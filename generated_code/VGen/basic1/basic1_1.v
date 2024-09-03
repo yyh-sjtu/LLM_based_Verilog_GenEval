@@ -1,13 +1,10 @@
-module full_adder(
-    input wire a,
-    input wire b,
-    input wire cin,
-    output wire sum,
-    output wire cout
+module wire_assign(
+    input in,
+    output out
 );
 
-assign sum = a ^ b ^ cin;
-assign cout = (a & b) | (b & cin) | (a & cin);
+    // Assign input to output
+    assign out = in;
 
 endmodule
 

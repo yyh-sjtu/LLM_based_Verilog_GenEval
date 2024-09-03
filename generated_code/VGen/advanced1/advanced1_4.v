@@ -1,14 +1,16 @@
-module for the signed adder
-module signed_adder(input [7:0] a, input [7:0] b, output reg [7:0] s, output reg overflow);
+module signed_adder(input [7:0] a, input [7:0] b, output [7:0] s, output overflow);
 
-  // Designing the full adder for each bit of the numbers
-  genvar i;
-  generate
-    for(i = 0; i < 8; i = i + 1) begin : full_adder_gen
-      assign s[i] = a[i] ^ b[i] ^ overflow;
-      assign overflow = (a[i] & b[i]) | (a[i] & overflow) | (b[i] & overflow);
+    reg [8:0] sum;
+
+    always @(*) begin
+        sum = a + b;
+        if(sum > 127 || sum < -128)
+            overflow = 1;
+        else
+            overflow = 0;
     end
-  endgenerate
-  
+
+    assign s = sum[7:0];
+
 endmodule
 

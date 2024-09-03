@@ -1,3 +1,6 @@
+
+reg out;
+
 always @(posedge clk) begin
     if (reset) begin
         present_state <= 0;
@@ -6,24 +9,31 @@ always @(posedge clk) begin
     end
 end
 
-always @* begin
+always @(present_state, in) begin
     case (present_state)
         0: begin
-            out = 1;
-            if (in == 0) begin
+            if (in) begin
                 next_state = 1;
             end else begin
                 next_state = 0;
             end
+            out = 1;
         end
         1: begin
-            out = 0;
-            if (in == 0) begin
-                next_state = 0;
-            end else begin
+            if (in) begin
                 next_state = 1;
+            end else begin
+                next_state = 0;
             end
+            out = 0;
+        end
+        default: begin
+            next_state = 0;
+            out = 0;
         end
     endcase
 end
+
 endmodule
+
+This module represents a simple Moore state machine with two states (0 and 1), one input (in), one output (out), and a clock and reset signal. The output is high when the state is 0 and low when the state is 1. The state changes based on the input value.

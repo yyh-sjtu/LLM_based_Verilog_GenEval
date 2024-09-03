@@ -1,47 +1,10 @@
-module full_adder(
-    input a,
-    input b,
-    input cin,
-    output sum,
-    output cout
-    );
+// Verilog code for AND gate module
+module and_gate( 
+  input a, 
+  input b, 
+  output out );
 
-    assign {cout, sum} = a + b + cin;
+  assign out = a & b; // Using bitwise AND to implement AND gate
 
-endmodule
-
-// Testbench for the full adder module
-
-module testbench;
-    reg a, b, cin;
-    wire sum, cout;
-
-    full_adder dut(
-        .a(a),
-        .b(b),
-        .cin(cin),
-        .sum(sum),
-        .cout(cout)
-    );
-
-    initial begin
-        a = 1;
-        b = 1;
-        cin = 0;
-        
-        #10;
-        
-        $display("a = %b, b = %b, cin = %b, sum = %b, cout = %b", a, b, cin, sum, cout);
-        
-        a = 0;
-        b = 1;
-        cin = 1;
-        
-        #10;
-        
-        $display("a = %b, b = %b, cin = %b, sum = %b, cout = %b", a, b, cin, sum, cout);
-        
-        // Continue testing with different values of a, b, and cin
-        
-    end
-endmodule
+endmodule 
+// End of module

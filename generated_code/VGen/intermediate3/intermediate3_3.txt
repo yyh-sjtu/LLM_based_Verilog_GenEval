@@ -1,40 +1,23 @@
+reg feedback_value;
 
-assign feedback_value = r_reg[4] ^ r_reg[2] ^ r_reg[0]; // Calculate the feedback value based on taps
-always @(posedge clk or posedge reset) begin
+always @ (posedge clk or posedge reset) begin
     if (reset) begin
-        r_reg <= 5'b1; // Initialize the LFSR with a non-zero value
+        r_reg <= 5'b1;
     end else begin
-        r_reg <= r_next; // Update the register with the next state value
+        r_reg <= r_next;
     end
 end
 
-assign r_next = {feedback_value, r_reg[4:1]}; // Shift the register and insert the feedback value at LSB
+assign feedback_value = r_reg[4] ^ r_reg[2];
 
-assign q = r_reg; // Output the current state of the LFSR
+assign r_next[0] = feedback_value;
+assign r_next[1] = r_reg[0];
+assign r_next[2] = r_reg[1];
+assign r_next[3] = r_reg[2];
+assign r_next[4] = r_reg[3];
 
-endmodule
-
-//Instance of lfsr module
-module test_lfsr;
-reg clk;
-reg reset;
-wire [4:0] q;
-
-initial begin
-    clk = 0;
-    reset = 1;
-    #10 reset = 0;
-    #50 $finish; // End simulation after 50 time units
-end
-
-always begin
-    #5 clk = ~clk; // Toggle clock every 5 time units
-end
-
-lfsr uut (
-    .clk(clk),
-    .reset(reset),
-    .q(q)
-);
+assign q = r_reg;
 
 endmodule
+
+This Verilog module implements a 5-bit maximal-length Galois LFSR with taps at bit positions 5 and 3. The LFSR is clocked by the input clock signal and has a reset input to initialize the LFSR to a known state. The LFSR output is stored in the r_reg register and the next state of the LFSR is calculated based on the current state and the tap positions. Feedback_value is calculated as the XOR of the bits at positions 4 and 2. The tap positions are used to calculate the next state of the LFSR and the output q is assigned to the current state of the LFSR.

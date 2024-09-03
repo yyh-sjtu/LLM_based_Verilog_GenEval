@@ -1,46 +1,52 @@
-  
-always @(posedge clk or posedge reset) begin
-  if (reset) begin
-    cur_state <= IDLE;
-  end else begin
-    cur_state <= next_state;
-  end
-end
+```
+module abro( 
+    input clk,
+    input reset,
+    input a,
+    input b,
+    output reg z );
 
-always @* begin
-  case (cur_state)
-    IDLE: begin
-      if (a & b) begin
-        next_state = SAB;
-      end else if (a) begin
-        next_state = SA;
-      end else if (b) begin
-        next_state = SB;
-      end else begin
-        next_state = IDLE;
-      end
-    end
-    SA: begin
-      if (b) begin
-        next_state = SAB;
-      end else begin
-        next_state = IDLE;
-      end
-    end
-    SB: begin
-      if (a) begin
-        next_state = SAB;
-      end else begin
-        next_state = IDLE;
-      end
-    end
-    SAB: begin
-      next_state = IDLE;
-    end
-    default: next_state = IDLE;
-  endcase
-end
+    parameter IDLE = 2'b00,
+              SA = 2'b01,
+              SB = 2'b10,
+              SAB = 2'b11;
 
-assign z = (cur_state == SAB) ? 1'b1 : 1'b0;
+    reg [1:0] cur_state, next_state;
+
+    // State transition and output logic
+    always @(posedge clk or posedge reset) begin
+        if (reset) begin
+            cur_state <= IDLE;
+            z <= 0;
+        end else begin
+            cur_state <= next_state;
+            case(cur_state)
+                IDLE: begin
+                    if(a && b) next_state <= SAB;
+                    else if(a) next_state <= SA;
+                    else if(b) next_state <= SB;
+                    else next_state <= IDLE;
+                end
+                SA: begin
+                    if(b && a) next_state <= SAB;
+                    else if(!a) next_state <= IDLE;
+                    else next_state <= SA;
+                end
+                SB: begin
+                    if(a && b) next_state <= SAB;
+                    else if(!b) next_state <= IDLE;
+                    else next_state <= SB;
+                end
+                SAB: begin
+                    next_state <= IDLE;
+                    z <= 1;
+                end
+                default: next_state <= IDLE;
+            endcase
+        end
+    end
 
 endmodule
+``` 
+
+This verilog code implements the ABRO finite state machine (FSM) as described in the comments. The FSM has four states: IDLE, SA, SB, and SAB. The FSM outputs 1 when both input signals a and b are high, regardless of the order in which they are received. The module also has inputs for the clock signal, reset signal, and the two input signals a and b. The output signal z indicates when the condition for outputting 1 is met.

@@ -1,14 +1,27 @@
 
-module full_adder_16bit(
-    input wire [15:0] a,
-    input wire [15:0] b,
-    input wire cin,
-    output reg [15:0] sum,
-    output reg cout
+module left_rotate(
+  input clk,
+  input reset,
+  input [2:0] amount,
+  input [7:0] data,
+  input load,
+  output reg [7:0] out
 );
 
-always @(*) begin
-    {cout, sum} = a + b + cin;
-end
-
+  reg [7:0] temp;
+  
+  always @(posedge clk or posedge reset) begin
+    if(reset) begin
+      out <= 8'b0;
+      temp <= 8'b0;
+    end else begin
+      if(load) begin
+        temp <= data;
+        out <= temp;
+      end else begin
+        temp <= {temp[6:0], temp[7]};
+        out <= temp;
+      end
+    end
+  end
 endmodule

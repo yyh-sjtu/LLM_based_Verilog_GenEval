@@ -1,35 +1,39 @@
-// Define states
-parameter S0 = 0;
-parameter S1 = 1;
+ // Define the states
+parameter STATE_0 = 0;
+parameter STATE_1 = 1;
 
 always @(posedge clk or posedge reset) begin
     if (reset) begin
-        present_state <= S0;
+        present_state <= STATE_0;
     end else begin
         present_state <= next_state;
     end
 end
 
 always @* begin
-    // Implement state transitions
-    case(present_state)
-        S0: begin
-            if(in == 1'b0) begin
-                next_state = S1;
+    case (present_state)
+        STATE_0: begin
+            if (in) begin
+                next_state = STATE_1;
             end else begin
-                next_state = S0;
+                next_state = STATE_0;
             end
         end
-        S1: begin
-            if(in == 1'b0) begin
-                next_state = S0;
+        STATE_1: begin
+            if (!in) begin
+                next_state = STATE_0;
             end else begin
-                next_state = S1;
+                next_state = STATE_1;
             end
+        end
+        default: begin
+            next_state = STATE_0;
         end
     endcase
 end
 
-assign out = (present_state == S0) ? 1'b1 : 1'b0;
+assign out = (present_state == STATE_0) ? 1'b1 : 1'b0;
 
 endmodule
+
+This verilog code implements a simple Moore state machine with two states (0 and 1), one input 'in', and one output 'out'. The reset state is set to 0, and the output is high when the machine is in state 0. The state changes based on the input 'in'. If 'in' is low, the state changes from 0 to 1, and vice versa.

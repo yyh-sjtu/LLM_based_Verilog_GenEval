@@ -1,45 +1,55 @@
+// Define state register and initial state
+reg [1:0] state_reg, next_state;
+parameter IDLE = 2'b00, SA = 2'b01, SB = 2'b10, SAB = 2'b11;
+assign z = (state_reg == SAB) ? 1'b1 : 1'b0;
 
-reg z;
-
-always @ (posedge clk or posedge reset) begin
-    if (reset)
-        cur_state <= IDLE;
-    else
-        cur_state <= next_state;
+always @(posedge clk or posedge reset) begin
+    if (reset) begin
+        state_reg <= IDLE;
+    end else begin
+        state_reg <= next_state;
+    end
 end
 
-always @ (*) begin
-    case (cur_state)
+always @* begin
+    case(state_reg)
         IDLE: begin
-            if (a & b)
+            if (a & b) begin
                 next_state = SAB;
-            else if (a)
+            end else if (a) begin
                 next_state = SA;
-            else if (b)
+            end else if (b) begin
                 next_state = SB;
-            else
+            end else begin
                 next_state = IDLE;
+            end
         end
-        
         SA: begin
-            if (b)
+            if (a & b) begin
                 next_state = SAB;
-            else
+            end else if (!a) begin
                 next_state = IDLE;
+            end else begin
+                next_state = SA;
+            end
         end
-        
         SB: begin
-            if (a)
+            if (a & b) begin
                 next_state = SAB;
-            else
+            end else if (!b) begin
                 next_state = IDLE;
+            end else begin
+                next_state = SB;
+            end
         end
-        
         SAB: begin
-            next_state = IDLE;
+            if (!a | !b) begin
+                next_state = IDLE;
+            end else begin
+                next_state = SAB;
+            end
         end
     endcase
 end
 
-assign z = (cur_state == SAB);
 endmodule

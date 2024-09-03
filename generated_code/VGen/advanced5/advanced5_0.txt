@@ -1,5 +1,4 @@
-
-
+// State machine logic
 always @(posedge clk or posedge reset) begin
     if (reset) begin
         cur_state <= IDLE;
@@ -8,29 +7,37 @@ always @(posedge clk or posedge reset) begin
     end
 end
 
+// Output logic
+assign z = (cur_state == SAB);
+
+// State transition logic
 always @* begin
     case (cur_state)
         IDLE: begin
-            if (a & b) begin
-                next_state = SAB;
-            end else if (a) begin
+            if (a && !b) begin
                 next_state = SA;
-            end else if (b) begin
+            end else if (!a && b) begin
                 next_state = SB;
+            end else if (a && b) begin
+                next_state = SAB;
             end else begin
                 next_state = IDLE;
             end
         end
         SA: begin
-            if (b) begin
+            if (a && b) begin
                 next_state = SAB;
+            end else if (!a && b) begin
+                next_state = SB;
             end else begin
                 next_state = IDLE;
             end
         end
         SB: begin
-            if (a) begin
+            if (a && b) begin
                 next_state = SAB;
+            end else if (a && !b) begin
+                next_state = SA;
             end else begin
                 next_state = IDLE;
             end
@@ -40,7 +47,5 @@ always @* begin
         end
     endcase
 end
-
-assign z = (cur_state == SAB) ? 1'b1 : 1'b0;
 
 endmodule

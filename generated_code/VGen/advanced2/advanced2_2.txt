@@ -1,46 +1,6 @@
-// Define the module for the 16-bit full adder
-module full_adder_16bit(
-    input [15:0] A,
-    input [15:0] B,
-    input cin,
-    output reg [15:0] sum,
-    output reg cout
-);
+Sure, here is the verilog code for the decade counter module as per your requirements:
 
-// Create 16 full adder cells
-genvar i;
-generate
-    for(i = 0; i < 16; i = i + 1) begin : full_adder_cell
-        full_adder full_adder_inst(
-            .A(A[i]),
-            .B(B[i]),
-            .cin(cin),
-            .sum(sum[i]),
-            .cout(cout)
-        );
-    end
-endgenerate
-
-endmodule
-
-// Instantiate the module for the full adder
-module full_adder(
-    input A,
-    input B,
-    input cin,
-    output reg sum,
-    output reg cout
-);
-
-// Implement the full adder logic
-always @(*) begin
-    sum = A ^ B ^ cin;
-    cout = (A & B) | (A & cin) | (B & cin);
-end
-
-endmodule
-
-// Define the module for the decade counter
+```verilog
 module decade_counter(
     input clk,
     input slowena,
@@ -48,40 +8,22 @@ module decade_counter(
     output reg [3:0] q
 );
 
-// Instantiate the 16-bit full adder module
-full_adder_16bit full_adder_inst(
-    .A(q),
-    .B(16'b1), // Increment value of 1 as input B
-    .cin(slowena),
-    .sum(q),
-    .cout()
-);
+reg [3:0] next_q;
 
-// Reset logic
-always @(*) begin
-    if(reset) begin
-        q <= 4'b0; // Reset the counter to 0
+always @(posedge clk, posedge reset) begin
+    if (reset) begin
+        q <= 4'b0000;
+    end else if (slowena) begin
+        next_q = q + 1;
+        if (next_q == 4'b1010) begin
+            next_q <= 4'b0000;
+        end else begin
+            q <= next_q;
+        end
     end
 end
 
 endmodule
+```
 
-// Top level module to test the decade counter
-module top(
-    input clk,
-    input slowena,
-    input reset,
-    output reg [3:0] q
-);
-
-// Instantiate the decade counter module
-decade_counter decade_counter_inst(
-    .clk(clk),
-    .slowena(slowena),
-    .reset(reset),
-    .q(q)
-);
-
-endmodule
-
-// This code implements a 16-bit full adder using 16 full adder cells and a decade counter that counts from 0 through 9 when slowena is high.
+This verilog module is a decade counter that starts counting from 0 to 9 (represented as 4'b0000 to 4'b1001) whenever the `slowena` input is high. The counter resets to 0 when the `reset` input is high. The counter increments on each positive edge of the `clk` input signal.

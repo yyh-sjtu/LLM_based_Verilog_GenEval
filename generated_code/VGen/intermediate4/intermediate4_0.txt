@@ -1,36 +1,26 @@
-// Define the states
-parameter state0 = 0;
-parameter state1 = 1;
-
-always @ (posedge clk or posedge reset) begin
+always @(posedge clk or posedge reset) begin
     if (reset) begin
-        present_state <= state0;
+        present_state <= 0;
     end else begin
         present_state <= next_state;
     end
 end
 
 always @* begin
+    next_state = present_state;
     case (present_state)
-        state0: begin
+        0: begin
             out = 1;
             if (in == 0) begin
-                next_state = state1;
-            end else begin
-                next_state = state0;
+                next_state = 1;
             end
         end
-        state1: begin
+        1: begin
             out = 0;
             if (in == 0) begin
-                next_state = state0;
-            end else begin
-                next_state = state1;
+                next_state = 0;
             end
         end
     endcase
 end
-
 endmodule
-
-// End of module.

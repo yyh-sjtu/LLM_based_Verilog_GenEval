@@ -1,52 +1,52 @@
 
 
-// Combinational logic for the ABRO FSM
-always@(posedge clk or posedge reset) begin
-    if (reset) begin
-        cur_state <= IDLE;
-    end else begin
-        cur_state <= next_state;
+// Defining the state register and assigning initial state
+always @(posedge clk or posedge reset) begin
+  if (reset) begin
+    cur_state <= IDLE;
+  end else begin
+    cur_state <= next_state;
+  end
+end
+
+// Next state logic
+always @* begin
+  case (cur_state)
+    IDLE: begin
+      if (a & b) begin
+        next_state = SAB;
+      end else if (a) begin
+        next_state = SA;
+      end else if (b) begin
+        next_state = SB;
+      end else begin
+        next_state = IDLE;
+      end
     end
+    SA: begin
+      if (b) begin
+        next_state = SAB;
+      end else begin
+        next_state = SA;
+      end
+    end
+    SB: begin
+      if (a) begin
+        next_state = SAB;
+      end else begin
+        next_state = SB;
+      end
+    end
+    SAB: begin
+      next_state = SAB;
+    end
+    default: next_state = IDLE;
+  endcase
 end
 
-// State transitions
-always@(cur_state, a, b) begin
-    case(cur_state)
-        IDLE: begin
-            if(a & b) begin
-                next_state <= SAB;
-            end else if (a) begin
-                next_state <= SA;
-            end else if (b) begin
-                next_state <= SB;
-            end else begin
-                next_state <= IDLE;
-            end
-        end
-        
-        SA: begin
-            if(b) begin
-                next_state <= SAB;
-            end else begin
-                next_state <= IDLE;
-            end
-        end
-        
-        SB: begin
-            if(a) begin
-                next_state <= SAB;
-            end else begin
-                next_state <= IDLE;
-            end
-        end
-        
-        SAB: begin
-            next_state <= IDLE;
-        end
-    endcase
-end
-
-// Output logic
-assign z = (cur_state == SAB) ? 1'b1 : 1'b0;
+// Output assignment
+assign z = (cur_state == SAB);
 
 endmodule
+
+This Verilog module defines a state machine that checks for the inputs a and b to be 1, regardless of their arrival order. The output z is set to 1 when a and b are both 1 in any order.

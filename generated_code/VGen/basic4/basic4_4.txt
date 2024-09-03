@@ -1,43 +1,9 @@
-Sure, here is the Verilog code for a 16-bit full adder implemented using combinational logic:
-
-```verilog
-module full_adder(
-    input [15:0] a,
-    input [15:0] b,
-    input cin,
-    output [16:0] sum,
-    output cout
+module mux(
+    input [4:0] a, b,
+    input sel,
+    output [4:0] out
 );
 
-wire [15:0] s;
-wire c;
-
-genvar i;
-generate
-    for (i = 0; i < 16; i = i + 1) begin : adder_loop
-        full_adder_1bit fa(
-            .a(a[i]),
-            .b(b[i]),
-            .cin(c),
-            .sum(s[i]),
-            .cout(c)
-        );
-    end
-endgenerate
-
-assign sum = {c, s};
-assign cout = c;
+assign out = (sel == 1'b0) ? a : b;
 
 endmodule
-
-module full_adder_1bit(
-    input a, b, cin,
-    output sum, cout
-);
-
-assign {cout, sum} = a + b + cin;
-
-endmodule
-```
-
-This code implements a 16-bit full adder by instantiating 16 instances of the full_adder_1bit module in a generate block. Each instance calculates the sum of the corresponding bits from inputs a and b along with the carry in (cin) and generates the sum bit (sum) and carry out (cout). The final output sum is concatenated with the final carry out to form the 16-bit sum output.

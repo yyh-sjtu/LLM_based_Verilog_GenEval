@@ -1,42 +1,50 @@
-// Define the state transitions for the FSM
-always @(posedge clk or posedge reset) begin
-    if (reset) begin
-        cur_state <= IDLE;
-    end else begin
-        cur_state <= next_state;
-    end
+
+reg z;
+
+always @ (posedge clk or posedge reset) begin
+   if (reset) begin
+      cur_state <= IDLE;
+   end else begin
+      cur_state <= next_state;
+   end
 end
 
-// Define the next state logic for the FSM
-always @* begin
-    case (cur_state)
-        IDLE: begin
-            if (a & b) begin
-                next_state = SAB;
-            end else if (a) begin
-                next_state = SA;
-            end else if (b) begin
-                next_state = SB;
-            end else begin
-                next_state = IDLE;
-            end
-        end
-        
-        SA: begin
-            next_state = (b) ? SAB : SA;
-        end
-        
-        SB: begin
-            next_state = (a) ? SAB : SB;
-        end
-        
-        SAB: begin
+always @ (*) begin
+   case (cur_state)
+      IDLE: begin
+         if (a & b) begin
             next_state = SAB;
-        end
-    endcase
+         end else if (a) begin
+            next_state = SA;
+         end else if (b) begin
+            next_state = SB;
+         end else begin
+            next_state = IDLE;
+         end
+      end
+
+      SA: begin
+         if (b) begin
+            next_state = SAB;
+         end else begin
+            next_state = IDLE;
+         end
+      end
+
+      SB: begin
+         if (a) begin
+            next_state = SAB;
+         end else begin
+            next_state = IDLE;
+         end
+      end
+
+      SAB: begin
+         next_state = IDLE;
+      end
+   endcase
 end
 
-// Define the output logic based on the current state
-assign z = (cur_state == SAB) ? 1 : 0;
+assign z = (cur_state == SAB);
 
 endmodule

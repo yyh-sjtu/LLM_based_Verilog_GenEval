@@ -1,20 +1,16 @@
-module full_adder(
-  input wire a,
-  input wire b,
-  input wire cin,
-  output wire sum,
-  output wire cout
+
+module mux(
+    input [4:0] a, b,
+    input sel,
+    output reg [4:0] out
 );
 
-  wire w1, w2, w3;
-
-  xor gate1 (w1, a, b);
-  xor gate2 (sum, w1, cin);
-
-  and gate3 (w2, w1, cin);
-  and gate4 (w3, a, b);
-
-  or gate5 (cout, w2, w3);
+always @(a, b, sel)
+begin
+    if(sel == 1'b0)
+        out = a;
+    else
+        out = b;
+end
 
 endmodule
-

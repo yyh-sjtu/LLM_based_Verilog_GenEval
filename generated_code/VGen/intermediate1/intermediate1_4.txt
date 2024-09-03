@@ -1,9 +1,11 @@
-// This is a full adder.
-module full_adder(
-  input a, b, cin,
-  output sum, cout
+module half_adder(
+  input a, 
+  input b, 
+  output sum, 
+  output cout
 );
 
-  assign {cout, sum} = a + b + cin;
+  assign sum = a ^ b;
+  assign cout = a & b;
 
 endmodule

@@ -1,13 +1,12 @@
-// Implementing the P-box module using the In32table permutation
+// Define the permutation logic
 always @* begin
-    for(i=0; i<len_table; i=i+1) begin
-        Out32[i*2 +: 2] = In32[In32table[i]*2 +: 2];
+    for(i=0; i<32; i=i+1) begin
+        Out32[i] = In32[In32table[i]];
     end
 end
 
 endmodule
 
-// The P-box module takes a 32-bit input 'In32' and permutes its bits using the predefined In32table
-// The output 'Out32' is also a 32-bit vector with its bits permuted according to the table
+This Verilog module defines a permutation block called P_box. It takes a 32-bit input signal In32 and outputs a permuted 32-bit signal Out32 based on the values stored in the In32table. The initial block initializes the values in the In32table according to the permutation order. The main logic block uses a for loop to assign the input values to the output signal based on the permutation order specified in the In32table.
 
-// Note: This module is a combinational logic implementation and does not have any clock inputs.
+I hope this helps in implementing the desired module. Let me know if you need any further assistance.

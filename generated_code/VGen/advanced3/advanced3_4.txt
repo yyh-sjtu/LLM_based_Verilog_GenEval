@@ -1,4 +1,3 @@
-```verilog
 module adv_fsm(
     input clk,
     input reset,
@@ -6,44 +5,53 @@ module adv_fsm(
     output reg z
 );
 
-parameter IDLE=2'b00, S1=2'b01, S10=2'b10, S101=2'b11;
 reg [1:0] present_state, next_state;
+parameter IDLE=2'b00, S1=2'b01, S10=2'b10, S101=2'b11;
 
-always @ (posedge clk or posedge reset)
-begin
-    if (reset)
+always @(posedge clk or posedge reset) begin
+    if (reset) begin
         present_state <= IDLE;
-    else
+    end else begin
         present_state <= next_state;
+    end
 end
 
-always @ (*)
-begin
+always @* begin
     case (present_state)
         IDLE: begin
-            if (x)
+            if (x) begin
                 next_state = S1;
-            else
+            end else begin
                 next_state = IDLE;
+            end
         end
         S1: begin
-            if (!x)
+            if (!x) begin
                 next_state = S10;
-            else
+            end else begin
                 next_state = IDLE;
+            end
         end
         S10: begin
-            if (x)
+            if (x) begin
                 next_state = S101;
-            else
+            end else begin
                 next_state = IDLE;
+            end
         end
-        S101: next_state = IDLE;
+        S101: begin
+            next_state = IDLE;
+        end
         default: next_state = IDLE;
     endcase
 end
 
-assign z = (present_state == S101);
+always @* begin
+    if (present_state == S101) begin
+        z = 1'b1;
+    end else begin
+        z = 1'b0;
+    end
+end
 
 endmodule
-```

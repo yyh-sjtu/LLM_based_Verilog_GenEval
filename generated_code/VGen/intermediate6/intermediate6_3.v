@@ -1,18 +1,12 @@
-module full_adder (
-    input wire [15:0] A,
-    input wire [15:0] B,
-    input wire Cin,
-    output wire [15:0] Sum,
-    output wire Cout
-);
+module ram #( parameter ADDR_WIDTH=6, parameter DATA_WIDTH=8)
+(input [DATA_WIDTH-1:0] data, input [ADDR_WIDTH-1:0] addr, input we, clk, output [DATA_WIDTH-1:0] q);
+reg [DATA_WIDTH-1:0] ram[2**ADDR_WIDTH-1:0];
 
-wire [15:0] C, S1, S2;
-
-xor_gate xor1 (.A(A), .B(B), .Y(S1));
-xor_gate xor2 (.A(S1), .B(Cin), .Y(S2));
-and_gate and1 (.A(S1), .B(Cin), .Y(C));
-and_gate and2 (.A(A), .B(B), .Y(Cout));
-or_gate or1 (.A(C, S2), .Y(Sum));
-
+always @ (posedge clk) begin
+  if (we) begin
+    ram[addr] <= data;
+  end
+  q <= ram[addr];
+end
 endmodule
 

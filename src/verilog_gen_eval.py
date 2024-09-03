@@ -22,7 +22,7 @@ def get_args():
     parser = argparse.ArgumentParser()
     parser.add_argument("--model_name", type=str, default="gpt-3.5-turbo")
     parser.add_argument("--benchmark", type=str, default="RTLLM")
-    parser.add_argument("--api_key", type=str, default="sk-")
+    parser.add_argument("--api_key", type=str, default="sk")
     parser.add_argument("--base_url", type=str, default="")
     parser.add_argument("--pass_at_n", type=int, default=5)  # pass@5
     parser.add_argument("--temp_outputfile", type=str, default="temp_output/test.vvp")
@@ -104,7 +104,7 @@ def test_on_benchmark(args):
                 prompt = get_file_content(get_prompt_file(design_dir, prompt_pattern))
                 
                 if benchmark == "VGen":
-                    prompt = "Please act as a professional verilog designer. \n Implement a module of a 16-bit full adder in combinational logic.\n" + prompt
+                    prompt = "Please act as a professional verilog designer. \n Implement the following module.\n" + prompt
                 
                 design_name = os.path.basename(design_dir)
                 generated_design_dir = os.path.join("generated_code", benchmark, design_name)
@@ -124,6 +124,7 @@ def test_on_benchmark(args):
                 print(f"Please generate the Verilog code of benchmard {benchmark} first!")
                 
             generated_design_dir_list = glob(os.path.join("generated_code", benchmark, "*"))
+            generated_design_dir_list.sort()
             for generated_design_dir in tqdm(generated_design_dir_list):
                 design_name = os.path.basename(generated_design_dir)
                 generated_design_file_list = glob(os.path.join(generated_design_dir, "*.v" if not benchmark == "VerilogEval" else f"*.sv"))

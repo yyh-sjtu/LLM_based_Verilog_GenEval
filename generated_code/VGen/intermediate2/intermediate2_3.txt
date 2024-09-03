@@ -1,16 +1,18 @@
-// Define internal signals
-reg [3:0] count;
+module counter( 
+     input clk,
+     input reset,
+     output reg [3:0] q
+);
 
-// Increment count on positive edge of clock
-always @(posedge clk or posedge reset)
-begin
-  if (reset)
-    count <= 4'b0001; // Reset count to 1
-  else
-    count <= count + 1; // Increment count
-end
-
-// Assign output to count
-assign q = count;
+  	always @ (posedge clk or posedge reset) begin
+    		if (reset) 
+      			q <= 4'b0001;
+    		else if (q == 4'b1100) 
+      			q <= 4'b0001;
+    		else 
+      			q <= q + 1;
+  	 end
 
 endmodule
+
+This Verilog code implements a counter module that counts from 1 to 12. The q output is a 4-bit signal that starts at 0001, increments by 1 on each clock cycle, and resets to 0001 when it reaches 1100. The counter is synchronous with the clock signal and can be reset using the reset input.

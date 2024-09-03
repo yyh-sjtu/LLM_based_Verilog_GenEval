@@ -1,17 +1,4 @@
-
-module full_adder(
-    input a,
-    input b,
-    input cin,
-    output sum,
-    output cout
-);
-
-assign sum = a ^ b ^ cin;
-assign cout = (a & b) | (b & cin) | (a & cin);
-
-endmodule
-module shift_register(
+module advshift(
     input clk,
     input load,
     input ena,
@@ -20,23 +7,19 @@ module shift_register(
     output reg [63:0] q
 );
 
-reg [63:0] shift_data;
-
 always @ (posedge clk) begin
     if (load) begin
         q <= data;
-        shift_data <= data;
-    end else begin
-        case(amount)
-            2'b00: shift_data <= {shift_data[62:0], 1'b0}; // shift left by 1 bit
-            2'b01: shift_data <= {shift_data[55:0], 8'b0}; // shift left by 8 bits
-            2'b10: shift_data <= {1'b0, shift_data[63:1]}; // shift right by 1 bit
-            2'b11: shift_data <= {8'b0, shift_data[63:8]}; // shift right by 8 bits
+    end else if (ena) begin
+        case (amount)
+            2'b00: q <= {q[62:0], 1'b0};
+            2'b01: q <= {q[55:0], 8'b0};
+            2'b10: q <= {1'b0, q[63:1]};
+            2'b11: q <= {8'b0, q[63:8]};
+            default: q <= q;
         endcase
-
-        if (ena)
-            q <= shift_data;
     end
 end
 
 endmodule
+

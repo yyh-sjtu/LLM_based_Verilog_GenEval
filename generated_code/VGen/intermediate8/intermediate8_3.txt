@@ -1,5 +1,8 @@
+// Implementing the truth table using Verilog code
+// Here is the code for the module based on the given truth table
 
-  assign f = (~x3 & ~x2 & x1) | (~x3 & x2 & ~x1) | (x3 & ~x2 & x1) | (x3 & x2 & ~x1);
+module truthtable(input x3, input x2, input x1, output f );
+    assign f = ~((x3 & x2 & ~x1) | (~x3 & x2 & x1) | (~x3 & ~x2 & ~x1) | (x3 & ~x2 & x1));
 endmodule
 
-This Verilog module represents a 16-bit full adder circuit implemented using combinational logic based on the given truth table. The output 'f' is calculated based on the input values x3, x2, and x1 using bitwise logic operations.
+// This module takes three input signals x3, x2, and x1 and computes the output signal f based on the given truth table.
