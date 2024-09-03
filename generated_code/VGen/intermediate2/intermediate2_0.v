@@ -1,24 +1,20 @@
-
-module counter( 
+module counter(
     input clk,
     input reset,
     output reg [3:0] q
 );
-    
-    reg [3:0] count;
-    
-    always @(posedge clk or posedge reset) begin
-        if (reset) begin
-            count <= 4'b0001;
+
+always @(posedge clk) begin
+    if (reset) begin
+        q <= 4'b0001; // initialize the counter to 1
+    end else begin
+        if (q == 4'b1100) begin
+            q <= 4'b0000; // reset counter to 0 when it reaches 12
         end else begin
-            if (count == 4'b1100) begin
-                count <= 4'b0001;
-            end else begin
-                count <= count + 1;
-            end
+            q <= q + 4'b0001; // increment counter by 1
         end
     end
-    
-    assign q = count;
-    
+end
+
 endmodule
+

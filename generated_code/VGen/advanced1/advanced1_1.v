@@ -5,14 +5,17 @@ module signed_adder(
     output overflow
 );
 
-    reg [7:0] temp_s;
-    reg overflow;
+    reg [8:0] sum;
 
-    assign s = temp_s;
-    assign overflow = temp_s[7] ^ s[7] ^ a[7] ^ b[7];
-
-    always @(*) begin
-        temp_s = a + b;
+    always @* begin
+        sum = a + b;
+        s = sum[7:0];
+        
+        if(sum[8] != sum[7]) begin
+            overflow = 1;
+        end else begin
+            overflow = 0;
+        end
     end
 
 endmodule

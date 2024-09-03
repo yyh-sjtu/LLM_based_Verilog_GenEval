@@ -1,11 +1,4 @@
-As a professional Verilog designer, I would implement the RAM module as follows:
-
-```verilog
-module ram #(
-    parameter ADDR_WIDTH = 6,
-    parameter DATA_WIDTH = 8
-)
-(
+module ram #( parameter ADDR_WIDTH=6, parameter DATA_WIDTH=8) (
     input [DATA_WIDTH-1:0] data,
     input [ADDR_WIDTH-1:0] addr,
     input we,
@@ -13,20 +6,13 @@ module ram #(
     output reg [DATA_WIDTH-1:0] q
 );
 
-reg [DATA_WIDTH-1:0] ram[0:2**ADDR_WIDTH-1];
+    reg [DATA_WIDTH-1:0] ram[0:(2**ADDR_WIDTH)-1];
 
-always @(posedge clk) begin
-    if(we) begin
-        ram[addr] <= data;
+    always @(posedge clk) begin
+        if(we) begin
+            ram[addr] <= data;
+        end
+        q <= ram[addr];
     end
-    q <= ram[addr];
-end
 
 endmodule
-```
-
-In this implementation, the RAM module has a parameterized address width (ADDR_WIDTH) and data width (DATA_WIDTH). It takes input data and address along with write enable (we) and clock (clk) signals. The output is the data read from the RAM at the specified address.
-
-The RAM is implemented using an array of registers where each address location stores DATA_WIDTH bits of data. The read and write operations are performed on the RAM array based on the clock signal and write enable signal.
-
-This design allows for a flexible and parameterized RAM module that can be customized based on the required address and data widths.

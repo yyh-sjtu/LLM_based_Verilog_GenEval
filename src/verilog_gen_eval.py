@@ -18,11 +18,20 @@ benchmark_list = [
     "VerilogEval"
 ]
 
+file_patterns = {
+    "RTLLM": {"prompt_pattern": "design_description.txt",
+                "testbench_pattern": "testbench.v"},
+    "VGen": {"prompt_pattern": "prompt*", 
+                "testbench_pattern": "tb_*"},
+    "VerilogEval": {"prompt_pattern": "*prompt.txt", 
+                    "testbench_pattern": "*test.sv"}
+}
+
 def get_args():
     parser = argparse.ArgumentParser()
     parser.add_argument("--model_name", type=str, default="gpt-3.5-turbo")
     parser.add_argument("--benchmark", type=str, default="RTLLM")
-    parser.add_argument("--api_key", type=str, default="sk")
+    parser.add_argument("--api_key", type=str, default="sk-")
     parser.add_argument("--base_url", type=str, default="")
     parser.add_argument("--pass_at_n", type=int, default=5)  # pass@5
     parser.add_argument("--temp_outputfile", type=str, default="temp_output/test.vvp")
@@ -72,15 +81,6 @@ def test_on_benchmark(args):
         benchmarks = benchmark_list
     else:
         raise ValueError("Invalid benchmark")
-    
-    file_patterns = {
-        "RTLLM": {"prompt_pattern": "design_description.txt",
-                  "testbench_pattern": "testbench.v"},
-        "VGen": {"prompt_pattern": "prompt*", 
-                 "testbench_pattern": "tb_*"},
-        "VerilogEval": {"prompt_pattern": "*prompt.txt", 
-                        "testbench_pattern": "*test.sv"}
-    }
     
     for benchmark in benchmarks:
         

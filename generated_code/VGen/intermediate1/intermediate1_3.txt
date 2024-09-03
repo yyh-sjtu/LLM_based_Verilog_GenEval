@@ -1,13 +1,8 @@
-// Verilog code for half adder module
+// Declare the input and output ports
+input a, b;
+output sum, cout;
 
-module half_adder(
-  input a,
-  input b,
-  output cout,
-  output sum
-);
-
-  assign sum = a ^ b; // XOR operation to calculate sum
-  assign cout = a & b; // AND operation to calculate carry out
-
+// Implement the half adder logic
+assign sum = a ^ b; // Calculate the sum using XOR gate
+assign cout = a & b; // Calculate the carry-out using AND gate
 endmodule

@@ -1,9 +1,4 @@
-
-module ram #(
-    parameter ADDR_WIDTH = 6,
-    parameter DATA_WIDTH = 8
-)
-(
+module ram #( parameter ADDR_WIDTH=6, parameter DATA_WIDTH=8) (
     input [DATA_WIDTH-1:0] data,
     input [ADDR_WIDTH-1:0] addr,
     input we,
@@ -11,13 +6,14 @@ module ram #(
     output reg [DATA_WIDTH-1:0] q
 );
 
-reg [DATA_WIDTH-1:0] ram[0:2**ADDR_WIDTH-1];
+    reg [DATA_WIDTH-1:0] ram[0:(2**ADDR_WIDTH)-1];
 
-always @(posedge clk) begin
-    if(we) begin
-        ram[addr] <= data;
+    always @(posedge clk) begin
+        if(we) begin
+            ram[addr] <= data;
+        end
+        q <= ram[addr];
     end
-    q <= ram[addr];
-end
 
 endmodule
+

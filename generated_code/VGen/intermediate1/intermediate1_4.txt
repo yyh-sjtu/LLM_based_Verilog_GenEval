@@ -1,11 +1,11 @@
-module half_adder(
-  input a, 
-  input b, 
-  output sum, 
-  output cout
-);
+// Declare the inputs and outputs
+input a, b;
+output cout, sum;
 
-  assign sum = a ^ b;
-  assign cout = a & b;
+// Implement the half adder logic
+assign sum = a ^ b;
+assign cout = a & b;
 
 endmodule
+
+// Note: This module implements a half adder which adds two bits 'a' and 'b' and produces a sum and carry-out.

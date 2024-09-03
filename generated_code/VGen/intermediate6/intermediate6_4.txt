@@ -1,25 +1,19 @@
-Sure, below is the Verilog code for the RAM module implementation based on the provided description:
-
-```verilog
-module ram #(parameter ADDR_WIDTH=6, parameter DATA_WIDTH=8)
-(
+module ram #( parameter ADDR_WIDTH=6, parameter DATA_WIDTH=8) (
   input [DATA_WIDTH-1:0] data,
   input [ADDR_WIDTH-1:0] addr,
   input we,
   input clk,
   output reg [DATA_WIDTH-1:0] q
 );
-
-reg [DATA_WIDTH-1:0] ram[0 : (2**ADDR_WIDTH)-1];
+reg [DATA_WIDTH-1:0] ram[2**ADDR_WIDTH-1:0];
 
 always @(posedge clk) begin
-  if(we) begin
+  if (we) begin
     ram[addr] <= data;
   end
   q <= ram[addr];
 end
 
 endmodule
-```
 
-Please let me know if you need any further modifications or have any additional requirements.
+This Verilog code implements a RAM module with the specified address and data widths. The ram array is declared to store data at specified addresses. The input data is written to the ram array when the write-enable signal 'we' is high. The output 'q' reads the data stored at the specified address 'addr'. The values in the ram array are retained between clock cycles.

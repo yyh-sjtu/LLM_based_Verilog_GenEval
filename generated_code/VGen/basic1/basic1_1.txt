@@ -1,10 +1,5 @@
-// Module definition
-module wire_assign(
-    input in,
-    output out
-);
 
-    // Assign input to output
-    assign out = in;
+assign out = in;
+endmodule
 
-endmodule // End of module wire_assign
+Please let me know if you need further assistance with Verilog design.
