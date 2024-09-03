@@ -1,0 +1,48 @@
+Here is an implementation of a 16-bit full adder in Verilog:
+
+```verilog
+module full_adder (
+    input a,
+    input b,
+    input cin,
+    output reg sum,
+    output reg cout
+);
+
+always @(*) begin
+    sum = a ^ b ^ cin;
+    cout = (a & b) | (b & cin) | (a & cin);
+end
+
+endmodule
+```
+
+And here is a module for a counter that counts from 1 to 12 using the full adder:
+
+```verilog
+module counter( 
+    input clk,
+    input reset,
+    output reg [3:0] q
+);
+
+reg [15:0] count;
+
+always @ (posedge clk or posedge reset) begin
+    if (reset) begin
+        count <= 4'b0001;
+        q <= 4'b0001;
+    end else begin
+        if (count < 4'b1100) begin
+            count <= count + 1;
+        end else begin
+            count <= 4'b0001;
+        end
+        q <= count[3:0];
+    end
+end
+
+endmodule
+``` 
+
+You can instantiate the `full_adder` module inside the `counter` module to perform the addition operation needed for the counter implementation. Make sure to add appropriate inputs and outputs as needed for your specific implementation.

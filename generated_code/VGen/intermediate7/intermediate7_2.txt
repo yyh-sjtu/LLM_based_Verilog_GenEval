@@ -1,0 +1,13 @@
+// Implementing the P-box module using the In32table permutation
+always @* begin
+    for(i=0; i<len_table; i=i+1) begin
+        Out32[i*2 +: 2] = In32[In32table[i]*2 +: 2];
+    end
+end
+
+endmodule
+
+// The P-box module takes a 32-bit input 'In32' and permutes its bits using the predefined In32table
+// The output 'Out32' is also a 32-bit vector with its bits permuted according to the table
+
+// Note: This module is a combinational logic implementation and does not have any clock inputs.

@@ -1,0 +1,44 @@
+Here is the complete Verilog code for the dual-port RAM module:
+
+```verilog
+module RAM #(
+    parameter WIDTH = 6,
+    parameter DEPTH = 8
+)(
+    input wire clk,
+    input wire rst_n,
+    input wire write_en,
+    input wire [WIDTH-1:0] write_addr,
+    input wire [WIDTH-1:0] write_data,
+    input wire read_en,
+    input wire [WIDTH-1:0] read_addr,
+    output reg [WIDTH-1:0] read_data
+);
+
+reg [WIDTH-1:0] RAM [0:(2**DEPTH)-1];
+
+always @(posedge clk or negedge rst_n) begin
+    if (~rst_n) begin
+        for (int i = 0; i < 2**DEPTH; i++)
+            RAM[i] <= 6'h00;
+    end else begin
+        if (write_en) begin
+            RAM[write_addr] <= write_data;
+        end
+    end
+end
+
+always @(posedge clk or negedge rst_n) begin
+    if (~rst_n) begin
+        read_data <= 6'h00;
+    end else begin
+        if (read_en) begin
+            read_data <= RAM[read_addr];
+        end
+    end
+end
+
+endmodule
+```
+
+This code defines a dual-port RAM module with a depth of 8 and a bit width of 6 bits. The module has separate input ports for write and read operations, allowing simultaneous read and write operations. The RAM array is initialized to all zeros on reset, and write and read operations are implemented based on the provided write and read addresses.

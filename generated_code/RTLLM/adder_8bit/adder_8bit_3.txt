@@ -1,0 +1,46 @@
+Here is the verilog code for the 8-bit adder module:
+
+```verilog
+module adder_8bit (
+    input [7:0] a,
+    input [7:0] b,
+    input cin,
+    output reg [7:0] sum,
+    output reg cout
+);
+
+reg [7:0] carry;
+
+genvar i;
+generate
+    for (i = 0; i < 8; i = i + 1) begin : adder_loop
+        full_adder adder_instance (
+            .a(a[i]),
+            .b(b[i]),
+            .cin(carry[i]),
+            .sum(sum[i]),
+            .cout(carry[i+1])
+        );
+    end
+endgenerate
+
+assign cout = carry[8];
+
+endmodule
+
+module full_adder (
+    input a,
+    input b,
+    input cin,
+    output reg sum,
+    output reg cout
+);
+
+assign {cout, sum} = a + b + cin;
+
+endmodule
+```
+
+In this code, the `adder_8bit` module consists of 8 instances of the `full_adder` module to perform the addition operation on each bit of the inputs `a` and `b`. The carry-out from one bit addition is fed as the carry-in to the next bit addition. Finally, the output `sum` represents the 8-bit sum and `cout` represents the final carry-out. 
+
+Feel free to modify the code as needed for your specific requirements.

@@ -5,7 +5,7 @@ import os
 # get access the parent directory
 os.chdir(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
 
-api_keys = ['API_KEY1', "API_KEY2"]
+api_keys = ['API_KEY_1', 'API_KEY_2']
 
 def llm_generate_code(model_name, instance, output, output_answer, prompt_type):
 
@@ -19,8 +19,8 @@ def llm_generate_code(model_name, instance, output, output_answer, prompt_type):
     # Try each API key until successful
     for _ in range(len(api_keys)):
         try:
-            client = OpenAI(api_key=api_keys[0])
-
+            # client = OpenAI(api_key=api_keys[0], base_url = base_url)
+            client = OpenAI(api_key=api_keys[0]) #my api
             # get the prompt
             with open("benchmark/" + f"{instance}/simple_design_description.txt", "r", encoding='utf-8') as f:
                 simple_prompt = f.read()
@@ -112,7 +112,7 @@ def llm_generate_code(model_name, instance, output, output_answer, prompt_type):
 if __name__ == "__main__":
     parser = argparse.ArgumentParser()
 
-    parser.add_argument("--model", type=str, default="gpt-4-vision-preview", help="The model name")
+    parser.add_argument("--model", type=str, default="gpt-4", help="The model name")
     parser.add_argument("--instance", type=str, default="arithmetic/adder_8bit", help="The instance name")
     parser.add_argument("--output", type=str, default="generated_code/gpt4v/adder_8bit_1.v", help="The output file name")
     parser.add_argument("--output_answer", type=str, default="generated_code/gpt4v/adder_8bit_1.txt", help="The output file name")

@@ -1,0 +1,29 @@
+I see that you are looking to implement a module for a 16-bit full adder in combinational logic. Below is the Verilog code for the signed adder that adds two 8-bit 2's complement numbers and captures signed overflow:
+
+```verilog
+module signed_adder(
+  input [7:0] a,
+  input [7:0] b,
+  output [7:0] s,
+  output overflow
+);
+
+reg[7:0] temp;
+
+assign s = a + b; // regular addition of the two 8-bit inputs
+
+// logic to check for signed overflow
+always @* begin
+  temp = a + b;
+  if ((a[7] == b[7]) && (a[7] != temp[7])) // overflow occurs if signs of operands are the same and result has a different sign
+    overflow = 1;
+  else
+    overflow = 0;
+end
+
+endmodule
+```
+
+In this code, `a` and `b` are the inputs which are 8-bit 2's complement numbers. The output `s` is also 8-bit and represents the sum of `a` and `b`. The `overflow` output indicates if a signed overflow occurred during the addition operation.
+
+Please let me know if you need any further modifications or have any specific requirements.

@@ -5,7 +5,7 @@ import os
 # get access the parent directory
 os.chdir(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
 
-api_keys = ['API_KEY1', "API_KEY2"]
+api_keys = ['API_KEY_1', 'API_KEY_2']
 
 def llm_complete_code(model_name, instance, output, output_answer, iter):
 

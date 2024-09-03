@@ -1,0 +1,42 @@
+Here is the complete Verilog code for the 16-bit divider module:
+
+```verilog
+module div_16bit (
+    input [15:0] A,
+    input [7:0] B,
+    output reg [15:0] result,
+    output reg [15:0] odd
+);
+
+reg [15:0] a_reg;
+reg [7:0] b_reg;
+
+always @ (*) begin
+    a_reg = A;
+    b_reg = B;
+end
+
+always @ (*) begin
+    reg [15:0] quotient;
+    reg [15:0] remainder;
+
+    quotient = 16'b0;
+    remainder = 16'b0;
+    
+    for (int i = 15; i >= 0; i = i - 1) begin
+        remainder = {remainder[14:0], a_reg[15]};
+        if (remainder >= b_reg) begin
+            quotient[i] = 1;
+            remainder = remainder - b_reg;
+        end
+        a_reg = {a_reg[14:0], A[15]};
+    end
+    
+    result = quotient;
+    odd = remainder;
+end
+
+endmodule
+```
+
+In this code, we define the module `div_16bit` with input ports `A` and `B` for the dividend and divisor, and output ports `result` for the quotient and `odd` for the remainder. The two always blocks are used to update the registers with the input values and perform the division operation. The division operation is done using a for loop to iterate through each bit of the dividend, comparing it with the divisor and updating the quotient and remainder accordingly.

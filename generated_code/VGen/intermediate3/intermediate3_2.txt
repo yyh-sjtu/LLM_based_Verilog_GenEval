@@ -1,0 +1,28 @@
+
+
+// Define the feedback polynomial
+assign feedback_value = r_reg[4] ^ r_reg[2] ^ r_reg[0];
+
+// Create the next state logic
+assign r_next[0] = feedback_value;
+assign r_next[1] = r_reg[0];
+assign r_next[2] = r_reg[1];
+assign r_next[3] = r_reg[2];
+assign r_next[4] = r_reg[3];
+
+// Clock and reset logic
+always @(posedge clk, posedge reset) begin
+  if (reset) begin
+    r_reg <= 5'b1;
+  end
+  else begin
+    r_reg <= r_next;
+  end
+end
+
+// Output logic
+assign q = r_reg;
+
+endmodule
+
+// Instantiate the lfsr module in your top-level module and connect the appropriate signals.
