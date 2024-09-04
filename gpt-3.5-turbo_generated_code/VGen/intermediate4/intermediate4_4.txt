@@ -1,0 +1,30 @@
+always @(posedge clk or posedge reset) begin
+    if (reset) begin
+        present_state <= 0;
+    end else begin
+        present_state <= next_state;
+    end
+end
+
+always @(present_state, in) begin
+    case (present_state)
+        0: begin
+            out <= 1;
+            if (in == 0) begin
+                next_state <= 1;
+            end else begin
+                next_state <= 0;
+            end
+        end
+        1: begin
+            out <= 0;
+            if (in == 0) begin
+                next_state <= 0;
+            end else begin
+                next_state <= 1;
+            end
+        end
+    endcase
+end
+endmodule
+Save the above code as "simple_fsm.v" and simulate it in a Verilog simulator to test its functionality. You can use tools like ModelSim for simulation. Make sure to provide appropriate test vectors for input "in" and observe the output "out" to verify the behavior of the Moore state machine.

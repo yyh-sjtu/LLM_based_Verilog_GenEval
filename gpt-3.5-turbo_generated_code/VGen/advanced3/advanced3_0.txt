@@ -1,0 +1,74 @@
+Sure! Below is the Verilog implementation of the finite state machine (FSM) that recognizes the sequence "101". It behaves according to the specifications you've provided, including state transitions and output signals.
+
+```verilog
+module adv_fsm(
+    input clk,
+    input reset,
+    input x,
+    output reg z
+);
+
+    reg [1:0] present_state, next_state;
+
+    // State encoding
+    parameter IDLE = 2'b00,
+              S1   = 2'b01,
+              S10  = 2'b10,
+              S101 = 2'b11;
+
+    // State transition logic - combinatorial
+    always @(*) begin
+        case (present_state)
+            IDLE: begin
+                if (x)
+                    next_state = S1;
+                else
+                    next_state = IDLE;
+            end
+            S1: begin
+                if (~x) // x is 0
+                    next_state = S10;
+                else
+                    next_state = IDLE;
+            end
+            S10: begin
+                if (x)
+                    next_state = S101;
+                else
+                    next_state = IDLE;
+            end
+            S101: begin
+                next_state = IDLE; // After recognizing "101", go back to IDLE
+            end
+            default: next_state = IDLE; // Default to IDLE in case of any invalid state
+        endcase
+    end
+
+    // State register - sequential logic
+    always @(posedge clk or posedge reset) begin
+        if (reset) begin
+            present_state <= IDLE;
+            z <= 0; // z is low during reset
+        end
+        else begin
+            present_state <= next_state;
+            if (present_state == S101) 
+                z <= 1; // Assert z when current state is S101
+            else 
+                z <= 0; // Deassert z in other states
+        end
+    end
+
+endmodule
+```
+
+### Explanation:
+- **State Encoding**: The states are encoded as 2-bit values for easier readability and state management.
+  
+- **Next state logic**: Based on the current state, the next state is determined using a combinational `always` block (`always @(*)`). The FSM transitions through states based on input `x`. 
+
+- **State register**: The change of the present state occurs on a rising edge of the clock or when a reset signal is high. If `reset` is asserted, the FSM goes to the `IDLE` state and the output `z` is set to 0. 
+
+- **Output Logic**: The output `z` is asserted high only when the FSM is in the `S101` state.
+
+You can simulate this module with a testbench to verify its functionality. If you have further requests or need additional examples, feel free to ask!

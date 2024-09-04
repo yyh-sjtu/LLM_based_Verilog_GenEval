@@ -1,0 +1,49 @@
+Certainly! Below is a complete implementation of a RAM module in Verilog based on your specifications. This module includes write and read operations controlled by the `we` (write enable) signal. When `we` is high, the data at the specified address will be written; otherwise, the data at the specified address will be read into `q`.
+
+```verilog
+// This is a RAM module
+module ram #( 
+    parameter ADDR_WIDTH = 6, 
+    parameter DATA_WIDTH = 8
+) (
+    input [DATA_WIDTH-1:0] data,        // Data input
+    input [ADDR_WIDTH-1:0] addr,        // Address input
+    input we,                            // Write enable
+    input clk,                           // Clock input
+    output reg [DATA_WIDTH-1:0] q       // Data output
+);
+    
+    // Declare the RAM as a memory array
+    reg [DATA_WIDTH-1:0] ram [0:(2**ADDR_WIDTH)-1]; // RAM array
+
+    // Always block for read and write operations
+    always @(posedge clk) begin
+        if (we) begin
+            ram[addr] <= data;              // Write operation
+        end 
+        q <= ram[addr];                     // Read operation
+    end
+    
+endmodule
+```
+
+### Explanation:
+
+1. **Parameters**: The parameters `ADDR_WIDTH` and `DATA_WIDTH` determine the size of the address space and the width of the data, respectively.
+
+2. **Inputs and Outputs**:
+   - `data`: Data input to write to the RAM.
+   - `addr`: The address at which the data should be written or read.
+   - `we`: Write enable signal.
+   - `clk`: Clock signal.
+   - `q`: The output to read data from the specified address.
+
+3. **RAM Declaration**: The RAM is declared as a two-dimensional array `ram` of size `2**ADDR_WIDTH`.
+
+4. **Always Block**: 
+   - Triggered on the positive edge of the clock.
+   - If `we` is high, it writes the `data` to the specified `addr`.
+   - The output `q` is assigned the data from the specified address regardless of the write enable signal.
+
+### Usage:
+This RAM module may be instantiated in a testbench or another design when you wish to utilize a simple memory structure. It is synchronous with respect to the clock and utilizes a straightforward read-write mechanism.

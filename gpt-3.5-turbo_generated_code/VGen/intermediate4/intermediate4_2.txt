@@ -1,0 +1,69 @@
+Certainly! Below is a Verilog implementation of a simple Moore state machine as per your specifications. The machine has two states: `0` and `1`. The output (`out`) is high when in state `0` and low when in state `1`. State transitions occur when the input `in` is low, and the reset takes the state back to `0`.
+
+```verilog
+module simple_fsm(
+    input clk,
+    input reset,
+    input in,
+    output reg out
+);
+    // State definitions
+    parameter STATE_0 = 1'b0;
+    parameter STATE_1 = 1'b1;
+
+    // State registers
+    reg present_state, next_state;
+
+    // State transition logic
+    always @(*) begin
+        case (present_state)
+            STATE_0: begin
+                if (!in)
+                    next_state = STATE_1;  // Transition to state 1
+                else
+                    next_state = STATE_0;  // Stay in state 0
+            end
+            STATE_1: begin
+                if (!in)
+                    next_state = STATE_0;  // Transition to state 0
+                else
+                    next_state = STATE_1;  // Stay in state 1
+            end
+            default: next_state = STATE_0;  // Default to state 0
+        endcase
+    end
+
+    // State update on clock edge
+    always @(posedge clk or posedge reset) begin
+        if (reset) begin
+            present_state <= STATE_0;  // Reset to state 0
+        end else begin
+            present_state <= next_state;  // Update state
+        end
+    end
+
+    // Output logic (Moore output)
+    always @(*) begin
+        case (present_state)
+            STATE_0: out = 1'b1;  // Output high in state 0
+            STATE_1: out = 1'b0;  // Output low in state 1
+            default: out = 1'bx;   // Undefined state
+        endcase
+    end
+
+endmodule
+```
+
+### Explanation:
+
+- **State Definitions**: `STATE_0` and `STATE_1` are defined as parameters for readability.
+  
+- **Present and Next State**: Two registers (`present_state`, `next_state`) track the current and next states.
+
+- **State Transition Logic**: In the combinational block (the `always @(*)` block), we define how the state transitions occur based on the current state and the input `in`.
+
+- **Clock and Reset Logic**: In the second `always @(...)` block which is triggered on the positive edge of the clock and the reset signal, the present state is updated. If the `reset` signal is high, the machine resets to state `0`.
+
+- **Output Logic**: A separate combinational block dictates the output based on the current state (`present_state`). The output is high only when in state `0`.
+
+This design captures the functionality of a Moore state machine with the desired behavior, including reset and proper state transitions.

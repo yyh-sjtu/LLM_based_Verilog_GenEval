@@ -1,0 +1,32 @@
+Certainly! Below is a complete implementation of a 2-to-1 multiplexer in Verilog. The module takes two 5-bit inputs (`a` and `b`), a selector input (`sel`), and produces a 5-bit output (`out`). 
+
+### Verilog Code
+
+```verilog
+module mux (
+    input [4:0] a,     // 5-bit input a
+    input [4:0] b,     // 5-bit input b
+    input sel,         // selector input
+    output [4:0] out   // 5-bit output
+);
+
+// Multiplexing logic
+assign out = (sel == 1'b0) ? a : b;
+
+endmodule
+```
+
+### Explanation:
+
+1. **Inputs and Outputs**:
+   - `input [4:0] a`: This is the first 5-bit input.
+   - `input [4:0] b`: This is the second 5-bit input.
+   - `input sel`: This is the selector signal that chooses which input to forward to the output.
+   - `output [4:0] out`: This is the 5-bit output that results from the multiplexing.
+
+2. **Behavior**:
+   - The `assign` statement uses a conditional operator (ternary operator) to implement the multiplexer logic.
+   - If `sel` is `0`, then `out` will take the value of `a`.
+   - If `sel` is `1`, then `out` will take the value of `b`.
+
+You can synthesize this code in a Verilog simulator or FPGA development environment to verify its functionality.

@@ -1,0 +1,20 @@
+Sure, here is the implementation of the 2-to-1 multiplexer module in Verilog:
+
+```verilog
+module mux( 
+  input [4:0] a, b,
+  input sel,
+  output reg [4:0] out );
+
+  always @ (a, b, sel)
+  begin
+    if(sel)
+      out = b;
+    else
+      out = a;
+  end
+
+endmodule
+```
+
+This module takes two 5-bit inputs `a` and `b`, a select signal `sel`, and has a 5-bit output `out`. It behaves as a 2-to-1 multiplexer where the output `out` is selected based on the value of the select signal `sel`. If `sel` is high (1), the output `out` will be the value of input `b`, else if `sel` is low (0), the output `out` will be the value of input `a`.

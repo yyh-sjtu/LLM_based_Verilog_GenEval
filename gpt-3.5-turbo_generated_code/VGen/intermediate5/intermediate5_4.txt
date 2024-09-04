@@ -1,0 +1,49 @@
+Certainly! Below is the Verilog implementation for a left rotate operation as described in the module signature you've provided. The module performs a left rotation of the input data by a specified amount on each rising clock edge, while also allowing for resetting and loading new data.
+
+Here’s the implementation:
+
+```verilog
+module left_rotate(
+    input clk,
+    input reset,
+    input [2:0] amount,  // Amount to shift/rotate
+    input [7:0] data,    // Data to shift/rotate
+    input load,          // Load signal to load new data
+    output reg [7:0] out // Output after rotation
+);
+
+    always @(posedge clk or posedge reset) begin
+        if (reset) begin
+            out <= 8'b0; // Clear the output on reset
+        end else if (load) begin
+            out <= data; // Load new data if load signal is high
+        end else begin
+            // Perform left rotation
+            out <= (out << amount) | (out >> (8 - amount));
+        end
+    end
+
+endmodule
+```
+
+### Explanation:
+1. **Input/Output Declarations**: 
+   - `clk`: Clock signal for synchronous operations.
+   - `reset`: Asynchronous reset signal to clear the output.
+   - `amount`: 3-bit input specifying how many bits to rotate left.
+   - `data`: 8-bit input that can be loaded to `out`.
+   - `load`: Signal to load new data into `out`.
+   - `out`: 8-bit output that holds the current rotated value.
+
+2. **Always Block**: 
+   - Triggered on the rising edge of `clk` or when `reset` is asserted.
+   - If `reset` is high, `out` is cleared.
+   - If `load` is high, `out` is loaded with the `data` input.
+   - If neither `reset` nor `load` is high, the rotation operation is executed.
+   - The left rotation is performed by shifting `out` left by `amount` bits and combining it with the bits that "wrap around" from the left side using the right shift operation.
+
+### Note:
+- You may want to consider boundary conditions (rotating by 0, 8, etc.), but with the current implementation, rotating by any amount from 1 to 7 works correctly as `>>` and `<<` handle those cases properly.
+- If `amount` is 0, the output will remain unchanged because of the nature of the bitwise operations. You might want to optimize the logic further if you're looking for specific edge behavior.
+
+Feel free to ask if you need further modifications or explanations!

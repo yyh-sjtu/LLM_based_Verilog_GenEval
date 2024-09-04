@@ -1,0 +1,20 @@
+// Generating feedback using xor operation on taps at bit positions 5 and 3
+assign feedback_value = r_reg[4] ^ r_reg[2];
+
+// Sequential logic for LFSR operation
+always @(posedge clk or posedge reset) begin
+    if (reset) begin
+        r_reg <= 5'b1; // Initializing LFSR with seed value 1
+    end else begin
+        r_reg <= r_next; // Updating LFSR state based on feedback value
+    end
+end
+
+// Calculating next state of LFSR using shift register with taps at bit positions 5 and 3
+assign r_next[0] = feedback_value;
+assign r_next[1:4] = r_reg[0:3];
+
+// Assigning output to current LFSR state
+assign q = r_reg;
+
+endmodule

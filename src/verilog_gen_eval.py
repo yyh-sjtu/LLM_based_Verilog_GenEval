@@ -93,6 +93,11 @@ def test_on_benchmark(args):
     else:
         raise ValueError("Invalid benchmark")
     
+    generated_code_dir = f"{args.model_name}_generated_code"
+    
+    if not os.path.exists(generated_code_dir):
+        os.mkdir(generated_code_dir)
+    
     for benchmark in benchmarks:
         
         prompt_pattern = file_patterns[benchmark]["prompt_pattern"]
@@ -123,7 +128,7 @@ def test_on_benchmark(args):
                 prompt = top_instruction[benchmark] + prompt
                 
                 design_name = os.path.basename(design_dir)
-                generated_design_dir = os.path.join("generated_code", benchmark, design_name)
+                generated_design_dir = os.path.join( generated_code_dir, benchmark, design_name)
                 os.makedirs(generated_design_dir, exist_ok=True)
 
                 for i in range(args.pass_at_n):
@@ -141,11 +146,12 @@ def test_on_benchmark(args):
                 
         if not args.gen_only:
             print(f"Start evaluating Verilog code for {benchmark}")
+            append_file(f"Model name: {args.model_name}\n", args.correctness_file)
             append_file(f"Evaluation results of {benchmark}:\n", args.correctness_file)
-            if not os.path.exists(os.path.join("generated_code", benchmark)):
+            if not os.path.exists(os.path.join( generated_code_dir, benchmark)):
                 print(f"Please generate the Verilog code of benchmard {benchmark} first!")
                 
-            generated_design_dir_list = glob(os.path.join("generated_code", benchmark, "*"))
+            generated_design_dir_list = glob(os.path.join( generated_code_dir, benchmark, "*"))
             generated_design_dir_list.sort()
             for generated_design_dir in tqdm(generated_design_dir_list):
                 design_name = os.path.basename(generated_design_dir)
@@ -156,7 +162,7 @@ def test_on_benchmark(args):
                 for generated_design_file in generated_design_file_list:
                     
                     try:
-                        testbench = get_testbench_file(generated_design_dir.replace("generated_code", "benchmark"), testbench_pattern)
+                        testbench = get_testbench_file(generated_design_dir.replace( generated_code_dir, "benchmark"), testbench_pattern)
                     except:
                         print(f"Skipping {generated_design_file}, because testbench pattern match failed.")
                         continue

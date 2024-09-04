@@ -1,0 +1,12 @@
+// Implementing the truth table logic using Verilog
+
+module circuit(input x3, input x2, input x1, output reg f );
+  
+  always @(x3 or x2 or x1)
+    case ({x3, x2, x1})
+      3'b000, 3'b001, 3'b011: f = 1;
+      3'b010, 3'b110, 3'b101: f = 0;
+      3'b100, 3'b111: f = 1;
+      default: f = 0;
+    endcase
+endmodule

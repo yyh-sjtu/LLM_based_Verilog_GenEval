@@ -1,0 +1,43 @@
+Sure! Based on the provided truth table, we can derive the logic expression for the output \( f \) by identifying which combinations of inputs produce a high output (1). 
+
+From the truth table, we can see that the output \( f \) is 1 for the following combinations of inputs:
+
+1. \( x3 = 0, x2 = 0, x1 = 0 \) (000)
+2. \( x3 = 0, x2 = 0, x1 = 1 \) (001)
+3. \( x3 = 0, x2 = 1, x1 = 1 \) (011)
+4. \( x3 = 1, x2 = 1, x1 = 0 \) (110)
+
+This corresponds to the minterms: 
+- \( m0 \) (000)
+- \( m1 \) (001)
+- \( m3 \) (011)
+- \( m6 \) (110)
+
+The logical expression can be derived from these minterms:
+\[ 
+f = \overline{x3} \cdot \overline{x2} \cdot \overline{x1} + \overline{x3} \cdot \overline{x2} \cdot x1 + \overline{x3} \cdot x2 \cdot x1 + x3 \cdot x2 \cdot \overline{x1}
+\]
+
+This can be implemented in Verilog as follows:
+
+```verilog
+module truthtable (
+    input x3,
+    input x2,
+    input x1,
+    output f
+);
+    assign f = (~x3 & ~x2 & ~x1) |   // m0
+               (~x3 & ~x2 & x1)  |   // m1
+               (~x3 & x2 & x1)   |   // m3
+               (x3 & x2 & ~x1);       // m6
+endmodule
+```
+
+### Explanation:
+- `~` is the NOT operation, which inverts the value of the input.
+- `&` is the AND operation.
+- `|` is the OR operation.
+- Each term in the expression corresponds to one of the minterms where \( f \) is 1.
+
+This module takes three inputs, \( x3 \), \( x2 \), and \( x1 \), and produces one output \( f \) according to the specified truth table.

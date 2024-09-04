@@ -1,0 +1,35 @@
+Sure! Let's implement the given truth table using Verilog. We will define the module `truthtable` with the specified inputs and output. The output will be defined based on the truth table you provided.
+
+Here’s a simple implementation using a combinational logic based on the given truth table:
+
+```verilog
+module truthtable(
+    input x3, 
+    input x2, 
+    input x1, 
+    output reg f
+);
+    // Combinational logic to compute the output
+    always @(*) begin
+        case ({x3, x2, x1})
+            3'b000: f = 1;  // 0 0 0 -> 1
+            3'b001: f = 1;  // 0 0 1 -> 1
+            3'b010: f = 0;  // 0 1 0 -> 0
+            3'b011: f = 1;  // 0 1 1 -> 1
+            3'b100: f = 0;  // 1 0 0 -> 0
+            3'b101: f = 0;  // 1 0 1 -> 0
+            3'b110: f = 1;  // 1 1 0 -> 1
+            3'b111: f = 0;  // 1 1 1 -> 0
+            default: f = 0; // Default case (just in case)
+        endcase
+    end
+endmodule
+```
+
+### Explanation:
+- The module `truthtable` has three inputs (`x3`, `x2`, `x1`) and one output (`f`).
+- We use an `always` block with the `@(*)` sensitivity list to implement combinational logic.
+- The output `f` is computed based on the combination of inputs using a `case` statement, matching the binary representation of the inputs to the corresponding output value from the truth table.
+- Each input combination is expressed in 3-bit binary format, allowing mapping to the output `f`.
+
+Feel free to modify or extend the code as needed for your application!

@@ -1,0 +1,45 @@
+Certainly! Below is a Verilog implementation of a signed adder that adds two 8-bit 2's complement numbers and captures the signed overflow. In 2's complement representation, overflow occurs when the sum of two positive numbers yields a negative result or when the sum of two negative numbers yields a positive result.
+
+```verilog
+module signed_adder(
+    input  [7:0] a,         // First 8-bit signed number
+    input  [7:0] b,         // Second 8-bit signed number
+    output [7:0] s,         // Sum of a and b
+    output overflow         // Overflow flag
+);
+    wire [8:0] sum;        // 9-bit sum to capture overflow
+
+    // Perform addition with an extra bit to capture overflow
+    assign sum = {1'b0, a} + {1'b0, b};
+
+    // Assign the lower 8 bits to the output sum
+    assign s = sum[7:0];
+
+    // Determine overflow condition
+    assign overflow = (a[7] == b[7]) && (s[7] != a[7]);
+
+endmodule
+```
+
+### Explanation:
+1. **Inputs**:
+   - `a` and `b`: 8-bit signed numbers (2's complement).
+  
+2. **Outputs**:
+   - `s`: The resulting sum, also an 8-bit signed number.
+   - `overflow`: A flag indicating if an overflow condition occurred.
+
+3. **Internal Logic**:
+   - A 9-bit wire `sum` is used to perform the addition, capturing any potential overflow.
+   - The sum is computed by concatenating `a` and `b` with an extra bit set to `0` to ensure that the addition does not lose information.
+   - The output `s` is assigned the lower 8 bits of the `sum`.
+   - The overflow condition is checked using the logic:
+     - If `a` and `b` have the same sign (both are either positive or negative) and the sign of the output `s` is different from `a`, then an overflow has occurred.
+
+### Testing:
+To verify the functionality of this module, you should write testbenches that include test cases covering edge cases such as:
+- Adding two positive numbers resulting in a negative.
+- Adding two negative numbers resulting in a positive.
+- Typical cases with no overflow.
+  
+Always ensure that you have thorough testing to confirm the correctness of the implementation.

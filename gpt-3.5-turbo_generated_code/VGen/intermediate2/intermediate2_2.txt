@@ -1,0 +1,38 @@
+Certainly! Below is a simple implementation of a Verilog counter module that counts from 1 to 12 and resets when it reaches 12 or when the reset signal is asserted.
+
+```verilog
+module counter(
+    input clk,
+    input reset,
+    output reg [3:0] q
+);
+
+// Initialize the counter
+initial begin
+    q = 4'b0001; // Start from 1
+end
+
+// Always block triggered on positive edge of clk or reset
+always @(posedge clk or posedge reset) begin
+    if (reset) begin
+        q <= 4'b0001; // Reset the counter to 1
+    end else begin
+        if (q == 4'b1100) begin // Check if counter reaches 12
+            q <= 4'b0001; // Reset to 1
+        end else begin
+            q <= q + 1; // Increment the counter
+        end
+    end
+end
+
+endmodule
+```
+
+### Explanation:
+- The counter (`q`) is a 4-bit register that starts at 1.
+- In the `always` block, we check for:
+  - Asserting the `reset` signal, which sets `q` back to `1`.
+  - If `q` reaches `12` (which is `4'b1100`), it resets back to `1`.
+  - Otherwise, the counter increments by `1` on each clock cycle.
+  
+This implementation will satisfy the requirements of counting from 1 to 12, and properly resetting as needed. Make sure to test it in your simulator to verify functionality under various scenarios!

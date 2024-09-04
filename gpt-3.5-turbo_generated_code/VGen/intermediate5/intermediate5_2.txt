@@ -1,0 +1,44 @@
+Certainly! Below is a Verilog implementation for a left rotate operation. The module rotates the input data left by the specified amount when the `load` signal is high. The `reset` signal clears the output, and the `clk` signal is used for synchronous operations.
+
+```verilog
+module left_rotate (
+    input clk,
+    input reset,
+    input [2:0] amount,
+    input [7:0] data,
+    input load,
+    output reg [7:0] out
+);
+
+always @(posedge clk or posedge reset) begin
+    if (reset) begin
+        // Clear output on reset
+        out <= 8'b0;
+    end else if (load) begin
+        // Perform left rotate operation
+        // Amount must be modded by 8 since we are rotating an 8-bit value
+        case (amount % 8)
+            3'b000: out <= data; // No rotation
+            3'b001: out <= {data[6:0], data[7]}; // Rotate left by 1
+            3'b010: out <= {data[5:0], data[7:6]}; // Rotate left by 2
+            3'b011: out <= {data[4:0], data[7:5]}; // Rotate left by 3
+            3'b100: out <= {data[3:0], data[7:4]}; // Rotate left by 4
+            3'b101: out <= {data[2:0], data[7:5]}; // Rotate left by 5
+            3'b110: out <= {data[1:0], data[7:6]}; // Rotate left by 6
+            3'b111: out <= {data[0], data[7:1]}; // Rotate left by 7
+            default: out <= data; // Default case (although not expected)
+        endcase
+    end
+end
+
+endmodule
+```
+
+### Explanation:
+- **Reset Logic**: When `reset` is high, the output `out` is cleared to `0`.
+- **Load Logic**: When `load` is high, it performs a left rotation based on the specified `amount`:
+  - The case statement checks the `amount` (modulus 8, since a shift by 8 gives the same result as a shift by 0) and rotates the bits appropriately.
+- The left shift/rotate is implemented using concatenation `{}` which allows us to create the shifted output.
+  
+### Usage:
+- You can instantiate this module in a testbench or another module, providing it with a clock signal, reset signal, the amount to rotate, the data to be rotated, and the load signal to trigger the operation.

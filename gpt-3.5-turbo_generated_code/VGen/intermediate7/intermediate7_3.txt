@@ -1,0 +1,72 @@
+To implement the permutation block module in Verilog based on your provided table, you'll first read from the input `In32`, use the permutation table to determine the positions of bits for the output `Out32`, and then write the resulting permuted bits.
+
+Here's a complete implementation:
+
+```verilog
+module P_box (
+    input wire [31:0] In32,
+    output reg [31:0] Out32
+);
+    
+    localparam len_table = 32;
+    reg [5:0] In32table [len_table-1:0];
+
+    initial begin
+        In32table[0] = 15;
+        In32table[1] = 6;
+        In32table[2] = 20;
+        In32table[3] = 10;
+        In32table[4] = 11;
+        In32table[5] = 22;
+        In32table[6] = 5;
+        In32table[7] = 9;
+        In32table[8] = 1;
+        In32table[9] = 7;
+        In32table[10] = 8;
+        In32table[11] = 4;
+        In32table[12] = 12;
+        In32table[13] = 13;
+        In32table[14] = 14;
+        In32table[15] = 17;
+        In32table[16] = 16;
+        In32table[17] = 25;
+        In32table[18] = 19;
+        In32table[19] = 23;
+        In32table[20] = 18;
+        In32table[21] = 26;
+        In32table[22] = 28;
+        In32table[23] = 27;
+        In32table[24] = 29;
+        In32table[25] = 31;
+        In32table[26] = 30;
+        In32table[27] = 0;
+        In32table[28] = 2;
+        In32table[29] = 3;
+        In32table[30] = 21;       
+        In32table[31] = 24;
+    end
+
+    always @(*) begin
+        Out32 = 32'b0;  // Initialize output to 0
+        for (integer i = 0; i < len_table; i = i + 1) begin
+            Out32[i] = In32[In32table[i]];  // Map input bits to output using the permutation table
+        end
+    end
+
+endmodule
+```
+
+### Explanation:
+1. **Input/Output Declarations**: The module has a 32-bit input (`In32`) and a 32-bit output (`Out32`).
+
+2. **Permutation Table**: The permutation table is defined as a localparam array `In32table` containing the indices for permutation.
+
+3. **Initialization**: In the initial block, the permutation indices are filled as provided.
+
+4. **Behavioral Block**: The `always @(*)` block gets triggered on any change to the input. Inside this block:
+   - `Out32` is reset to zero.
+   - A loop goes through each element in the permutation table, setting each bit of `Out32` to the corresponding bit in `In32` as specified by the permutation indices.
+
+### Note:
+- Ensure that when using this module in a testbench, you handle the simulation so that the initial block can execute properly (Verilog simulation tools manage this differently).
+- This code assumes simple synthesis without structural optimizations or clocked behavior; you may need to adapt it depending on your synthesis tools and requirements for clocking or resets.
