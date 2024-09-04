@@ -10,7 +10,7 @@
 </div>
 
 ## 1. Introduction
-This framework integrates three mainstream benchmarks, including RTLLM, VGen, VerilogEval for LLM based verilog generation.
+This framework integrates three mainstream benchmarks, including [RTLLM](https://github.com/hkust-zhiyao/RTLLM), [VGen](https://github.com/shailja-thakur/VGen), [VerilogEval](https://github.com/NVlabs/verilog-eval) for LLM based verilog generation.
 
 ## 2. Usage
 ### 1. Install iverilog:
@@ -19,6 +19,10 @@ sudo apt install iverilog
 ```
 ### 2. Run
 
+Start quickly:
+```bash
+bash run.sh
+```
 Run the following command to evaluate on all benchmarks:
 ```bash
 python src/verilog_gen_eval.py --benchmark all
