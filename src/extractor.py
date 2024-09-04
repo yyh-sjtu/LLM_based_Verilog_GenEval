@@ -1,3 +1,9 @@
+'''
+Code extractor
+2024-09-04
+Author: Yunhao Zhou
+'''
+
 import re
 
 def verilog_extractor(text):

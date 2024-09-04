@@ -1,5 +1,8 @@
-# LM_based_Verilog_GenEval: A comprehensive generation and evaluation framework for LLM based Verilog code generation
-# Author: Yunhao Zhou
+'''
+LM_based_Verilog_GenEval: A comprehensive generation and evaluation framework for LLM based Verilog code generation
+2024-09-04
+Author: Yunhao Zhou
+'''
 
 from tqdm import tqdm
 import os
@@ -38,8 +41,8 @@ def get_args():
     parser.add_argument("--correctness_file", type=str, default=f"correctness/correctness_file{datetime.now().strftime('%Y%m%d_%H%M%S')}.txt")
     parser.add_argument("--gen_only", action='store_true', help="If set, only generate code without evaluation")
     parser.add_argument("--eval_only", action='store_true', help="If set, only run evaluation without generating code")
+    parser.add_argument("--prompt_type", type=str, default="1", help="When the benchmark is VGen, the prompt_type should be set")
     
-        
     args = parser.parse_args()
     
     if args.gen_only and args.eval_only:
@@ -143,104 +146,6 @@ def test_on_benchmark(args):
             
             append_file(f"{'-'*20}\n", args.correctness_file)
         
-def test_RTLLM(args):
-    prompt_file = "design_description.txt"
-    testbench_file = "testbench.v"
-    base_dir = "benchmark/RTLLM"
-    benchmark = os.path.basename(base_dir)
-    
-    design_dir_list = glob(os.path.join(base_dir, "*"))
-    
-    for design_dir in tqdm(design_dir_list):
-        prompt = get_file_content(os.path.join(design_dir, prompt_file))
-        
-        design_name = os.path.basename(design_dir)
-        generated_design_dir = os.path.join("generated_code", benchmark, design_name)
-        os.makedirs(generated_design_dir, exist_ok=True)
-        
-        for i in range(args.pass_at_n):
-            text = llm_call(args.model_name, prompt, args.api_key, args.base_url)
-            verilog_code = verilog_extractor(text)
-            write_file(text, os.path.join(generated_design_dir, f"{design_name}_{i}.txt"))
-            write_file(verilog_code, os.path.join(generated_design_dir, f"{design_name}_{i}.v"))
-            
-def test_VGen(args):
-    def get_prompt_file(design_dir, prompt_pattern):
-        return glob(os.path.join(design_dir, prompt_pattern))[0]
-    
-    def get_testbench_file(design_dir, tb_pattern):
-        return glob(os.path.join(design_dir, tb_pattern))[0]
-        
-        
-    prompt_type = input("Please choose prompt_type(1/2/3): ")
-    if not (prompt_type == "1" or prompt_type == "2" or prompt_type == "3"):
-        raise ValueError("Invalid prompt_type for VGen")
-    
-    prompt_pattern = f"prompt{prompt_type}_*"
-    testbench_pattern = "tb_*"
-    base_dir = "benchmark/VGen"
-    benchmark = os.path.basename(base_dir)
-    
-    design_dir_list = glob(os.path.join(base_dir, "*"))
-    
-    for design_dir in tqdm(design_dir_list):
-        prompt_file = get_prompt_file(design_dir, prompt_pattern)
-        prompt = get_file_content(os.path.join(design_dir, prompt_file))
-        
-        design_name = os.path.basename(design_dir)
-        generated_design_dir = os.path.join("generated_code", design_name)
-        os.makedirs(generated_design_dir, benchmark, exist_ok=True)
-        
-        for i in range(args.pass_at_n):
-            text = llm_call(args.model_name, prompt, args.api_key, args.base_url)
-            verilog_code = verilog_extractor(text)
-            write_file(text, os.path.join(generated_design_dir, f"{design_name}_{i}.txt"))
-            write_file(verilog_code, os.path.join(generated_design_dir, f"{design_name}_{i}.v"))
-            
-def test_VerilogEval(args):
-    def get_prompt_file(design_dir, prompt_pattern):
-        return glob(os.path.join(design_dir, prompt_pattern))[0]
-    
-    def get_testbench_file(design_dir, tb_pattern):
-        return glob(os.path.join(design_dir, tb_pattern))[0]
-    
-    prompt_pattern = "*prompt.txt"
-    testbench_pattern = "*test.sv"
-    base_dir = "benchmark/VerilogEval"
-    benchmark = os.path.basename(base_dir)
-    
-    design_dir_list = glob(os.path.join(base_dir, "*"))
-    
-    for design_dir in tqdm(design_dir_list):
-        design_name = os.path.basename(design_dir)
-        prompt_file = get_prompt_file(design_dir, prompt_pattern)
-        
-        prompt = get_file_content(os.path.join(design_dir, prompt_file))
-        
-        generated_design_dir = os.path.join("generated_code", design_name)
-        os.makedirs(generated_design_dir, benchmark, exist_ok=True)
-        
-        for i in range(args.pass_at_n):
-            text = llm_call(args.model_name, prompt, args.api_key, args.base_url)
-            verilog_code = verilog_extractor(text)
-            write_file(text, os.path.join(generated_design_dir, f"{design_name}_{i}.txt"))
-            write_file(verilog_code, os.path.join(generated_design_dir, f"{design_name}_{i}.v"))
-    
-    
-benchmark = {
-    "RTLLM": test_RTLLM,
-    "VGen": test_VGen,
-    "VerilogEval": test_VerilogEval
-}
-
-# if __name__ == "__main__":
-#     args = get_args()
-#     if args.benchmark in benchmark:
-#         benchmark[args.benchmark](args)
-#     elif args.benchmark == "all":
-#         print("all benchmark")
-#     else:
-#         print("Invalid benchmark name")
 
 if __name__ == "__main__":
     args = get_args()
