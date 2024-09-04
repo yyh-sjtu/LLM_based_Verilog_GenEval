@@ -1,21 +1,9 @@
-Here is the Verilog implementation of the 2-to-1 multiplexer module:
-
-```verilog
 module mux(
-    input [4:0] a, b,
-    input sel,
-    output reg [4:0] out
+input [4:0] a, b,
+input sel,
+output [4:0] out
 );
 
-always @(a, b, sel)
-begin
-    if(sel == 1'b0)
-        out = a;
-    else
-        out = b;
-end
+assign out = sel ? b : a;
 
 endmodule
-```
-
-In this implementation, the module has two 5-bit input ports a and b, a single-bit select signal sel, and a 5-bit output port out. The output port will be connected to the input port a if sel is 0, and will be connected to the input port b if sel is 1. The `always` block continuously monitors the inputs a, b, and sel and updates the output out accordingly.

@@ -1,3 +1,5 @@
+Here is the complete verilog code implementing the data width conversion circuit:
+
 ```verilog
 module width_8to16 (
     input clk,
@@ -12,22 +14,26 @@ reg [7:0] data_reg;
 reg [7:0] data_lock;
 
 always @(posedge clk or negedge rst_n) begin
-    if (!rst_n) begin
+    if (~rst_n) begin
+        data_reg <= 8'b0;
+        data_lock <= 8'b0;
+        valid_out <= 0;
         data_out <= 16'b0;
-        valid_out <= 1'b0;
     end else begin
         if (valid_in) begin
-            if (!valid_out) begin
-                data_lock <= data_in;
-                valid_out <= 1'b0;
-            end else begin
-                data_reg <= data_in;
-                data_out <= {data_lock, data_reg};
-                valid_out <= 1'b1;
-            end
+            data_lock <= data_reg;
+            data_reg <= data_in;
+        end
+        if (valid_in && ~valid_out) begin
+            valid_out <= 1;
+            data_out <= {data_lock, data_in};
         end
     end
 end
 
 endmodule
 ```
+
+This code defines a module `width_8to16` with the specified input and output ports as described in the requirements. It implements the behavior of storing the first arriving 8-bit data and then concatenating it with the second arriving 8-bit data to form a 16-bit output. The output valid_out is activated only after both valid inputs are received.
+
+Please note that this code assumes that the clk and rst_n signals are correctly defined and handled in the higher-level design.

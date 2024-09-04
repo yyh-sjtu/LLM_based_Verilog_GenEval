@@ -1,0 +1,28 @@
+Certainly! Below is a Verilog implementation of the `TopModule` with the specified interface. It contains 8 D flip-flops, each one capturing the corresponding bit from the 8-bit input `d` on the positive edge of the clock.
+
+```verilog
+module TopModule (
+    input  clk,
+    input  [7:0] d,
+    output reg [7:0] q
+);
+
+// D Flip-Flops
+always @(posedge clk) begin
+    q <= d; // Capture the input 'd' on the positive edge of 'clk'
+end
+
+endmodule
+```
+
+### Explanation:
+- **Module Declaration**: The module `TopModule` declares the input and output ports.
+- **Input Ports**:
+  - `clk`: Clock signal.
+  - `d`: 8-bit input data.
+- **Output Ports**:
+  - `q`: 8-bit output that captures the state of `d`.
+- **Always Block**: This block is triggered on the positive edge of `clk`.
+- **Non-blocking Assignment (`<=`)**: Used to ensure that the flip-flops update their output (`q`) with the value of `d` on the rising edge of the clock.
+
+This straightforward implementation achieves the desired functionality of using D flip-flops to store the input data `d` in the output `q` upon each rising edge of the clock signal.

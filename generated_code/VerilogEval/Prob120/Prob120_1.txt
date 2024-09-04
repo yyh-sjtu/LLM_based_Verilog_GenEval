@@ -1,0 +1,96 @@
+Sure! Below is an RTL implementation of the `TopModule` that adheres to the given state transition table for a Moore state machine. This example is written in Verilog:
+
+```verilog
+module TopModule (
+    input wire clk,
+    input wire reset,
+    input wire in,
+    output reg out
+);
+
+// State Encoding
+typedef enum reg [1:0] {
+    A = 2'b00,
+    B = 2'b01,
+    C = 2'b10,
+    D = 2'b11
+} state_t;
+
+state_t current_state, next_state;
+
+// State Transition Logic
+always @(*) begin
+    case (current_state)
+        A: begin
+            if (in) begin
+                next_state = B;
+            end else begin
+                next_state = A;
+            end
+            out = 1'b0;
+        end
+        
+        B: begin
+            if (in) begin
+                next_state = B;
+            end else begin
+                next_state = C;
+            end
+            out = 1'b0;
+        end
+        
+        C: begin
+            if (in) begin
+                next_state = D;
+            end else begin
+                next_state = A;
+            end
+            out = 1'b0;
+        end
+        
+        D: begin
+            if (in) begin
+                next_state = B;
+            end else begin
+                next_state = C;
+            end
+            out = 1'b1;
+        end
+        
+        default: begin
+            next_state = A;
+            out = 1'b0; // Default output
+        end
+    endcase
+end
+
+// State Update Logic
+always @(posedge clk or posedge reset) begin
+    if (reset) begin
+        current_state <= A; // Reset to state A
+        out <= 1'b0; // Output on reset
+    end else begin
+        current_state <= next_state; // Update state
+    end
+end
+
+endmodule
+```
+
+### Explanation:
+
+1. **State Encoding**:
+   - States A, B, C, D are encoded as 2-bit values using an enumerated type (`typedef enum`). This improves readability.
+
+2. **State Transition Logic**:
+   - The `always @(*)` block is used to derive the next state and the output based on the current state and the input `in`.
+   - Outputs are assigned directly within the case statements since it is a Moore machine (outputs are only a function of the state).
+
+3. **State Update Logic**:
+   - The state is updated synchronously on the positive edge of the `clk`. An asynchronous reset (`reset`) sets the current state to `A`.
+
+4. **Output Handling**:
+   - The output `out` changes based only on the current state.
+
+### Synthesis Considerations:
+This implementation is straightforward and can be synthesized easily for hardware. Make sure to test the design in a simulation environment to ensure it behaves as expected.

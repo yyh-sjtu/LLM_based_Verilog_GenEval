@@ -1,0 +1,41 @@
+Certainly! Below is a Verilog implementation of the `TopModule`. The module includes the necessary logic to enable the shift register for exactly 4 clock cycles when reset is asserted.
+
+```verilog
+module TopModule (
+    input clk,
+    input reset,
+    output reg shift_ena
+);
+
+// State to count the number of clock cycles 
+reg [1:0] cycle_count;
+
+// Sequential logic for managing the shift enable signal
+always @(posedge clk) begin
+    if (reset) begin
+        shift_ena <= 1'b1; // Enable shift register
+        cycle_count <= 2'b00; // Reset the counter
+    end else if (cycle_count < 2'b11) begin
+        cycle_count <= cycle_count + 2'b01; // Increment the cycle counter
+        shift_ena <= 1'b1; // Continue enabling for the first 4 cycles
+    end else begin
+        shift_ena <= 1'b0; // Disable shift register after 4 cycles
+    end
+end
+
+endmodule
+```
+
+### Explanation:
+1. **Input/Output Declaration**: The module has a clock input (`clk`), a reset input (`reset`), and an output `shift_ena`.
+
+2. **Counter Variable**: A 2-bit register `cycle_count` is used to keep track of how many clock cycles `shift_ena` has been asserted.
+
+3. **Synchronous Reset Logic**: 
+   - On a positive edge of `clk`, if `reset` is high, then `shift_ena` is asserted (`1`) and `cycle_count` is initialized to `0`.
+   - If `reset` is not high and `cycle_count` is less than `3` (0 through 3 counts for 4 cycles), increment `cycle_count` and keep `shift_ena` asserted.
+   - If `cycle_count` reaches 3, `shift_ena` is deasserted (`0`), indicating that the shift register should not be enabled anymore until it is reset.
+
+### Notes:
+- Make sure your simulation environment supports Verilog and that you can properly observe the output to ensure functionality matches the intended design.
+- The implementation assumes that the `reset` signal is active high and synchronous to the clock, as specified in your requirements.

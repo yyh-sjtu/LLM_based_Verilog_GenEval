@@ -1,0 +1,37 @@
+To implement the TopModule with the specified interface, I would create a Verilog module as follows:
+
+```verilog
+module TopModule(
+    input clk,
+    input load,
+    input [1:0] ena,
+    input [99:0] data,
+    output reg [99:0] q
+);
+
+reg [99:0] shift_reg;
+
+always @(posedge clk) begin
+    if (load) begin
+        shift_reg <= data;
+    end else begin
+        if (ena == 2'b01) begin // Rotate right
+            shift_reg <= {shift_reg[0], shift_reg[99:1]};
+        end else if (ena == 2'b10) begin // Rotate left
+            shift_reg <= {shift_reg[98:0], shift_reg[99]};
+        end
+    end
+end
+
+assign q = shift_reg;
+
+endmodule
+```
+
+This Verilog module defines a shift register with 100 bits, named `shift_reg`. The module receives inputs `clk`, `load`, `ena`, and `data`, and outputs the contents of the rotator as `q`.
+
+The `clk` signal is used as the clock input for synchronous behavior. If `load` is high, the module loads the shift register with the input `data`. If `load` is low, the module checks the value of `ena` to determine whether to rotate the bits to the right, to the left, or not at all.
+
+For a right rotation, the module shifts the bits to the right and takes the leftmost bit to shift it in at the rightmost position. For a left rotation, the module shifts the bits to the left and takes the rightmost bit to shift it in at the leftmost position.
+
+The contents of the rotator are then output on `q`.

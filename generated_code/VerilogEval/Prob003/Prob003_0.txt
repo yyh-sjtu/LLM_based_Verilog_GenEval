@@ -1,0 +1,15 @@
+Sure, I can help you with that. Here is an example implementation of the TopModule module in Verilog:
+
+```verilog
+module TopModule(
+    output reg one
+    );
+
+always @(posedge clk) begin
+    one <= 1'b1;
+end
+
+endmodule
+```
+
+In this implementation, the module TopModule has one output port named "one" which is always driven with logic high (1) using an always block sensitive to the positive edge of a clock signal. Let me know if you need any further assistance.

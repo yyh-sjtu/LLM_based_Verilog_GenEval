@@ -1,10 +1,8 @@
-// Declare inputs and outputs
-input a, b;
-output sum, cout;
+module half_adder(
+input a, b,
+output cout, sum);
 
-// Implement the half adder logic
-assign sum = a ^ b; // sum is the XOR of a and b
-assign cout = a & b; // cout is the AND of a and b
+assign sum = a ^ b; // XOR gate for sum
+assign cout = a & b; // AND gate for carry out
+
 endmodule
-
-// End of code

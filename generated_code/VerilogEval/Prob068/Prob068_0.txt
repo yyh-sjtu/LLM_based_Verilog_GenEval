@@ -1,0 +1,55 @@
+Here is a possible Verilog implementation for the TopModule:
+
+```verilog
+module TopModule(
+    input clk,
+    input reset,
+    output reg [3:0] ena,
+    output reg [15:0] q
+);
+
+reg [3:0] ones_digit;
+reg [3:0] tens_digit;
+reg [3:0] hundreds_digit;
+reg [3:0] thousands_digit;
+
+always @(posedge clk) begin
+    if (reset) begin
+        ones_digit <= 4'b0000;
+        tens_digit <= 4'b0000;
+        hundreds_digit <= 4'b0000;
+        thousands_digit <= 4'b0000;
+    end else begin
+        if (ones_digit == 4'b1001) begin // Check for 9
+            ones_digit <= 4'b0000;
+            ena <= {1'b0, 1'b0, 1'b1, 1'b0}; // Increment tens_digit
+            if (tens_digit == 4'b1001) begin // Check for 9
+                tens_digit <= 4'b0000;
+                ena <= {1'b0, 1'b1, 1'b0, 1'b0}; // Increment hundreds_digit
+                if (hundreds_digit == 4'b1001) begin // Check for 9
+                    hundreds_digit <= 4'b0000;
+                    ena <= {1'b1, 1'b0, 1'b0, 1'b0}; // Increment thousands_digit
+                    if (thousands_digit == 4'b1001) begin // Check for 9, wrap around to 0 if necessary
+                        thousands_digit <= 4'b0000;
+                    end else begin
+                        thousands_digit <= thousands_digit + 1;
+                    end
+                end else begin
+                    hundreds_digit <= hundreds_digit + 1;
+                end
+            else begin
+                tens_digit <= tens_digit + 1;
+            end
+        end else begin
+            ones_digit <= ones_digit + 1;
+        end
+        ena <= {1'b0, 1'b0, 1'b0, 1'b1}; // Increment ones_digit
+    end
+end
+
+assign q = {thousands_digit, hundreds_digit, tens_digit, ones_digit};
+
+endmodule
+```
+
+This implementation uses four separate registers to store the binary values of each digit. The counter increments the ones digit first, then the tens digit, then the hundreds digit, and finally the thousands digit. The enable signals are set accordingly to indicate when each digit should be incremented. The counter wraps around to 0 after reaching 9 for each digit. The output signal q concatenates the binary values of all four digits.

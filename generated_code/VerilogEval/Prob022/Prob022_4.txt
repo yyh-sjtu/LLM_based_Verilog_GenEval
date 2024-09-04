@@ -1,0 +1,22 @@
+Sure, here is the implementation of the TopModule module in Verilog:
+
+```verilog
+module TopModule (
+    input a,
+    input b,
+    input sel,
+    output reg out
+);
+
+always @(a, b, sel) begin
+    if (sel == 0) begin
+        out <= a;
+    end else begin
+        out <= b;
+    end
+end
+
+endmodule
+```
+
+This module implements a simple 2-to-1 multiplexer based on the value of the sel input. When sel is 0, the output out is set to input a. When sel is 1, the output out is set to input b.

@@ -1,0 +1,26 @@
+Here is an RTL implementation of the TopModule with the specified interface:
+
+```verilog
+module TopModule(
+    input clk,
+    input reset,
+    output reg [3:0] q
+);
+
+// Decade counter logic
+always @(posedge clk) begin
+    if (reset) begin
+        q <= 4'b0001;
+    end else begin
+        if (q == 4'b1010) begin
+            q <= 4'b0001;
+        end else begin
+            q <= q + 1;
+        end
+    end
+end
+
+endmodule
+```
+
+This code implements a decade counter that counts from 1 to 10 in binary representation. The counter is reset to 1 when the reset input is high and increments on each positive edge of the clock signal. Feel free to reach out if you have any questions or need further clarification.

@@ -1,0 +1,32 @@
+Here is a Verilog implementation of the TopModule with a 4-bit adder using full adders:
+
+```verilog
+module FullAdder (
+    input a,
+    input b,
+    input cin,
+    output sum,
+    output cout
+);
+
+assign sum = a ^ b ^ cin;
+assign cout = (a & b) | (cin & (a ^ b));
+
+endmodule
+
+module TopModule (
+    input [3:0] x,
+    input [3:0] y,
+    output [4:0] sum
+);
+
+wire [3:0] carry;
+FullAdder FA0 (.a(x[0]), .b(y[0]), .cin(1'b0), .sum(sum[0]), .cout(carry[0]));
+FullAdder FA1 (.a(x[1]), .b(y[1]), .cin(carry[0]), .sum(sum[1]), .cout(carry[1]));
+FullAdder FA2 (.a(x[2]), .b(y[2]), .cin(carry[1]), .sum(sum[2]), .cout(carry[2]));
+FullAdder FA3 (.a(x[3]), .b(y[3]), .cin(carry[2]), .sum(sum[3]), .cout(sum[4]));
+
+endmodule
+```
+
+This module implements a 4-bit adder using four full adders to calculate the sum of the inputs x and y. The output sum includes a 5th bit for overflow detection. The carry out from each full adder is chained to the carry in of the next adder, ensuring correct propagation of the carry across all bits.

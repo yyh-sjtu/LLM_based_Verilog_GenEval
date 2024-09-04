@@ -1,17 +1,12 @@
-```
+```verilog
 module alu (
-    input [31:0] a,
-    input [31:0] b,
+    input [31:0] a, b,
     input [5:0] aluc,
     output reg [31:0] r,
-    output reg zero,
-    output reg carry,
-    output reg negative,
-    output reg overflow,
-    output reg flag
+    output reg zero, carry, negative, overflow, flag
 );
 
-// Define Operations
+// Define the operation parameters
 parameter ADD = 6'b100000;
 parameter ADDU = 6'b100001;
 parameter SUB = 6'b100010;
@@ -30,14 +25,18 @@ parameter SRLV = 6'b000110;
 parameter SRAV = 6'b000111;
 parameter LUI = 6'b001111;
 
-// Define Internal Wires
 reg [31:0] res;
-reg [1:0] shift_amount;
 
-// Assign Inputs to Registers
-always @(*)
-begin
-    case(aluc)
+always @* begin
+    // Default outputs
+    zero = 0;
+    carry = 0;
+    negative = 0;
+    overflow = 0;
+    flag = 'z;
+
+    // Perform operation based on the control signal (aluc)
+    case (aluc)
         ADD: res = a + b;
         ADDU: res = a + b;
         SUB: res = a - b;
@@ -46,45 +45,28 @@ begin
         OR: res = a | b;
         XOR: res = a ^ b;
         NOR: res = ~(a | b);
-        SLT: res = (a < b) ? 1 : 0;
-        SLTU: res = (a < b) ? 1 : 0;
+        SLT: res = (a < b) ? 32'h1 : 32'h0;
+        SLTU: res = (a < b) ? 32'h1 : 32'h0;
         SLL: res = a << b[4:0];
         SRL: res = a >> b[4:0];
-        SRA: res = a >>> b[4:0];
-        SLLV: res = a << b[4:0];
-        SRLV: res = a >> b[4:0];
-        SRAV: res = a >>> b[4:0];
-        LUI: res = {a[15:0], 16'b0};
-        default: res = 32'bzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzz;
+        SRA: res = $signed(a) >>> b[4:0];
+        SLLV: res = a << b;
+        SRLV: res = a >> b;
+        SRAV: res = $signed(a) >>> b;
+        LUI: res = {{16{a[31]}}, a[15:0]};
+        default: res = 32'bz;
     endcase
-    
-    // Set Zero Flag
-    if (res == 0)
-        zero = 1;
-    else
-        zero = 0;
-    
-    // Set Negative Flag
-    if (res[31] == 1)
-        negative = 1;
-    else
-        negative = 0;
-    
-    // Set Carry Flag
-    // Not implemented in this code
-    
-    // Set Overflow Flag
-    // Not implemented in this code
 
-    // Set Flag based on Control Signal
-    if (aluc == SLT || aluc == SLTU)
-        flag = 1;
-    else
-        flag = 0;
+    // Set outputs based on the result
+    if (res == 32'h0) zero = 1;
+    if (res < 0) negative = 1;
+    if (a[31] && b[31] && !res[31]) overflow = 1;
+    // Set flag output for SLT and SLTU
+    if (aluc == SLT || aluc == SLTU) flag = res[31];
+
+    r = res[31:0];
 end
-
-// Assign Result to Output
-assign r = res;
 
 endmodule
 ```
+This code implements an ALU for a 32-bit MIPS-ISA CPU with the specified operations and control signals. It performs the operations based on the control signal (aluc) and sets the appropriate outputs (zero, carry, negative, overflow, flag) accordingly.

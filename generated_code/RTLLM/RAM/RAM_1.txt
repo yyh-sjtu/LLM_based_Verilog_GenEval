@@ -1,37 +1,37 @@
 ```verilog
-module RAM (
-	input wire clk,
-	input wire rst_n,
-	input wire write_en,
-	input wire [WIDTH-1:0] write_addr,
-	input wire [WIDTH-1:0] write_data,
-	input wire read_en,
-	input wire [WIDTH-1:0] read_addr,
-	output reg [WIDTH-1:0] read_data
+module RAM #(parameter WIDTH = 6, DEPTH = 8)(
+    input clk,
+    input rst_n,
+    input write_en,
+    input [WIDTH-1:0] write_addr,
+    input [WIDTH-1:0] write_data,
+    input read_en,
+    input [WIDTH-1:0] read_addr,
+    output reg [WIDTH-1:0] read_data
 );
 
-parameter WIDTH = 6;
-parameter DEPTH = 8;
-
-reg [WIDTH-1:0] RAM [0:DEPTH-1];
+reg [DEPTH-1 : 0] RAM [2**WIDTH-1:0];
 
 always @(posedge clk or negedge rst_n) begin
-	if (!rst_n) begin
-		for (int i=0; i<DEPTH; i=i+1) begin
-			RAM[i] <= 6'b000000;
-		end
-	else if (write_en) begin
-		RAM[write_addr] <= write_data;
-	end
+    if (!rst_n) begin
+        for (int i = 0; i < 2**WIDTH; i = i + 1) begin
+            RAM[i] <= 6'b000000;
+        end
+    end
+    if (write_en) begin
+        RAM[write_addr] <= write_data;
+    end
 end
 
 always @(posedge clk or negedge rst_n) begin
-	if (!rst_n) begin
-		read_data <= 6'b000000;
-	else if (read_en) begin
-		read_data <= RAM[read_addr];
-	end
+    if (!rst_n) begin
+        read_data <= 6'b000000;
+    end
+    if (read_en) begin
+        read_data <= RAM[read_addr];
+    end
 end
 
 endmodule
 ```
+This verilog module implements a dual-port RAM with a depth of 8 and a bit width of 6 bits, as specified. The write and read operations are performed based on the write_en, write_addr, write_data, read_en, and read_addr signals. The initialized data is all set to 000000. The read_data output represents the data read from the RAM.

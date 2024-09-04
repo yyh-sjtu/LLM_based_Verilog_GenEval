@@ -8,20 +8,21 @@ module multi_booth_8bit (
     output reg rdy
 );
 
-reg [15:0] multiplicand, multiplier;
+reg [7:0] multiplier;
+reg [7:0] multiplicand;
 reg [4:0] ctr;
 
 always @(posedge clk or posedge reset) begin
     if (reset) begin
-        multiplicand <= {{8{a[7]}}, a};
-        multiplier <= {{8{b[7]}}, b};
+        multiplier <= {{8{a[7]}}, a};
+        multiplicand <= {{8{b[7]}}, b};
         ctr <= 0;
-        p <= 16'b0;
+        p <= 0;
         rdy <= 0;
     end else begin
         if (ctr < 16) begin
-            multiplicand <= {multiplicand[15], multiplicand[15:1]};
-            if (multiplier[ctr]) begin
+            multiplicand <= {multiplicand[6:0], 1'b0};
+            if (multiplier[ctr] == 1'b1) begin
                 p <= p + multiplicand;
             end
             ctr <= ctr + 1;

@@ -1,0 +1,42 @@
+Sure! Below is an implementation of a `TopModule` that serves as a decade counter. The counter counts from 1 to 10 and resets to 1 on a synchronous reset. Here’s the RTL design written in Verilog:
+
+```verilog
+module TopModule (
+    input  clk,
+    input  reset,
+    output reg [3:0] q // 4-bit output
+);
+
+// Always block that triggers on the positive edge of the clock
+always @(posedge clk) begin
+    if (reset) begin
+        q <= 4'b0001; // Reset to 1
+    end else begin
+        // Increment the counter
+        if (q == 4'b1010) begin // If q reaches 10 (1010), reset to 1
+            q <= 4'b0001;
+        end else begin
+            q <= q + 1; // Increment the counter
+        end
+    end
+end
+
+endmodule
+```
+
+### Explanation:
+1. **Module Definition**:
+    - The module is named `TopModule`, with one clock input (`clk`), one reset input (`reset`), and a 4-bit output (`q`).
+
+2. **Always Block**:
+    - The `always @(posedge clk)` block triggers on the positive edge of the `clk`.
+  
+3. **Reset Condition**:
+    - If `reset` is high, the output `q` is set to `4'b0001` (which is decimal 1).
+
+4. **Counting Logic**:
+    - If `q` reaches `4'b1010` (which is decimal 10), it resets to `4'b0001`.
+    - Otherwise, `q` is incremented by 1.
+
+### Testing the Module:
+For a complete environment, you would also typically create a testbench to verify the functionality of the module. You can implement a testbench that applies various clock, reset, and simulation scenarios to ensure the `TopModule` behaves as expected. If you need help with that or have more questions, feel free to ask!

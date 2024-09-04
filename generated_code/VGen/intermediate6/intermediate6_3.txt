@@ -1,18 +1,15 @@
-module ram #( parameter ADDR_WIDTH=6, parameter DATA_WIDTH=8) (
-    input [DATA_WIDTH-1:0] data,
-    input [ADDR_WIDTH-1:0] addr,
-    input we,
-    input clk,
-    output reg [DATA_WIDTH-1:0] q
-);
+module ram #( parameter ADDR_WIDTH=6, parameter DATA_WIDTH=8) 
+(input [DATA_WIDTH-1:0] data, input [ADDR_WIDTH-1:0] addr, input we, clk, output reg [DATA_WIDTH-1:0] q);
 
-    reg [DATA_WIDTH-1:0] ram[2**ADDR_WIDTH-1:0];
+reg [DATA_WIDTH-1:0] ram[2**ADDR_WIDTH-1:0];
 
-    always @(posedge clk) begin
-        if(we == 1'b1) begin
-            ram[addr] <= data;
-        end
-        q <= ram[addr];
+always @(posedge clk) begin
+    if(we) begin
+        ram[addr] <= data;
     end
+    q <= ram[addr];
+end
 
 endmodule
+
+This module implements a simple RAM module in Verilog. It takes input data, address, write enable signal, and clock signal. It has an output q which represents the output data from the RAM at the provided address. The RAM is implemented as an array of registers with size 2 to the power of ADDR_WIDTH. On the positive edge of the clock signal, the module checks if we is active, if so, it writes the input data to the RAM at the specified address. The output q is then updated to reflect the data stored at the address in the RAM.

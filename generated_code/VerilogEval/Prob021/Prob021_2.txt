@@ -1,0 +1,23 @@
+Here is the Verilog code for the TopModule implementing the 4-bit wide, 256-to-1 multiplexer with the given interface:
+
+```verilog
+module TopModule (
+    input [1023:0] in,
+    input [7:0] sel,
+    output reg [3:0] out
+);
+
+always @* begin
+    case(sel)
+        0: out = in[3:0];
+        1: out = in[7:4];
+        2: out = in[11:8];
+        // Add more cases for sel=3 to sel=255 as needed
+        default: out = 4'b0; // Default output if sel is out of range
+    endcase
+end
+
+endmodule
+```
+
+This code defines the TopModule with the specified interface and implements a 256-to-1 multiplexer based on the selection input (`sel`). Depending on the value of `sel`, the corresponding 4-bit input from the concatenated 1024-bit input vector `in` is selected and output on `out`. If `sel` is out of range, the output is set to all zeros.

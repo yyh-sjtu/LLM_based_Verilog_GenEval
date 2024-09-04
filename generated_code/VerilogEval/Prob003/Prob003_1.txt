@@ -1,0 +1,15 @@
+In Verilog, the TopModule module implementing the described interface would look like this:
+
+```verilog
+module TopModule(
+    output reg one
+);
+
+    always @* begin
+        one = 1'b1;
+    end
+
+endmodule
+```
+
+This code defines a module named TopModule with an output port named one. The always block continuously assigns a value of 1 to the output port, making sure it always drives logic high.

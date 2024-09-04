@@ -1,19 +1,40 @@
+Certainly! A 3-bit priority encoder can be implemented in Verilog by checking the input bits from the most significant bit (MSB) to the least significant bit (LSB). The output `pos` will indicate the position of the highest priority (the first high bit in this case).
+
+Here’s a simple implementation of your priority encoder module:
+
+```verilog
 module priority_encoder(
     input [2:0] in,
     output reg [1:0] pos
 );
 
 always @(*) begin
-    case(in)
-        3'b000: pos = 2'b00;
-        3'b001: pos = 2'b00;
-        3'b010: pos = 2'b01;
-        3'b011: pos = 2'b01;
-        3'b100: pos = 2'b10;
-        3'b101: pos = 2'b10;
-        3'b110: pos = 2'b10;
-        3'b111: pos = 2'b10;
+    casez (in)
+        3'b1??: pos = 2'b10;  // If input 2 is high
+        3'b01?: pos = 2'b01;  // If input 1 is high
+        3'b00?: pos = 2'b00;  // If all inputs are low
+        default: pos = 2'b00;  // Default case
     endcase
 end
 
 endmodule
+```
+
+### Explanation:
+1. **Inputs and Outputs:**
+   - `input [2:0] in`: 3-bit input signal.
+   - `output reg [1:0] pos`: 2-bit output that indicates the position of the first high bit.
+
+2. **Always Block:**
+   - The `always @(*)` block is used to describe combinational logic.
+   - The `casez` statement is utilized to check for the first high input. The `?` allows for don't-care conditions, simplifying the logic checks.
+
+3. **Cases:**
+   - `3'b1??`: If the MSB (input 2) is high, set `pos` to `2'b10`.
+   - `3'b01?`: If the second bit (input 1) is high, set `pos` to `2'b01`.
+   - `3'b00?`: This case represents that both input 2 and input 1 are low, so `pos` is set to `2'b00` (meaning no high bit).
+   - The `default` case is also set to `2'b00` to handle any unforeseen scenarios.
+
+### Additional Notes:
+- If you want to enforce that the output should be in a certain range (like 0 to 3 for 3 inputs), the values are assigned accordingly. 
+- You can modify the priority order or size by adjusting the input width and cases if you need a different configuration in the future.

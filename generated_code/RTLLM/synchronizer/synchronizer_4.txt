@@ -11,32 +11,26 @@ module synchronizer (
 
 reg [3:0] data_reg;
 reg en_data_reg;
-reg en_clap_one;
-reg en_clap_two;
+reg en_clap_one, en_clap_two;
 
 always @(posedge clk_a or negedge arstn) begin
-    if (arstn == 0) begin
-        data_reg <= 0;
+    if (~arstn) begin
+        data_reg <= 4'b0000;
+        en_data_reg <= 1'b0;
     end else begin
         data_reg <= data_in;
-    end
-    
-    if (arstn == 0) begin
-        en_data_reg <= 0;
-    end else begin
         en_data_reg <= data_en;
     end
 end
 
 always @(posedge clk_b or negedge brstn) begin
-    if (brstn == 0) begin
-        en_clap_one <= 0;
-        en_clap_two <= 0;
-        dataout <= 0;
+    if (~brstn) begin
+        en_clap_one <= 1'b0;
+        en_clap_two <= 1'b0;
+        dataout <= 4'b0000;
     end else begin
         en_clap_one <= en_data_reg;
         en_clap_two <= en_clap_one;
-        
         if (en_clap_two) begin
             dataout <= data_reg;
         end
@@ -45,4 +39,4 @@ end
 
 endmodule
 ```
-```
+This code implements the multi-bit MUX-based synchronizer as described in the requirements. It includes the necessary registers to store data and enable signals with proper synchronization based on clock signals and reset conditions. The output data (dataout) will be updated according to the specified logic and timing constraints.

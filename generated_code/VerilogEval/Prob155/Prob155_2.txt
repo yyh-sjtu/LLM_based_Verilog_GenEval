@@ -1,0 +1,86 @@
+```verilog
+module TopModule (
+    input clk,
+    input areset,
+    input bump_left,
+    input bump_right,
+    input ground,
+    input dig,
+    output reg walk_left,
+    output reg walk_right,
+    output reg aaah,
+    output reg digging
+);
+
+    parameter WALK_LEFT = 2'b00;
+    parameter WALK_RIGHT = 2'b01;
+    parameter FALLING = 2'b10;
+    parameter DIGGING = 2'b11;
+    
+    reg [1:0] state;
+    reg [4:0] fall_count;
+    
+    always @(posedge clk or posedge areset) begin
+        if (areset) begin // Reset state machine
+            state <= WALK_LEFT;
+            fall_count <= 0;
+        end else begin
+            case (state)
+                WALK_LEFT: begin
+                    if (bump_left) begin
+                        walk_left <= 0;
+                        walk_right <= 1;
+                        state <= WALK_RIGHT;
+                    end else if (dig && ground) begin
+                        digging <= 1;
+                        state <= DIGGING;
+                    end else if (ground == 0) begin
+                        aaah <= 1;
+                        walk_left <= 0;
+                        walk_right <= 0;
+                        state <= FALLING;
+                    end
+                end
+                
+                WALK_RIGHT: begin
+                    if (bump_right) begin
+                        walk_left <= 1;
+                        walk_right <= 0;
+                        state <= WALK_LEFT;
+                    end else if (dig && ground) begin
+                        digging <= 1;
+                        state <= DIGGING;
+                    end else if (ground == 0) begin
+                        aaah <= 1;
+                        walk_left <= 0;
+                        walk_right <= 0;
+                        state <= FALLING;
+                    end
+                end
+                
+                FALLING: begin
+                    if (ground == 1) begin
+                        state <= walk_left ? WALK_LEFT : WALK_RIGHT;
+                    end else begin
+                        fall_count <= fall_count + 1;
+                        if (fall_count > 20) begin
+                            walk_left <= 0;
+                            walk_right <= 0;
+                            aaah <= 0;
+                            digging <= 0;
+                        end
+                    end
+                end
+                
+                DIGGING: begin
+                    if (!dig || !ground) begin
+                        digging <= 0;
+                        state <= ground ? walk_left ? WALK_LEFT : WALK_RIGHT : FALLING;
+                    end
+                end
+            endcase
+        end
+    end
+
+endmodule
+```

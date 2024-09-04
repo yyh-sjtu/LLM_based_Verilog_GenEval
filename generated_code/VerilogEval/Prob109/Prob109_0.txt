@@ -1,0 +1,75 @@
+Certainly! Below is an implementation of the `TopModule` in Verilog that meets the specified requirements of a Moore state machine with the given state transitions. 
+
+### Verilog Code
+
+```verilog
+module TopModule (
+    input clk,
+    input areset,
+    input in,
+    output reg out
+);
+
+    // State Encoding
+    typedef enum logic [1:0] {
+        A = 2'b00, // State A
+        B = 2'b01  // State B
+    } state_t;
+
+    // State and next state variables
+    state_t current_state, next_state;
+
+    // Asynchronous reset to state B
+    always_ff @(posedge clk or posedge areset) begin
+        if (areset) begin
+            current_state <= B; // Reset to state B
+        end else begin
+            current_state <= next_state; // Transition to next state
+        end
+    end
+
+    // Next state logic for the state machine
+    always_comb begin
+        case (current_state)
+            A: begin
+                if (in == 1'b0) begin
+                    next_state = B;  // A --0--> B
+                end else begin
+                    next_state = A;  // A --1--> A
+                end
+                out = 1'b0; // Output for state A
+            end
+            
+            B: begin
+                if (in == 1'b0) begin
+                    next_state = A;  // B --0--> A
+                end else begin
+                    next_state = B;  // B --1--> B
+                end
+                out = 1'b1; // Output for state B
+            end
+            
+            default: begin
+                next_state = B; // Default to state B in unexpected case
+                out = 1'b1;
+            end
+        endcase
+    end
+
+endmodule
+```
+
+### Explanation
+
+1. **State Encoding**: The module defines two states `A` and `B` using a 2-bit enum type.
+  
+2. **Asynchronous Reset**: The `always_ff` block handles both the clock signal and the asynchronous reset signal. When `areset` is high, the module resets to state `B`.
+
+3. **Next State Logic**: The `always_comb` block defines the logic for state transitions based on the current state and the input `in`. The outputs are specified directly within the state cases:
+   - In state `A`, the output is `0` regardless of input.
+   - In state `B`, the output is `1` regardless of input.
+
+4. **Default Case**: A default case is provided for safety, ensuring that if the state machine encounters an invalid state, it defaults to state `B`.
+
+### Usage
+This module can be synthesized and instantiated in a larger design, and it will perform the state transitions detailed in your description. Remember to connect `clk`, `areset`, and `in` according to your system's requirements.

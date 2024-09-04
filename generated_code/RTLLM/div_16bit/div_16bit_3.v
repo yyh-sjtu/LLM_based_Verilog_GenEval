@@ -1,4 +1,3 @@
-
 module div_16bit (
     input [15:0] A,
     input [7:0] B,
@@ -8,30 +7,28 @@ module div_16bit (
 
 reg [15:0] a_reg;
 reg [7:0] b_reg;
+reg [7:0] quotient;
+reg [15:0] remainder;
 
-always @ (*) begin
+always @* begin
     a_reg = A;
     b_reg = B;
 end
 
-always @ (*) begin
-    reg [15:0] quotient;
-    reg [15:0] remainder;
-
-    quotient = 16'b0;
-    remainder = 16'b0;
-    
-    for (int i = 15; i >= 0; i = i - 1) begin
-        remainder = {remainder[14:0], a_reg[15]};
-        if (remainder >= b_reg) begin
-            quotient[i] = 1;
-            remainder = remainder - b_reg;
+always @* begin
+    quotient = 8'b0;
+    remainder = a_reg; 
+    for (int i = 15; i >= 8; i = i - 1) begin
+        if (remainder[i] == 1'b1) begin
+            if (b_reg <= remainder[i-7:i]) begin
+                quotient[i-8] = 1'b1;
+                remainder[i-7:i] = remainder[i-7:i] - b_reg;
+            end
         end
-        a_reg = {a_reg[14:0], A[15]};
     end
-    
     result = quotient;
     odd = remainder;
 end
 
 endmodule
+

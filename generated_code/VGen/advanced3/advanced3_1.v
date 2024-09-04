@@ -5,56 +5,50 @@ module adv_fsm(
     output reg z
 ); 
 
-reg present_state, next_state;
+parameter IDLE = 2'b00;
+parameter S1 = 2'b01;
+parameter S10 = 2'b10;
+parameter S101 = 2'b11;
 
-// State parameters
-parameter IDLE=0, S1=1, S10=2, S101=3;
+reg [1:0] present_state, next_state;
 
 always @ (posedge clk or posedge reset) begin
     if (reset) begin
         present_state <= IDLE;
-    end else begin
-        present_state <= next_state;
+        z <= 0;
     end
-end
-
-always @(*) begin
-    case(present_state)
-        IDLE: begin
-            if (x) begin
-                next_state = S1;
-            end else begin
-                next_state = IDLE;
+    else begin
+        present_state <= next_state;
+        case(present_state)
+            IDLE: begin
+                if (x)
+                    next_state = S1;
+                else
+                    next_state = IDLE;
+                
+                z <= 0;
             end
-        end
-        S1: begin
-            if (!x) begin
-                next_state = S10;
-            end else begin
-                next_state = IDLE;
+            S1: begin
+                if (!x)
+                    next_state = S10;
+                else
+                    next_state = IDLE;
+                
+                z <= 0;
             end
-        end
-        S10: begin
-            if (x) begin
-                next_state = S101;
-            end else begin
-                next_state = IDLE;
+            S10: begin
+                if (x)
+                    next_state = S101;
+                else
+                    next_state = IDLE;
+                
+                z <= 0;
             end
-        end
-        S101: begin
-            next_state = IDLE;
-        end
-        default: begin
-            next_state = IDLE;
-        end
-    endcase
-end
-
-always @ (*) begin
-    if (present_state == S101) begin
-        z = 1;
-    end else begin
-        z = 0;
+            S101: begin
+                next_state = IDLE;
+                z <= 1;
+            end
+        endcase
     end
 end
 

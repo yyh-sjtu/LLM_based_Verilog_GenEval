@@ -1,0 +1,31 @@
+Sure, I have identified the bug in the existing module. The issue lies in the second always block where we are using the negation of the 'arrived' signal instead of using the 'arrived' signal directly to determine whether to keep driving or not.
+
+Here is the updated version of the module with the bug fixed:
+
+```verilog
+module TopModule (
+    input      cpu_overheated,
+    output reg shut_off_computer,
+    input      arrived,
+    input      gas_tank_empty,
+    output reg keep_driving
+);
+
+    always @(*) begin
+        if (cpu_overheated)
+            shut_off_computer = 1;
+        else
+            shut_off_computer = 0;
+    end
+
+    always @(*) begin
+        if (arrived)
+            keep_driving = ~gas_tank_empty;
+        else
+            keep_driving = 0;
+    end
+
+endmodule
+```
+
+This updated version should now correctly handle the flags and conditions for shutting off the computer and keeping driving based on the input signals provided.

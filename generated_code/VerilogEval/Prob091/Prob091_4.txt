@@ -1,0 +1,49 @@
+Certainly! Below is a Verilog implementation of the `TopModule` that satisfies the specified interface and implements the state transition logic for the given finite-state machine (FSM) using one-hot encoding.
+
+### Verilog Code for TopModule
+
+```verilog
+module TopModule (
+    input  [5:0] y,  // current state
+    input        w,   // input signal
+    output       Y1,  // output signal for state flip-flop y[1]
+    output       Y3   // output signal for state flip-flop y[3]
+);
+
+// State logic for Y1 and Y3 based on the current state y and the input w
+
+assign Y1 = (y[1] && w) ||                 // Transition from B to C
+            (y[5] && !w);                  // Transition from F to D 
+
+assign Y3 = (y[3] && w) ||                 // Transition from D to C
+            (y[2] && !w) ||                // Transition from C to D
+            (y[3] && !w);                  // Stay in D on 0
+
+endmodule
+```
+
+### Explanation:
+
+1. **State Definitions**:
+   - The states correspond to the one-hot encoding where `y[5:0]` represent states A to F:
+     - A = 000001
+     - B = 000010
+     - C = 000100
+     - D = 001000
+     - E = 010000
+     - F = 100000
+
+2. **Output Logic**:
+   - `Y1` is the input to the state flip-flop representing state B (`y[1]`). This logic implements the conditions necessary for `y[1]` to be asserted (going to state B):
+     - From state A (00...1) to state B (01...0) when input `w` is 1.
+     - From state F (100000) to state D when input `w` is 0.
+   
+   - `Y3` is the input to the state flip-flop for state D (`y[3]`). This output is asserted based on:
+     - Transition from state C (000100) to D (001000) when input `w` is 1.
+     - Transition from state B to D when input `w` is 0.
+     - Remaining in the D state when `w` is 0.
+
+3. **Operational Behaviors**:
+   - The outputs `Y1` and `Y3` follow the transition rules defined in the state machine diagram and based on the provided input `w`.
+  
+Make sure to integrate this module into a larger FSM framework that includes state flip-flops and clocking mechanisms as necessary, ensuring the right transitions and state updates occur during simulation.

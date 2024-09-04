@@ -1,0 +1,47 @@
+Sure, here is the Verilog code for the TopModule that instantiates the full_module three times:
+
+```verilog
+module TopModule (
+    input clk,
+    input L,
+    input q_in,
+    input r_in,
+    output Q
+);
+
+reg [2:0] r1, r2, r3;
+reg L1, L2, L3;
+reg [2:0] q1, q2, q3;
+wire [2:0] q_out1, q_out2, q_out3;
+
+full_module full_module_inst1 (
+    .r(r1),
+    .L(L1),
+    .clk(clk),
+    .q(q1)
+);
+
+full_module full_module_inst2 (
+    .r(r2),
+    .L(L2),
+    .clk(clk),
+    .q(q2)
+);
+
+full_module full_module_inst3 (
+    .r(r3),
+    .L(L3),
+    .clk(clk),
+    .q(q3)
+);
+
+assign q_out1 = L1 ? r1 : q1;
+assign q_out2 = L2 ? r2 : q2;
+assign q_out3 = L3 ? r3 : q3;
+
+assign Q = q_out1 ^ q_out2 ^ q_out3;
+
+endmodule
+```
+
+In this code, the TopModule instantiates three instances of the full_module and connects the inputs and outputs accordingly. The final output Q is calculated based on the outputs of the three full_module instances using XOR.

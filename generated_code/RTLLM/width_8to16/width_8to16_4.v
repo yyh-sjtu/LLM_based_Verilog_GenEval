@@ -1,3 +1,4 @@
+
 module width_8to16 (
     input clk,
     input rst_n,
@@ -7,25 +8,25 @@ module width_8to16 (
     output reg [15:0] data_out
 );
 
-reg [7:0] data_latch;
-reg flag;
+reg [15:0] data_reg;
 
-always @ (posedge clk or negedge rst_n) begin
+always @(posedge clk or negedge rst_n) begin
     if (!rst_n) begin
-        data_out <= 16'b0;
-        valid_out <= 1'b0;
-        flag <= 1'b0;
-    end else if (valid_in) begin
-        if (!flag) begin
-            data_latch <= data_in;
-            flag <= 1'b1;
-        end else begin
-            data_out <= {data_latch, data_in};
-            valid_out <= 1'b1;
-            flag <= 1'b0;
+        data_reg <= 16'b0;
+        valid_out <= 0;
+    end else begin
+        if (valid_in) begin
+            if (!valid_out) begin
+                data_reg <= {data_in, 8'b0};
+                valid_out <= 0;
+            end else begin
+                data_reg <= {data_reg[15:8], data_in};
+                valid_out <= 1;
+            end
         end
     end
 end
 
-endmodule
+assign data_out = data_reg;
 
+endmodule

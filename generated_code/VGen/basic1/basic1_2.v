@@ -1,10 +1,4 @@
-module wire_assign(
-  input in,
-  output out
-);
-
-  // assign the input to the output
+module wire_assign( input in, output out );
   assign out = in;
-
 endmodule
 

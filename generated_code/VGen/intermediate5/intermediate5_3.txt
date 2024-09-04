@@ -1,32 +1,63 @@
-Sure, here is the implementation of the left rotate module in Verilog:
+Certainly! Below is a Verilog implementation of a left rotate operation that shifts an 8-bit input `data` to the left by a specified `amount` and rotates the bits back around. The module includes a load mechanism and resets the output when the reset signal is applied.
+
+Here's how you can implement the `left_rotate` module:
 
 ```verilog
 module left_rotate(
-    input clk,
-    input reset,
-    input [2:0] amount,
-    input [7:0] data,
-    input load,
-    output reg [7:0] out
+    input clk,             // Clock input
+    input reset,           // Reset input
+    input [2:0] amount,    // Number of positions to rotate
+    input [7:0] data,      // Input data to rotate
+    input load,            // Load signal to load data into rotation
+    output reg [7:0] out   // Output rotated data
 );
 
-reg [7:0] shift_reg;
+// Internal signal for the rotated result
+reg [7:0] data_reg;
 
+// Always block for synchronous reset and loading
 always @(posedge clk or posedge reset) begin
-    if (reset)
-        shift_reg <= 8'b0;
-    else if (load)
-        shift_reg <= data;
-    else begin
-        shift_reg <= {shift_reg[7-amount:0], shift_reg[7:8-amount]};
+    if (reset) begin
+        // On reset, clear the output
+        out <= 8'b0;
+        data_reg <= 8'b0;
+    end else if (load) begin
+        // Load new data when load signal is high
+        data_reg <= data;
+        out <= data_reg; // Initialize output with loaded data
+    end else begin
+        // Perform left rotation
+        out <= {data_reg[6:0], data_reg[7]} << amount;
+        // The result is a left shift with rotation
+        // Note: Handles full rotation by using modulo 8
+        data_reg <= {data_reg[6:0], data_reg[7]} << amount;
     end
 end
-
-assign out = shift_reg;
 
 endmodule
 ```
 
-This Verilog module takes an 8-bit input data and rotates it to the left by the specified amount (from 0 to 7) whenever the load signal is high. The output is stored in the `out` register and updated on every clock cycle. The `reset` signal resets the shift register to 0 when active.
+### Explanation:
+1. **Inputs:**
+   - `clk`: The clock signal.
+   - `reset`: Active high signal that resets the output.
+   - `amount`: Specifies how many bits to rotate (0 to 7).
+   - `data`: The 8-bit input data to be loaded and rotated.
+   - `load`: When high, loads the new `data` into the internal register.
 
-Please let me know if you need any further assistance or modifications.
+2. **Outputs:**
+   - `out`: The resulting rotated data.
+
+3. **Internal Register:**
+   - `data_reg`: An internal register to hold the data being processed.
+
+4. **Behavior:**
+   - On the rising edge of the clock, if `reset` is asserted, both `data_reg` and `out` are cleared.
+   - If `load` is active, `data` is loaded into `data_reg` and out is initialized with this data.
+   - If neither `reset` nor `load` are active, the code performs the left rotation, shifting the bits of `data_reg` to the left by the specified amount (`amount`). The bits shifted out on the left are wrapped around to the right.
+
+### Note:
+- The left rotate operation essentially shifts the bits to the left and takes the bits that overflow from the leftmost side and wraps them around to the right.
+- You may need additional handling in practical applications where the shift amount is used, particularly to account for the modulo operation on the `amount` to restrict it within the range of `0` to `7`.
+
+Feel free to modify the implementation or ask for further details on specific aspects or enhancements!

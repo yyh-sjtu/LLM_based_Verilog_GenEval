@@ -1,0 +1,31 @@
+Sure! Below is an example of how you might implement a Verilog module named `TopModule` that establishes the specified connections between its input and output ports.
+
+```verilog
+module TopModule (
+    input   wire a,  // Input a
+    input   wire b,  // Input b
+    input   wire c,  // Input c
+    output  wire w,  // Output w
+    output  wire x,  // Output x
+    output  wire y,  // Output y
+    output  wire z   // Output z
+);
+
+    // Assign inputs to outputs as specified
+    assign w = a;  // Connect input a to output w
+    assign x = b;  // Connect input b to output x
+    assign y = b;  // Connect input b to output y
+    assign z = c;  // Connect input c to output z
+
+endmodule
+```
+
+### Explanation:
+- **Module Declaration**: The `TopModule` is defined with three inputs (`a`, `b`, `c`) and four outputs (`w`, `x`, `y`, `z`).
+- **Wire Types**: The inputs and outputs are declared as `wire` to allow continuous assignment.
+- **Assign Statements**: Each output is assigned the value of the corresponding input based on the specified connections you provided.
+
+### Usage:
+To use this module, you would instantiate it within a testbench or another module, connecting appropriate signals to `a`, `b`, and `c`, and monitoring the outputs `w`, `x`, `y`, and `z`. 
+
+If you have further modifications or need additional features, let me know!

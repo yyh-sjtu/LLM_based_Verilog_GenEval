@@ -1,5 +1,5 @@
 ```verilog
-module pe (
+module pe(
     input clk,
     input rst,
     input [31:0] a,
@@ -8,10 +8,11 @@ module pe (
 );
 
 always @(posedge clk or posedge rst) begin
-    if (rst) begin
-        c <= 0;
-    end else begin
-        c <= c + a * b;
+    if (rst == 1'b1) begin
+        c <= 32'b0; // Reset the accumulator register
+    end 
+    else begin
+        c <= c + (a * b); // Accumulate the product of input operands
     end
 end
 

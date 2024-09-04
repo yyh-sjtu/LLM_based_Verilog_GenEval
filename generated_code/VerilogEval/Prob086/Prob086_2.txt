@@ -1,0 +1,27 @@
+As a professional RTL designer, I will implement the TopModule module with the specified interface and functionality. Here is the Verilog code for the module:
+
+```verilog
+module TopModule (
+    input clk,
+    input reset,
+    output reg [4:0] q
+);
+
+reg [4:0] lfsr;
+
+always @(posedge clk) begin
+    if (reset) begin
+        lfsr <= 5'd1; // Reset LFSR output to 1
+    end else begin
+        lfsr <= {lfsr[3] ^ lfsr[2], lfsr[4:1]}; // LFSR with taps at bit positions 5 and 3
+    end
+end
+
+assign q = lfsr;
+
+endmodule
+```
+
+This implementation creates a 5-bit maximal-length Galois LFSR with taps at bit positions 5 and 3. The LFSR output is reset to 1 on an active-high synchronous reset signal. The sequential logic is triggered on the positive edge of the clock signal.
+
+Please let me know if you need any further modifications or have any additional requirements.

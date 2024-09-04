@@ -1,23 +1,31 @@
-// Verilog code for decade counter
+// Verilog code for a decade counter that counts from 0 through 9
+// It counts only when slowena is high
+
 module count_slow (
-    input clk,
-    input slowena,
-    input reset,
-    output reg [3:0] q
+    input clk,         // Clock input
+    input slowena,     // Enable signal for counting
+    input reset,       // Reset signal
+    output reg [3:0] q // Output register for the counter
 );
 
-always @(posedge clk) begin
-    if (reset) begin
-        q <= 4'b0000; // Reset the counter to 0
-    end else begin
-        if (slowena) begin // Check if slowena is high to count
-            if (q == 4'b1001) begin
-                q <= 4'b0000; // Reset the counter when it reaches 9
-            end else begin
-                q <= q + 1;  // Increment the counter
+    reg [3:0] q_next;     // Next state register for the counter
+
+    always @(posedge clk or posedge reset) begin
+        if (reset) begin
+            q <= 4'b0;    // Reset the counter to 0
+        end else begin
+            if (slowena) begin
+                q <= q_next; // Update the current state with the next state
             end
         end
     end
-end
+
+    always @* begin
+        if (q == 4'b1001) begin
+            q_next = 4'b0000; // Reset the counter to 0 when it reaches 9
+        end else begin
+            q_next = q + 1; // Increment the counter by 1
+        end
+    end
 
 endmodule

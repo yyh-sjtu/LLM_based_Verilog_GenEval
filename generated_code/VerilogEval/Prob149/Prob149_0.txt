@@ -1,0 +1,128 @@
+Certainly! Below is the Verilog RTL design for the `TopModule` as per your specifications. This design includes a simple state machine to implement the logic for the water level and flow rate control based on the sensor inputs.
+
+```verilog
+module TopModule (
+    input  wire clk,
+    input  wire reset,
+    input  wire [2:0] s,
+    output reg  fr2,
+    output reg  fr1,
+    output reg  fr0,
+    output reg  dfr
+);
+    
+    // Define states for water level ranges
+    typedef enum reg [1:0] {
+        LOW_LEVEL = 2'b00,      // Below s[0]
+        BETWEEN_S1_AND_S0 = 2'b01, // Between s[1] and s[0]
+        BETWEEN_S2_AND_S1 = 2'b10, // Between s[2] and s[1]
+        HIGH_LEVEL = 2'b11      // Above s[2]
+    } state_t;
+
+    state_t current_state, next_state;
+
+    // Sequential logic: State update on clock or sync reset
+    always @(posedge clk or posedge reset) begin
+        if (reset) begin
+            current_state <= LOW_LEVEL; // Reset state
+        end else begin
+            current_state <= next_state;
+        end
+    end
+
+    // Combinational logic: Determine next state and outputs
+    always @* begin
+        // Default output values
+        fr2 = 1'b0;
+        fr1 = 1'b0;
+        fr0 = 1'b0;
+        dfr = 1'b0;
+        
+        // State output logic
+        case (current_state)
+            LOW_LEVEL: begin
+                if (s == 3'b000) begin // No sensors asserted
+                    fr2 = 1'b1; // Maximum flow rate
+                    fr1 = 1'b1;
+                    fr0 = 1'b1;
+                    dfr = 1'b0; // No incremental flow
+                    next_state = LOW_LEVEL; // Stay in LOW state
+                end else if (s[0]) begin // s[0] asserted
+                    next_state = BETWEEN_S1_AND_S0;
+                end else if (s[1]) begin // s[1] asserted
+                    next_state = BETWEEN_S2_AND_S1;
+                end else if (s[2]) begin // s[2] asserted
+                    next_state = HIGH_LEVEL;
+                end
+            end
+            
+            BETWEEN_S1_AND_S0: begin
+                fr1 = 1'b1;
+                fr0 = 1'b1; // Assert fr1 and fr0
+                dfr = 1'b0;
+
+                if (s[0]) begin
+                    next_state = BETWEEN_S1_AND_S0; // Stay in this state
+                end else if (s[1]) begin
+                    next_state = BETWEEN_S2_AND_S1; // Move to the next state
+                end else if (s[2]) begin
+                    next_state = HIGH_LEVEL; // Move to high level state
+                end else begin
+                    next_state = LOW_LEVEL; // Move to low level state
+                end
+            end
+
+            BETWEEN_S2_AND_S1: begin
+                fr0 = 1'b1; // Assert fr0
+                dfr = 1'b0; // no incremental flow
+
+                if (s[1]) begin
+                    next_state = BETWEEN_S2_AND_S1; // Stay in this state
+                end else if (s[0]) begin
+                    next_state = BETWEEN_S1_AND_S0; // Move to the next state
+                end else begin
+                    next_state = LOW_LEVEL; // Move to low level state
+                end
+            end
+
+            HIGH_LEVEL: begin
+                // All flow controls set to zero
+                fr2 = 1'b0; 
+                fr1 = 1'b0;
+                fr0 = 1'b0; 
+                dfr = 1'b0;
+                
+                if (s[0] == 1'b1) begin
+                    next_state = BETWEEN_S1_AND_S0; // Move to next state
+                end else if (s[1] == 1'b1) begin
+                    next_state = BETWEEN_S2_AND_S1; // Move to next state
+                end else begin
+                    next_state = HIGH_LEVEL; // Stay in High level
+                end
+            end
+
+            default: begin
+                next_state = LOW_LEVEL; // Default state
+            end
+        endcase
+    end
+endmodule
+```
+
+### Overview of the Design
+
+1. **State Representation**: The module uses a simple state machine with four states to represent the different levels implied by the sensor inputs:
+    - `LOW_LEVEL`
+    - `BETWEEN_S1_AND_S0`
+    - `BETWEEN_S2_AND_S1`
+    - `HIGH_LEVEL`
+
+2. **Synchronous Reset**: An active-high synchronous reset returns the system to the `LOW_LEVEL` state where all flow rates are enabled.
+
+3. **Output Logic**: The outputs (flow rates) are asserted based on the current state and sensor readings.
+
+### Features
+- The module combines both sequential and combinational logic to reflect the impact of sensor changes on flow rates effectively.
+- The `dfr` output is controlled conditionally based on state transitions between levels.
+
+Feel free to modify or enhance the design according to any additional specifications or requirements you may have!

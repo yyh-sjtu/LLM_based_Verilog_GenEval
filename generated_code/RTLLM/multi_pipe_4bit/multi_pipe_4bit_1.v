@@ -1,3 +1,4 @@
+
 module multi_pipe_4bit (
     input clk,
     input rst_n,
@@ -8,47 +9,40 @@ module multi_pipe_4bit (
 
 parameter size = 4;
 
-reg [3:0] ext_mul_a;
-reg [3:0] ext_mul_b;
-reg [7:0] partial_products [0:size-1];
-reg [7:0] registers [0:size-1];
+reg [7:0] partial_products[size-1:0];
+reg [7:0] sum_reg;
 
-// Extend input signals
-always @* begin
-    ext_mul_a = {4'b0, mul_a};
-    ext_mul_b = {4'b0, mul_b};
-end
-
-// Multiplication operation
-generate
-    genvar i;
-    for (i = 0; i < size; i = i + 1) begin: MULTIPLY
-        always @* begin
-            if (ext_mul_b[i] == 1'b1)
-                partial_products[i] = ext_mul_a << i;
-            else
-                partial_products[i] = 8'b0;
-        end
-    end
-endgenerate
-
-// Add of partial products
 always @(posedge clk or negedge rst_n) begin
     if (~rst_n) begin
-        registers <= {size{8'b0}};
-    end else begin
-        registers <= registers + partial_products;
+        sum_reg <= 8'b0;
+        for (int i=0; i<size; i=i+1) begin
+            partial_products[i] <= 8'b0;
+        end
+    end
+    else begin
+        sum_reg <= sum_reg + partial_products[0];
+        for (int i=0; i<size-1; i=i+1) begin
+            partial_products[i] <= partial_products[i+1];
+        end
+        partial_products[size-1] <= 8'b0;
     end
 end
 
-// Final product calculation
+always @(*) begin
+    for (int i=0; i<size; i=i+1) begin
+        if (mul_b[i] == 1) begin
+            partial_products[i] <= {mul_a, i{1'b0}};
+        end
+    end
+end
+
 always @(posedge clk or negedge rst_n) begin
     if (~rst_n) begin
         mul_out <= 8'b0;
-    end else begin
-        mul_out <= registers;
+    end
+    else begin
+        mul_out <= sum_reg;
     end
 end
 
 endmodule
-

@@ -1,0 +1,27 @@
+Sure, here is the RTL code for the TopModule module implementing the 2-to-1 mux as per your requirements:
+
+```verilog
+module TopModule (
+    input a,
+    input b,
+    input sel_b1,
+    input sel_b2,
+    output out_assign,
+    output out_always
+);
+
+assign out_assign = (sel_b1 & sel_b2) ? b : a;
+
+always @* begin
+    if (sel_b1 & sel_b2) begin
+        out_always = b;
+    end
+    else begin
+        out_always = a;
+    end
+end
+
+endmodule
+```
+
+This code defines a module TopModule with the specified input and output ports. It uses both assign statements and a procedural always block to implement the 2-to-1 mux functionality as described. The output out_assign will be assigned either a or b based on the values of sel_b1 and sel_b2, while out_always will be updated based on the procedural if statement.

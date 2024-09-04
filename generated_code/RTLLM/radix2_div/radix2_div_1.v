@@ -1,44 +1,52 @@
 
 module radix2_div (
-    input clk,
-    input rst,
-    input sign,
-    input [7:0] dividend,
-    input [7:0] divisor,
-    input opn_valid,
-    output reg res_valid,
+    input wire clk,
+    input wire rst,
+    input wire sign,
+    input wire [7:0] dividend,
+    input wire [7:0] divisor,
+    input wire opn_valid,
+    output wire res_valid,
     output reg [15:0] result
 );
 
-reg [7:0] SR;
+reg [15:0] SR;
 reg [7:0] NEG_DIVISOR;
 reg [3:0] cnt;
 reg start_cnt;
 
-always @ (posedge clk or posedge rst) begin
+always @(posedge clk or posedge rst) begin
     if (rst) begin
-        SR <= 8'b0;
-        NEG_DIVISOR <= 8'b0;
-        cnt <= 4'b0000;
+        cnt <= 4'b0;
         start_cnt <= 1'b0;
         res_valid <= 1'b0;
-    end else if (opn_valid && !res_valid) begin
-        SR <= {1'b0, dividend};
-        NEG_DIVISOR <= (sign) ? -divisor : divisor;
-        cnt <= 4'b0001;
-        start_cnt <= 1'b1;
-    end else if (start_cnt) begin
-        if (cnt == 4'b1000) begin
-            cnt <= 4'b0000;
-            start_cnt <= 1'b0;
-            result <= {SR, SR};
-            res_valid <= 1'b1;
-        end else begin
-            cnt <= cnt + 1;
-            if (SR[7]) begin
-                SR <= {SR[6:0], 1'b0};
-            else begin
-                SR <= SR - NEG_DIVISOR;
+    end else begin
+        if (opn_valid && res_valid == 1'b0) begin
+            SR <= {1'b0, dividend};
+            NEG_DIVISOR <= (sign) ? -divisor : divisor;
+            start_cnt <= 1'b1;
+        end
+        
+        if (start_cnt) begin
+            if (cnt == 4'b1000) begin
+                cnt <= 4'b0;
+                start_cnt <= 1'b0;
+                
+                if (sign) begin
+                    result <= (SR[7]) ? {SR[15], SR[14:8] - 8'b1} : {SR[7], SR[14:8]};
+                end else begin
+                    result <= {SR[7], SR[14:8]};
+                end
+                
+                res_valid <= 1'b1;
+            end else begin
+                cnt <= cnt + 1;
+                
+                if (SR[15:8] >= NEG_DIVISOR) begin
+                    SR <= {SR[14:0], 1'b0} - {NEG_DIVISOR, 1'b0};
+                end else begin
+                    SR <= {SR[14:0], 1'b1};
+                end
             end
         end
     end

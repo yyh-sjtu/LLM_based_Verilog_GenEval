@@ -1,0 +1,25 @@
+As a professional RTL designer, I would implement the TopModule as shown below in Verilog:
+
+```verilog
+module TopModule (
+    input clk,
+    input j,
+    input k,
+    output reg Q
+);
+
+reg Qold;
+
+always @(posedge clk) begin
+    if (j && ~k)
+        Q <= 1;
+    else if (~j && k)
+        Q <= 0;
+    else if (j && k)
+        Q <= ~Qold;
+end
+
+endmodule
+```
+
+In this implementation, the module TopModule contains the input ports clk, j, k and the output port Q. Inside the always block sensitive to the posedge of the clock signal, the JK flip-flop logic is implemented according to the specified truth table. The Q output is assigned the appropriate value based on the values of j, k, and the previous output Qold.

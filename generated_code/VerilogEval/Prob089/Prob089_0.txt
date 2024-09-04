@@ -1,0 +1,96 @@
+To implement a module called `TopModule` that acts as a serial 2's complementer Moore state machine, we'll define the state machine's states and behavior. The states manage the conversion process: loading bits, computing the 2's complement, and producing the output.
+
+### Key Features:
+1. **Asynchronous Reset**: When `areset` is high, the state machine resets.
+2. **Moore Machine**: The output `z` depends only on the current state, not directly on the input.
+3. **2's Complement Calculation**: This involves inverting the bits and adding 1 at the end.
+
+### State Definitions:
+- **IDLE**: Waiting for `areset` to go low.
+- **INVERT**: Invert the current bit and store.
+- **ADD_ONE**: After all bits have been inverted, add 1 to the accumulated result.
+
+### RTL Implementation:
+Here's how you could implement this in Verilog:
+
+```verilog
+module TopModule (
+    input  clk,
+    input  areset,
+    input  x,
+    output reg z
+);
+
+    // State encoding
+    typedef enum reg [1:0] {
+        IDLE = 2'b00,
+        INVERT = 2'b01,
+        ADD_ONE = 2'b10
+    } state_t;
+
+    state_t current_state, next_state;
+
+    // Registers to store intermediate results and carry
+    reg [31:0] inverted_result; // A large enough size to handle arbitrary length inputs
+    reg [31:0] stored_result;
+    reg carry;
+
+    // Edge-triggered logic block
+    always @(posedge clk or posedge areset) begin
+        if (areset) begin
+            current_state <= IDLE;
+            inverted_result <= 0;
+            stored_result <= 0;
+            z <= 0;
+
+        end else begin
+            current_state <= next_state;
+        end
+    end
+
+    // Next state logic and output generation
+    always @(*) begin
+        case (current_state)
+            IDLE: begin
+                if (!areset) begin
+                    next_state = INVERT; // Start inverting when reset is released
+                    z = 0;               // Output defined by state (Moore)
+                end else begin
+                    next_state = IDLE;
+                    z = z;               // Maintain output
+                end
+            end
+
+            INVERT: begin
+                inverted_result = (inverted_result << 1) | ~x; // Shift left and invert x
+                next_state = ADD_ONE; // Move to add one after inverting
+                z = 0;               // Keep output same
+            end
+
+            ADD_ONE: begin
+                stored_result = inverted_result + 1; // Add one to the inverted_result
+                if (stored_result[31]) begin           // If there's a carry-out
+                    z = 1;                            // Set output z to 1
+                end else begin
+                    z = 0;                            // Otherwise output is 0
+                end
+                next_state = INVERT; // Go back to INVERT state to ready for another input
+            end
+
+            default: begin
+                next_state = IDLE; // Default to IDLE to avoid latches
+                z = 0;            // Default output
+            end
+        endcase
+    end
+
+endmodule
+```
+
+### Notes:
+- **State Encoding**: The states are encoded using a `typedef` for clarity.
+- **Output Logic**: The output `z` is set based on the current state, adhering to the Moore machine principle.
+- **Bit Shift and Inversion**: The input `x` is inverted and stored in `inverted_result` during each clock cycle.
+- **State Transition**: The machine transitions between states as required to perform the 2's complement calculation.
+
+This implementation provides the basic framework for handling a serial bit stream and computes the 2's complement using a Moore state machine approach while considering the asynchronous reset feature. Make sure to adjust `stored_result` size according to your specific requirements and simulation constraints.

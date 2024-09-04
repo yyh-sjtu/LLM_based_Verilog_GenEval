@@ -1,9 +1,9 @@
 
-always @* begin
-  for (i = 0; i < len_table; i = i + 1) begin
-    Out32[i] = In32[In32table[i]];
-  end
+always @(*) begin
+    for (i = 0; i < len_table; i = i + 1) begin
+        Out32[i] = In32[In32table[i]];
+    end
 end
 endmodule
 
-This module takes a 32-bit input vector "In32" and permutes its elements according to the values stored in the "In32table". The permuted vector is then output as "Out32". The permutation is done by accessing the elements of In32 based on the values stored in In32table.
+This Verilog module represents a P-box permutation block that takes in a 32-bit input signal In32 and outputs a permuted 32-bit signal Out32 based on the defined permutation table In32table. The input signal is permuted according to the indices specified in the In32table array, resulting in the desired output signal. The module uses an iterative loop to perform the permutation for each element in the In32 array.

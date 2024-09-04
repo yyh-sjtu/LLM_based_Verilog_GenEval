@@ -1,17 +1,37 @@
-// Define the truth table using a case statement
-always @(*)
-begin
-    case({x3,x2,x1})
-        3'b000: f = 1;
-        3'b001: f = 1;
-        3'b010: f = 0;
-        3'b011: f = 1;
-        3'b100: f = 0;
-        3'b101: f = 0;
-        3'b110: f = 1;
-        3'b111: f = 0;
-        default: f = 0; // Default output if inputs don't match any case
-    endcase
+// Define the module truthtable
+module truthtable(
+    input x3, 
+    input x2, 
+    input x1, 
+    output reg f // declare f as a register output
+);
+
+// Implement the logic based on the truth table provided
+always @* begin
+    if (x3 == 0 && x2 == 0 && x1 == 0) begin
+        f = 1;
+    end
+    else if (x3 == 0 && x2 == 0 && x1 == 1) begin
+        f = 1;
+    end
+    else if (x3 == 0 && x2 == 1 && x1 == 0) begin
+        f = 0;
+    end
+    else if (x3 == 0 && x2 == 1 && x1 == 1) begin
+        f = 1;
+    end
+    else if (x3 == 1 && x2 == 0 && x1 == 0) begin
+        f = 0;
+    end
+    else if (x3 == 1 && x2 == 0 && x1 == 1) begin
+        f = 0;
+    end
+    else if (x3 == 1 && x2 == 1 && x1 == 0) begin
+        f = 1;
+    end
+    else begin // (x3 == 1 && x2 == 1 && x1 == 1)
+        f = 0;
+    end
 end
 
 endmodule

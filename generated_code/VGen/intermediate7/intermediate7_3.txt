@@ -1,10 +1,11 @@
-// Implementing the logic for permutation block
-always @* begin
-    for (i = 0; i < 32; i=i+1) begin
+// Define the permutation block logic
+always @*
+begin
+    for (i=0; i<len_table; i=i+1)
+    begin
         Out32[i] = In32[In32table[i]];
     end
 end
-
 endmodule
 
-This Verilog module defines a permutation block that takes a 32-bit input vector "In32" and outputs a permuted 32-bit vector "Out32" based on the predefined permutation table "In32table". The permutation table specifies the mapping for each bit position in the input vector to the corresponding bit position in the output vector. The logic inside the module implements this permutation and assigns the output values to "Out32" based on the mapping defined in the table. The final output will be the permuted vector according to the specified permutation table.
+This module defines a permutation block that takes a 32-bit input vector In32 and outputs a permuted 32-bit output vector Out32 based on the values stored in the In32table array. The values in the In32table array determine the order in which the bits of the input vector are arranged in the output vector. The permutation logic iterates through each entry in the In32table array and assigns the corresponding bit from the input vector to the output vector at the specified index.

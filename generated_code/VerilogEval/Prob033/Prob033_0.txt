@@ -1,0 +1,32 @@
+Here is an RTL design for the TopModule module that performs the specified operation:
+
+```
+module TopModule (
+    input [7:0] a,
+    input [7:0] b,
+    output reg [7:0] s,
+    output reg overflow
+);
+
+// Internal signals
+reg signed [8:0] sum;
+
+// Perform addition
+always @(*) begin
+    sum = $signed(a) + $signed(b);
+    s = sum[7:0];
+end
+
+// Check for overflow
+always @(*) begin
+    if (sum > 127 || sum < -128) begin
+        overflow = 1;
+    end else begin
+        overflow = 0;
+    end
+end
+
+endmodule
+```
+
+In this design, the module takes in two 8-bit inputs a and b, and outputs an 8-bit sum s and a boolean overflow signal. The addition is performed using signed arithmetic to handle 2's complement numbers properly. The overflow check is done by checking if the result sum exceeds the range [-128, 127] for signed 8-bit numbers.

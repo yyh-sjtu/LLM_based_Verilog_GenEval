@@ -1,0 +1,53 @@
+Certainly! Below is a Verilog implementation of the `TopModule` as per your specifications. This module will control the ringer and vibration motor based on the inputs `ring` and `vibrate_mode`.
+
+### Verilog Code for TopModule
+
+```verilog
+module TopModule (
+    input wire ring,
+    input wire vibrate_mode,
+    output reg ringer,
+    output reg motor
+);
+    
+    always @(*) begin
+        // Default outputs
+        ringer = 0;
+        motor = 0;
+
+        // Check if there's an incoming call
+        if (ring) begin
+            // If vibrate mode is active, turn on the motor
+            if (vibrate_mode) begin
+                motor = 1;
+            end
+            // If not in vibrate mode, turn on the ringer
+            else begin
+                ringer = 1;
+            end
+        end
+    end
+
+endmodule
+```
+
+### Explanation
+
+1. **Input Ports**:
+   - `ring`: Signal indicating an incoming call.
+   - `vibrate_mode`: Signal indicating if the phone should be in vibrate mode.
+
+2. **Output Ports**:
+   - `ringer`: Signal to indicate if the ringer should be on (active high).
+   - `motor`: Signal to indicate if the vibration motor should be on (active high).
+
+3. **Behavior**:
+   - The `always @(*)` block is used for combinational logic, which reacts to changes in the input signals.
+   - Initially, both `ringer` and `motor` are set to `0`.
+   - If `ring` is `1` (indicating an incoming call):
+     - If `vibrate_mode` is `1`, then the motor is turned on (`motor = 1`).
+     - If `vibrate_mode` is `0`, then the ringer is turned on (`ringer = 1`).
+
+This setup ensures that either the ringer or the motor is activated based on the mode of operation while handling incoming calls efficiently.
+
+Feel free to modify or ask if you have any more requirements!

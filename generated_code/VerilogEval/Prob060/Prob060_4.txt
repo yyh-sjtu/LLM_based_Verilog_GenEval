@@ -1,0 +1,45 @@
+Sure! Below is an example implementation of a `TopModule` using Verilog. This module is a 4-bit shift register with positive edge-triggered D flip-flops and a synchronous active-low reset.
+
+```verilog
+module TopModule (
+    input wire clk,        // Clock input
+    input wire resetn,    // Active-low synchronous reset
+    input wire in,        // Serial input
+    output reg out        // Serial output
+);
+
+    // Internal 4-bit shift register
+    reg [3:0] shift_reg;
+
+    // Sequential logic for the shift register
+    always @(posedge clk or negedge resetn) begin
+        if (!resetn) begin
+            // Synchronous reset: clear the shift register
+            shift_reg <= 4'b0000;
+        end else begin
+            // Shift left by one position and insert the new input bit
+            shift_reg <= {shift_reg[2:0], in};
+        end
+    end
+
+    // The output is the MSB of the shift register
+    assign out = shift_reg[3];
+
+endmodule
+```
+
+### Explanation:
+
+1. **Module Definition**: The module `TopModule` is defined with input and output ports according to your requirements.
+
+2. **Internal Register**: A 4-bit register `shift_reg` is declared to hold the state of the shift register.
+
+3. **Always Block**: The sequential logic operates inside an `always` block that triggers on the positive edge of the clock or negative edge of the reset signal.
+   - If `resetn` is low, the shift register is asynchronously cleared to `0000`.
+   - If `resetn` is high, the current contents of the shift register are shifted left by one bit, with the new input `in` being inserted into the least significant bit (LSB).
+
+4. **Output Assignment**: The output `out` is assigned the most significant bit (MSB) of the shift register `shift_reg[3]`.
+
+### Notes:
+- Ensure that your simulation or synthesis environment has the appropriate clock and reset signals configured for testing.
+- This implementation assumes a synchronous reset to set the shift register to `0000`.

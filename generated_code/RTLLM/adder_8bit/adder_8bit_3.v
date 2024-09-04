@@ -3,26 +3,38 @@ module adder_8bit (
     input [7:0] a,
     input [7:0] b,
     input cin,
-    output reg [7:0] sum,
-    output reg cout
+    output [7:0] sum,
+    output cout
 );
 
-reg [7:0] carry;
+wire [7:0] sum_intermediate;
+wire [6:0] carry_intermediate;
 
+// First bit adder
+full_adder FA0 (
+    .a(a[0]),
+    .b(b[0]),
+    .cin(cin),
+    .sum(sum_intermediate[0]),
+    .cout(carry_intermediate[0])
+);
+
+// Intermediate bit adders
 genvar i;
 generate
-    for (i = 0; i < 8; i = i + 1) begin : adder_loop
-        full_adder adder_instance (
+    for (i = 1; i < 8; i=i+1) begin : gen_full_adder
+        full_adder FA (
             .a(a[i]),
             .b(b[i]),
-            .cin(carry[i]),
-            .sum(sum[i]),
-            .cout(carry[i+1])
+            .cin(carry_intermediate[i-1]),
+            .sum(sum_intermediate[i]),
+            .cout(carry_intermediate[i])
         );
     end
 endgenerate
 
-assign cout = carry[8];
+assign sum = sum_intermediate;
+assign cout = carry_intermediate[7];
 
 endmodule
 
@@ -30,10 +42,11 @@ module full_adder (
     input a,
     input b,
     input cin,
-    output reg sum,
-    output reg cout
+    output sum,
+    output cout
 );
 
-assign {cout, sum} = a + b + cin;
+assign sum = a ^ b ^ cin;
+assign cout = (a & b) | (b & cin) | (a & cin);
 
 endmodule

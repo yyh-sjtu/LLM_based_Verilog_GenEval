@@ -1,19 +1,33 @@
-module counter(
+// Define the counter module
+module counter (
     input clk,
     input reset,
     output reg [3:0] q
 );
 
-always @(posedge clk) begin
-    if (reset) begin
-        q <= 4'b0001;
-    end else begin
-        if (q == 4'b1100) begin
-            q <= 4'b0001;
-        end else begin
-            q <= q + 1;
+    // Define internal signal to hold the count value
+    reg [3:0] count;
+
+    // Always block sensitive to clock
+    always @ (posedge clk) begin
+        // Check if reset is high, reset the count
+        if (reset) begin
+            count <= 4'b1;
+        end
+        // Increment the count if not reset
+        else begin
+            // If the count is less than 12, increment it
+            if (count < 12) begin
+                count <= count + 1;
+            end
+            // Otherwise, reset the count to 1
+            else begin
+                count <= 4'b1;
+            end
         end
     end
-end
+
+    // Assign count value to output q
+    assign q = count;
 
 endmodule

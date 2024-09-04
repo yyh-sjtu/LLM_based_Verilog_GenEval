@@ -7,17 +7,26 @@ module edge_detect (
     output reg down
 );
 
-reg a_last;
+reg a_dly;
 
 always @(posedge clk or negedge rst_n) begin
     if (~rst_n) begin
-        rise <= 0;
-        down <= 0;
-        a_last <= 0;
+        a_dly <= 1'b0;
+        rise <= 1'b0;
+        down <= 1'b0;
     end else begin
-        rise <= (a & ~a_last);
-        down <= (~a & a_last);
-        a_last <= a;
+        a_dly <= a;
+        
+        if (a_dly == 1'b0 && a == 1'b1) begin
+            rise <= 1'b1;
+            down <= 1'b0;
+        end else if (a_dly == 1'b1 && a == 1'b0) begin
+            rise <= 1'b0;
+            down <= 1'b1;
+        end else begin
+            rise <= 1'b0;
+            down <= 1'b0;
+        end
     end
 end
 

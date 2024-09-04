@@ -1,0 +1,56 @@
+Certainly! Below is an implementation of the `TopModule` in Verilog that meets the specified requirements. It includes a 10-bit down-counter that can be loaded and decrements on each clock cycle, asserting the terminal count (`tc`) signal when the counter reaches zero.
+
+```verilog
+module TopModule (
+    input wire clk,
+    input wire load,
+    input wire [9:0] data,
+    output reg tc
+);
+
+    reg [9:0] counter; // 10-bit internal counter
+
+    // Sequential logic for counter
+    always @(posedge clk) begin
+        if (load) begin
+            counter <= data; // Load the new value into the counter
+            tc <= 1'b0;      // Reset the terminal count when loaded
+        end else if (counter > 0) begin
+            counter <= counter - 1; // Decrement the counter
+            tc <= 1'b0;              // Maintain tc as low while counting down
+        end
+
+        // Assert terminal count when counter reaches 0
+        if (counter == 1) begin
+            tc <= 1'b1; // Assert terminal count when about to reach zero
+        end else if (counter == 0) begin
+            tc <= 1'b1; // Assert terminal count when counter reaches zero
+        end
+    end
+
+endmodule
+```
+
+### Explanation
+
+1. **Module Declaration**:
+   - The module `TopModule` takes three inputs (`clk`, `load`, and `data`) and one output (`tc`).
+
+2. **Signal Declaration**:
+   - We declare a 10-bit register `counter` to hold the countdown value.
+
+3. **Always Block**:
+   - The always block is sensitive to the positive edge of the clock (`posedge clk`).
+   - If `load` is asserted (`load == 1`), we load the `data` into `counter` and reset `tc` to `0`.
+   - If `load` is not asserted and `counter` is greater than `0`, we decrement the counter. If `counter` is currently more than 0, `tc` is kept low.
+   - We check if `counter` is about to reach `0` or has reached `0` to assert the `tc` signal.
+
+### Counter Behavior
+- When `load` is set to 1, the counter is updated to the value of `data`. This action will reset the terminal count.
+- When `load` is set to 0, the counter decrements by 1 on each clock cycle. The terminal count is asserted when the counter hits zero.
+- Once the counter hits zero, it stays at zero until a new value is loaded in again.
+
+### Testing & Simulation
+For thorough testing, you'd want to create a testbench to simulate various scenarios, ensuring the counter behaves as intended under different `load` conditions and clock cycles.
+
+Feel free to modify or extend the coding style and logic based on additional requirements or specific technology constraints!

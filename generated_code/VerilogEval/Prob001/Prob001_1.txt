@@ -1,0 +1,13 @@
+Here is a simple Verilog RTL code for the TopModule:
+
+```verilog
+module TopModule (
+    output zero
+);
+
+assign zero = 1'b0;
+
+endmodule
+```
+
+This module simply assigns a constant value of 0 to the output port "zero", ensuring that it always outputs a LOW signal.

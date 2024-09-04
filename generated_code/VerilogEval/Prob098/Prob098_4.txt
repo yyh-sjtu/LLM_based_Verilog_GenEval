@@ -1,0 +1,32 @@
+Based on the given simulation waveforms, it appears that the module TopModule is a D flip-flop with the following truth table:
+
+D  Q(t)  Q(t+1)
+0   x      0
+1   x      1
+0   0      0
+1   0      1
+0   1      0
+1   1      0
+
+To implement this in RTL (Register Transfer Level), we can write the following Verilog code for TopModule:
+
+```verilog
+module TopModule (
+    input clk,
+    input a,
+    output reg q
+);
+
+always @(posedge clk) begin
+    if(a)
+        q <= 1;
+    else
+        q <= 0;
+end
+
+endmodule
+```
+
+In this code, the always block is sensitive to the positive edge of the clock. If the input a is high (1), the output q will be set to 1 on the next clock edge. Otherwise, the output q will be set to 0 on the next clock edge.
+
+This implementation should match the behavior described by the simulation waveforms provided.

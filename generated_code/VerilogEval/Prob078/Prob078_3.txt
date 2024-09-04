@@ -1,0 +1,28 @@
+To implement a dual-edge triggered flip-flop behavior without using a dual-edge triggered flip-flop directly, we can use two separate flip-flops, one triggered on the rising edge and the other triggered on the falling edge of the clock. Here is a Verilog code snippet that achieves this:
+
+```verilog
+module TopModule (
+    input clk,
+    input d,
+    output reg q
+);
+
+reg q_rising_edge;
+reg q_falling_edge;
+
+always @(posedge clk) begin
+    q_rising_edge <= d;
+end
+
+always @(negedge clk) begin
+    q_falling_edge <= q_rising_edge;
+end
+
+assign q = q_falling_edge;
+
+endmodule
+```
+
+In this code, we use two separate registers `q_rising_edge` and `q_falling_edge` to store the value of input `d` on the rising and falling edges of the clock, respectively. The first always block triggers on the rising edge of the clock and assigns the input `d` to `q_rising_edge`. The second always block triggers on the falling edge of the clock and assigns the value of `q_rising_edge` to `q_falling_edge`. Finally, we assign the value of `q_falling_edge` to the output `q`, which effectively simulates a dual-edge triggered behavior.
+
+This approach effectively emulates the functionality of a dual-edge triggered flip-flop using standard flip-flops available in FPGA architectures.

@@ -9,35 +9,33 @@ module adder_pipe_64bit (
     output reg o_en
 );
 
-reg [63:0] add_results [4:0]; // Pipeline stage registers
-
-reg [64:0] sum [4:0]; // Sum of adda, addb, and carry
-reg [4:0] carry; // Carry signals for each stage
+reg [63:0] sum1, sum2, sum3, sum4;
+reg [65:0] carry1, carry2, carry3;
 
 always @(posedge clk or negedge rst_n) begin
     if (~rst_n) begin
-        for (int i = 0; i < 5; i = i + 1) begin
-            add_results[i] <= 0;
-            sum[i] <= 0;
-            o_en <= 0;
-        end
-        carry <= 0;
+        sum1 <= 64'b0;
+        sum2 <= 64'b0;
+        sum3 <= 64'b0;
+        sum4 <= 64'b0;
+        carry1 <= 66'b0;
+        carry2 <= 66'b0;
+        carry3 <= 66'b0;
+        o_en <= 0;
     end else begin
-        // Pipeline stages
-        for (int i = 4; i >= 0; i = i - 1) begin
-            if (i == 4) begin
-                add_results[i] <= i_en ? adda + addb : 0;
-            end else begin
-                sum[i+1] <= add_results[i+1] + carry[i+1];
-                add_results[i] <= sum[i+1][63:0];
-                carry[i] <= sum[i+1][64];
-            end
+        if (i_en) begin
+            sum1 <= adda + addb;
+            carry1 <= {1'b0, sum1};
+            sum2 <= sum1 + carry1[63:0];
+            carry2 <= {1'b0, sum2};
+            sum3 <= sum2 + carry2[63:0];
+            carry3 <= {1'b0, sum3};
+            sum4 <= sum3 + carry3[63:0];
+            o_en <= 1;
         end
-        
-        // Output result
-        result <= sum[0];
-        o_en <= i_en;
     end
 end
+
+assign result = sum4;
 
 endmodule

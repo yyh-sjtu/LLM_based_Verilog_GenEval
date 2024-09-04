@@ -1,0 +1,14 @@
+Here is the RTL code for the TopModule with a NOT gate implementation:
+
+```verilog
+module TopModule (
+    input in,
+    output out
+);
+
+assign out = ~in;
+
+endmodule
+```
+
+This code defines a module named TopModule with an input port 'in' and an output port 'out'. The NOT gate functionality is implemented by assigning the output port 'out' with the bitwise negation of the input port 'in'. This code will generate the desired behavior of a NOT gate where the output is the inverse of the input.

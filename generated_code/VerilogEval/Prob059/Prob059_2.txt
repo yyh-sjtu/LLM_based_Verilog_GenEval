@@ -1,0 +1,30 @@
+Sure! Below is an implementation of the `TopModule` in Verilog. This module takes 3 input ports (`a`, `b`, and `c`) and drives 4 output ports (`w`, `x`, `y`, and `z`) according to the specified connections.
+
+```verilog
+module TopModule (
+    input wire a,
+    input wire b,
+    input wire c,
+    output wire w,
+    output wire x,
+    output wire y,
+    output wire z
+);
+
+// Assigning inputs to outputs as per specification
+assign w = a; // a -> w
+assign x = b; // b -> x
+assign y = b; // b -> y
+assign z = c; // c -> z
+
+endmodule
+```
+
+### Explanation:
+- **Module Declaration**: We declare the `TopModule` with designated input and output ports.
+- **Wire Assignment**: The `assign` statements make direct connections between the inputs and outputs according to your requirements.
+  - `w` receives the value of `a`.
+  - `x` and `y` both receive the value of `b`.
+  - `z` receives the value of `c`.
+
+This module essentially acts like a simple interconnecting wiring system based on the specified conditions. You can simulate and test this module with your desired testbench to verify its functionality.

@@ -1,3 +1,4 @@
+
 module pe (
     input wire clk,
     input wire rst,
@@ -7,7 +8,7 @@ module pe (
 );
 
 always @(posedge clk or posedge rst) begin
-    if (rst) begin
+    if (rst == 1) begin
         c <= 0;
     end else begin
         c <= c + (a * b);
@@ -15,4 +16,3 @@ always @(posedge clk or posedge rst) begin
 end
 
 endmodule
-

@@ -1,0 +1,41 @@
+Certainly! Below is a simple implementation of the `TopModule` in Verilog that meets the requirements you've provided. This module implements a 4-bit shift register that can shift in data or decrement the value, depending on the control signals.
+
+```verilog
+module TopModule (
+    input  clk,
+    input  shift_ena,
+    input  count_ena,
+    input  data,
+    output reg [3:0] q
+);
+
+    always @(posedge clk) begin
+        if (shift_ena) begin
+            // Shift in data (most-significant-bit first)
+            q <= {data, q[3:1]};
+        end else if (count_ena) begin
+            // Decrement the value in the register
+            if (q != 4'b0000) begin
+                q <= q - 1;
+            end
+        end
+    end
+
+endmodule
+```
+
+### Explanation:
+
+1. **Module Declaration**: The module is named `TopModule`, and it has one clock input, three control inputs, and one four-bit output.
+
+2. **Sequential Logic Block**: The `always` block is triggered by the positive edge of the clock (`posedge clk`).
+
+3. **Control Logic**:
+   - **Shift Operation**: If `shift_ena` is high, the `data` bit is shifted into the most significant position of `q`, with the other bits shifted down. This is achieved using the concatenation operator (`{data, q[3:1]}`).
+   - **Count Operation**: If `count_ena` is high and the current value of `q` is not zero, `q` is decremented by 1 (`q <= q - 1`).
+
+4. **Output**: The value of `q` is a 4-bit register that reflects the current state of the shift register or counter.
+
+### Additional Notes:
+- The design assumes that `shift_ena` and `count_ena` will not be high simultaneously in the specified operational conditions. Therefore, no specific handling is necessary for this case.
+- The module needs to be instantiated in a testbench for simulation or synthesized in a hardware description environment for implementation on FPGA or ASIC.

@@ -1,0 +1,99 @@
+Sure! Below is a Verilog implementation of the `TopModule` that implements a gshare branch predictor as specified in your request.
+
+```verilog
+module TopModule (
+    input clk,
+    input areset,
+    
+    // Prediction interface
+    input predict_valid,
+    input [6:0] predict_pc,
+    output reg predict_taken,
+    output reg [6:0] predict_history,
+    
+    // Training interface
+    input train_valid,
+    input train_taken,
+    input train_mispredicted,
+    input [6:0] train_history,
+    input [6:0] train_pc
+);
+
+    // Constants
+    parameter ADDR_WIDTH = 7;
+    parameter PHT_SIZE = 128;
+    parameter NUM_BITS = 2; // saturating counter is 2 bits
+    
+    // Internal registers
+    reg [ADDR_WIDTH-1:0] global_history; // Global branch history register
+    reg [NUM_BITS-1:0] pht[PHT_SIZE-1:0]; // Pattern history table
+    reg training_taken; // Holds the training prediction if needed
+    
+    // Helper function to calculate the PHT index
+    function [ADDR_WIDTH-1:0] calculate_index;
+        input [ADDR_WIDTH-1:0] pc;
+        input [ADDR_WIDTH-1:0] history;
+        begin
+            calculate_index = (pc ^ history) % PHT_SIZE;
+        end
+    endfunction
+
+    // Asynchronous reset
+    always @(posedge clk or posedge areset) begin
+        if (areset) begin
+            global_history <= 7'b0;
+            for (integer i = 0; i < PHT_SIZE; i = i + 1) begin
+                pht[i] <= 2'b00; // Initialize all counters to 0
+            end
+        end else begin
+            // Training phase
+            if (train_valid) begin
+                integer index = calculate_index(train_pc, train_history);
+                if (train_taken) begin
+                    // Increment counter on taken
+                    if (pht[index] < 2'b11)
+                        pht[index] <= pht[index] + 1;
+                end else begin
+                    // Decrement counter on not taken
+                    if (pht[index] > 2'b00)
+                        pht[index] <= pht[index] - 1;
+                end
+                
+                // If it was a misprediction, recover history
+                if (train_mispredicted) begin
+                    global_history <= train_history; // Recover history on misprediction
+                end
+            end
+            
+            // Prediction phase
+            if (predict_valid) begin
+                integer index = calculate_index(predict_pc, global_history);
+
+                // Use current PHT state
+                predict_taken <= (pht[index] >= 2'b10); // Taken if counter state is high
+
+                // Update history on prediction
+                global_history <= {global_history[5:0], predict_taken}; // Shift history left
+                predict_history <= global_history; // Output current history
+            end
+        end
+    end
+endmodule
+```
+
+### Explanation:
+1. **Inputs and Outputs**: The module has inputs for clock, asynchronous reset, and the prediction and training signals. Outputs include the predicted branch direction and the global branch history.
+
+2. **PHT and Global History**: The 128-entry Pattern History Table (PHT) is implemented as a 2-bit saturating counter array, with another 7-bit register to keep track of the global history.
+
+3. **Index Calculation**: A function, `calculate_index`, computes the index for accessing the PHT based on the XOR of the PC and global history.
+
+4. **Clock Behaviour**:
+   - On the positive edge of the clock:
+     - If `areset` is high, it resets the global history and initializes the PHT to zero.
+     - If `train_valid` is high, it updates the PHT based on whether the branch was taken or not, and adjusts the history if there was misprediction.
+     - If `predict_valid` is high, it uses the PHT to make a prediction and updates the global history register accordingly.
+
+5. **Saturating Counter Logic**: The PHT entries are moved up or down based on the outcome (taken or not), ensuring that it conforms to a saturating counter mechanism.
+
+This implementation should give you the functionality described in your specifications. You may want to test it thoroughly in a simulation environment to verify the correctness and to handle borderline cases.

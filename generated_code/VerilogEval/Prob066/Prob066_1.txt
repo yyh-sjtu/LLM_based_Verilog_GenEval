@@ -1,0 +1,48 @@
+Certainly! Below is an implementation of the `TopModule` in Verilog that meets your specifications. The module will monitor a 32-bit input vector for transitions from `1` to `0`. When such a transition is detected, it sets a corresponding bit in the 32-bit output to `1` until the reset is activated.
+
+Here’s the RTL code:
+
+```verilog
+module TopModule (
+    input  wire        clk,     // Clock input
+    input  wire        reset,   // Synchronous reset input
+    input  wire [31:0] in,      // 32-bit input
+    output reg  [31:0] out      // 32-bit output
+);
+
+    reg [31:0] prev_in; // Register to hold the previous state of the input
+
+    always @(posedge clk) begin
+        if (reset) begin
+            out <= 32'b0; // Reset the output to 0
+            prev_in <= 32'b0; // Reset previous input state
+        end else begin
+            // Capture rising edge transitions from 1 to 0 in the input
+            for (int i = 0; i < 32; i = i + 1) begin
+                if (prev_in[i] == 1'b1 && in[i] == 1'b0) begin
+                    out[i] <= 1'b1; // Transition detected: set output
+                end
+            end
+            // Update previous input state
+            prev_in <= in;
+        end
+    end
+
+endmodule
+```
+
+### Explanation:
+
+1. **Module Definition**: The module is defined with the specified inputs and outputs.
+2. **Registers**:
+    - `prev_in`: A register to keep track of the previous state of the 32-bit input vector.
+3. **Always Block**:
+    - Triggered on the positive edge of the clock.
+    - First, it checks for the `reset` signal. When `reset` is high, it clears both the `out` and `prev_in` registers.
+    - If not resetting, it checks every bit of the `prev_in` and the current `in` to find any transitions from `1` to `0`. If such a transition is detected on a bit, the corresponding bit in `out` is set to `1`.
+    - After evaluating, it updates `prev_in` to the current `in` for the next clock cycle.
+
+### Considerations:
+- Ensure correct simulation models are used to test the functionality.
+- Be aware of the synthesis tools as they may have specific handling of `for` loops in combinatorial logic.
+- In real-world applications, debouncing or additional state management might be needed depending on the input nature.

@@ -1,0 +1,16 @@
+Here is the Verilog RTL implementation of the TopModule based on the given Karnaugh map:
+
+```verilog
+module TopModule (
+    input a,
+    input b,
+    input c,
+    output out
+);
+
+assign out = (c & (a | b));
+
+endmodule
+```
+
+This Verilog code defines the TopModule module with the specified input and output ports. The logic inside the module implements the circuit described by the given Karnaugh map. The output signal `out` is generated based on the logic expression `(c & (a | b))`.

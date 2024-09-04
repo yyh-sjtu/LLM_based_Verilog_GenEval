@@ -6,55 +6,66 @@ module fsm (
     output reg MATCH
 );
 
-    // State variables
-    reg [3:0] state;
+    // Define states
+    typedef enum logic [2:0] {
+        S0, // Initial state
+        S1, // State after receiving '1'
+        S2, // State after '1, 0'
+        S3, // State after '1, 0, 0'
+        S4, // State after '1, 0, 0, 1'
+        S5  // State after '1, 0, 0, 1, 1'
+    } states;
 
-    // Next state and output logic
-    always @(posedge CLK or posedge RST) begin
+    // Initialize state register
+    reg [2:0] state, next_state;
+
+    // Initialize output
+    reg next_MATCH;
+
+    // State transition and output logic
+    always @ (posedge CLK or posedge RST) begin
         if (RST) begin
-            state <= 4'b0000;
+            state <= S0;
             MATCH <= 0;
         end
         else begin
-            case (state)
-                4'b0000: begin
-                    if (IN) state <= 4'b0001;
-                    else state <= 4'b0000;
-                end
-                4'b0001: begin
-                    if (!IN) state <= 4'b0010;
-                    else state <= 4'b0001;
-                end
-                4'b0010: begin
-                    if (!IN) state <= 4'b0011;
-                    else state <= 4'b0000;
-                end
-                4'b0011: begin
-                    if (IN) state <= 4'b0100;
-                    else state <= 4'b0000;
-                end
-                4'b0100: begin
-                    if (IN) begin
-                        MATCH <= 1;
-                        state <= 4'b0000;
-                    end
-                    else state <= 4'b0101;
-                end
-                4'b0101: begin
-                    if (!IN) state <= 4'b0110;
-                    else state <= 4'b0000;
-                end
-                4'b0110: begin
-                    if (!IN) state <= 4'b0111;
-                    else state <= 4'b0000;
-                end
-                4'b0111: begin
-                    if (IN) state <= 4'b0100;
-                    else state <= 4'b0000;
-                end
-                default: state <= 4'b0000;
-            endcase
+            state <= next_state;
+            MATCH <= next_MATCH;
         end
+    end
+
+    // Next state logic
+    always @* begin
+        next_state = state;
+        next_MATCH = 0;
+
+        case (state)
+            S0: begin
+                if (IN) next_state = S1;
+            end
+            S1: begin
+                if (!IN) next_state = S0;
+                else if (IN) next_state = S2;
+            end
+            S2: begin
+                if (!IN) next_state = S0;
+                else if (IN) next_state = S3;
+            end
+            S3: begin
+                if (!IN) next_state = S0;
+                else if (IN) next_state = S4;
+            end
+            S4: begin
+                if (!IN) next_state = S0;
+                else if (IN) begin
+                    next_state = S5;
+                    next_MATCH = 1;
+                end
+            end
+            S5: begin
+                if (!IN) next_state = S0;
+            end
+        endcase
     end
 
 endmodule

@@ -1,0 +1,34 @@
+Certainly! Below is a simple implementation of a module named `TopModule` in Verilog that includes 8 D flip-flops with active high synchronous reset. Each flip-flop takes one bit of the 8-bit input `d` and outputs to the 8-bit output `q`. The output is set to zero on the reset signal.
+
+```verilog
+module TopModule (
+    input  wire       clk,    // Clock input
+    input  wire       reset,  // Reset input
+    input  wire [7:0] d,      // 8-bit data input
+    output reg  [7:0] q       // 8-bit data output
+);
+
+    // 8 D Flip-Flops
+    always @(posedge clk) begin
+        if (reset) begin
+            q <= 8'b00000000;  // Reset output to zero
+        end else begin
+            q <= d;            // Capture data on clock edge
+        end
+    end
+
+endmodule
+```
+
+### Breakdown of the Code:
+
+1. **Module Definition**: The module is defined with the name `TopModule` and specifies its input/output ports.
+   
+2. **Clock and Reset Handling**: The `always` block is triggered on the positive edge of `clk`. Inside the block:
+   - It checks if `reset` is high. If so, `q` is set to zero (`8'b00000000`).
+   - If `reset` is not active, the 8-bit data input `d` is assigned to the output `q`.
+
+3. **Assignments**: The assignment to `q` is non-blocking (using `<=`), which is a common practice in sequential logic.
+
+### Synthesis:
+This code is synthesizable and can be used in FPGA or ASIC designs. Just make sure to check the toolchain you're using for any specific requirements or syntax nuances.

@@ -7,28 +7,35 @@ module div_16bit (
 
 reg [15:0] a_reg;
 reg [7:0] b_reg;
-reg [15:0] temp_remainder;
 
-always @* begin
+always @(*) begin
     a_reg = A;
     b_reg = B;
 end
 
-always @* begin
-    result = 16'b0;
-    temp_remainder = a_reg;
+always @(*) begin
+    reg [15:0] dividend;
+    reg [7:0] divisor;
+    reg [15:0] quotient;
+    reg [15:0] remainder;
 
-    for (int i = 15; i >= 8; i = i-1) begin
-        if(temp_remainder[i] >= b_reg) begin
-            result[i-8] = 1;
-            temp_remainder[i] = temp_remainder[i] - b_reg;
-        end
-        else begin
-            result[i-8] = 0;
+    dividend = a_reg;
+    divisor = b_reg;
+    quotient = 0;
+    remainder = 0;
+    
+    for (int i = 15; i >= 0; i = i - 1) begin
+        remainder = remainder << 1;
+        remainder[0] = dividend[i];
+
+        if (remainder >= divisor) begin
+            remainder = remainder - divisor;
+            quotient[i] = 1;
         end
     end
 
-    odd = temp_remainder;
+    result = quotient;
+    odd = remainder;
 end
 
 endmodule

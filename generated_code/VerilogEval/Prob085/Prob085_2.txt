@@ -1,0 +1,46 @@
+Sure! Below is a Verilog implementation of a module named `TopModule` that satisfies the requirements you've provided. The module is designed to function as a 4-bit shift register, managing asynchronous reset, synchronous load, and enable signals.
+
+```verilog
+module TopModule (
+    input  clk,
+    input  areset,
+    input  load,
+    input  ena,
+    input  [3:0] data,
+    output reg [3:0] q
+);
+
+    // On the positive edge of the clock
+    always @(posedge clk or posedge areset) begin
+        if (areset) begin
+            // Asynchronous reset
+            q <= 4'b0000; // Reset the shift register to 0
+        end else if (load) begin
+            // Load data into the shift register
+            q <= data; // Load the input data
+        end else if (ena) begin
+            // Shift right
+            q <= {1'b0, q[3:1]}; // Shift right (MSB gets 0, LSB is lost)
+        end
+        // If neither load nor ena is active, q retains its value
+    end
+
+endmodule
+```
+
+### Explanation:
+1. **Inputs and Outputs**:
+    - `clk`: Clock input for synchronization.
+    - `areset`: Asynchronous reset that sets the register to zero.
+    - `load`: Control signal to load input data into the register.
+    - `ena`: Control signal to shift the register right.
+    - `data`: 4-bit input data to be loaded into the shift register.
+    - `q`: 4-bit output representing the current contents of the shift register.
+
+2. **Logic Implementation**:
+    - The `always` block is sensitive to the positive edge of `clk` and `areset`. If `areset` is high, `q` is set to `4'b0000` immediately.
+    - If `load` is asserted on the positive edge of `clk`, `q` is updated with the value of `data`.
+    - If `ena` is asserted and `load` is not asserted, the current value of `q` is shifted right, and the most significant bit (MSB) is filled with `0`.
+    - If neither `load` nor `ena` are asserted, the value of `q` remains unchanged.
+
+This design ensures that the conflicting inputs (`load` and `ena`) are handled appropriately, with the `load` input taking priority when both are active.

@@ -1,8 +1,36 @@
-// Implementing the truth table using Verilog code
-// Here is the code for the module based on the given truth table
+To implement the specified truth table in Verilog, we can derive the output `f` based on the given input combinations. From the truth table, we can observe that `f` is `1` for the following input combinations:
 
-module truthtable(input x3, input x2, input x1, output f );
-    assign f = ~((x3 & x2 & ~x1) | (~x3 & x2 & x1) | (~x3 & ~x2 & ~x1) | (x3 & ~x2 & x1));
+- \(000\)
+- \(001\)
+- \(011\)
+- \(110\)
+
+Thus, the logic for `f` can be expressed using a combination of logic terms. We can derive the equation for `f` using a Sum of Products (SOP) format. For the input conditions where output `f` is `1`, we can write `f` as:
+
+\[ f = \overline{x3} \cdot \overline{x2} \cdot \overline{x1} + \overline{x3} \cdot \overline{x2} \cdot x1 + \overline{x3} \cdot x2 \cdot x1 + x3 \cdot x2 \cdot \overline{x1} \]
+
+Now, let's implement this in Verilog:
+
+```verilog
+module truthtable(
+    input x3,
+    input x2,
+    input x1,
+    output f
+);
+
+// Logic expression for f
+assign f = (~x3 & ~x2 & ~x1) |  // 000
+           (~x3 & ~x2 & x1)  |  // 001
+           (~x3 & x2 & x1)   |  // 011
+           (x3 & x2 & ~x1);      // 110
+
 endmodule
+```
 
-// This module takes three input signals x3, x2, and x1 and computes the output signal f based on the given truth table.
+### Explanation:
+- The module defines the inputs `x3`, `x2`, and `x1`, and the output `f`.
+- The `assign` statement computes the output `f` using a combination of AND (`&`), OR (`|`), and NOT (`~`) operations based on the derived logical expression from the truth table. 
+- The conditions are combined using the OR operator to account for all cases where `f` is `1`.
+
+You can synthesize this module in a Verilog simulator or on an FPGA to verify that it behaves according to the defined truth table.

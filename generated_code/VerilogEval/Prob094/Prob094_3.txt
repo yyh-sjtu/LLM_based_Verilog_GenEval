@@ -1,0 +1,49 @@
+To implement the `TopModule` with the specified functionality, I'll provide you with a Verilog module. This module will compute the outputs `out_both`, `out_any`, and `out_different` based on the given input `in`. Here’s how it can be structured:
+
+```verilog
+module TopModule (
+    input  [3:0] in,              // 4-bit input
+    output [3:0] out_both,        // Output: both inputs are 1
+    output [3:0] out_any,         // Output: at least one input is 1
+    output [3:0] out_different     // Output: inputs are different
+);
+    
+    // Calculate out_both
+    assign out_both[0] = 1'b0; // No neighbor on the left for in[0]
+    assign out_both[1] = in[1] & in[0]; // Check in[1] and in[0]
+    assign out_both[2] = in[2] & in[1]; // Check in[2] and in[1]
+    assign out_both[3] = in[3] & in[2]; // Check in[3] and in[2]
+    
+    // Calculate out_any
+    assign out_any[3] = 1'b0; // No neighbor on the right for in[3]
+    assign out_any[2] = in[2] | in[3]; // Check in[2] and in[3]
+    assign out_any[1] = in[1] | in[2]; // Check in[1] and in[2]
+    assign out_any[0] = in[0] | in[1]; // Check in[0] and in[1]
+
+    // Calculate out_different
+    assign out_different[0] = in[0] ^ in[3]; // Wrap around (in[0] and in[3])
+    assign out_different[1] = in[1] ^ in[0]; // Check in[1] and in[0]
+    assign out_different[2] = in[2] ^ in[1]; // Check in[2] and in[1]
+    assign out_different[3] = in[3] ^ in[2]; // Check in[3] and in[2]
+
+endmodule
+```
+
+### Explanation of the Module:
+
+1. **Input and Output Declaration**: 
+   - The module has a 4-bit input `in` and three 4-bit outputs: `out_both`, `out_any`, and `out_different`.
+
+2. **out_both Calculation**: 
+   - The first bit (`out_both[0]`) is set to `0` since `in[0]` has no left neighbor.
+   - The bits `out_both[1]`, `out_both[2]`, and `out_both[3]` are calculated using the logical AND operation between the respective bit and its left neighbor.
+
+3. **out_any Calculation**: 
+   - The last bit (`out_any[3]`) is set to `0` since `in[3]` has no right neighbor.
+   - The other bits are computed using the logical OR operation between the current bit and its right neighbor.
+
+4. **out_different Calculation**: 
+   - The comparisons wrap around, making `out_different[0]` compare `in[0]` with `in[3]`.
+   - The other bits are compared with their respective left neighbors.
+
+This module should fulfill your requirements according to the specified logic for each output. You can synthesize and simulate it in your preferred RTL tools.

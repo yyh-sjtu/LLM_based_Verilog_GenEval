@@ -1,0 +1,14 @@
+Sure, here is a Verilog code implementation for the TopModule:
+
+```verilog
+module TopModule(
+  input in,
+  output out
+);
+
+assign out = in;
+
+endmodule
+``` 
+
+This module simply assigns the input signal 'in' directly to the output signal 'out', effectively behaving like a wire.

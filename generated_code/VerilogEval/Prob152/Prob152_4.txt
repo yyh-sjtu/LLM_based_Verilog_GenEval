@@ -1,0 +1,121 @@
+To implement the `TopModule` behavior specified, we will create a Moore finite state machine (FSM) that captures the rules and conditions of the Lemmings' behavior. Here's a Verilog implementation of the module:
+
+```verilog
+module TopModule(
+    input clk,
+    input areset,
+    input bump_left,
+    input bump_right,
+    input ground,
+    input dig,
+    output reg walk_left,
+    output reg walk_right,
+    output reg aaah,
+    output reg digging
+);
+
+    // State Encoding
+    typedef enum reg [1:0] {
+        STATE_WALK_LEFT,
+        STATE_WALK_RIGHT,
+        STATE_FALL,
+        STATE_DIG
+    } state_t;
+
+    state_t current_state, next_state;
+
+    // State Register (Sequential Logic)
+    always @(posedge clk or posedge areset) begin
+        if (areset) begin
+            current_state <= STATE_WALK_LEFT; // Reset to walking left
+        end else begin
+            current_state <= next_state; // Update state
+        end
+    end
+
+    // Next State and Output Logic (Combinatorial Logic)
+    always @(*) begin
+        // Default outputs
+        next_state = current_state;
+        walk_left = 0;
+        walk_right = 0;
+        aaah = 0;
+        digging = 0;
+
+        case (current_state)
+            STATE_WALK_LEFT: begin
+                walk_left = 1;
+                aaah = 0; // Not falling
+                if (!ground) begin
+                    next_state = STATE_FALL; // Fall if there is no ground
+                    aaah = 1; // Say "aaah!"
+                end else if (dig) begin
+                    next_state = STATE_DIG; // Start digging
+                    digging = 1;
+                end else if (bump_right) begin
+                    next_state = STATE_WALK_RIGHT; // Bump on right
+                end
+            end
+
+            STATE_WALK_RIGHT: begin
+                walk_right = 1;
+                aaah = 0; // Not falling
+                if (!ground) begin
+                    next_state = STATE_FALL; // Fall if there is no ground
+                    aaah = 1; // Say "aaah!"
+                end else if (dig) begin
+                    next_state = STATE_DIG; // Start digging
+                    digging = 1;
+                end else if (bump_left) begin
+                    next_state = STATE_WALK_LEFT; // Bump on left
+                end
+            end
+            
+            STATE_FALL: begin
+                aaah = 1; // Falling
+                if (ground) begin
+                    // When ground reappears, resume previous direction
+                    if (current_state == STATE_WALK_LEFT) begin
+                        next_state = STATE_WALK_LEFT; // Back to walking left
+                    end else begin
+                        next_state = STATE_WALK_RIGHT; // Back to walking right
+                    end
+                end
+            end
+            
+            STATE_DIG: begin
+                digging = 1; // Digging
+                if (!ground) begin
+                    next_state = STATE_FALL; // Fall if there is no ground
+                    aaah = 1; // Say "aaah!"
+                end else if (bump_left || bump_right) begin
+                    // Ignore bumps while digging
+                    next_state = STATE_DIG; // Stay in digging state
+                end
+            end
+
+            default: begin
+                // Default case should not happen; includes input reset.
+                next_state = STATE_WALK_LEFT;
+            end
+        endcase
+    end
+endmodule
+```
+
+### Explanation:
+1. **State Definition:** We define four states: `STATE_WALK_LEFT`, `STATE_WALK_RIGHT`, `STATE_FALL`, and `STATE_DIG`.
+
+2. **Reset Handling:** On a positive edge reset (`areset`), the Lemming starts by walking left.
+
+3. **State Transition Logic:** The states and outputs are updated based on the conditions specified:
+    - When in `STATE_WALK_LEFT`, the Lemming will:
+      - Say "aaah!" and transition to `STATE_FALL` if `ground` is low.
+      - Transition to digging if `dig` is high, otherwise switch to `STATE_WALK_RIGHT` if bumped right.
+    - When in `STATE_WALK_RIGHT`, the behavior is similar but mirrored for the rightward movement.
+    - When falling, the Lemming will keep saying "aaah!" until the ground is detected, at which point it will revert to the directional state it was last in.
+    - The `DIG` state allows the Lemming to dig, prioritizing falling over digging.
+
+4. **Output Logic:** The walk and fall outputs are controlled directly from the states, while digging is only asserted when in the `DIG` state.
+
+This implementation maintains the desired logic and behavior of the Lemming as detailed in your specification.

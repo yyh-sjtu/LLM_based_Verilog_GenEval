@@ -1,0 +1,166 @@
+To implement the described Moore state machine in RTL (Register Transfer Level), we will define the `TopModule` following your requirements. Here we will derive the next-state logic and output logic based on the state transitions provided.
+
+### State Encoding
+
+Using one-hot encoding, our states will be represented as follows:
+
+- S     = 10'b0000000001
+- S1    = 10'b0000000010
+- S11   = 10'b0000000100
+- S110  = 10'b0000001000
+- B0    = 10'b0000010000
+- B1    = 10'b0000100000
+- B2    = 10'b0001000000
+- B3    = 10'b0010000000
+- Count  = 10'b0100000000
+- Wait   = 10'b1000000000
+
+### Next-State Logic
+Let's derive the next-state logic equations for each state based on the transitions specified.
+
+1. **State S (10'b0000000001)**
+   - If d = 0: Stay in S
+   - If d = 1: Go to S1
+   - Next-State: `S_next = S & ~d | S1 & d`
+
+2. **State S1 (10'b0000000010)**
+   - If d = 0: Back to S
+   - If d = 1: Go to S11
+   - Next-State: `S1_next = S1 & ~d | S11 & d`
+
+3. **State S11 (10'b0000000100)**
+   - If d = 0: Go to S110
+   - If d = 1: Stay in S11 
+   - Next-State: `S11_next = S11 & d | S110 & ~d`
+
+4. **State S110 (10'b0000001000)**
+   - If d = 0: Go to S
+   - If d = 1: Go to B0
+   - Next-State: `Count_next = S110 & ~d | B0 & d`
+
+5. **State B0 (10'b0000010000)**
+   - Always transition to B1
+   - Next-State: `B1_next = B0`
+
+6. **State B1 (10'b0000100000)**
+   - Always transition to B2
+   - Next-State: `B2_next = B1`
+
+7. **State B2 (10'b0001000000)**
+   - Always transition to B3
+   - Next-State: `B3_next = B2`
+
+8. **State B3 (10'b0010000000)**
+   - Always transition to Count
+   - Next-State: `Count_next = B3`
+
+9. **State Count (10'b0100000000)**
+   - Transition to Count if counting is 1 and done_counting is not asserted
+   - Transition to Wait if done_counting is asserted
+   - `Count_next = Count & counting & ~done_counting | Wait & done_counting`
+
+10. **State Wait (10'b1000000000)**
+    - Stay in Wait if done is asserted and ack is 0
+    - Transition to S if done is asserted and ack is 1
+    - `Wait_next = Wait & done & ~ack | S & (done & ack)`
+
+### Output Logic
+Next, we derive the outputs based on the states:
+
+- **done**: High when in Wait and done is asserted: 
+  ```verilog
+  done = Wait & done
+  ```
+
+- **counting**: High when in Count:
+  ```verilog
+  counting = Count
+  ```
+
+- **shift_ena**: High when in B0, B1, B2, B3:
+  ```verilog
+  shift_ena = B0 | B1 | B2 | B3
+  ```
+
+### RTL Code Implementation
+
+Based on the logic derived, here’s a Verilog example of how to implement the module `TopModule`:
+
+```verilog
+module TopModule (
+    input  d,
+    input  done_counting,
+    input  ack,
+    input  [9:0] state,
+    output reg B3_next,
+    output reg S_next,
+    output reg S1_next,
+    output reg Count_next,
+    output reg Wait_next,
+    output reg done,
+    output reg counting,
+    output reg shift_ena
+);
+
+always @* begin
+    // Initialize outputs
+    B3_next = 1'b0;
+    S_next = 1'b0;
+    S1_next = 1'b0;
+    Count_next = 1'b0;
+    Wait_next = 1'b0;
+    done = 1'b0;
+    counting = 1'b0;
+    shift_ena = 1'b0;
+
+    // Next state logic
+    // State S
+    if (state[0]) begin
+        S_next = ~d;
+        S1_next = d;
+    end
+    // State S1
+    else if (state[1]) begin
+        S_next = ~d;
+        S1_next = ~d;
+        // S11 next state will be handled next
+    end
+    // State S11
+    else if (state[2]) begin
+        S11_next = (d) ? state[2] : 1'b0; // Stay or go to S110
+    end
+    // State S110
+    else if (state[3]) begin
+        S_next = ~d;
+        Count_next = d;
+    end
+    // State B0
+    else if (state[4]) begin
+        B3_next = 1'b1; // Always go to B1
+    end
+    // State B1, B2, B3
+    else if (state[5] | state[6] | state[7]) begin
+        Count_next = 1'b1; // Always next to count
+    end
+    // State Count
+    else if (state[8]) begin
+        Count_next = 1'b1;
+        Wait_next = done_counting;
+        counting = 1'b1;
+    end
+    // State Wait
+    else if (state[9]) begin
+        Wait_next = 1'b1;
+        if (ack) S_next = 1'b1; // Transition back to S
+    end
+
+    // Output logic
+    done = state[9]; // done when in Wait and done=1
+    counting = state[8]; // counting when in Count state
+    shift_ena = state[4] | state[5] | state[6] | state[7]; // shift enabled in B0, B1, B2, B3
+end
+
+endmodule
+```
+
+This module describes the combinational logic of the Moore state machine as requested. Make sure to hook up this logic to a clock or another control system in your larger design, as this snippet does not include clocked behavior (which would typically involve state registers).

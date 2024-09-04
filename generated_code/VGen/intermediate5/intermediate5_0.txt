@@ -1,32 +1,30 @@
-Here is the implementation of the module for the shift left and rotate operation in Verilog:
-
 ```verilog
 module left_rotate(
-  input clk,
-  input reset,
-  input [2:0] amount,
-  input [7:0] data,
-  input load,
-  output reg [7:0] out
+    input clk,
+    input reset,
+    input [2:0] amount,
+    input [7:0] data,
+    input load,
+    output reg [7:0] out
 );
 
-  reg [7:0] temp;
-  
-  always @(posedge clk or posedge reset) begin
+reg [7:0] shifted_data;
+
+always @(posedge clk) begin
     if(reset) begin
-      out <= 8'b0;
-      temp <= 8'b0;
-    end else begin
-      if(load) begin
-        temp <= data;
-        out <= temp;
-      end else begin
-        temp <= {temp[6:0], temp[7]};
-        out <= temp;
-      end
+        shifted_data <= '0;
+        out <= '0;
     end
-  end
+    else begin
+        if(load) begin
+            shifted_data <= data;
+        end
+        else begin
+            shifted_data <= {shifted_data[7 - amount:0], shifted_data[7:8 - amount]};
+        end
+        out <= shifted_data;
+    end
+end
+
 endmodule
 ```
-
-This module performs a shift left and rotate operation on the input data with the specified amount. The data is shifted to the left by the specified amount and the bits that are shifted out are rotated and shifted back in. The output is stored in the `out` register. The `load` input is used to load the initial data into the module. The operation is synchronous to the `clk` signal and the output `out` is updated only on the rising edge of the clock signal.

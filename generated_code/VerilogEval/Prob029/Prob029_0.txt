@@ -1,0 +1,18 @@
+Below is the Verilog code implementation of the TopModule:
+
+```verilog
+module TopModule (
+    input in1,
+    input in2,
+    input in3,
+    output reg out
+);
+
+always @(*) begin
+    out = ~(in1 ^ in2) ^ in3;
+end
+
+endmodule
+```
+
+This code implements the specified circuit, where the inputs `in1` and `in2` are connected to an XNOR gate, which is then connected to a XOR gate along with input `in3`. The output of the XOR gate is assigned to the output `out` of the module.

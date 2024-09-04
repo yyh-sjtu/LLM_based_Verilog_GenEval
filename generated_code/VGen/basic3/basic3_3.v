@@ -1,3 +1,4 @@
+
 module priority_encoder(
     input [2:0] in,
     output reg [1:0] pos
@@ -12,10 +13,8 @@ always @* begin
         3'b100: pos = 2'b10;
         3'b101: pos = 2'b10;
         3'b110: pos = 2'b10;
-        3'b111: pos = 2'b11;
-        default: pos = 2'b00;
+        3'b111: pos = 2'b10;
     endcase
 end
 
 endmodule
-

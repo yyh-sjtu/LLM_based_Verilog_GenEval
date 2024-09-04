@@ -1,0 +1,26 @@
+Here is the RTL code for the TopModule implementing a shift register with four D flops:
+
+```verilog
+module TopModule (
+    input clk,
+    input resetn,
+    input in,
+    output reg out
+);
+
+reg [3:0] shift_reg;
+
+always @ (posedge clk or negedge resetn) begin
+    if (~resetn) begin
+        shift_reg <= 4'b0;
+    end else begin
+        shift_reg <= {in, shift_reg[3:1]};
+    end
+end
+
+assign out = shift_reg[0];
+
+endmodule
+```
+
+This code uses a 4-bit shift register implemented using four D flip-flops. The input `in` is loaded into the first flip-flop on each clock cycle, and the values are shifted to the next flip-flop on each clock cycle. The output `out` is the last bit of the shift register. The reset signal `resetn` is used to reset the shift register to all zeros when low. The module is sensitive to the positive edge of the clock signal.

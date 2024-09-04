@@ -1,0 +1,29 @@
+Here is the RTL code for the TopModule implementing the two-bit saturating counter:
+
+```verilog
+module TopModule (
+    input clk,
+    input areset,
+    input train_valid,
+    input train_taken,
+    output reg [1:0] state
+);
+
+always @(posedge clk or posedge areset) begin
+    if (areset) begin
+        state <= 2'b01; // Reset to weakly not-taken
+    end else begin
+        if (train_valid) begin
+            if (train_taken && (state < 3)) begin
+                state <= state + 1; // Increment counter (up to 3)
+            end else if (!train_taken && (state > 0)) begin
+                state <= state - 1; // Decrement counter (down to 0)
+            end
+        end
+    end
+end
+
+endmodule
+```
+
+This RTL code defines the TopModule with the specified inputs and outputs. The module implements the two-bit saturating counter logic as described, where the counter value is updated based on the inputs train_valid and train_taken. The counter is reset to 2'b01 on the positive edge of the areset signal. The state output represents the two-bit counter value. The sequential logic inside the always block is triggered on the positive edge of the clock signal.

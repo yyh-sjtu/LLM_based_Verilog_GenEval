@@ -1,0 +1,32 @@
+Certainly! Below is an RTL implementation of the `TopModule` based on the specified truth table using Verilog. This module defines the inputs (`x3`, `x2`, `x1`) and the output (`f`) and implements the combinational logic as derived from the truth table:
+
+```verilog
+module TopModule (
+    input wire x3,
+    input wire x2,
+    input wire x1,
+    output wire f
+);
+
+    // Combinational logic based on the given truth table
+    assign f = (~x3 & x2 & ~x1) | (~x3 & x2 & x1) | (x3 & ~x2 & x1) | (x3 & x2 & x1);
+
+endmodule
+```
+
+### Explanation of the Implementation:
+1. **Truth Table Analysis**:
+   - From the truth table, we can deduce the following conditions when `f` outputs a `1`:
+     - When `x3 = 0`, `x2 = 1`, regardless of `x1` (2 cases: `001`, `011`).
+     - When `x3 = 1`, `x2 = 0`, `x1 = 1` (case: `101`).
+     - When `x3 = 1`, `x2 = 1`, regardless of `x1` (2 cases: `111`).
+
+2. **Logical Representation**:
+   - From the above conditions, we can express the logic using AND, OR, and NOT gates.
+   - The logic expression for `f` can be derived as: 
+     - \( f = \overline{x3} \cdot x2 \cdot \overline{x1} + \overline{x3} \cdot x2 \cdot x1 + x3 \cdot \overline{x2} \cdot x1 + x3 \cdot x2 \cdot x1 \)
+
+3. **Verilog Code**:
+   - The `assign` statement is used to define `f`, which outputs `1` for the combinations that meet the conditions stated above.
+
+This module is purely combinational, meaning the output `f` depends only on the current values of the inputs (`x3`, `x2`, `x1`). You can simulate this Verilog module to verify its functionality against the provided truth table.

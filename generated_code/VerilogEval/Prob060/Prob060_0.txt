@@ -1,0 +1,92 @@
+Certainly! Below is a Verilog implementation of the `TopModule` that acts as a 4-bit shift register with synchronous reset functionality. The input `in` is shifted into the register on each positive edge of the clock, and the output `out` will reflect the most significant bit of the shift register.
+
+Here's the code:
+
+```verilog
+module TopModule (
+    input  clk,
+    input  resetn,
+    input  in,
+    output out
+);
+
+    // 4-bit shift register declaration
+    reg [3:0] shift_reg;
+
+    // Synchronous process for the shift register
+    always @(posedge clk) begin
+        if (!resetn) begin
+            // Reset the shift register to 0 when resetn is low
+            shift_reg <= 4'b0000;
+        end else begin
+            // Shift left
+            shift_reg <= {shift_reg[2:0], in};
+        end
+    end
+
+    // Output the most significant bit of the shift register
+    assign out = shift_reg[3];
+
+endmodule
+```
+
+### Explanation of the Code:
+1. **Module Declaration**: The module `TopModule` takes in inputs `clk`, `resetn`, and `in`, and produces an output `out`.
+
+2. **Shift Register**: A 4-bit register `shift_reg` is declared to hold the bits in the shift register.
+
+3. **Always Block**: 
+   - It triggers on the positive edge of the `clk`.
+   - If `resetn` is low (active low reset), the shift register is reset to `4'b0000`.
+   - If not, it shifts the current contents of `shift_reg` left by one bit and places the input `in` in the least significant bit (LSB). This is achieved using the concatenation operator `{}`.
+
+4. **Output Assignment**: The most significant bit (MSB) of the 4-bit shift register (`shift_reg[3]`) is assigned to the output `out`.
+
+### Testbench (For Simulation)
+You may want to test this module with a simple testbench:
+
+```verilog
+module TopModule_tb;
+
+    reg clk;
+    reg resetn;
+    reg in;
+    wire out;
+
+    // Instantiate the TopModule
+    TopModule uut (
+        .clk(clk),
+        .resetn(resetn),
+        .in(in),
+        .out(out)
+    );
+
+    initial begin
+        // Initialize inputs
+        clk = 0;
+        resetn = 0; // Start by asserting reset
+        in = 0;
+
+        // Release reset after some time
+        #10 resetn = 1;
+
+        // Simulate shifting of input values
+        #10 in = 1; // Shift in 1
+        #10 in = 0; // Shift in 0
+        #10 in = 1; // Shift in 1
+        #10 in = 1; // Shift in 1
+
+        // Observe output
+        #10;
+
+        // Finish simulation
+        $finish;
+    end
+
+    // Clock generation
+    always #5 clk = ~clk; // Toggle clock every 5 time units
+
+endmodule
+```
+
+With this testbench, you can observe how the `TopModule` operates over time based on `in`, `clk`, and `resetn`. Adjust the timing and input patterns as needed for thorough testing.

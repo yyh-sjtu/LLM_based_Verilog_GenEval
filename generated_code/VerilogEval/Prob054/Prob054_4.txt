@@ -1,0 +1,28 @@
+Here is the RTL code for the TopModule that meets the specified requirements:
+
+```verilog
+module TopModule(
+    input clk,
+    input [7:0] in,
+    output reg [7:0] pedge
+);
+
+reg [7:0] prev_in;
+
+always @(posedge clk) begin
+    for (int i=0; i<8; i=i+1) begin
+        if (prev_in[i] == 0 && in[i] == 1) begin
+            pedge[i] <= 1;
+        end else begin
+            pedge[i] <= 0;
+        end
+    end
+    prev_in <= in;
+end
+
+endmodule
+```
+
+This code creates a module named TopModule with the specified interface. Inside the module, the previous input values are stored in `prev_in`. On each clock cycle, the module compares each bit in the input vector to detect a 0 to 1 transition and sets the corresponding bit in the output vector `pedge` accordingly.
+
+Please let me know if you need any further clarification or if you have any specific requirements.

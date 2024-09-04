@@ -1,3 +1,4 @@
+
 module synchronizer (
     input wire clk_a,
     input wire clk_b,
@@ -19,18 +20,26 @@ always @(posedge clk_a or negedge arstn) begin
     end else begin
         data_reg <= data_in;
     end
-    en_data_reg <= data_en;
+    
+    if (~arstn) begin
+        en_data_reg <= 1'b0;
+    end else begin
+        en_data_reg <= data_en;
+    end
 end
 
 always @(posedge clk_b or negedge brstn) begin
     if (~brstn) begin
         en_clap_one <= 1'b0;
         en_clap_two <= 1'b0;
-        dataout <= 4'b0000;
     end else begin
         en_clap_one <= en_data_reg;
         en_clap_two <= en_clap_one;
-        
+    end
+    
+    if (~brstn) begin
+        dataout <= 4'b0000;
+    end else begin
         if (en_clap_two) begin
             dataout <= data_reg;
         end
@@ -38,4 +47,3 @@ always @(posedge clk_b or negedge brstn) begin
 end
 
 endmodule
-

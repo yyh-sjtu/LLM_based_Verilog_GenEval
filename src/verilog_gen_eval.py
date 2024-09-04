@@ -30,14 +30,16 @@ file_patterns = {
                     "testbench_pattern": "*test.sv"}
 }
 
+top_instruction = {
+    "RTLLM": "",
+    "VGen": "Please act as a professional verilog designer. \n Implement the following module.\n",
+    "VerilogEval": "Please act as a professional RTL designer.\n"
+}
+
 def get_args():
     parser = argparse.ArgumentParser()
     parser.add_argument("--model_name", type=str, default="gpt-3.5-turbo")
-<<<<<<< HEAD
-    parser.add_argument("--benchmark", type=str, default="RTLLM")
-=======
     parser.add_argument("--benchmark", type=str, default="RTLLM", help="Currently, there are four valid options: RTLLM, VGen, VerilogEval, all.")
->>>>>>> 6f978b6 (clean redundants)
     parser.add_argument("--api_key", type=str, default="sk-")
     parser.add_argument("--base_url", type=str, default="")
     parser.add_argument("--pass_at_n", type=int, default=5)  # pass@5
@@ -46,6 +48,8 @@ def get_args():
     parser.add_argument("--gen_only", action='store_true', help="If set, only generate code without evaluation")
     parser.add_argument("--eval_only", action='store_true', help="If set, only run evaluation without generating code")
     parser.add_argument("--prompt_type", type=str, default="1", help="When the benchmark is VGen, the prompt_type should be set")
+    parser.add_argument("--no_overwrite", action='store_true', help="If set, the exitsing files will not be overwritten")
+    
     
     args = parser.parse_args()
     
@@ -95,7 +99,8 @@ def test_on_benchmark(args):
         testbench_pattern = file_patterns[benchmark]["testbench_pattern"]
         
         if benchmark == "VGen":
-            prompt_type = input("please choose prompt_type(1/2/3): ")
+            prompt_type = args.prompt_type
+            print(f"Using prompt type: prompt{prompt_type} for VGen")
             if not (prompt_type == "1" or prompt_type == "2" or prompt_type == "3"):
                 raise ValueError("Invalid prompt_type for VGen")
             prompt_pattern = prompt_pattern.replace("prompt", "prompt" + prompt_type)
@@ -108,21 +113,31 @@ def test_on_benchmark(args):
             
             print(f"Start generating Verilog code for {benchmark}")
             for design_dir in tqdm(design_dir_list):
-                prompt = get_file_content(get_prompt_file(design_dir, prompt_pattern))
                 
-                if benchmark == "VGen":
-                    prompt = "Please act as a professional verilog designer. \n Implement the following module.\n" + prompt
+                try:
+                    prompt = get_file_content(get_prompt_file(design_dir, prompt_pattern))
+                except:
+                    print(f"Skipping {design_dir}, because prompt pattern match failed.")
+                    continue
+                
+                prompt = top_instruction[benchmark] + prompt
                 
                 design_name = os.path.basename(design_dir)
                 generated_design_dir = os.path.join("generated_code", benchmark, design_name)
                 os.makedirs(generated_design_dir, exist_ok=True)
 
                 for i in range(args.pass_at_n):
+                    output_text = os.path.join(generated_design_dir, f"{design_name}_{i}.txt")
+                    output_verilog = os.path.join(generated_design_dir, 
+                                    f"{design_name}_{i}.v" if not benchmark == "VerilogEval" else f"{design_name}_{i}.sv")
+                    
+                    if args.no_overwrite and os.path.exists(output_verilog):
+                        continue
+                    
                     text = llm_call(args.model_name, prompt, args.api_key, args.base_url)
                     verilog_code = verilog_extractor(text)
-                    write_file(text, os.path.join(generated_design_dir, f"{design_name}_{i}.txt"))
-                    write_file(verilog_code, os.path.join(generated_design_dir, 
-                        f"{design_name}_{i}.v" if not benchmark == "VerilogEval" else f"{design_name}_{i}.sv"))
+                    write_file(text, output_text)
+                    write_file(verilog_code, output_verilog)
                 
         if not args.gen_only:
             print(f"Start evaluating Verilog code for {benchmark}")
@@ -139,7 +154,13 @@ def test_on_benchmark(args):
                 correct_count = 0
                 total_tests = 0
                 for generated_design_file in generated_design_file_list:
-                    testbench = get_testbench_file(generated_design_dir.replace("generated_code", "benchmark"), testbench_pattern)
+                    
+                    try:
+                        testbench = get_testbench_file(generated_design_dir.replace("generated_code", "benchmark"), testbench_pattern)
+                    except:
+                        print(f"Skipping {generated_design_file}, because testbench pattern match failed.")
+                        continue
+                        
                     if evaluate(benchmark, generated_design_file, testbench, args.temp_outputfile):
                         correct_count += 1
                     total_tests += 1
@@ -154,5 +175,3 @@ def test_on_benchmark(args):
 if __name__ == "__main__":
     args = get_args()
     test_on_benchmark(args)
-    
-

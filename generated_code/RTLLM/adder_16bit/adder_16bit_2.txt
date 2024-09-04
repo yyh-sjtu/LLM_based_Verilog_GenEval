@@ -1,47 +1,52 @@
 ```verilog
 module adder_8bit(
-  input a,
-  input b,
-  input Cin,
-  output y,
-  output Co
+    input [7:0] a,
+    input [7:0] b,
+    input Cin,
+    output [7:0] y,
+    output Co
 );
 
-assign {Co, y} = {Cin, a} + b;
+assign {Co, y} = a + b + Cin;
 
 endmodule
 
 module adder_16bit(
-  input [15:0] a,
-  input [15:0] b,
-  input Cin,
-  output reg [15:0] y,
-  output reg Co
+    input [15:0] a,
+    input [15:0] b,
+    input Cin,
+    output [15:0] y,
+    output Co
 );
 
-reg [7:0] carry;
-reg [7:0] sum;
+wire [7:0] sum1, sum2, sum3;
+wire Co1, Co2;
 
-adder_8bit adder[7:0](
-  .a(a[7*2 +: 8]),
-  .b(b[7*2 +: 8]),
-  .Cin(carry[6]),
-  .y(sum[7*2 +: 8]),
-  .Co(carry[7])
+adder_8bit adder1(
+    .a(a[7:0]),
+    .b(b[7:0]),
+    .Cin(Cin),
+    .y(sum1),
+    .Co(Co1)
 );
 
-always @(*) begin
-  carry[0] = Cin;
-  carry[1] = sum[0][8];
-  carry[2] = sum[1][8];
-  carry[3] = sum[2][8];
-  carry[4] = sum[3][8];
-  carry[5] = sum[4][8];
-  carry[6] = sum[5][8];
-  Co = carry[7];
-end
+adder_8bit adder2(
+    .a(a[7:0]),
+    .b(b[7:0]),
+    .Cin(Co1),
+    .y(sum2),
+    .Co(Co2)
+);
 
-assign y = {sum[5:0], sum[7:6]};
+adder_8bit adder3(
+    .a(a[7:0]),
+    .b(b[7:0]),
+    .Cin(Co2),
+    .y(sum3),
+    .Co(Co)
+);
 
+assign y = {sum3, sum2};
+  
 endmodule
 ```

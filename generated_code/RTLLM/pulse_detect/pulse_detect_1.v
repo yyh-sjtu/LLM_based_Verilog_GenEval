@@ -6,37 +6,46 @@ module pulse_detect (
     output reg data_out
 );
 
-reg [1:0] state;
+typedef enum logic [2:0] {
+    IDLE,
+    TRANSITION_1,
+    TRANSITION_2,
+    PULSE_DETECT
+} state_type;
 
-parameter IDLE = 2'b00;
-parameter P1 = 2'b01;
-parameter P2 = 2'b10;
+reg [2:0] state;
 
-always @ (posedge clk or negedge rst_n) begin
+always @(posedge clk or negedge rst_n) begin
     if (~rst_n) begin
         state <= IDLE;
         data_out <= 0;
     end else begin
         case (state)
             IDLE: begin
-                if(data_in == 1)
-                    state <= P1;
-                else
+                if (data_in == 1) begin
+                    state <= TRANSITION_1;
+                end
+            end
+            TRANSITION_1: begin
+                if (data_in == 0) begin
+                    state <= TRANSITION_2;
+                end
+            end
+            TRANSITION_2: begin
+                if (data_in == 1) begin
+                    state <= PULSE_DETECT;
+                end
+            end
+            PULSE_DETECT: begin
+                if (data_in == 0) begin
                     state <= IDLE;
-            end
-            P1: begin
-                state <= P2;
-            end
-            P2: begin
-                state <= IDLE;
+                    data_out <= 1;
+                end else begin
+                    data_out <= 0;
+                end
             end
             default: state <= IDLE;
         endcase
-
-        if (state == P2)
-            data_out <= 1;
-        else
-            data_out <= 0;
     end
 end
 

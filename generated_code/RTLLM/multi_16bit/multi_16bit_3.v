@@ -1,66 +1,54 @@
-
 module multi_16bit (
-    input clk,
-    input rst_n,
-    input start,
-    input [15:0] ain,
-    input [15:0] bin,
-    output reg [31:0] yout,
-    output reg done
+    input clk,     // Clock signal
+    input rst_n,   // Active-low reset signal
+    input start,   // Enable signal to initiate multiplication
+    input [15:0] ain, // Multiplicand input
+    input [15:0] bin, // Multiplier input
+    output reg [31:0] yout, // Product output
+    output reg done // Completion flag
 );
 
-reg [4:0] i;
-reg [15:0] areg;
-reg [15:0] breg;
-reg [31:0] yout_r;
-reg done_r;
+reg [4:0] i; // Shift count register
+reg [15:0] areg, breg; // Multiplicand and multiplier registers
+reg [31:0] yout_r; // Product register
+reg done_r; // Completion flag register
 
-always @(posedge clk or negedge rst_n) begin
+always @ (posedge clk or negedge rst_n) begin
     if (~rst_n) begin
-        i <= 0;
+        i <= 0; // Reset shift count register
+        done_r <= 0; // Reset completion flag
+        areg <= 0; // Reset multiplicand register
+        breg <= 0; // Reset multiplier register
+        yout_r <= 0; // Reset product register
     end else begin
-        if (start && (i < 17)) begin
-            i <= i + 1;
+        if (start && (i < 16)) begin
+            i <= i + 1; // Increment shift count register
         end else if (!start) begin
-            i <= 0;
+            i <= 0; // Reset shift count register
         end
+
+        done_r <= (i == 16) ? 1 : (i == 17) ? 0 : done_r; // Update completion flag
     end
 end
 
-always @(posedge clk or negedge rst_n) begin
+always @ (posedge clk or negedge rst_n) begin
     if (~rst_n) begin
-        done_r <= 0;
+        yout <= 0; // Reset product output
     end else begin
-        if (i == 16) begin
-            done_r <= 1;
-        end else if (i == 17) begin
-            done_r <= 0;
-        end
-    end
-end
-
-always @(posedge clk or negedge rst_n) begin
-    if (~rst_n) begin
-        areg <= 0;
-        breg <= 0;
-        yout_r <= 0;
-    end else begin
-        if (start) begin
-            if (i == 0) begin
-                areg <= ain;
-                breg <= bin;
-            end else if ((i > 0) && (i < 17)) begin
-                if (areg[i-1]) begin
-                    yout_r <= yout_r + (breg << (i-1));
-                end
+        if (i == 0) begin
+            areg <= ain; // Store multiplicand in register
+            breg <= bin; // Store multiplier in register
+        end else if ((i > 0) && (i < 17)) begin
+            if (areg[i-1] == 1) begin
+                yout_r <= yout_r + ({breg, 16'b0} << (i-1)); // Shift and accumulate operation
             end
         end
+
+        yout <= yout_r; // Assign product output
     end
 end
 
-always @(posedge clk) begin
-    yout <= yout_r;
-    done <= done_r;
-end
+assign done = done_r; // Assign completion flag
 
 endmodule
+

@@ -1,0 +1,65 @@
+Sure! Below is an example of a SystemVerilog implementation for the `TopModule`. This module will perform the required 100-bit left/right rotations based on the specified `load` and `ena` signals.
+
+```systemverilog
+module TopModule (
+    input logic clk,
+    input logic load,
+    input logic [1:0] ena,
+    input logic [99:0] data,
+    output logic [99:0] q
+);
+
+    // Internal register to hold the current value of the rotator
+    logic [99:0] rotator;
+
+    // Synchronous process
+    always_ff @(posedge clk) begin
+        if (load) begin
+            // Load the data into the rotator
+            rotator <= data;
+        end else begin
+            // Rotate left or right based on ena
+            case (ena)
+                2'b01: begin
+                    // Rotate right by one bit
+                    rotator <= {rotator[0], rotator[99:1]};
+                end
+                2'b10: begin
+                    // Rotate left by one bit
+                    rotator <= {rotator[98:0], rotator[99]};
+                end
+                // No rotation for 2'b00 and 2'b11
+                default: begin
+                    rotator <= rotator;
+                end
+            endcase
+        end
+    end
+
+    // Output assignment
+    assign q = rotator;
+
+endmodule
+```
+
+### Explanation of the Code
+
+1. **Module Definition**:
+   - The module is named `TopModule` and has ports as specified.
+
+2. **Internal Register**: 
+   - A 100-bit register `rotator` is defined to hold the current contents of the rotator. 
+
+3. **Synchronous Process**:
+   - The `always_ff` block is triggered on the positive edge of `clk`.
+   - If `load` is high, the `data` input is loaded directly into the `rotator`.
+   - If `load` is low, a `case` statement determines the rotation based on the `ena` input:
+     - `2'b01`: Rotates the bits to the right.
+     - `2'b10`: Rotates the bits to the left.
+     - `2'b00` and `2'b11`: No rotation occurs.
+
+4. **Output Assignment**:
+   - The `q` output continuously reflects the contents of the `rotator`.
+
+### Note
+- The design will work under the assumption that the necessary environment for simulation or synthesis is ready, with appropriate synthesis tools or simulators supporting SystemVerilog.

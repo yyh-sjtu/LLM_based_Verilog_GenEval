@@ -1,21 +1,23 @@
-// Define initial state of LFSR
-initial begin
-    r_reg <= 5'b1; // Initial seed value
-end
 
-// Calculate next state based on taps
-assign feedback_value = r_reg[4] ^ r_reg[2] ^ r_reg[0]; // XOR taps at bits 5 and 3
-assign r_next = {feedback_value, r_reg[4:1]}; // Shift feedback value to msb position
 
+// Implementing the feedback logic for the LFSR
+assign feedback_value = r_reg[4] ^ r_reg[2]; // Tapping at bit positions 5 and 3
+
+// Sequential logic to update the shift register on every clock cycle
 always @(posedge clk or posedge reset) begin
-    if (reset) begin
-        r_reg <= 5'b1; // Reset to initial seed value
-    end else begin
-        r_reg <= r_next; // Update state based on clock
-    end
+  if (reset) begin
+    r_reg <= 5'b1; // Initializing the shift register with a non-zero value
+  end else begin
+    r_reg <= r_next; // Updating the shift register with the next state value
+  end
 end
 
-// Output current state
+// Generating the next state value based on the feedback logic
+assign r_next[4:0] = {r_reg[3:0], feedback_value};
+
+// Assigning the output of the LFSR to the q output port
 assign q = r_reg;
 
 endmodule
+
+This Verilog module implements a 5-bit maximal-length Galois LFSR with taps at bit positions 5 and 3. The module takes a clock signal (clk) and a reset signal (reset) as inputs, and outputs the 5-bit LFSR output (q). The LFSR is implemented using a shift register (r_reg) and feedback logic based on the taps at bit positions 5 and 3. The shift register is updated on every clock cycle, generating the next state value based on the feedback logic. The output of the LFSR is connected to the q output port.

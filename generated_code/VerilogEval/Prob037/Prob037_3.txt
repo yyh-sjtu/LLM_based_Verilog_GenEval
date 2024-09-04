@@ -1,0 +1,31 @@
+Here is the RTL code for the TopModule with the specified interface and functionality:
+
+```verilog
+module TopModule (
+    input clk,
+    input reset,
+    output reg [9:0] q
+);
+
+reg [9:0] counter;
+
+always @(posedge clk) begin
+    if (reset) begin
+        counter <= 0;
+    end else begin
+        if (counter == 999) begin
+            counter <= 0;
+        end else begin
+            counter <= counter + 1;
+        end
+    end
+end
+
+assign q = counter;
+
+endmodule
+```
+
+This code implements a 10-bit counter that counts from 0 to 999 with a period of 1000 cycles. The counter is reset to 0 when the reset input is active high. The sequential logic is triggered on the positive edge of the clock signal.
+
+Please let me know if you need any further assistance or modifications.

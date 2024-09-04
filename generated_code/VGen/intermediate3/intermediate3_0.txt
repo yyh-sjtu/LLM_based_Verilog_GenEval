@@ -1,34 +1,16 @@
-Here is the Verilog implementation for the 5-bit maximal-length Galois LFSR with taps at bit positions 5 and 3:
+// Implementing the Galois LFSR logic
+assign feedback_value = r_reg[4] ^ r_reg[2] ^ 1'b1;
+assign r_next[4:1] = r_reg[3:0];
+assign r_next[0] = feedback_value;
 
-```verilog
-module lfsr( 
-  input clk,
-  input reset,
-  output reg [4:0] q
-); 
-  reg [4:0] r_reg;
-  wire [4:0] r_next;
-  wire feedback_value;
-  
-  // Feedback logic for taps at bit positions 5 and 3
-  assign feedback_value = r_reg[4] ^ r_reg[2];
-  
-  // D flip-flop for storage of the current state
-  always @(posedge clk or posedge reset) begin
-    if(reset) begin
-      r_reg <= 5'b1;
-    end else begin
-      r_reg <= r_next;
-    end
-  end
-  
-  // Feedback XOR feedback_value with the current state to get the next state
-  assign r_next = {feedback_value, r_reg[4:1]};
-  
-  // Output the current state
-  assign q = r_reg;
-  
+always @(posedge clk or posedge reset) begin
+    if (reset)
+        r_reg <= 5'b1;
+    else
+        r_reg <= r_next;
+end
+
+// Connecting the output
+assign q = r_reg;
+
 endmodule
-```
-
-Please let me know if you need any further modifications or additional information.

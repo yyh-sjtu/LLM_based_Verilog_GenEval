@@ -1,0 +1,48 @@
+Certainly! Below is an RTL implementation of the `TopModule` in Verilog that processes the scancodes from a PS/2 keyboard and asserts the corresponding output for the arrow keys.
+
+```verilog
+module TopModule (
+    input  [15:0] scancode,
+    output reg left,
+    output reg down,
+    output reg right,
+    output reg up
+);
+    
+    always @(*) begin
+        // Initialize outputs to 0
+        left = 0;
+        down = 0;
+        right = 0;
+        up = 0;
+
+        // Check the scancode value and assert the corresponding output
+        case (scancode)
+            16'hE06B: left = 1;   // Left arrow
+            16'hE072: down = 1;   // Down arrow
+            16'hE074: right = 1;  // Right arrow
+            16'hE075: up = 1;     // Up arrow
+            default: ; // Do nothing if no valid scancode
+        endcase
+    end
+
+endmodule
+```
+
+### Explanation:
+1. **Module Declaration**: The `TopModule` has one 16-bit input port for the `scancode` and four 1-bit output ports (`left`, `down`, `right`, `up`).
+
+2. **Always Block**: The `always @(*)` block is a combinatorial logic block that will execute any time the input (`scancode`) changes.
+
+3. **Default Initialization**: Outputs are initialized to `0` to ensure that any previously asserted output is cleared.
+
+4. **Case Statement**: A `case` statement is used to match the `scancode` input against known values:
+    - If the `scancode` matches `16'hE06B`, the `left` output is asserted to `1`.
+    - If it matches `16'hE072`, `down` is asserted.
+    - If it matches `16'hE074`, `right` is asserted.
+    - If it matches `16'hE075`, `up` is asserted.
+    
+5. **Default Case**: A `default` clause handles any cases that do not match the specified scancodes, ensuring that outputs remain in their initialized state.
+
+### Usage:
+You can include this module in your design, and it will respond to PS/2 keyboard scancodes as intended, asserting the correct outputs for left, down, right, and up arrow key presses.

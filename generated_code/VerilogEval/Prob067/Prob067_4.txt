@@ -1,0 +1,30 @@
+As a professional RTL designer, I will implement the TopModule as per your requirements. Here is the Verilog code for the module:
+
+```verilog
+module TopModule (
+    input clk,
+    input reset,
+    input slowena,
+    output reg [3:0] q
+);
+
+always @(posedge clk or posedge reset) begin
+    if (reset) begin
+        q <= 4'b0000;
+    end else begin
+        if (slowena) begin
+            if (q == 4'b1001) begin
+                q <= 4'b0000;
+            end else begin
+                q <= q + 1;
+            end
+        end
+    end
+end
+
+endmodule
+```
+
+This Verilog code implements a decade counter that counts from 0 to 9 based on the slowena input, incrementing by one on each clock cycle when slowena is high. The counter is reset to 0 when the reset input is high. The sequential logic is triggered on the positive edge of the clock.
+
+Please let me know if you need any further modifications or have any specific requirements.

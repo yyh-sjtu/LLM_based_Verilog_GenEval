@@ -1,55 +1,50 @@
-// Define state register and initial state
-reg [1:0] state_reg, next_state;
-parameter IDLE = 2'b00, SA = 2'b01, SB = 2'b10, SAB = 2'b11;
-assign z = (state_reg == SAB) ? 1'b1 : 1'b0;
-
+// Define the state machine transitions
 always @(posedge clk or posedge reset) begin
-    if (reset) begin
-        state_reg <= IDLE;
-    end else begin
-        state_reg <= next_state;
-    end
+  if (reset) begin
+    cur_state <= IDLE;
+  end else begin
+    cur_state <= next_state;
+  end
 end
 
+// Define the state machine logic
 always @* begin
-    case(state_reg)
-        IDLE: begin
-            if (a & b) begin
-                next_state = SAB;
-            end else if (a) begin
-                next_state = SA;
-            end else if (b) begin
-                next_state = SB;
-            end else begin
-                next_state = IDLE;
-            end
-        end
-        SA: begin
-            if (a & b) begin
-                next_state = SAB;
-            end else if (!a) begin
-                next_state = IDLE;
-            end else begin
-                next_state = SA;
-            end
-        end
-        SB: begin
-            if (a & b) begin
-                next_state = SAB;
-            end else if (!b) begin
-                next_state = IDLE;
-            end else begin
-                next_state = SB;
-            end
-        end
-        SAB: begin
-            if (!a | !b) begin
-                next_state = IDLE;
-            end else begin
-                next_state = SAB;
-            end
-        end
-    endcase
+  case (cur_state)
+    IDLE: begin
+      if (a == 1 && b == 1) begin
+        next_state = SAB;
+      end else if (a == 1) begin
+        next_state = SA;
+      end else if (b == 1) begin
+        next_state = SB;
+      end else begin
+        next_state = IDLE;
+      end
+    end
+    
+    SA: begin
+      if (b == 1) begin
+        next_state = SAB;
+      end else begin
+        next_state = SA;
+      end
+    end
+    
+    SB: begin
+      if (a == 1) begin
+        next_state = SAB;
+      end else begin
+        next_state = SB;
+      end
+    end
+    
+    SAB: begin
+      next_state = SAB;
+    end
+  endcase
 end
+
+// Output
+assign z = (cur_state == SAB);
 
 endmodule

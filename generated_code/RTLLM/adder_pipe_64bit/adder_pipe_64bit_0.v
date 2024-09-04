@@ -1,4 +1,3 @@
-
 module adder_pipe_64bit (
     input clk,
     input rst_n,
@@ -9,37 +8,35 @@ module adder_pipe_64bit (
     output reg o_en
 );
 
-reg [63:0] sum_0, sum_1, sum_2, sum_3, sum_4;
-reg carry_0 = 1'b0, carry_1 = 1'b0, carry_2 = 1'b0, carry_3 = 1'b0;
+// Internal signals declaration
+reg [63:0] sum[3:0];
+reg [4:0] carry[3:0];
 
+// Pipeline stages
 always @(posedge clk or negedge rst_n) begin
     if (~rst_n) begin
-        sum_0 <= 64'b0;
-        sum_1 <= 64'b0;
-        sum_2 <= 64'b0;
-        sum_3 <= 64'b0;
-        sum_4 <= 64'b0;
-        carry_0 <= 1'b0;
-        carry_1 <= 1'b0;
-        carry_2 <= 1'b0;
-        carry_3 <= 1'b0;
-        o_en <= 1'b0;
-    end else begin
-        if (i_en) begin
-            sum_0 <= adda + addb + carry_0;
-            sum_1 <= sum_0;
-            sum_2 <= sum_1;
-            sum_3 <= sum_2;
-            sum_4 <= sum_3;
-            carry_0 <= sum_0[64];
-            carry_1 <= sum_1[64];
-            carry_2 <= sum_2[64];
-            carry_3 <= sum_3[64];
-            o_en <= 1'b1;
+        for (int i = 0; i < 4; i = i + 1) begin
+            carry[i] <= 0;
+            sum[i] <= 0;
         end
+        o_en <= 0;
+    end else begin
+        carry[0] <= 0;
+        sum[0] <= i_en ? (adda[0] + addb[0]) : 0;
+        
+        carry[1] <= adda[0] + addb[0] >= 64'd2;
+        sum[1] <= i_en ? (adda[1] + addb[1] + carry[0]) : 0;
+        
+        carry[2] <= adda[1] + addb[1] + carry[0] >= 64'd2;
+        sum[2] <= i_en ? (adda[2] + addb[2] + carry[1]) : 0;
+        
+        carry[3] <= adda[2] + addb[2] + carry[1] >= 64'd2;
+        sum[3] <= i_en ? (adda[3] + addb[3] + carry[2]) : 0;
+        
+        result <= {carry[3], sum[3], sum[2], sum[1], sum[0]};
+        o_en <= i_en;
     end
 end
 
-assign result = {carry_3, sum_4};
-
 endmodule
+

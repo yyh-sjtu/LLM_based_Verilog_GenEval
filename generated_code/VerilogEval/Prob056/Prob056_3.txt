@@ -1,0 +1,41 @@
+Sure! Below is a Verilog implementation of a JK flip-flop as specified in your request. The module is named `TopModule` and follows the truth table you've provided.
+
+```verilog
+module TopModule (
+    input clk,
+    input j,
+    input k,
+    output reg Q
+);
+
+// Always block that triggers on the positive edge of clk
+always @(posedge clk) begin
+    case ({j, k}) // Combine j and k into a 2-bit value
+        2'b00: Q <= Q;        // Qold
+        2'b01: Q <= 1'b0;     // Reset to 0
+        2'b10: Q <= 1'b1;     // Set to 1
+        2'b11: Q <= ~Q;       // Toggle Q
+        default: Q <= Q;      // Default case (should not happen)
+    endcase
+end
+
+endmodule
+```
+
+### Explanation:
+
+1. **Interface**: The module `TopModule` has three inputs (`clk`, `j`, `k`) and one output (`Q`).
+
+2. **Always Block**: The `always` block is triggered on the positive edge of the clock signal (`clk`).
+
+3. **Case Statement**:
+   - `2'b00`: If both `j` and `k` are 0, the output `Q` retains its old value (`Qold`).
+   - `2'b01`: If `j` is 0 and `k` is 1, `Q` is reset to `0`.
+   - `2'b10`: If `j` is 1 and `k` is 0, `Q` is set to `1`.
+   - `2'b11`: If both `j` and `k` are 1, `Q` toggles its value (`~Q`).
+
+4. **Synthesis Note**: The output `Q` is declared as a `reg` type since it will store the state of the flip-flop.
+
+### Simulation and Testing:
+
+You can simulate this module to see how it responds to different inputs at rising clock edges. Make sure to test all combinations of `j` and `k` to verify the functionality of the JK flip-flop.

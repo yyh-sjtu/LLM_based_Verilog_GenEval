@@ -1,21 +1,32 @@
 
-module count_slow (
+module decade_counter(
     input clk,
     input slowena,
     input reset,
     output reg [3:0] q
 );
 
-    always @ (posedge clk) begin
-        if (reset) begin
-            q <= 4'b0000;
+    // Internal signal to keep track of the current count
+    reg [3:0] count;
+
+    // Assign q to the count variable
+    always @(posedge clk or posedge reset) begin
+        if(reset) begin
+            count <= 4'h0;
         end else begin
-            if (q == 4'b1001 && slowena) begin
-                q <= 4'b0000;
-            end else if (slowena) begin
-                q <= q + 1;
+            if(slowena) begin
+                if(count == 4'h9) begin
+                    count <= 4'h0;
+                end else begin
+                    count <= count + 1;
+                end
             end
         end
+    end
+
+    // Assign the count to q
+    always @(posedge clk) begin
+        q <= count;
     end
 
 endmodule

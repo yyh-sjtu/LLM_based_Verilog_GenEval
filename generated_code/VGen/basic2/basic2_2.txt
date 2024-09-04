@@ -1,10 +1,13 @@
-// Verilog code for AND gate module
-module and_gate( 
-  input a, 
-  input b, 
-  output out );
+// Verilog code for implementing an AND gate module
+module and_gate(
+  input a,
+  input b,
+  output out
+);
 
-  assign out = a & b; // Using bitwise AND to implement AND gate
+  assign out = a & b;
 
-endmodule 
-// End of module
+endmodule
+
+// This module takes two input signals 'a' and 'b', performs a logical AND operation on them, 
+// and outputs the result on the 'out' signal.

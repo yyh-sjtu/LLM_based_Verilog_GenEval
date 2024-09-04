@@ -1,0 +1,71 @@
+To implement the `TopModule` that corresponds to the finite-state machine (FSM) given in your specification, we'll derive the state transition logic based on the one-hot encoding of the states A, B, C, D, E, and F.
+
+### State Encoding:
+Given the one-hot state encoding:
+- A = `000001`
+- B = `000010`
+- C = `000100`
+- D = `001000`
+- E = `010000`
+- F = `100000`
+
+### Next State Logic:
+Next, we need to analyze the transitions based on the FSM diagram provided:
+
+1. **From State A (`000001`)**:
+   - On input `1` → go to B (`000010`).
+   - On input `0` → stay in A (`000001`).
+
+2. **From State B (`000010`)**:
+   - On input `1` → go to C (`000100`).
+   - On input `0` → go to D (`001000`).
+
+3. **From State C (`000100`)**:
+   - On input `1` → go to E (`010000`).
+   - On input `0` → go to D (`001000`).
+
+4. **From State D (`001000`)**:
+   - On input `1` → go to F (`100000`).
+   - On input `0` → go back to A (`000001`).
+
+5. **From State E (`010000`)**:
+   - On input `1` → stay in E (`010000`).
+   - On input `0` → go to D (`001000`).
+
+6. **From State F (`100000`)**:
+   - On input `1` → go to C (`000100`).
+   - On input `0` → go to D (`001000`).
+
+### Outputs:
+- According to your specification:
+  - The output `Y1` should be the input of state flip-flop y[1].
+  - The output `Y3` should be the input of state flip-flop y[3].
+  
+From the transitions we can deduce:
+- Y1 is `1` if the FSM is in state B (`000010`).
+- Y3 is `1` if the FSM is in state D (`001000`).
+
+### RTL Implementation:
+We'll implement the `TopModule` in Verilog:
+
+```verilog
+module TopModule(
+    input [5:0] y,   // State input (one-hot)
+    input w,         // Input signal
+    output Y1,       // Output for state flip-flop y[1]
+    output Y3        // Output for state flip-flop y[3]
+);
+
+    // Assign outputs based on the current state
+    assign Y1 = y[1];  // Y1 is 1 when in State B
+    assign Y3 = y[3];  // Y3 is 1 when in State D
+
+endmodule
+```
+
+### Explanation:
+- The module has a simple structure where `Y1` and `Y3` outputs correspond directly to the bits in the one-hot encoded state representation. 
+- `Y1` is driven by `y[1]`, which indicates whether the FSM is in state B.
+- `Y3` is driven by `y[3]`, indicating whether the FSM is in state D.
+
+With this implementation, we represent the desired FSM output states based on the one-hot encoding, finishing our design as per the specifications you provided.

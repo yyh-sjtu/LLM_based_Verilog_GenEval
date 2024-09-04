@@ -1,0 +1,25 @@
+Here is an RTL design code for the TopModule implementing a decade counter:
+
+```verilog
+module TopModule (
+    input clk,
+    input reset,
+    output reg [3:0] q
+);
+
+always @(posedge clk) begin
+    if (reset) begin
+        q <= 4'b0001; // Reset counter to 1
+    end else begin
+        if (q == 10) begin
+            q <= 4'b0001; // Reset counter to 1 when reaching 10
+        end else begin
+            q <= q + 4'b0001; // Increment counter
+        end
+    end
+end
+
+endmodule
+```
+
+This Verilog code defines a TopModule with clock input, reset input, and a 4-bit output q representing the decade counter. The counter increments from 1 to 10 and then resets to 1 when reaching 10. The reset signal is synchronous and will reset the counter to 1 on the positive edge of the clock when asserted.

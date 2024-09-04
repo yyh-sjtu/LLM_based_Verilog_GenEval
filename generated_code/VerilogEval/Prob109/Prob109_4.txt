@@ -1,0 +1,74 @@
+Certainly! Below is an RTL implementation of the `TopModule` that represents a Moore state machine based on the specified state transition diagram. The module will include states A and B, with the specified transitions and an asynchronous reset functionality.
+
+```verilog
+module TopModule (
+    input  clk,
+    input  areset,
+    input  in,
+    output reg out
+);
+
+    // State definitions
+    typedef enum logic {
+        A, // State A (output: 0)
+        B  // State B (output: 1)
+    } state_t;
+
+    // Current state and next state variables
+    state_t current_state, next_state;
+
+    // State transition logic
+    always_ff @(posedge clk or posedge areset) begin
+        if (areset) begin
+            current_state <= B; // Asynchronously reset to state B
+            out <= 1;           // Output for state B is 1
+        end else begin
+            current_state <= next_state; // Update the state
+        end
+    end
+
+    // Next state logic
+    always_comb begin
+        case (current_state)
+            A: begin
+                if (in == 0) begin
+                    next_state = B; // 0 from A goes to B
+                end else begin
+                    next_state = A; // 1 from A stays in A
+                end
+                out = 0; // Output for state A is 0
+            end
+            B: begin
+                if (in == 0) begin
+                    next_state = A; // 0 from B goes to A
+                end else begin
+                    next_state = B; // 1 from B stays in B
+                end
+                out = 1; // Output for state B is 1
+            end
+            default: begin
+                next_state = B; // Default state
+            end
+        endcase
+    end
+
+endmodule
+```
+
+### Explanation:
+1. **State Definitions**: We define the states using an enumerated type (`state_t`) for readability. States A and B correspond to values 0 and 1.
+  
+2. **Current State and Next State**: We maintain the current state and calculate the next state based on the input and the current state.
+
+3. **Reset Logic**: The state machine asynchronously resets to state B when the `areset` signal is high.
+
+4. **State Transition and Output Logic**:
+   - For each state (A and B), the module determines the next state based on the input.
+   - The output is set based on the current state, which follows the Moore state machine principle.
+
+5. **Always Blocks**:
+   - `always_ff` is triggered on the clock or reset signal and is responsible for updating the current state.
+   - `always_comb` computes the next state based on the current state and the input signal.
+
+### Usage:
+- You can instantiate this module in your top-level design and connect the clock and reset signals accordingly. The output will reflect the state of the machine based on the defined transitions.

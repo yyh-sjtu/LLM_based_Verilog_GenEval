@@ -8,29 +8,31 @@ module signal_generator(
 reg [1:0] state;
 
 always @(posedge clk or negedge rst_n) begin
-    if(~rst_n) begin
+    if (~rst_n) begin
         state <= 2'b00;
-        wave <= 5'b00000;
+        wave <= 5'b0;
     end else begin
-        case(state)
-            2'b00: begin
-                if(wave == 5'b11111) begin
+        case (state)
+            2'b00: begin // Increment wave
+                if (wave == 5'b11111) begin
                     state <= 2'b01;
                 end else begin
                     wave <= wave + 1;
                 end
             end
-            2'b01: begin
-                if(wave == 5'b00000) begin
+            2'b01: begin // Decrement wave
+                if (wave == 5'b0) begin
                     state <= 2'b00;
                 end else begin
                     wave <= wave - 1;
                 end
             end
+            default: state <= 2'b00;
         endcase
     end
 end
 
 endmodule
 ```
-This Verilog code implements a Triangle Wave signal generator module that generates a waveform by incrementing and decrementing a 5-bit signal named "wave". The waveform cycles between 0 and 31, which is incremented or decremented by 1. The module includes input ports for clock signal (clk) and reset signal (rst_n), as well as an output port for the generated waveform (wave). The waveform generation is controlled by a state machine using a case statement within an always block that is triggered by the clock signal and reset signal.
+
+This Verilog code defines a module named `signal_generator` that generates a triangle wave signal with a 5-bit output waveform named `wave`. The waveform is continuously incremented and decremented between 0 and 31. The waveform generation is controlled by a state machine that transitions between incrementing and decrementing the waveform. The reset signal `rst_n` is used to reset the state and waveform registers to initial values. The waveform is updated on the positive edge of the clock signal `clk`.

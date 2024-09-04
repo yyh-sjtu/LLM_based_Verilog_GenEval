@@ -1,0 +1,41 @@
+Certainly! The issue with your original code lies in the fact that the `result_is_zero` output is not being updated properly in all cases. Specifically, the `result_is_zero` flag should also be set when `do_sub` is high. Additionally, it is important to ensure that `result_is_zero` always gets assigned in the `always` block, depending on the value of `out`.
+
+Here’s the revised version of your RTL module that fixes the bug:
+
+```verilog
+synthesis verilog_input_version verilog_2001
+module TopModule (
+    input do_sub,
+    input [7:0] a,
+    input [7:0] b,
+    output reg [7:0] out,
+    output reg result_is_zero
+);
+
+    always @(*) begin
+        // Perform addition or subtraction based on do_sub signal
+        if (do_sub) begin
+            out = a - b;  // Subtract b from a
+        end else begin
+            out = a + b;  // Add a and b
+        end
+
+        // Check if the output is zero
+        if (out == 8'b0) begin
+            result_is_zero = 1;  // Set the zero flag
+        end else begin
+            result_is_zero = 0;  // Clear the zero flag
+        end
+    end
+
+endmodule
+```
+
+### Explanation of Changes:
+1. **Conditional Assignments**: I’ve used an `if-else` construct to handle the addition and subtraction to clarify the intention compared to a `case` statement.
+  
+2. **Result Zero Check**: The `result_is_zero` flag now checks the output value explicitly for zero and handles both setting and clearing of the flag within the same always block.
+
+3. **Output Width**: `result_is_zero` is set to `1` if the `out` is equal to zero, otherwise it is set to `0`.
+
+This ensures that regardless of whether an addition or subtraction is performed, the zero flag will correctly reflect the state of the output.

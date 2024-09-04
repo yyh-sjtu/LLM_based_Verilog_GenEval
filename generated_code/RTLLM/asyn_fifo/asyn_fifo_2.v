@@ -1,4 +1,27 @@
 
+module dual_port_RAM (
+    input wclk,
+    input wenc,
+    input [$clog2(DEPTH)-1:0] waddr,
+    input [WIDTH-1:0] wdata,
+    input rclk,
+    input renc,
+    input [$clog2(DEPTH)-1:0] raddr,
+    output reg [WIDTH-1:0] rdata
+);
+
+    reg [WIDTH-1:0] RAM_MEM [0:DEPTH-1];
+
+    always @(posedge wclk) begin
+        if (wenc) RAM_MEM[waddr] <= wdata;
+    end
+
+    always @(posedge rclk) begin
+        if (renc) rdata <= RAM_MEM[raddr];
+    end
+
+endmodule
+
 module asyn_fifo (
     input wclk,
     input rclk,
@@ -15,77 +38,53 @@ module asyn_fifo (
 parameter WIDTH = 8;
 parameter DEPTH = 16;
 
-reg [$clog2(DEPTH)-1:0] wptr, rptr;
-reg [WIDTH-1:0] dual_port_RAM [0:DEPTH-1];
-
-reg [$clog2(DEPTH)-1:0] wptr_bin, rptr_bin;
+reg [$clog2(DEPTH)-1:0] wptr, rptr, wptr_syn, rptr_syn;
 reg [$clog2(DEPTH)-1:0] wptr_buff, rptr_buff;
-reg [$clog2(DEPTH)-1:0] wptr_syn, rptr_syn;
 
-reg [WIDTH-1:0] rdata_out;
+always @(posedge wclk or negedge wrstn) begin
+    if (!wrstn) begin
+        wptr <= 0;
+        wptr_buff <= 0;
+    else if (winc) begin
+        wptr <= wptr + 1;
+        wptr_buff <= wptr;
+    end
+end
 
-// Dual-port RAM instantiation
-dual_port_RAM #(
-    .WIDTH(WIDTH)
-) ram_instance (
+always @(posedge rclk or negedge rrstn) begin
+    if (!rrstn) begin
+        rptr <= 0;
+        rptr_buff <= 0;
+    else if (rinc) begin
+        rptr <= rptr + 1;
+        rptr_buff <= rptr;
+    end
+end
+
+always @(wptr or rptr) begin
+    wptr_syn <= wptr ^ (wptr >> 1);
+    rptr_syn <= rptr ^ (rptr >> 1);
+end
+
+always @(posedge wclk) begin
+    if (wptr_syn == rptr) wfull <= 1;
+    else wfull <= 0;
+end
+
+always @(posedge rclk) begin
+    if (rptr == wptr && rptr_buff != wptr_buff) rempty <= 1;
+    else rempty <= 0;
+end
+
+dual_port_RAM RAM (
     .wclk(wclk),
-    .wenc(winc),
+    .wenc(!wfull),
     .waddr(wptr_syn),
     .wdata(wdata),
     .rclk(rclk),
-    .renc(rinc),
+    .renc(!rempty),
     .raddr(rptr_syn),
-    .rdata(rdata_out)
+    .rdata(rdata)
 );
-
-// Write pointer logic
-always @(posedge wclk or negedge wrstn) begin
-    if (~wrstn) begin
-        wptr <= 0;
-    end else begin
-        wptr <= winc ? (wptr + 1) : wptr;
-    end
-end
-
-// Read pointer logic
-always @(posedge rclk or negedge rrstn) begin
-    if (~rrstn) begin
-        rptr <= 0;
-    end else begin
-        rptr <= rinc ? (rptr + 1) : rptr;
-    end
-end
-
-// Gray code conversion
-assign wptr_bin = wptr ^ (wptr >> 1);
-assign rptr_bin = rptr ^ (rptr >> 1);
-
-// Pointer synchronization
-always @* begin
-    wptr_syn = wptr_bin ^ wptr_buff;
-    rptr_syn = rptr_bin ^ rptr_buff;
-end
-
-// Full and Empty conditions
-always @* begin
-    wfull = (wptr == {~rptr_bin[($clog2(DEPTH)-1)], rptr_bin[($clog2(DEPTH)-2):0]});
-    rempty = (rptr == wptr);
-end
-
-// Buffer registers for write and read pointer
-always @(posedge wclk or negedge wrstn) begin
-    wptr_buff <= ~wrstn ? 0 : wptr_bin;
-end
-
-always @(posedge rclk or negedge rrstn) begin
-    rptr_buff <= ~rrstn ? 0 : rptr_bin;
-end
-
-// Output data and connection
-always @* begin
-    if (rinc && ~rempty) begin
-        rdata = rdata_out;
-    end
-end
 
 endmodule

@@ -1,0 +1,35 @@
+As a professional RTL designer, I would create the TopModule as follows:
+
+```verilog
+
+module TopModule (
+    input clk,
+    input reset,
+    input slowena,
+    output reg [3:0] q
+);
+
+// Internal signals
+reg [3:0] count;
+
+// Sequential logic
+always @(posedge clk) begin
+    if (reset) begin
+        count <= 4'b0000;
+    end else if (slowena) begin
+        if (count == 4'b1001) begin
+            count <= 4'b0000;
+        end else begin
+            count <= count + 1;
+        end
+    end
+end
+
+// Output assignment
+assign q = count;
+
+endmodule
+
+```
+
+This Verilog code implements the TopModule with a decade counter that counts from 0 through 9 with a period of 10. The counter is reset to 0 when the reset input is high. The counter increments when the slowena input is high and is triggered on the positive edge of the clock. The output q represents the count of the decade counter.

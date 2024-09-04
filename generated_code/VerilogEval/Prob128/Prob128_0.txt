@@ -1,0 +1,78 @@
+Sure! Below is an RTL implementation of the `TopModule` using Verilog. The module contains a finite state machine (FSM) that processes the incoming byte stream according to the specified PS/2 mouse protocol.
+
+```verilog
+module TopModule (
+    input    clk,
+    input    reset,
+    input    [7:0] in,
+    output reg done
+);
+
+    // State encoding
+    typedef enum reg [1:0] {
+        IDLE       = 2'b00,  // Waiting for the first byte
+        BYTE1      = 2'b01,  // First byte received
+        BYTE2      = 2'b10,  // Second byte received
+        BYTE3      = 2'b11   // Third byte received
+    } state_t;
+
+    state_t current_state, next_state;
+
+    // State transition logic
+    always @(posedge clk) begin
+        if (reset) begin
+            current_state <= IDLE;
+        end else begin
+            current_state <= next_state;
+        end
+    end
+
+    // Next state logic and done signal generation
+    always @(*) begin
+        // Default values
+        next_state = current_state;
+        done = 1'b0;
+
+        case (current_state)
+            IDLE: begin
+                if (in[3] == 1'b1) begin
+                    next_state = BYTE1;  // Transition to BYTE1 if the first byte is detected
+                end
+            end
+            
+            BYTE1: begin
+                next_state = BYTE2;   // Move to BYTE2 after receiving the first byte
+            end
+            
+            BYTE2: begin
+                next_state = BYTE3;   // Move to BYTE3 after receiving the second byte
+            end
+            
+            BYTE3: begin
+                done = 1'b1;          // Signal done after receiving the third byte
+                next_state = IDLE;    // Reset state back to IDLE
+            end
+            
+            default: 
+                next_state = IDLE;    // Safety condition for default case
+        endcase
+    end
+
+endmodule
+```
+
+### Explanation of the Code
+1. **State Enum**: We define a 2-bit enumerated type to represent the four states of our FSM: `IDLE`, `BYTE1`, `BYTE2`, and `BYTE3`.
+
+2. **State Transition Logic**: On the rising edge of the clock, the current state is updated. If the reset signal is high, we return to the `IDLE` state.
+
+3. **Next State Logic and Done Signal**: The next state and the `done` signal are determined combinatorially:
+   - In `IDLE`, if the input byte has `in[3]` set to 1, we transition to `BYTE1`.
+   - In `BYTE1`, we transition to `BYTE2`.
+   - In `BYTE2`, we transition to `BYTE3`.
+   - In `BYTE3`, we assert `done` and reset to `IDLE`.
+
+4. **Output**: The `done` signal is only asserted in the cycle immediately after last byte is received.
+
+### Usage
+This module can be instantiated in a larger design, with the clock and reset connected to appropriate signals. The incoming byte stream is given as the input `in`, and the `done` output will indicate when a complete three-byte message has been detected.

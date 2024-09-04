@@ -1,0 +1,34 @@
+To implement the specified `TopModule` with the desired functionality of controlling a cellphone's ringer and vibration motor, we can use a simple combinatorial logic structure to define the outputs based on the inputs.
+
+Here's the Verilog implementation for the `TopModule`:
+
+```verilog
+module TopModule (
+    input  wire ring,          // Input signal indicating an incoming call
+    input  wire vibrate_mode,  // Input signal indicating the vibrate mode is active
+    output wire ringer,        // Output signal to control the ringer
+    output wire motor          // Output signal to control the vibration motor
+);
+
+    // Assign outputs based on ring and vibrate_mode inputs
+    assign ringer = ring && ~vibrate_mode; // Ringer is on if there's a ring and vibrate_mode is off
+    assign motor  = ring && vibrate_mode;   // Motor is on if there's a ring and vibrate_mode is on
+
+endmodule
+```
+
+### Explanation:
+
+1. **Input Ports**:
+    - `ring`: This indicates whether there's an incoming call.
+    - `vibrate_mode`: This indicates whether the phone is in vibrate mode.
+
+2. **Output Ports**:
+    - `ringer`: This output controls the phone’s ringer. It should be set to `1` when there is an incoming call and vibrate mode is not active.
+    - `motor`: This output controls the vibration motor. It should be set to `1` when there is an incoming call and vibrate mode is active.
+
+3. **Logic**:
+    - The `ringer` output is activated when `ring` is high and `vibrate_mode` is low (using the expression `ring && ~vibrate_mode`).
+    - The `motor` output is activated when both `ring` is high and `vibrate_mode` is high (using the expression `ring && vibrate_mode`).
+
+This design ensures that whenever there is an incoming call, either the ringer or the motor will be activated depending on the mode, but not both at the same time.

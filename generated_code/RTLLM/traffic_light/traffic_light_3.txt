@@ -1,7 +1,8 @@
-module traffic_light(
-    input wire rst_n,
-    input wire clk,
-    input wire pass_request,
+```verilog
+module traffic_light (
+    input rst_n,
+    input clk,
+    input pass_request,
     output reg [7:0] clock,
     output reg red,
     output reg yellow,
@@ -19,50 +20,52 @@ reg p_red, p_yellow, p_green;
 
 always @(posedge clk or negedge rst_n) begin
     if (!rst_n) begin
-        cnt <= 8'b00001010; // 10 in binary
+        cnt <= 10;
         state <= idle;
-        p_red <= 1'b0;
-        p_yellow <= 1'b0;
-        p_green <= 1'b0;
+        p_red <= 0;
+        p_yellow <= 0;
+        p_green <= 0;
     end else begin
         case(state)
             idle: begin
                 state <= s1_red;
             end
             s1_red: begin
-                if(cnt == 8'b00000011) begin // 3 in binary
+                if (cnt == 0)
                     state <= s3_green;
-                end
+                else
+                    state <= s1_red;
             end
             s2_yellow: begin
-                if(cnt == 8'b00000011) begin // 3 in binary
+                if (cnt == 0)
                     state <= s1_red;
-                end
+                else
+                    state <= s2_yellow;
             end
             s3_green: begin
-                if(cnt == 8'b00000011) begin // 3 in binary
+                if (cnt == 0)
                     state <= s2_yellow;
-                end
+                else
+                    state <= s3_green;
             end
         endcase
     end
 end
 
 always @(posedge clk or negedge rst_n) begin
-    if (!rst_n) begin
-        cnt <= 8'b00001010; // 10 in binary
-    end else begin
-        if(pass_request && p_green) begin
-            cnt <= 8'b00001010; // 10 in binary
-        end else if(!p_green && p_green) begin
-            cnt <= 8'b00111100; // 60 in binary
-        end else if(!p_yellow && p_yellow) begin
-            cnt <= 8'b00000101; // 5 in binary
-        else if(!p_red && p_red) begin
-            cnt <= 8'b00001010; // 10 in binary
-        end else begin
-            cnt <= cnt - 8'b00000001; // Decrement counter
-        end
+    if (!rst_n)
+        cnt <= 10;
+    else begin
+        if (pass_request && p_green)
+            cnt <= 10;
+        else if (!green && p_green)
+            cnt <= 60;
+        else if (!yellow && p_yellow)
+            cnt <= 5;
+        else if (!red && p_red)
+            cnt <= 10;
+        else
+            cnt <= cnt - 1;
     end
 end
 
@@ -70,31 +73,34 @@ assign clock = cnt;
 
 always @(posedge clk or negedge rst_n) begin
     if (!rst_n) begin
-        red <= 1'b0;
-        yellow <= 1'b0;
-        green <= 1'b0;
+        red <= 0;
+        yellow <= 0;
+        green <= 0;
     end else begin
         case(state)
             s1_red: begin
-                red <= 1'b1;
-                yellow <= 1'b0;
-                green <= 1'b0;
+                red <= 1;
+                yellow <= 0;
+                green <= 0;
             end
             s2_yellow: begin
-                red <= 1'b0;
-                yellow <= 1'b1;
-                green <= 1'b0;
+                red <= 0;
+                yellow <= 1;
+                green <= 0;
             end
             s3_green: begin
-                red <= 1'b0;
-                yellow <= 1'b0;
-                green <= 1'b1;
+                red <= 0;
+                yellow <= 0;
+                green <= 1;
+            end
+            default: begin
+                red <= 0;
+                yellow <= 0;
+                green <= 0;
             end
         endcase
-        p_red <= red;
-        p_yellow <= yellow;
-        p_green <= green;
     end
 end
 
 endmodule
+```

@@ -1,0 +1,41 @@
+Here’s a SystemVerilog implementation of the `TopModule` based on your specifications. 
+
+```verilog
+module TopModule (
+    input  logic [2:0] a,               // 3-bit input a
+    input  logic [2:0] b,               // 3-bit input b
+    output logic [2:0] out_or_bitwise,  // 3-bit output for bitwise OR
+    output logic out_or_logical,         // output for logical OR
+    output logic [5:0] out_not           // 6-bit output for NOT operations
+);
+
+    // Compute bitwise OR of a and b
+    assign out_or_bitwise = a | b;
+    
+    // Compute logical OR of a and b
+    assign out_or_logical = |{a, b};  // Combine the inputs into one vector
+    
+    // Compute NOT of a and b
+    assign out_not = {~b, ~a};  // Upper half is ~b, lower half is ~a
+
+endmodule
+```
+
+### Explanation
+
+1. **Inputs and Outputs**:
+   - `a` and `b` are defined as 3-bit inputs using a `logic` type.
+   - `out_or_bitwise` is a 3-bit output for the result of the bitwise OR operation.
+   - `out_or_logical` is a single bit output for the logical OR operation.
+   - `out_not` is a 6-bit output where the upper 3 bits contain the NOT of `b` and the lower 3 bits contain the NOT of `a`.
+
+2. **Bitwise OR**:
+   - The assignment for `out_or_bitwise` uses the bitwise OR operator (`|`).
+
+3. **Logical OR**:
+   - The logical OR is computed using the reduction operator (`|`), which checks if there are any non-zero bits in the combined vector (concatenating `a` and `b`).
+
+4. **NOT Operation**:
+   - The NOT operation is performed using the negation operator (`~`), and the results are packed into `out_not` with the upper half corresponding to `b` and the lower half to `a` through concatenation.
+
+This module should meet your requirements for implementing the specified logic. You can instantiate this module in a testbench and simulate it to verify its behavior.

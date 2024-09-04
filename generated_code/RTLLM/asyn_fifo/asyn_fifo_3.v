@@ -1,5 +1,30 @@
 
-module asyn_fifo (
+module dual_port_RAM(
+    input wclk,
+    input wenc,
+    input [$clog2(DEPTH)-1:0] waddr,
+    input [WIDTH-1:0] wdata,
+    input rclk,
+    input renc,
+    input [$clog2(DEPTH)-1:0] raddr,
+    output reg [WIDTH-1:0] rdata
+);
+
+    reg [WIDTH-1:0] RAM_MEM [0:DEPTH-1];
+    
+    always @(posedge wclk) begin
+        if(wenc)
+            RAM_MEM[waddr] <= wdata;
+    end
+    
+    always @(posedge rclk) begin
+        if(renc)
+            rdata <= RAM_MEM[raddr];
+    end
+    
+endmodule
+
+module asyn_fifo(
     input wclk,
     input rclk,
     input wrstn,
@@ -15,59 +40,67 @@ module asyn_fifo (
 parameter WIDTH = 8;
 parameter DEPTH = 16;
 
-// Dual-port RAM instantiation
-dual_port_RAM ram (
+reg [WIDTH-1:0] wptr, rptr;
+reg [WIDTH-1:0] wptr_buff, rptr_buff;
+reg [WIDTH-1:0] waddr_bin, raddr_bin;
+reg [WIDTH-1:0] rptr_syn;
+reg [WIDTH-1:0] neg_msb_raddr;
+wire [WIDTH-1:0] msb_rptr;
+
+assign msb_rptr = {rptr[WIDTH-1], rptr[WIDTH-1:1]};
+assign neg_msb_raddr = {~raddr_bin[WIDTH-1], raddr_bin[WIDTH-1:1]};
+
+dual_port_RAM ram_inst(
     .wclk(wclk),
-    .wenc(winc & ~wfull),
-    .waddr(waddr),
+    .wenc(winc),
+    .waddr(waddr_bin),
     .wdata(wdata),
     .rclk(rclk),
-    .renc(rinc & ~rempty),
-    .raddr(raddr),
+    .renc(rinc),
+    .raddr(raddr_bin),
     .rdata(rdata)
 );
 
-// Signal declarations
-reg [$clog2(DEPTH)-1:0] waddr, raddr;
-reg [WIDTH-1:0] wptr, rptr;
-reg [WIDTH-1:0] wptr_buff, rptr_buff;
-
-// Write and read pointer logic
 always @(posedge wclk or negedge wrstn) begin
-    if (~wrstn) begin
-        waddr <= 0;
+    if(~wrstn)
         wptr <= 0;
-        wptr_buff <= 0;
-    end else begin
-        waddr <= waddr + winc;
-        wptr <= wptr ^ (wptr >> 1);
-        wptr_buff <= wptr;
-    end
+    else if(winc)
+        wptr <= wptr + 1;
 end
 
 always @(posedge rclk or negedge rrstn) begin
-    if (~rrstn) begin
-        raddr <= 0;
+    if(~rrstn)
         rptr <= 0;
-        rptr_buff <= 0;
-    end else begin
-        raddr <= raddr + rinc;
-        rptr <= rptr ^ (rptr >> 1);
-        rptr_buff <= rptr;
-    end
+    else if(rinc)
+        rptr <= rptr + 1;
 end
 
-// Full and empty signal generation
+always @(posedge wclk) begin
+    wptr_buff <= wptr;
+end
+
+always @(posedge rclk) begin
+    rptr_buff <= rptr;
+end
+
+always @(wptr, wptr_buff) begin
+    waddr_bin = wptr ^ (wptr >> 1);
+end
+
+always @(rptr, rptr_buff) begin
+    rptr_syn = rptr ^ (rptr >> 1);
+end
+
 always @(*) begin
-    if (wptr == ({~rptr[WIDTH-1], rptr[WIDTH-2:0]})) begin
-        wfull <= 1;
+    if(wptr == rptr_syn)
+        rempty = 1;
     else
-        wfull <= 0;
+        rempty = 0;
     
-    if (wptr == rptr) begin
-        rempty <= 1;
+    if(wptr == {~msb_raddr, raddr_bin[WIDTH-2:0]})
+        wfull = 1;
     else
-        rempty <= 0;
+        wfull = 0;
 end
 
 endmodule

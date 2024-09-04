@@ -1,0 +1,51 @@
+You can achieve the required functionality by defining the `TopModule` in SystemVerilog (or Verilog). This module will compute the pairwise comparisons between the input signals and store the results in a 25-bit output vector.
+
+Here’s how you can implement the module:
+
+```verilog
+module TopModule(
+    input  wire a,
+    input  wire b,
+    input  wire c,
+    input  wire d,
+    input  wire e,
+    output reg  [24:0] out
+);
+
+    always @(*) begin
+        out[24] = (a == a);  // Comparison of a with a
+        out[23] = (a == b);  // Comparison of a with b
+        out[22] = (a == c);  // Comparison of a with c
+        out[21] = (a == d);  // Comparison of a with d
+        out[20] = (a == e);  // Comparison of a with e
+        out[19] = (b == a);  // Comparison of b with a
+        out[18] = (b == b);  // Comparison of b with b
+        out[17] = (b == c);  // Comparison of b with c
+        out[16] = (b == d);  // Comparison of b with d
+        out[15] = (b == e);  // Comparison of b with e
+        out[14] = (c == a);  // Comparison of c with a
+        out[13] = (c == b);  // Comparison of c with b
+        out[12] = (c == c);  // Comparison of c with c
+        out[11] = (c == d);  // Comparison of c with d
+        out[10] = (c == e);  // Comparison of c with e
+        out[ 9] = (d == a);  // Comparison of d with a
+        out[ 8] = (d == b);  // Comparison of d with b
+        out[ 7] = (d == c);  // Comparison of d with c
+        out[ 6] = (d == d);  // Comparison of d with d
+        out[ 5] = (d == e);  // Comparison of d with e
+        out[ 4] = (e == a);  // Comparison of e with a
+        out[ 3] = (e == b);  // Comparison of e with b
+        out[ 2] = (e == c);  // Comparison of e with c
+        out[ 1] = (e == d);  // Comparison of e with d
+        out[ 0] = (e == e);  // Comparison of e with e
+    end
+
+endmodule
+```
+
+### Explanation:
+- **Module Declaration**: The module `TopModule` takes five 1-bit inputs (`a`, `b`, `c`, `d`, `e`) and produces a 25-bit output `out`.
+- **Always Block**: The output `out` is computed combinatorially within an `always @(*)` block, which means it will react to changes in any of its inputs.
+- **Pairwise Comparisons**: Each output bit is assigned a value based on the equality of the two bits being compared. If they are equal, the output bit will be set to `1`, otherwise it will be set to `0`.
+
+This design provides the required pairwise comparisons, and should work as expected when the module is synthesized in an RTL design flow.

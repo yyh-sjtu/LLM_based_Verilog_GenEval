@@ -1,0 +1,24 @@
+As a professional RTL designer, I will start by analyzing the given simulation waveforms to determine the behavior of the circuit. Based on the provided waveforms, it appears that the output q is only 1 when either b or c is 1, or when both a and d are 1.
+
+With this understanding, I will now implement the TopModule with the specified interface and behavior.
+
+``` verilog
+module TopModule (
+    input a,
+    input b,
+    input c,
+    input d,
+    output reg q
+);
+
+always @* begin
+    if((b || c) || (a && d))
+        q = 1;
+    else
+        q = 0;
+end
+
+endmodule
+```
+
+The Verilog code above implements the desired combinational circuit based on the provided simulation waveforms. It determines the output q based on the conditions described earlier. Please let me know if further modifications or adjustments are needed.

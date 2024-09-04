@@ -1,7 +1,8 @@
+Here is the complete Verilog code for the ALU module implementing the specified operations:
+
 ```verilog
-module alu (
-    input [31:0] a,
-    input [31:0] b,
+module alu(
+    input [31:0] a, b,
     input [5:0] aluc,
     output reg [31:0] r,
     output reg zero,
@@ -29,16 +30,32 @@ parameter SRLV = 6'b000110;
 parameter SRAV = 6'b000111;
 parameter LUI = 6'b001111;
 
+// Internal wires
 reg [31:0] res;
-reg flag;
+reg [4:0] shift_amount;
 
-always @(*) begin
-    zero = (res == 0);
-    carry = (res < a);
-    negative = (res[31] == 1);
-    overflow = ((a[31] == b[31]) && (res[31] != a[31]));
-    flag = (aluc == SLT || aluc == SLTU) ? 1'b1 : 1'bz;
-    
+// Zero flag
+assign zero = (res == 0) ? 1 : 0;
+
+// Negative flag
+assign negative = res[31];
+
+// Overflow flag
+assign overflow = (res[31] != a[31] && res[31] != b[31]) ? 1 : 0;
+
+// Flag based on SLT and SLTU operations
+always @*
+begin
+    case(aluc)
+        SLT: flag = 1;
+        SLTU: flag = 1;
+        default: flag = 1'bz;
+    endcase
+end
+
+// Operation selection
+always @*
+begin
     case(aluc)
         ADD: res = a + b;
         ADDU: res = a + b;
@@ -48,31 +65,24 @@ always @(*) begin
         OR: res = a | b;
         XOR: res = a ^ b;
         NOR: res = ~(a | b);
-        SLT:
-        begin
-            if (a < b)
-                res = 32'b1;
-            else
-                res = 32'b0;
-        end
-        SLTU:
-        begin
-            if (a < b)
-                res = 32'b1;
-            else
-                res = 32'b0;
-        end
+        SLT: res = (a < b) ? 1 : 0;
+        SLTU: res = (a < b) ? 1 : 0;
         SLL: res = a << b[4:0];
         SRL: res = a >> b[4:0];
         SRA: res = $signed(a) >>> b[4:0];
         SLLV: res = a << b[4:0];
         SRLV: res = a >> b[4:0];
         SRAV: res = $signed(a) >>> b[4:0];
-        LUI: res = {a[15:0], 16'b0};
-        default: res = 32'bz;
+        LUI: res = {a[31:16], 16'h0000};
+        default: res = 32'bzzzz_zzzz_zzzz_zzzz_zzzz_zzzz_zzzz_zzzz; // High-impedance
     endcase
 end
 
+// Carry flag (not implemented for this ALU)
+
+assign r = res;
+
 endmodule
 ```
-Please note that this is a basic implementation of the ALU and may need further optimization and testing for a complete and functional design.
+
+This Verilog code implements an ALU module as per the requirements specified. It defines various operations based on the control signal (aluc) and computes the result accordingly, along with setting the flags (zero, negative, overflow, and flag). Note that the carry flag is not implemented in this code.

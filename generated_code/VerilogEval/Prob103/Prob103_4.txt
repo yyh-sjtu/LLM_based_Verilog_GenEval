@@ -1,0 +1,57 @@
+To implement the `TopModule` based on the provided waveform data, we need to analyze the truth table derived from the inputs `a`, `b`, `c`, and `d` to determine the logic expression that describes the output `q`.
+
+Let's summarize the input/output behavior from the provided waveforms:
+
+- `q` is `1` for `(a, b, c, d)` values:
+  - `(0, 0, 0, 0)` (0ns)
+  - `(0, 0, 1, 1)` (30ns)
+  - `(0, 1, 0, 1)` (40ns)
+  - `(0, 1, 1, 0)` (45ns)
+  - `(1, 0, 0, 1)` (60ns)
+  - `(1, 0, 1, 0)` (65ns)
+  - `(1, 1, 1, 1)` (90ns)
+
+- `q` is `0` for `(a, b, c, d)` values:
+  - `(0, 0, 0, 1)` (20ns)
+  - `(0, 0, 1, 0)` (25ns)
+  - `(0, 1, 0, 0)` (35ns)
+  - `(0, 1, 1, 1)` (50ns)
+  - `(1, 0, 0, 0)` (55ns)
+  - `(1, 0, 1, 1)` (70ns)
+  - `(1, 1, 0, 0)` (80ns)
+  - `(1, 1, 1, 0)` (85ns)
+
+From this, we can extract a logical expression. Here’s a suggested simplification:
+
+1. From the observations, we have:
+   \[
+   q = \overline{a} \overline{b} \overline{c} \overline{d} + \overline{a}\overline{b}cd + \overline{a}bc\overline{d} + ab\overline{c} + a\overline{b}d + ac\overline{b} + abc
+   \]
+
+This expression can be translated directly into the Verilog code. Here is how you would implement the `TopModule` in Verilog:
+
+```verilog
+module TopModule (
+    input  wire a,
+    input  wire b,
+    input  wire c,
+    input  wire d,
+    output wire q
+);
+
+    assign q = (~a & ~b & ~c & ~d) |    // q = 1 when a=0, b=0, c=0, d=0
+               (~a & ~b & c & d) |    // q = 1 when a=0, b=0, c=1, d=1
+               (~a & b & c & ~d) |    // q = 1 when a=0, b=1, c=1, d=0
+               (a & ~b & c & ~d) |    // q = 1 when a=1, b=0, c=1, d=0
+               (a & b & ~c & d) |     // q = 1 when a=1, b=1, c=0, d=1
+               (a & b & c & d);       // q = 1 when a=1, b=1, c=1, d=1
+
+endmodule
+```
+
+### Explanation:
+- This module consists solely of combinational logic using the `assign` statement.
+- The logic expression is a sum of products representing the conditions under which `q` is `1`.
+- Each product term corresponds to a combination of the inputs that results in `q` being true.
+
+Make sure to simulate and verify this design in your RTL environment to confirm that it behaves as expected against the original waveform data!

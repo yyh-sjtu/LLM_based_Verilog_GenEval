@@ -1,0 +1,14 @@
+As a professional RTL designer, I would implement the TopModule as follows:
+
+```verilog
+module TopModule (
+    input [31:0] in,
+    output [31:0] out
+);
+
+    assign out = {in[7:0], in[15:8], in[23:16], in[31:24]};
+
+endmodule
+```
+
+In this implementation, I used concatenation to reverse the byte order of the 32-bit input vector 'in' and assign it to the output vector 'out'. This code ensures that the byte order of the input vector is reversed as specified in the module interface.

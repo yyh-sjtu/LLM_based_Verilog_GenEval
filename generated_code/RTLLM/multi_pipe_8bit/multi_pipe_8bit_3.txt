@@ -1,3 +1,6 @@
+Here is the complete Verilog code for the unsigned 8bit multiplier based on pipelining processing:
+
+```verilog
 module multi_pipe_8bit (
     input clk,
     input rst_n,
@@ -8,79 +11,64 @@ module multi_pipe_8bit (
     output reg [15:0] mul_out
 );
 
-reg [7:0] mul_a_reg;
-reg [7:0] mul_b_reg;
-reg [7:0] temp [7:0];
-reg [15:0] sum [7:0];
-reg [15:0] mul_out_reg;
-reg [7:0] mul_en_out_reg;
-
 // Input Control
+reg mul_en_out_reg;
 always @(posedge clk) begin
-    if (rst_n == 0) begin
-        mul_en_out_reg <= 0;
-    end else begin
-        mul_en_out_reg <= mul_en_in;
-    end
+    mul_en_out_reg <= mul_en_in;
 end
-
 assign mul_en_out = mul_en_out_reg[7];
 
 // Input Registers
+reg [7:0] mul_a_reg;
+reg [7:0] mul_b_reg;
 always @(posedge clk) begin
-    if (rst_n == 0) begin
-        mul_a_reg <= 8'b0;
-        mul_b_reg <= 8'b0;
-    end else begin
-        if (mul_en_in) begin
-            mul_a_reg <= mul_a;
-            mul_b_reg <= mul_b;
-        end
+    if(mul_en_in) begin
+        mul_a_reg <= mul_a;
+        mul_b_reg <= mul_b;
     end
 end
 
 // Partial Product Generation
+wire [7:0] temp [7:0];
+genvar i, j;
 generate
-    genvar i;
-    for (i = 0; i < 8; i = i + 1) begin: PPGen
-        assign temp[i] = mul_b_reg[i] ? mul_a_reg : 8'b0;
-    end
-endgenerate
-
-// Partial Sum Calculation
-generate
-    genvar j;
-    for (j = 0; j < 8; j = j + 1) begin: PSCalc
-        always @(posedge clk) begin
-            if (rst_n == 0) begin
-                sum[j] <= 16'b0;
-            end else begin
-                if (mul_en_in) begin
-                    sum[j] <= sum[j] + {8'b0, temp[j]};
-                end
-            end
+    for(i=0; i<8; i=i+1) begin: GEN_PARTIAL_PROD
+        for(j=0; j<8; j=j+1) begin
+            assign temp[i][j] = (mul_b_reg[i] & mul_a_reg[j]) ? mul_a_reg[j] : 8'h0;
         end
     end
 endgenerate
 
-// Final Product Calculation
+// Partial Sum Calculation
+reg [15:0] sum [7:0];
 always @(posedge clk) begin
-    if (rst_n == 0) begin
-        mul_out_reg <= 16'b0;
-    end else begin
-        if (mul_en_in) begin
-            mul_out_reg <= {sum[7], sum[6], sum[5], sum[4], sum[3], sum[2], sum[1], sum[0]};
+    if(mul_en_in) begin
+        for(i=0; i<8; i=i+1) begin
+            sum[i] <= temp[i];
+        end
+    end
+end
+
+// Final Product Calculation
+reg [15:0] mul_out_reg;
+always @(posedge clk) begin
+    if(mul_en_in) begin
+        for(i=0; i<8; i=i+1) begin
+            mul_out_reg <= mul_out_reg + sum[i];
         end
     end
 end
 
 // Output Assignment
-always @* begin
-    if (mul_en_out) begin
+always @(*) begin
+    if(mul_en_out) begin
         mul_out = mul_out_reg;
     end else begin
-        mul_out = 16'b0;
+        mul_out = 16'h0;
     end
 end
 
 endmodule
+```
+
+This Verilog code implements an 8bit multiplier using pipelining processing with input control, input registers, partial product generation, partial sum calculation, final product calculation, and output assignment. The module operates on the rising edge of the clock signal and utilizes an active-low reset signal.

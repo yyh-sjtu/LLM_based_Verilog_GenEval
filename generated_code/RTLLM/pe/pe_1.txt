@@ -1,3 +1,6 @@
+Here is the Verilog code for the Multiplying Accumulator module:
+
+```verilog
 module pe (
     input clk,
     input rst,
@@ -15,3 +18,6 @@ always @(posedge clk or posedge rst) begin
 end
 
 endmodule
+```
+
+This code defines a Verilog module named `pe` that implements the Multiplying Accumulator functionality as described. The module has input ports `clk`, `rst`, `a`, and `b`, and an output port `c`. Inside the module, there is an always block that updates the register `c` on the positive edge of the clock signal or the reset signal. If the reset signal is high, `c` is set to 0, and if the reset signal is low, it adds the product of `a` and `b` to `c`.

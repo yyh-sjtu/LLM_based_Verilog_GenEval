@@ -10,45 +10,49 @@ module radix2_div (
     output reg [15:0] result
 );
 
-reg [7:0] ABS_DIVIDEND;
+reg [15:0] SR;
 reg [7:0] NEG_DIVISOR;
-reg [8:0] cnt;
-reg [7:0] SR;
+reg [3:0] cnt;
 reg start_cnt;
 
 always @(posedge clk or posedge rst) begin
     if (rst) begin
-        ABS_DIVIDEND <= 8'b0;
-        NEG_DIVISOR <= 8'b0;
-        cnt <= 9'b0;
-        SR <= 8'b0;
-        start_cnt <= 1'b0;
-        res_valid <= 1'b0;
+        res_valid <= 0;
+        SR <= 16'h0000;
+        start_cnt <= 0;
+        cnt <= 4'h1;
     end else begin
         if (opn_valid && !res_valid) begin
-            ABS_DIVIDEND <= sign ? dividend : dividend;
+            SR <= {1'b0, dividend} << 1;
             NEG_DIVISOR <= -divisor;
-            cnt <= 9'b0;
-            SR <= {ABS_DIVIDEND[6:0], 1'b0};
-            start_cnt <= 1'b1;
+            start_cnt <= 1;
         end
         
         if (start_cnt) begin
-            if (cnt == 8'b11111111) begin
-                cnt <= 9'b0;
-                start_cnt <= 1'b0;
-                res_valid <= 1'b1;
-                result <= {SR[7], SR[6:0], SR[8]};
+            if (cnt == 4'h8) begin
+                start_cnt <= 0;
+                cnt <= 4'h1;
+                SR <= {SR[7:0] + 8'h00, SR[15:8], 8'h00}; // update SR with remainder and quotient
+                res_valid <= 1;
             end else begin
                 cnt <= cnt + 1;
-                if (SR[8] == 1'b1) begin
-                    SR <= {SR[6:0] - NEG_DIVISOR, SR[8]};
-                end else begin
-                    SR <= {SR[6:0], SR[8]};
+                if (sign) begin // signed division
+                    if (SR[15] == 1) begin
+                        SR <= SR + {1'b0, NEG_DIVISOR}; // subtraction with 2's complement
+                    end else begin
+                        SR <= SR + {1'b0, divisor}; 
+                    end
+                end else begin // unsigned division
+                    if (SR[15:8] >= divisor) begin
+                        SR <= SR + {1'b0, -divisor};
+                    end
                 end
+                SR <= {SR[7:0], SR[15:8]}; // shift left and update carry-out
             end
         end
     end
 end
+
+assign result = SR;
 
 endmodule

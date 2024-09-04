@@ -1,0 +1,21 @@
+Here is the RTL code for the TopModule module that implements the desired functionality:
+
+```verilog
+module TopModule (
+    input [1:0] A,
+    input [1:0] B,
+    output reg z
+);
+
+always @(*) begin
+    if (A == B) begin
+        z = 1;
+    end else begin
+        z = 0;
+    end
+end
+
+endmodule
+```
+
+This module compares the 2-bit inputs A and B and assigns the output z to 1 if they are equal, and 0 otherwise. The code uses an always block with a combinational logic to perform the comparison and assign the output value.

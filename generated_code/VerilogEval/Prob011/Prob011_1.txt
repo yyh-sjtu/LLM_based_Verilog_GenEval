@@ -1,0 +1,30 @@
+Certainly! Below is a simple implementation of a module named `TopModule` that acts as a NOR gate using Verilog.
+
+### Verilog Code for `TopModule`
+
+```verilog
+module TopModule (
+    input wire a,    // Input a
+    input wire b,    // Input b
+    output wire out  // Output out
+);
+
+// Implementing NOR logic
+assign out = ~(a | b); // NOR gate implementation
+
+endmodule
+```
+
+### Explanation
+
+- **Inputs**:
+  - `a`: One-bit input.
+  - `b`: One-bit input.
+  
+- **Output**:
+  - `out`: One-bit output representing the NOR operation of inputs `a` and `b`.
+
+### NOR Logic
+The output `out` will be high (`1`) only when both inputs `a` and `b` are low (`0`). The expression `assign out = ~(a | b);` uses the logical OR operator (`|`) followed by the NOT operator (`~`) to achieve the NOR functionality.
+
+Feel free to ask if you need further modifications or explanations!

@@ -1,0 +1,19 @@
+Sure, here is the code for the TopModule implementing a D latch:
+
+```verilog
+module TopModule (
+    input d,
+    input ena,
+    output reg q
+);
+    
+always @ (posedge ena)
+begin
+    if (ena)
+        q <= d;
+end
+
+endmodule
+```
+
+This code defines a module named TopModule with one input `d`, one input `ena`, and one output `q`. Inside the module, an always block is used to implement a D latch functionality where the output `q` only updates to the input `d` when the enable signal `ena` is high.

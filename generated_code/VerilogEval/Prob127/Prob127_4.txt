@@ -1,0 +1,83 @@
+Certainly! Below is the Verilog implementation of the `TopModule`, which describes a simple finite state machine (FSM) for the Lemmings game, as you've requested.
+
+### Verilog Code for TopModule
+
+```verilog
+module TopModule (
+    input  clk,
+    input  areset,
+    input  bump_left,
+    input  bump_right,
+    output reg walk_left,
+    output reg walk_right
+);
+
+    // State encoding
+    typedef enum reg [1:0] {
+        STATE_WALK_LEFT = 2'b00,
+        STATE_WALK_RIGHT = 2'b01
+    } state_t;
+
+    state_t current_state, next_state;
+
+    // State Transition - (in the always block that is sensitive to clock)
+    always @(posedge clk or posedge areset) begin
+        if (areset) begin
+            current_state <= STATE_WALK_LEFT; // Reset to walk left state
+        end else begin
+            current_state <= next_state; // Transition to the next state
+        end
+    end
+
+    // Combinational logic for state transition and output
+    always @(*) begin
+        // Default Outputs
+        walk_left = 0;
+        walk_right = 0;
+
+        // Next state logic
+        case (current_state)
+            STATE_WALK_LEFT: begin
+                walk_left = 1; // Current State - Walking Left
+
+                if (bump_right || bump_left) begin
+                    next_state = STATE_WALK_RIGHT; // Bumped on the left or right
+                end else begin
+                    next_state = STATE_WALK_LEFT; // Stay in the same state
+                end
+            end
+
+            STATE_WALK_RIGHT: begin
+                walk_right = 1; // Current State - Walking Right
+                
+                if (bump_left || bump_right) begin
+                    next_state = STATE_WALK_LEFT; // Bumped on the left or right
+                end else begin
+                    next_state = STATE_WALK_RIGHT; // Stay in the same state
+                end
+            end
+            
+            default: begin
+                // Default case should not occur if the FSM is designed correctly.
+                next_state = STATE_WALK_LEFT; // Safe fallback
+                walk_left = 1;
+                walk_right = 0;
+            end
+        endcase
+    end
+
+endmodule
+```
+
+### Explanation
+1. **State Encoding**: The Lemming can be in one of two states: `STATE_WALK_LEFT` and `STATE_WALK_RIGHT`. Encoding them as 2-bit states helps with clarity.
+
+2. **Asynchronous Reset**: The `areset` input is used to asynchronously reset the FSM to the left walking state. This reset uses the `posedge` trigger to ensure synchronous behavior while allowing immediate reaction to the reset signal.
+
+3. **State Transition Logic**: When the clock signal transitions high, the current state is updated based on the next state logic defined in the combinational always block.
+
+4. **Output Logic**: The outputs `walk_left` and `walk_right` are set depending on the current state. If the Lemming is walking left, `walk_left` is set to 1. If bumping occurs (either left or right), the state transitions accordingly to the opposite direction.
+
+5. **Default Fallback**: A default case in the state machine ensures that we have a safe fallback state, which can be helpful in simulations or unforeseen scenarios.
+
+Feel free to ask if you need further modifications or explanations!

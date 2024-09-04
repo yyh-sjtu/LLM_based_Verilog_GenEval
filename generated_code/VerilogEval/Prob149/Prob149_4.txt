@@ -1,0 +1,21 @@
+To implement the TopModule with the described functionality, I would first design a state machine that determines the flow rate based on the current water level and the previous sensor change. Here is a high-level overview of the state machine's states and transitions:
+
+State machine states:
+1. State 0 - No sensors asserted, all flow rates fr2, fr1, fr0, dfr asserted
+2. State 1 - Sensors s[0] asserted, flow rates fr0, dfr asserted
+3. State 2 - Sensors s[1] asserted, flow rates fr0, fr1, dfr asserted
+4. State 3 - Sensors s[2] asserted, only dfr asserted
+
+State machine transitions:
+- Transition to State 0 whenever the reset signal is asserted.
+- Transition based on the current sensor inputs and previous state.
+
+Next, I would create the logic to implement the state machine transitions based on the current sensor inputs and previous state. This logic would include the determination of which flow rates to assert based on the water level and sensor changes.
+
+I would also implement logic for the flow rate outputs fr2, fr1, fr0, and dfr based on the state machine's current state and the water level conditions specified in the table. This logic would ensure that the correct flow rates are asserted based on the water level and sensor changes.
+
+Additionally, I would implement the synchronous reset functionality to reset the state machine to State 0 whenever the reset signal is asserted, ensuring that the system behaves as if the water level had been low for a long time.
+
+Finally, I would write RTL code for the TopModule module that incorporates the state machine logic, flow rate determination, and reset functionality, adhering to the specified input and output signals.
+
+By following these steps, I would be able to design and implement the TopModule with the required functionality as a professional RTL designer.

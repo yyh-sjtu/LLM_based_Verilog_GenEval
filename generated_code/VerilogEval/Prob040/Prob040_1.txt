@@ -1,0 +1,32 @@
+Sure! Below is a Verilog implementation of the `TopModule` that implements a decade counter with the specified interface.
+
+```verilog
+module TopModule (
+    input wire clk,      // Clock input
+    input wire reset,    // Synchronous reset
+    output reg [3:0] q   // 4-bit output for the counter
+);
+    
+    // Always block triggered on the positive clock edge
+    always @(posedge clk) begin
+        if (reset) begin
+            q <= 4'b0000; // Reset the counter to 0
+        end else begin
+            if (q == 4'b1001) begin
+                q <= 4'b0000; // Reset to 0 after counting to 9
+            end else begin
+                q <= q + 1; // Increment the counter
+            end
+        end
+    end
+    
+endmodule
+```
+
+### Explanation:
+- **Module Declaration**: `TopModule` is declared with inputs `clk`, `reset`, and the output `q` which is 4 bits wide.
+- **Always Block**: The counter behavior is defined in an always block that is triggered on the positive edge of the clock.
+- **Synchronous Reset**: Inside the always block, the first check is for the `reset` signal. If `reset` is high, the counter `q` is set to `0`.
+- **Counter Logic**: If the reset is not active, the counter checks if it has reached `9` (binary `1001`). If it has, it resets `q` back to `0`. Otherwise, it increments `q` by `1`.
+
+This code will create a decade counter that resets and counts correctly from `0` to `9` on each clock cycle while observing the synchronous reset.

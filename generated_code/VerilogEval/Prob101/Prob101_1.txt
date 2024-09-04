@@ -1,0 +1,45 @@
+Based on the provided simulation waveforms, we can analyze the output `q` in relation to the inputs `a`, `b`, `c`, and `d`. The output `q` is asserted (set to high) under the following conditions:
+
+1. (a=0, b=0, c=0, d=1) → q = 0
+2. (a=0, b=0, c=1, d=0) → q = 1
+3. (a=0, b=0, c=1, d=1) → q = 1
+4. (a=0, b=1, c=0, d=0) → q = 1
+5. (a=0, b=1, c=0, d=1) → q = 1
+6. (a=0, b=1, c=1, d=0) → q = 1
+7. (a=0, b=1, c=1, d=1) → q = 1
+8. (a=1, b=0, c=0, d=0) → q = 0
+9. (a=1, b=0, c=0, d=1) → q = 0
+10. (a=1, b=0, c=1, d=0) → q = 1
+11. (a=1, b=0, c=1, d=1) → q = 1
+12. (a=1, b=1, c=0, d=0) → q = 1
+13. (a=1, b=1, c=0, d=1) → q = 1
+14. (a=1, b=1, c=1, d=0) → q = 1
+15. (a=1, b=1, c=1, d=1) → q = 1
+
+From this analysis, we can summarize the conditions under which `q` is equal to 1:
+
+- q = 1 when:
+  - a = 0 and (c = 1 or b = 1)
+  - a = 1 and (c = 1 or b = 1)
+
+In Verilog RTL, we can implement the logic as follows:
+
+```verilog
+module TopModule (
+    input  wire a,
+    input  wire b,
+    input  wire c,
+    input  wire d,
+    output wire q
+);
+
+// Combinational logic
+assign q = (~a & (b | c)) | (a & (b | c));
+
+endmodule
+```
+
+### Explanation:
+- The output `q` is computed based on the logic derived from the conditions above.
+- The `assign` statement implements the derived logic directly using combinational logic expressions.
+- The circuit effectively outputs a high signal when the conditions summarized are met.

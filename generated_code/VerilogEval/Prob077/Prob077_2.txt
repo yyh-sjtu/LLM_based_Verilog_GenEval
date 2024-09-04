@@ -1,0 +1,41 @@
+Sure! Below is the Verilog code for the `TopModule` that implements the requested functionality, adhering to the specified interface. The code creates two intermediate wires for the outputs of the AND gates and feeds them into an OR gate, with an inverted output as well.
+
+```verilog
+module TopModule (
+    input wire a,
+    input wire b,
+    input wire c,
+    input wire d,
+    output wire out,
+    output wire out_n
+);
+
+    wire and1_out;  // Intermediate wire for first AND gate (a AND b)
+    wire and2_out;  // Intermediate wire for second AND gate (c AND d)
+
+    // First layer: Two AND gates
+    and and1 (and1_out, a, b);  // AND gate 1
+    and and2 (and2_out, c, d);   // AND gate 2
+
+    // Second layer: Or gate
+    or or1 (out, and1_out, and2_out);  // OR gate
+
+    // Inverted output
+    not not1 (out_n, out);  // Invert the output
+
+endmodule
+```
+
+### Explanation:
+1. **Inputs and Outputs**: The module `TopModule` has four one-bit inputs (`a`, `b`, `c`, `d`) and two one-bit outputs (`out` and `out_n`).
+
+2. **Intermediate Wires**:
+   - `and1_out`: The output of the first AND gate connected to inputs `a` and `b`.
+   - `and2_out`: The output of the second AND gate connected to inputs `c` and `d`.
+
+3. **Logic Gates**: 
+   - Two AND gates are instantiated that take the respective inputs and produce outputs on the intermediate wires.
+   - An OR gate takes the outputs of the two AND gates and produces the final output `out`. 
+   - Finally, a NOT gate inverts `out` to produce `out_n`.
+
+This code clearly and effectively captures the intended functional design. Let me know if you need any modifications or additional details!

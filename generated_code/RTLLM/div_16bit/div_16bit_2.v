@@ -5,36 +5,32 @@ module div_16bit (
     output reg [15:0] odd
 );
 
-reg [7:0] a_reg, b_reg;
-reg [15:0] dividend;
-reg [3:0] count;
-reg [15:0] tmp_result;
+reg [15:0] a_reg;
+reg [7:0] b_reg;
 
 always @* begin
     a_reg = A;
     b_reg = B;
-    dividend = A;
-    count = 0;
-    result = 0;
-    odd = 0;
+end
+
+always @* begin
+    reg [15:0] temp_remainder;
+    reg [7:0] temp_quotient;
     
-    tmp_result = 0;
-    while(count < 16) begin
-        if(dividend[15] == 1) begin
-            tmp_result = tmp_result << 1;
-            tmp_result[0] = 1;
-            dividend = dividend - b_reg;
+    temp_remainder = a_reg;
+    temp_quotient = 16'b0;
+    
+    for (int i = 0; i < 8; i = i + 1) begin
+        if(temp_remainder[15] == 1'b1) begin
+            temp_remainder = temp_remainder - b_reg;
+            temp_quotient[7-i] = 1'b1;
         end
-        else begin
-            tmp_result = tmp_result << 1;
-        end
-        count = count + 1;
-        dividend = dividend << 1;
+        
+        temp_remainder = temp_remainder << 1;
     end
     
-    result = tmp_result;
-    odd = dividend;
-    
+    result = temp_quotient;
+    odd = temp_remainder;
 end
 
 endmodule

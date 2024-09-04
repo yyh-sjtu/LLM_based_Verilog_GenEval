@@ -1,5 +1,5 @@
 
-module width_8to16 (
+module width_8to16(
     input wire clk,
     input wire rst_n,
     input wire valid_in,
@@ -8,24 +8,22 @@ module width_8to16 (
     output reg [15:0] data_out
 );
 
-reg [7:0] data_latch;
-reg flag;
+reg [7:0] data_lock;
 
 always @(posedge clk or negedge rst_n) begin
-    if (!rst_n) begin // reset condition
-        data_latch <= 8'h00;
+    if (!rst_n) begin
+        data_lock <= 8'b0;
         valid_out <= 0;
-        data_out <= 16'h0000;
-        flag <= 0;
+        data_out <= 16'b0;
     end else begin
         if (valid_in) begin
-            if (!flag) begin
-                data_latch <= data_in;
-                flag <= 1;
+            if (!valid_out) begin
+                data_lock <= data_in;
+                valid_out <= 0;
+                data_out <= 16'b0;
             end else begin
+                data_out <= {data_lock, data_in};
                 valid_out <= 1;
-                data_out <= {data_latch, data_in};
-                flag <= 0;
             end
         end
     end

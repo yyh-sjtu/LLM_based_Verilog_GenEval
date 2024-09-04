@@ -1,0 +1,30 @@
+Certainly! The description you provided indicates that you want to implement a module where two inputs are sent to an AND gate, but there is an inversion (bubble) on one of the inputs. This means that `in2` should be inverted before being fed into the AND gate.
+
+Here's how you can implement this in Verilog:
+
+```verilog
+module TopModule (
+    input wire in1,
+    input wire in2,
+    output wire out
+);
+
+// Internal wire to hold the inverted in2
+wire not_in2;
+
+// Invert in2
+assign not_in2 = ~in2;
+
+// AND gate with in1 and inverted in2
+assign out = in1 & not_in2;
+
+endmodule
+```
+
+### Explanation:
+- We define a module called `TopModule` that has two inputs (`in1` and `in2`) and one output (`out`).
+- Inside the module, we declare a wire (`not_in2`) to hold the inverted value of `in2`.
+- We use the bitwise NOT operator `~` to invert `in2`.
+- Finally, we create the output `out` by ANDing `in1` with the inverted `in2`.
+
+This code implements the desired functionality where `out` is the result of `in1 AND NOT in2`.

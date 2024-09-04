@@ -1,7 +1,7 @@
 
 module calendar (
-    input wire CLK,
-    input wire RST,
+    input CLK,
+    input RST,
     output reg [5:0] Hours,
     output reg [5:0] Mins,
     output reg [5:0] Secs
@@ -9,10 +9,10 @@ module calendar (
 
 always @ (posedge CLK or posedge RST) begin
     if (RST) begin
-        Secs <= 0;
+        Secs <= 6'b000000;
     end else begin
-        if (Secs == 59) begin
-            Secs <= 0;
+        if (Secs == 6'b111110) begin
+            Secs <= 6'b000000;
         end else begin
             Secs <= Secs + 1;
         end
@@ -21,24 +21,28 @@ end
 
 always @ (posedge CLK or posedge RST) begin
     if (RST) begin
-        Mins <= 0;
+        Mins <= 6'b000000;
     end else begin
-        if (Mins == 59 && Secs == 59) begin
-            Mins <= 0;
-        end else if (Secs == 59) begin
-            Mins <= Mins + 1;
+        if (Secs == 6'b111110 && Mins == 6'b111110) begin
+            Mins <= 6'b000000;
+        end else begin
+            if (Secs == 6'b111110) begin
+                Mins <= Mins + 1;
+            end
         end
     end
 end
 
 always @ (posedge CLK or posedge RST) begin
     if (RST) begin
-        Hours <= 0;
+        Hours <= 6'b000000;
     end else begin
-        if (Hours == 23 && Mins == 59 && Secs == 59) begin
-            Hours <= 0;
-        end else if (Mins == 59) begin
-            Hours <= Hours + 1;
+        if (Secs == 6'b111110 && Mins == 6'b111110 && Hours == 6'b10111) begin
+            Hours <= 6'b000000;
+        end else begin
+            if (Mins == 6'b111110) begin
+                Hours <= Hours + 1;
+            end
         end
     end
 end

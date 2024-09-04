@@ -1,0 +1,33 @@
+Certainly! Here’s how you can implement a top-level module in Verilog named `TopModule`, which incorporates 8 D flip-flops with synchronous reset functionality:
+
+```verilog
+module TopModule (
+    input wire clk,
+    input wire reset,
+    input wire [7:0] d,
+    output reg [7:0] q
+);
+
+    // D flip-flops with synchronous reset
+    always @(posedge clk) begin
+        if (reset) begin
+            q <= 8'b0; // Set q to zero if reset is active
+        end else begin
+            q <= d; // Update q with the value of d
+        end
+    end
+
+endmodule
+```
+
+### Explanation:
+1. **Module Declaration**: The module named `TopModule` is declared with the specified input and output ports.
+2. **Input and Output**:
+   - `clk`: Clock input.
+   - `reset`: Active high synchronous reset input.
+   - `d`: 8-bit input data to be stored in the D flip-flops.
+   - `q`: 8-bit output which holds the state of the flip-flops.
+3. **Always Block**: The flip-flops' behavior is described using an `always` block that is triggered by the positive edge of the `clk` signal.
+4. **Reset Logic**: Inside the `always` block, it first checks if the `reset` signal is high. If so, it sets `q` to zero (`8'b0`). If `reset` is low, the output `q` takes the value of the input `d`.
+
+In this implementation, all 8 bits of `q` and `d` are handled simultaneously, effectively treating the module as an array of 8 D flip-flops. Each flip-flop can be visualized as outputting one bit of the 8-bit wide `q` based on the input `d` and the reset condition.

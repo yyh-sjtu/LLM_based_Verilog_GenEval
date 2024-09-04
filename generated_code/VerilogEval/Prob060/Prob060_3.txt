@@ -1,0 +1,42 @@
+Certainly! Below is an example of a Verilog implementation for a module named `TopModule` that acts as a 4-bit shift register using D flip-flops. The module has a synchronous active-low reset, and it shifts the input bit `in` through the registers on each positive clock edge.
+
+```verilog
+module TopModule (
+    input  clk,
+    input  resetn,
+    input  in,
+    output reg out
+);
+
+    // Declare the shift register as a 4-bit wide register
+    reg [3:0] shift_reg;
+
+    // Sequential logic for the shift register
+    always @(posedge clk) begin
+        if (!resetn) begin
+            // Reset the shift register to 0 on active-low reset
+            shift_reg <= 4'b0000;
+            out <= 0; // Also reset the output
+        end else begin
+            // Shift the input through the register
+            shift_reg <= {shift_reg[2:0], in};
+            out <= shift_reg[3]; // Assign the MSB of the shift register to the output
+        end
+    end
+
+endmodule
+```
+
+### Explanation:
+
+1. **Module Declaration:** The `TopModule` is defined with the specified ports: `clk`, `resetn`, `in`, and `out`.
+
+2. **Shift Register:** The `shift_reg` is a 4-bit register achieved using `reg [3:0]`.
+
+3. **Always Block:** The `always` block with `@(posedge clk)` indicates that the code inside this block will execute on the positive edge of the clock.
+
+4. **Reset Logic:** The condition `if (!resetn)` checks if the reset is asserted (active-low). If it is, the shift register is cleared to `0`, and the output `out` is also reset.
+
+5. **Shifting Logic:** If reset is not asserted, the module shifts in the newest value from `in`, while shifting the bits in the shift register left. The output `out` is assigned the most significant bit (MSB) of `shift_reg`.
+
+With this implementation, the `TopModule` behaves as a synchronous 4-bit shift register with the specified interface.

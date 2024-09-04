@@ -1,0 +1,22 @@
+Here is the Verilog implementation for the TopModule module:
+
+```verilog
+module TopModule (
+    input [99:0] a,
+    input [99:0] b,
+    input sel,
+    output reg [99:0] out
+);
+
+always @ (sel)
+begin
+    if (sel == 0)
+        out = a;
+    else
+        out = b;
+end
+
+endmodule
+```
+
+This implementation creates a 2-1 multiplexer that selects either input `a` or input `b` based on the value of the `sel` input. When `sel` is low (0), the output `out` will be the 100-bit input `a`, and when `sel` is high (1), the output `out` will be the 100-bit input `b`.

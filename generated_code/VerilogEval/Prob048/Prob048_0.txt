@@ -1,0 +1,36 @@
+Sure! Below is the Verilog implementation for a simple D flip-flop with an active high synchronous reset. The module is named `TopModule` and includes the specified interface with the input and output ports.
+
+```verilog
+module TopModule (
+    input  wire clk,  // Clock input
+    input  wire d,    // Data input
+    input  wire r,    // Reset input (active high)
+    output reg  q     // Output
+);
+
+// Always block triggered on the rising edge of clk
+// or when reset is asserted
+always @(posedge clk or posedge r) begin
+    if (r) begin
+        // If reset is high, set q to 0
+        q <= 1'b0;
+    end else begin
+        // Otherwise, set q to d
+        q <= d;
+    end
+end
+
+endmodule
+```
+
+### Explanation:
+1. **Module Definition**: The module is named `TopModule`, which contains the appropriate input and output ports.
+2. **Registers and Wires**: 
+   - The output `q` is declared as a `reg` type because it will hold its value between clock cycles.
+3. **Always Block**: 
+   - The `always` block is sensitive to the positive edge of `clk` and the positive edge of `r`, which enables synchronous reset functionality.
+4. **Reset Logic**:
+   - If `r` is high when the clock rises, `q` is set to 0.
+   - If `r` is low, `q` takes the value of `d`.
+
+This design captures the required behavior of a D flip-flop with an active high synchronous reset. Let me know if you have any questions or need further modifications!

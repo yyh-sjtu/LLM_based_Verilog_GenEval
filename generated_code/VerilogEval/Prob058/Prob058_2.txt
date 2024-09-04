@@ -1,0 +1,32 @@
+Here is a sample implementation of the TopModule module with the requested interface:
+
+```verilog
+module TopModule (
+    input clk,
+    input a,
+    input b,
+    output out_assign,
+    output out_always_comb,
+    output out_always_ff
+);
+
+// Assign statement implementation
+assign out_assign = a ^ b;
+
+// Combinational always block implementation
+always @* begin
+    out_always_comb = a ^ b;
+end
+
+// Clocked always block implementation
+reg out_reg;
+always @(posedge clk) begin
+    out_reg <= a ^ b;
+end
+
+assign out_always_ff = out_reg;
+
+endmodule
+```
+
+This Verilog code defines a module named TopModule with the specified interface. It implements an XOR gate in three different ways as requested: using an assign statement, a combinational always block, and a clocked always block with a flip-flop for delayed output. The sequential logic is triggered on the positive edge of the clock signal.

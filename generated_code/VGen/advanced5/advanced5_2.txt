@@ -1,52 +1,33 @@
-
-
-// Defining the state register and assigning initial state
+// Declare the state register
 always @(posedge clk or posedge reset) begin
-  if (reset) begin
-    cur_state <= IDLE;
-  end else begin
-    cur_state <= next_state;
-  end
+    if(reset) 
+        cur_state <= IDLE;
+    else
+        cur_state <= next_state;
 end
 
-// Next state logic
-always @* begin
-  case (cur_state)
-    IDLE: begin
-      if (a & b) begin
-        next_state = SAB;
-      end else if (a) begin
-        next_state = SA;
-      end else if (b) begin
-        next_state = SB;
-      end else begin
-        next_state = IDLE;
-      end
-    end
-    SA: begin
-      if (b) begin
-        next_state = SAB;
-      end else begin
-        next_state = SA;
-      end
-    end
-    SB: begin
-      if (a) begin
-        next_state = SAB;
-      end else begin
-        next_state = SB;
-      end
-    end
-    SAB: begin
-      next_state = SAB;
-    end
-    default: next_state = IDLE;
-  endcase
+// Define the next state logic
+always @(*) begin
+    case(cur_state)
+        IDLE: begin
+            if(a & b) next_state = SAB;
+            else if(a) next_state = SA;
+            else if(b) next_state = SB;
+            else next_state = IDLE;
+        end
+        SA: begin
+            if(b) next_state = SAB;
+            else next_state = SA;
+        end
+        SB: begin
+            if(a) next_state = SAB;
+            else next_state = SB;
+        end
+        SAB: next_state = SAB;
+    endcase
 end
 
-// Output assignment
+// Define the output logic
 assign z = (cur_state == SAB);
 
 endmodule
-
-This Verilog module defines a state machine that checks for the inputs a and b to be 1, regardless of their arrival order. The output z is set to 1 when a and b are both 1 in any order.

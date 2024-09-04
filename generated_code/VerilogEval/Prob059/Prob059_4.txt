@@ -1,0 +1,32 @@
+Certainly! Below is a simple implementation of the `TopModule` in Verilog. This module connects its input ports to its output ports according to the specified behavior.
+
+```verilog
+module TopModule (
+    input  wire a,  // Input port 'a'
+    input  wire b,  // Input port 'b'
+    input  wire c,  // Input port 'c'
+    output wire w,  // Output port 'w' (connected to 'a')
+    output wire x,  // Output port 'x' (connected to 'b')
+    output wire y,  // Output port 'y' (connected to 'b')
+    output wire z   // Output port 'z' (connected to 'c')
+);
+
+// Assignments to connect inputs to outputs
+assign w = a;  // Connect input 'a' to output 'w'
+assign x = b;  // Connect input 'b' to output 'x'
+assign y = b;  // Connect input 'b' to output 'y'
+assign z = c;  // Connect input 'c' to output 'z'
+
+endmodule
+```
+
+### Explanation:
+- **Input Ports**: Three one-bit inputs `a`, `b`, and `c`.
+- **Output Ports**: Four one-bit outputs `w`, `x`, `y`, and `z`.
+- **Assignments**:
+  - `w` is directly assigned to `a`.
+  - `x` and `y` are both assigned to `b`.
+  - `z` is assigned to `c`.
+
+### Simulation:
+To test this module, you would typically write a testbench to provide stimulus to the inputs and observe the outputs. Let me know if you need assistance with that or if you have any other requests!

@@ -1,0 +1,36 @@
+As a professional RTL designer, I would implement the TopModule as described below:
+
+```verilog
+module TopModule (
+    input clk,
+    input resetn,
+    input [1:0] byteena,
+    input [15:0] d,
+    output reg [15:0] q
+);
+
+reg [15:0] registers;
+
+always @(posedge clk or negedge resetn) begin
+    if (~resetn) begin
+        registers <= 16'b0;
+    end else begin
+        if (byteena[0]) begin
+            registers[7:0] <= byteena[0] ? d[7:0] : registers[7:0];
+        end
+        if (byteena[1]) begin
+            registers[15:8] <= byteena[1] ? d[15:8] : registers[15:8];
+        end
+    end
+end
+
+assign q = registers;
+
+endmodule
+```
+
+In this implementation, the module TopModule contains 16 D flip-flops to store the data values. The byte-enable inputs byteena control which bytes of the 16 registers should be modified on a given clock cycle. The resetn signal is used for synchronous, active-low reset of all registers.
+
+The input data d is split into upper and lower bytes based on byteena[1] and byteena[0] values, and the corresponding parts of the registers are updated accordingly. The q output simply reflects the current state of the registers.
+
+This implementation ensures that only the selected bytes are modified based on the byte-enable inputs and that the reset functionality is implemented properly.

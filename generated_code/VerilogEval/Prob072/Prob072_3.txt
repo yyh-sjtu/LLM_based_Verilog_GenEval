@@ -1,0 +1,57 @@
+Certainly! Below is an example of a Verilog implementation for the `TopModule` as described in your request. This module will control the heating and cooling system based on the mode and temperature input signals.
+
+```verilog
+module TopModule (
+    input  mode,        // Thermostat mode: 1 for heating, 0 for cooling
+    input  too_cold,    // Signal indicating it's too cold
+    input  too_hot,     // Signal indicating it's too hot
+    input  fan_on,      // User request for fan to be on
+    output reg heater,   // Heater control output
+    output reg aircon,   // Air conditioner control output
+    output reg fan       // Fan control output
+);
+
+always @(*) begin
+    // Default outputs
+    heater = 0;
+    aircon = 0;
+    fan = 0;
+
+    // Control logic for the thermostat
+    if (fan_on) begin
+        // If requested by the user, turn on the fan
+        fan = 1;
+    end else begin
+        // Control based on mode
+        if (mode) begin
+            // Heating mode
+            if (too_cold) begin
+                heater = 1;   // Turn on the heater
+                fan = 1;      // Turn on the fan
+            end
+        end else begin
+            // Cooling mode
+            if (too_hot) begin
+                aircon = 1;   // Turn on the air conditioner
+                fan = 1;      // Turn on the fan
+            end
+        end
+    end
+end
+
+endmodule
+```
+
+### Explanation:
+1. **Inputs and Outputs**:
+   - The module has four inputs: `mode`, `too_cold`, `too_hot`, and `fan_on`.
+   - There are three output control signals: `heater`, `aircon`, and `fan`.
+
+2. **Control Logic**:
+   - The outputs are defaulted to `0` at the start of every evaluation in the `always` block.
+   - If the user requests the fan to be on (`fan_on`), the fan is activated regardless of the other conditions.
+   - In heating mode (`mode = 1`), if it’s too cold (`too_cold = 1`), the heater is turned on and the fan is also turned on.
+   - In cooling mode (`mode = 0`), if it’s too hot (`too_hot = 1`), the air conditioner is activated, and similarly, the fan is turned on.
+
+### Usage:
+This module can be instantiated in another design to control the heater, air conditioning, and fan based on the specified conditions. It implements a simple state-based decision-making process for climate control in a home or building.

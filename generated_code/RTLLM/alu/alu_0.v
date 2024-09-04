@@ -1,4 +1,3 @@
-
 module alu (
     input [31:0] a,
     input [31:0] b,
@@ -41,30 +40,26 @@ always @(*) begin
         OR: res = a | b;
         XOR: res = a ^ b;
         NOR: res = ~(a | b);
-        SLT: begin
-            res = (a < b) ? 32'h00000001 : 32'h00000000;
-        end
-        SLTU: begin
-            res = (a < b) ? 32'h00000001 : 32'h00000000;
-        end
+        SLT: res = (a < b) ? 1 : 0;
+        SLTU: res = (a < b) ? 1 : 0;
         SLL: res = a << b[4:0];
         SRL: res = a >> b[4:0];
-        SRA: res = a >>> b[4:0];
-        SLLV: res = a << b[4:0];
-        SRLV: res = a >> b[4:0];
-        SRAV: res = a >>> b[4:0];
-        LUI: res = {a[31:16], 16'h0000};
-        default: res = 32'bz;
+        SRA: res = $signed(a) >>> b[4:0];
+        SLLV: res = a << (b & 31);
+        SRLV: res = a >> (b & 31);
+        SRAV: res = $signed(a) >>> (b & 31);
+        LUI: res = {a[15:0], 16'b0};
+        default: res = 32'hzzzz_zzzz_zzzz_zzzz_zzzz_zzzz_zzzz_zzzz;
     endcase
+    
+    zero = (res == 0) ? 1 : 0;
+    carry = (res < a) ? 1 : 0;
+    negative = (res[31] == 1) ? 1 : 0;
+    overflow = (res[31] != a[31] && a[31] == b[31]) ? 1 : 0;
+    flag = (aluc == SLT || aluc == SLTU) ? 1 : 1'bz;
 end
-
-assign zero = (res == 32'h00000000) ? 1'b1 : 1'b0;
-assign carry = (res[32]) ? 1'b1 : 1'b0;
-assign negative = (res[31]) ? 1'b1 : 1'b0;
-assign overflow = 1'b0; // Assuming no overflow detection for simplicity
-
-assign flag = (aluc == SLT || aluc == SLTU) ? 1'b1 : 1'bz;
 
 assign r = res;
 
 endmodule
+

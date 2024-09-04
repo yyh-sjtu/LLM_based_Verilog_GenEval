@@ -1,0 +1,53 @@
+Certainly! Below is the RTL code for the `TopModule` that implements an 8-bit shift register and uses 3 input lines (A, B, C) to read from the shift register based on the corresponding 3-bit address. The code is written in Verilog:
+
+```verilog
+module TopModule (
+    input        clk,      // Clock input
+    input        enable,   // Enable input
+    input        S,        // Shift in input
+    input        A,        // Address input A
+    input        B,        // Address input B
+    input        C,        // Address input C
+    output reg   Z         // Output Z
+);
+
+    // 8-bit shift register using D flip-flops
+    reg [7:0] Q; // 8-bit register
+
+    // 3 to 8 decoder for address select
+    wire [2:0] addr;
+    assign addr = {C, B, A}; // Combine A, B, C into a 3-bit address
+
+    // Shift register logic
+    always @(posedge clk) begin
+        if (enable) begin
+            Q <= {S, Q[7:1]}; // Shift left and insert S at MSB
+        end
+    end
+
+    // Multiplexer logic to select Z based on address
+    always @(*) begin
+        case (addr)
+            3'b000: Z = Q[0]; // ABC = 000 selects Q[0]
+            3'b001: Z = Q[1]; // ABC = 001 selects Q[1]
+            3'b010: Z = Q[2]; // ABC = 010 selects Q[2]
+            3'b011: Z = Q[3]; // ABC = 011 selects Q[3]
+            3'b100: Z = Q[4]; // ABC = 100 selects Q[4]
+            3'b101: Z = Q[5]; // ABC = 101 selects Q[5]
+            3'b110: Z = Q[6]; // ABC = 110 selects Q[6]
+            3'b111: Z = Q[7]; // ABC = 111 selects Q[7]
+            default: Z = 0;   // Default case
+        endcase
+    end
+
+endmodule
+```
+
+### Explanation:
+1. **Shift Register**: The shift register is implemented using an 8-bit register `Q`. On the positive edge of `clk`, if `enable` is high, the register shifts left by taking the input `S` and placing it at the Most Significant Bit (MSB), while moving the contents of `Q` to the right.
+
+2. **Addressing Mechanism**: The address is extracted from the inputs A, B, C where C is the most significant bit and A is the least significant bit (thus `{C, B, A}`). This forms a 3-bit binary value from 0 to 7.
+
+3. **Output Logic**: A combinatorial always block selects the output `Z` based on the value of the address created from A, B, and C. Each address corresponds to a different bit in the shift register `Q`.
+
+This design supports a synchronous shift operation while allowing random access reads from the stored bits in the shift register.

@@ -1,0 +1,47 @@
+Certainly! Here's a SystemVerilog implementation of the `TopModule` with the specified interface, including 8 D flip-flops that reset to the value `0x34` on an active high synchronous reset:
+
+```systemverilog
+module TopModule (
+    input logic clk,
+    input logic reset,
+    input logic [7:0] d,
+    output logic [7:0] q
+);
+
+    // Internal storage for the flip-flops
+    logic [7:0] ff;
+
+    // Always block for D flip-flops triggered by negative edge
+    always_ff @(negedge clk or posedge reset) begin
+        if (reset) begin
+            ff <= 8'h34; // Reset to 0x34 on active high reset
+        end else begin
+            ff <= d; // Capture input on the negative edge of clk
+        end
+    end
+    
+    // Assigning the output
+    assign q = ff;
+
+endmodule
+```
+
+### Explanation:
+
+1. **Module Interface**:
+   - The module `TopModule` has inputs `clk`, `reset`, and `d` (8 bits), and an output `q` (8 bits).
+
+2. **D Flip-Flops**:
+   - The internal signal `ff` is a 8-bit wide register used to store the values of the flip-flops.
+   - The `always_ff` block is used to model the behavior of the D flip-flops, triggered on the negative edge of `clk` and the positive edge of `reset`.
+
+3. **Reset Logic**:
+   - If `reset` is high, all flip-flops are set to `0x34`. This is implemented inside the `if (reset)` condition.
+  
+4. **Data Capture**:
+   - If `reset` is low, the flip-flops capture the input `d` when there is a negative edge of `clk`.
+
+5. **Output Assignment**:
+   - The output `q` is continuously assigned the value of `ff`, reflecting the current state of the flip-flops.
+
+This design meets the specified requirements and properly implements a synchronous reset feature for the D flip-flops, along with capturing the input data on the appropriate clock edge.

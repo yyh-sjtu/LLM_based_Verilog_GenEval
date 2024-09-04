@@ -1,0 +1,68 @@
+To implement the TopModule with the specified state machine, we will design the next state logic for the state variable `y[1]` based on the state transitions described. The output `Y1` corresponds to the second bit of the state code (i.e., `y[1]`).
+
+### State Encoding
+We can represent the states as follows:
+- `A`: 3'b000 (y = 0)
+- `B`: 3'b001 (y = 1)
+- `C`: 3'b010 (y = 2)
+- `D`: 3'b011 (y = 3)
+- `E`: 3'b100 (y = 4)
+- `F`: 3'b101 (y = 5)
+
+### State Transitions
+Based on the provided transitions:
+- A (0) --0--> B
+- A (0) --1--> A
+- B (0) --0--> C
+- B (0) --1--> D
+- C (0) --0--> E
+- C (0) --1--> D
+- D (0) --0--> F
+- D (0) --1--> A
+- E (1) --0--> E
+- E (1) --1--> D
+- F (1) --0--> C
+- F (1) --1--> D
+
+### Implementation
+The output bit `Y1` corresponds to the value of `y[1]`. From the state transitions, we observe that:
+- From states `A`, `B`, `C`, and `D`, `Y1` can be `0`
+- From states `E` and `F`, `Y1` can be `1`
+
+### Next State Logic for `y[1]`
+We can summarize `y[1]` based on current state and input `w`:
+- When in state A (y = 0): `Y1 = 0`
+- When in state B (y = 1): If `w = 0`, next state → C (y[1] = 0). If `w = 1`, next state → D (y[1] = 1).
+- When in state C (y = 2): If `w = 0`, next state → E (y[1] = 1). If `w = 1`, next state → D (y[1] = 1).
+- When in state D (y = 3): If `w = 0`, next state → F (y[1] = 1). If `w = 1`, next state → A (y[1] = 0).
+- When in state E (y = 4): `Y1 = 1` (remains in E if w=0).
+- When in state F (y = 5): If `w = 0`, next state → C (y[1] = 0). If `w = 1`, next state → D (y[1] = 1).
+
+From this logic, we can derive a simple expression for `Y1` based on the states and transitions.
+
+### Verilog Code
+Below is the Verilog code for the `TopModule` implementing the above logic:
+
+```verilog
+module TopModule(
+    input [2:0] y, // current state
+    input w,       // input signal
+    output Y1      // output
+);
+
+// Determine the next state logic for y[1]
+assign Y1 = (y == 3'b100) || (y == 3'b101) || // State E or F -> Y1 = 1
+            ((y == 3'b001) && w) ||         // State B with w = 1 -> Y1 = 1
+            ((y == 3'b010) && (w)) ||       // State C with w = 1 -> Y1 = 1
+            ((y == 3'b011) && w);           // State D with w = 1 -> Y1 = 1
+// All other cases, Y1 = 0
+
+endmodule
+```
+
+### Explanation
+- `Y1` is computed using a combination of equality checks and logical operations to determine when it should output a high value based on the current state and the input signal `w`.
+- For states E and F (`y = 100` and `y = 101`), `Y1` is set to `1`.
+- The states B, C, and D require checking the value of `w` to determine the output for `Y1`.
+
+This will ensure the specified functionality of the state machine is achieved.

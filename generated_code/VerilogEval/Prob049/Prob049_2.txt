@@ -1,0 +1,22 @@
+Sure, here is the RTL code for the TopModule implementing a D flip flop with a positive edge triggered clock and an asynchronous reset:
+
+```verilog
+module TopModule (
+    input clk,
+    input ar,
+    input d,
+    output reg q
+);
+
+always @(posedge clk or posedge ar) begin
+    if (ar) begin
+        q <= 1'b0; // Asynchronous reset
+    end else begin
+        q <= d; // D flip flop
+    end
+end
+
+endmodule
+```
+
+This code defines a module named TopModule with the specified interface. It contains a D flip flop that is triggered on the positive edge of the clock signal. The asynchronous reset signal "ar" is used to reset the flip flop to 0 when triggered. The output q represents the output of the flip flop.

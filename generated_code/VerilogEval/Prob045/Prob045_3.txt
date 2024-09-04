@@ -1,0 +1,27 @@
+Sure, here is an RTL description of the TopModule module implementing the functionality you described:
+
+```verilog
+module TopModule (
+    input clk,
+    input [7:0] in,
+    input [7:0] anyedge,
+    output reg [7:0] out
+);
+
+reg [7:0] prev_in;
+
+always @(posedge clk) begin
+    for (int i = 0; i < 8; i = i + 1) begin
+        if (prev_in[i] == 1'b0 && in[i] == 1'b1) begin
+            out[i] <= 1'b1;
+        end else begin
+            out[i] <= 1'b0;
+        end
+    end
+    prev_in <= in;
+end
+
+endmodule
+```
+
+This module will detect any edge transition in the input signal on a per-bit basis and set the corresponding output bit to 1 on the cycle following a 0 to 1 transition. The module uses a register `prev_in` to store the previous value of the input signal to compare against the current input values. The output signal `out` is updated accordingly for each bit.

@@ -1,5 +1,5 @@
 
-module multi_16bit (
+module multi_16bit(
     input clk,
     input rst_n,
     input start,
@@ -9,41 +9,46 @@ module multi_16bit (
     output reg done
 );
 
-reg [3:0] i;
-reg [31:0] areg, breg, yout_r;
+reg [4:0] i;
+reg [15:0] areg, breg;
+reg [31:0] yout_r;
 reg done_r;
 
 always @(posedge clk or negedge rst_n) begin
     if (~rst_n) begin
-        i <= 4'b0000;
+        i <= 0;
     end else begin
-        if (start && i < 4'b1000) begin
-            i <= i + 4'b0001;
+        if (start && (i < 17)) begin
+            i <= i + 1;
         end else if (!start) begin
-            i <= 4'b0000;
+            i <= 0;
         end
     end
+end
 
+always @(posedge clk or negedge rst_n) begin
     if (~rst_n) begin
-        done_r <= 1'b0;
+        done_r <= 0;
     end else begin
-        if (i == 4'b1000) begin
-            done_r <= 1'b1;
-        end else if (i == 4'b1001) begin
-            done_r <= 1'b0;
+        if (i == 16) begin
+            done_r <= 1;
+        end else if (i == 17) begin
+            done_r <= 0;
         end
     end
+end
 
+always @(posedge clk or negedge rst_n) begin
     if (~rst_n) begin
-        areg <= 32'b0;
-        breg <= 32'b0;
-        yout_r <= 32'b0;
+        areg <= 0;
+        breg <= 0;
+        yout_r <= 0;
     end else begin
         if (start) begin
-            if (i == 4'b0000) begin
-                areg <= {16'd0, ain};
-                breg <= {16'd0, bin};
-            end else begin
+            if (i == 0) begin
+                areg <= ain;
+                breg <= bin;
+            end else if (i > 0 && i < 17) begin
                 if (areg[i-1] == 1) begin
                     yout_r <= yout_r + (breg << (i-1));
                 end

@@ -1,30 +1,32 @@
 
-module dual_port_RAM #(parameter DEPTH = 16, WIDTH = 8)(
-    input wclk,
-    input wenc,
-    input [$clog2(DEPTH)-1:0] waddr,
-    input [WIDTH-1:0] wdata,
-    input rclk,
-    input renc,
-    input [$clog2(DEPTH)-1:0] raddr,
+module dual_port_RAM #(parameter DEPTH = 16, parameter WIDTH = 8)
+(
+    input wclk, 
+    input wenc, 
+    input [$clog2(DEPTH)-1:0] waddr, 
+    input [WIDTH-1:0] wdata, 
+    input rclk, 
+    input renc, 
+    input [$clog2(DEPTH)-1:0] raddr, 
     output reg [WIDTH-1:0] rdata
 );
-    
     reg [WIDTH-1:0] RAM_MEM [0:DEPTH-1];
     
-    always @(posedge wclk) begin
+    always @(posedge wclk)
+    begin
         if(wenc)
             RAM_MEM[waddr] <= wdata;
     end
     
-    always @(posedge rclk) begin
+    always @(posedge rclk)
+    begin
         if(renc)
             rdata <= RAM_MEM[raddr];
     end
-    
 endmodule
 
-module asyn_fifo #(parameter WIDTH = 8, DEPTH = 16)(
+module asyn_fifo #(parameter WIDTH = 8, parameter DEPTH = 16)
+(
     input wclk,
     input rclk,
     input wrstn,
@@ -37,70 +39,60 @@ module asyn_fifo #(parameter WIDTH = 8, DEPTH = 16)(
     output reg [WIDTH-1:0] rdata
 );
     
+    reg [$clog2(DEPTH)-1:0] waddr_bin;
+    reg [$clog2(DEPTH)-1:0] raddr_bin;
     reg [$clog2(DEPTH)-1:0] wptr;
     reg [$clog2(DEPTH)-1:0] rptr;
     reg [$clog2(DEPTH)-1:0] wptr_buff;
     reg [$clog2(DEPTH)-1:0] rptr_buff;
     
-    wire [WIDTH-1:0] rdata_tmp;
+    reg [$clog2(DEPTH)-1:0] rptr_syn;
     
-    dual_port_RAM #(DEPTH, WIDTH) RAM (
+    always @ (posedge wclk)
+    begin
+        if(wrstn == 1'b0)
+            wptr <= 0;
+        else if(winc == 1'b1)
+            wptr <= wptr + 1;
+    end
+    
+    always @ (posedge rclk)
+    begin
+        if(rrstn == 1'b0)
+            rptr <= 0;
+        else if(rinc == 1'b1)
+            rptr <= rptr + 1;
+    end
+    
+    always @ (wptr or wclk)
+        waddr_bin <= wptr ^ (wptr >> 1);
+    
+    always @ (rptr or rclk)
+        raddr_bin <= rptr ^ (rptr >> 1);
+    
+    always @ (wptr_buff, rptr)
+        wfull <= (wptr == ~rptr[($clog2(DEPTH)-1)]) && (wptr != rptr);
+    
+    always @ (wptr, rptr)
+        rempty <= (rptr == wptr);
+    
+    always @ (posedge wclk)
+        wptr_buff <= wptr;
+    
+    always @ (posedge rclk)
+        rptr_buff <= rptr;
+    
+    assign rptr_syn = rptr_buff;
+    
+    dual_port_RAM #(.DEPTH(DEPTH), .WIDTH(WIDTH)) RAM_inst
+    (
         .wclk(wclk),
-        .wenc(~wrstn),
-        .waddr(wptr),
+        .wenc(1'b1),
+        .waddr(waddr_bin),
         .wdata(wdata),
         .rclk(rclk),
-        .renc(rrstn),
-        .raddr(rptr),
-        .rdata(rdata_tmp)
+        .renc(1'b1),
+        .raddr(raddr_bin),
+        .rdata(rdata)
     );
-    
-    // Gray code conversion for write pointer
-    assign wptr[0] = wptr_buff[0] ^ winc;
-    generate
-        genvar i;
-        for(i = 1; i < $clog2(DEPTH); i = i + 1) begin
-            assign wptr[i] = wptr_buff[i-1] ^ wptr_buff[i] ^ winc;
-        end
-    endgenerate
-    
-    // Gray code conversion for read pointer
-    assign rptr[0] = rptr_buff[0] ^ rinc;
-    generate
-        genvar j;
-        for(j = 1; j < $clog2(DEPTH); j = j + 1) begin
-            assign rptr[j] = rptr_buff[j-1] ^ rptr_buff[j] ^ rinc;
-        end
-    endgenerate
-    
-    // Synchronize write and read pointers
-    always @(posedge wclk or negedge wrstn) begin
-        if(~wrstn)
-            wptr_buff <= 0;
-        else
-            wptr_buff <= wptr;
-    end
-    
-    always @(posedge rclk or negedge rrstn) begin
-        if(~rrstn)
-            rptr_buff <= 0;
-        else
-            rptr_buff <= rptr;
-    end
-    
-    // Full and empty signals
-    always @(*) begin
-        if(wptr == {~rptr[$clog2(DEPTH)-1], rptr[$clog2(DEPTH)-2:0]})
-            wfull = 1;
-        else
-            wfull = 0;
-        
-        if(wptr == rptr)
-            rempty = 1;
-        else
-            rempty = 0;
-    end
-    
-    assign rdata = rempty ? rdata_tmp : rdata;
-    
 endmodule

@@ -1,0 +1,34 @@
+Certainly! Below is a Verilog implementation of the `TopModule` that mimics the functionality of the 7420 chip, which contains two 4-input NAND gates. The module takes 8 input bits (p1a, p1b, p1c, p1d for the first gate, and p2a, p2b, p2c, p2d for the second gate) and produces 2 output bits (p1y and p2y) as the outputs of the NAND gates.
+
+Here is the Verilog code for the `TopModule`:
+
+```verilog
+module TopModule (
+    input  wire p1a,
+    input  wire p1b,
+    input  wire p1c,
+    input  wire p1d,
+    input  wire p2a,
+    input  wire p2b,
+    input  wire p2c,
+    input  wire p2d,
+    output wire p1y,
+    output wire p2y
+);
+
+    // First 4-input NAND gate
+    assign p1y = ~(p1a & p1b & p1c & p1d);
+
+    // Second 4-input NAND gate
+    assign p2y = ~(p2a & p2b & p2c & p2d);
+
+endmodule
+```
+
+### Explanation:
+1. **Module Definition**: The top-level module is named `TopModule` and has its ports defined.
+2. **NAND Gate Implementations**: 
+   - For the first NAND gate, `p1y` is computed by taking the logical AND of inputs `p1a`, `p1b`, `p1c`, and `p1d`, and then inverting the result using the bitwise NOT operator (`~`).
+   - Similarly, the second NAND gate's output `p2y` is obtained by ANDing `p2a`, `p2b`, `p2c`, and `p2d`, followed by negation.
+   
+This straightforward implementation leverages Verilog's assign statements to model combinational logic using the NAND operation, ensuring the module behaves as expected based on the truth table of a 4-input NAND gate.

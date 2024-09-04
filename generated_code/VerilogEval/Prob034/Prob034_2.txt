@@ -1,0 +1,23 @@
+Sure, here is a Verilog implementation of the TopModule with the specified interface and 8 D flip-flops triggered by the positive edge of the clock:
+
+```verilog
+module TopModule (
+    input clk,
+    input [7:0] d,
+    output reg [7:0] q
+);
+
+reg [7:0] q_next;
+
+always @(posedge clk) begin
+    q <= q_next;
+end
+
+always @* begin
+    q_next = d;
+end
+
+endmodule
+```
+
+This module includes 8 D flip-flops triggered by the positive edge of the clock signal. The input data is stored in the `q_next` register and then transferred to the output `q` register on the next clock edge.

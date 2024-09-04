@@ -1,0 +1,27 @@
+Here is a possible implementation of the TopModule in Verilog:
+
+```verilog
+module TopModule (
+    input clk,
+    input reset,
+    output reg [31:0] q
+);
+
+reg [31:0] lfsr;
+
+always @(posedge clk) begin
+    if (reset) begin
+        lfsr <= 32'h1;
+    end else begin
+        lfsr <= {lfsr[30:0], lfsr[31] ^ lfsr[21] ^ lfsr[1] ^ lfsr[0]};
+    end
+end
+
+assign q = lfsr;
+
+endmodule
+```
+
+This code defines a module TopModule with a 32-bit register lfsr representing the Galois LFSR. The reset signal is used to reset the output q to 1. On each positive clock edge, the lfsr value is updated based on the taps at bit positions 32, 22, 2, and 1 using XOR gates. The output q is driven by the lfsr register. 
+
+This implementation follows the required specifications for a 32-bit Galois LFSR with taps at specific bit positions and synchronous reset functionality.

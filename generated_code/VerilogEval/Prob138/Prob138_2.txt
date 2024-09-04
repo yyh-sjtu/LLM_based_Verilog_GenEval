@@ -1,0 +1,103 @@
+Certainly! Below is a Verilog implementation of the `TopModule` based on the specified state machine. I'll define the states as local parameters, implement the state transition logic in one `always` block, and handle the flip-flops for state storage in another. Lastly, I'll define the output `z` as specified.
+
+### Verilog Code
+
+```verilog
+module TopModule (
+    input  wire clk,
+    input  wire reset,
+    input  wire w,
+    output reg  z
+);
+
+    // State encoding
+    typedef enum reg [2:0] {
+        A = 3'b000,
+        B = 3'b001,
+        C = 3'b010,
+        D = 3'b011,
+        E = 3'b100,
+        F = 3'b101
+    } state_t;
+
+    state_t current_state, next_state;
+
+    // State transition logic
+    always @* begin
+        case (current_state)
+            A: begin
+                if (w) 
+                    next_state = B;
+                else 
+                    next_state = A;
+            end
+
+            B: begin
+                if (w) 
+                    next_state = C;
+                else 
+                    next_state = D;
+            end
+
+            C: begin
+                if (w) 
+                    next_state = E;
+                else 
+                    next_state = D;
+            end
+
+            D: begin
+                if (w) 
+                    next_state = F;
+                else 
+                    next_state = A;
+            end
+
+            E: begin
+                if (w) 
+                    next_state = E;
+                else 
+                    next_state = D;
+            end
+
+            F: begin
+                if (w) 
+                    next_state = C;
+                else 
+                    next_state = D;
+            end
+
+            default: next_state = A; // Safety net
+        endcase
+    end
+
+    // State flip-flops
+    always @(posedge clk or posedge reset) begin
+        if (reset) 
+            current_state <= A;
+        else 
+            current_state <= next_state;
+    end
+
+    // Output logic for z
+    always @* begin
+        case (current_state)
+            E: z = 1'b1;
+            default: z = 1'b0;
+        endcase
+    end
+
+endmodule
+```
+
+### Explanation:
+
+1. **State Encoding**: I've defined the states A, B, C, D, E, and F using a 3-bit enumerated type. This way, each state corresponds to a unique bit pattern.
+
+2. **State Transition Logic**: A combinational `always @*` block determines the `next_state` based on the current state and the input `w`.
+
+3. **State Flip-Flops**: The synchronous state update is handled in a separate `always` block that triggers on the rising edge of the clock or when the reset signal is high. When reset is asserted, the state resets to A.
+
+4. **Output Logic**: The output `z` is assigned based on the current state. It is high only when the state is E.
+
+This Verilog code should give you an FSM functionality as described in your requirements. You can simulate or synthesize this design based on your needs.

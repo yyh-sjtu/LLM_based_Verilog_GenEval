@@ -1,33 +1,37 @@
-// 8-bit full adder
-module full_adder_8bit (
-    input a,
-    input b,
+```verilog
+module adder_8bit (
+    input [7:0] a,
+    input [7:0] b,
     input Cin,
-    output y,
+    output [7:0] y,
     output Co
-);
+    );
 
-assign {Co, y} = a + b + Cin;
+    assign y = a + b + Cin;
+    assign Co = (a[7] & b[7]) | (a[7] & Cin) | (b[7] & Cin);
 
 endmodule
 
-// 16-bit full adder
 module adder_16bit (
     input [15:0] a,
     input [15:0] b,
     input Cin,
     output [15:0] y,
     output Co
-);
+    );
 
-wire [15:0] Co_intermediate;
-wire [15:0] y_intermediate;
-
-full_adder_8bit fa1 (.a(a[0]), .b(b[0]), .Cin(Cin), .y(y_intermediate[0]), .Co(Co_intermediate[0]));
-full_adder_8bit fa2 (.a(a[1]), .b(b[1]), .Cin(Co_intermediate[0]), .y(y_intermediate[1]), .Co(Co_intermediate[1]));
-// Continue instantiating full adders for the remaining bits
-
-assign Co = Co_intermediate[15];
-assign y = y_intermediate;
+    genvar i;
+    generate
+        for (i = 0; i < 2; i = i + 1) begin
+            adder_8bit adder_inst(
+                .a(a[8*i +: 8]),
+                .b(b[8*i +: 8]),
+                .Cin((i == 0) ? Cin : adder_inst.Co),
+                .y(y[8*i +: 8]),
+                .Co((i == 1) ? adder_inst.Co : Co)
+            );
+        end
+    endgenerate
 
 endmodule
+```

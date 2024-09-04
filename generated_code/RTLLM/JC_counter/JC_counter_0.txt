@@ -7,14 +7,14 @@ module JC_counter (
 
 always @(posedge clk or negedge rst_n) begin
     if (~rst_n) begin
-        Q <= 64'b0; // Reset the counter
-    end else begin
+        Q <= 64'b0; // Reset condition
+    end
+    else begin
         if (Q[0] == 1'b0) begin
-            // Increment operation
-            Q <= {Q[63], Q[63:1]};
-        end else begin
-            // Decrement operation
-            Q <= {Q[63], ~Q[63:1]};
+            Q <= {Q[63:1], 1'b1}; // Increment
+        end
+        else begin
+            Q <= {Q[63:1], 1'b0}; // Decrement
         end
     end
 end

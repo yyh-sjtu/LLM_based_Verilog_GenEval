@@ -1,0 +1,22 @@
+Here is the Verilog code for the TopModule module implementation:
+
+```verilog
+module TopModule (
+    input a,
+    input b,
+    input c,
+    output w,
+    output x,
+    output y,
+    output z
+);
+
+assign w = a;
+assign x = b;
+assign y = b;
+assign z = c;
+
+endmodule
+```
+
+This module simply assigns the values of the input ports to the corresponding output ports as specified in the description. The Verilog code should be syntactically correct and achieve the desired behavior of the TopModule module. Let me know if you need any further assistance or modifications.

@@ -1,0 +1,37 @@
+Certainly! Below is an RTL implementation of your `TopModule` in Verilog. This module detects positive edges of each bit in an 8-bit input vector and produces an output vector that indicates which bits changed from `0` to `1`.
+
+### Verilog Code for TopModule
+```verilog
+module TopModule (
+    input wire clk,
+    input wire [7:0] in,
+    output reg [7:0] pedge
+);
+
+    // Reg to hold the previous state of the input
+    reg [7:0] in_prev;
+
+    always @(posedge clk) begin
+        // Detect positive edges
+        pedge <= (in & ~in_prev);  // Set pedge to 1 where in is 1 and in_prev is 0
+        in_prev <= in;              // Update previous input state
+    end
+
+endmodule
+```
+
+### Explanation
+1. **Inputs and Outputs**: We have a clock (`clk`), an 8-bit input (`in`), and an 8-bit output (`pedge`).
+  
+2. **Previous State Storage**: We use a register `in_prev` to store the state of `in` from the previous clock cycle.
+
+3. **Always Block**: Upon the rising edge of the clock, we:
+   - Set `pedge` to detect where positive edges occur in the input:
+     - The expression `(in & ~in_prev)` checks each bit, setting it in `pedge` to `1` if the current input bit is `1`, but the previous input bit was `0`.
+   - Update `in_prev` to the current value of `in` to prepare for the next clock cycle.
+
+### Usage
+This module can be instantiated in a larger design. It will correctly output `pedge` as an 8-bit vector, indicating the positive transitions of the corresponding bits in the `in` vector.
+
+### Simulation and Testing
+Make sure to test this module in simulation using a suitable testbench. The testbench can provide a clock signal and various test vectors for the input to verify the correctness of edge detection.

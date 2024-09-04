@@ -1,0 +1,21 @@
+Here is the RTL code for the TopModule with the specified interface and functionality:
+
+```verilog
+module TopModule (
+    input clk,
+    input [7:0] d,
+    output reg [7:0] q
+);
+
+reg [7:0] q_reg;
+
+always @(posedge clk) begin
+    q_reg <= d;
+end
+
+assign q = q_reg;
+
+endmodule
+```
+
+In this code, the 8-bit input signal `d` is directly loaded into the 8-bit output signal `q` on the positive edge of the clock signal `clk`. The output `q` is registered in the `q_reg` register, which updates its value synchronously with the clock signal.

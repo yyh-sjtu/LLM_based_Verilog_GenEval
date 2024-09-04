@@ -1,0 +1,84 @@
+To implement the module `TopModule` based on the provided state machine and the one-hot encoding for the states, we need to create a structure that captures the behavior of the given state transitions, specifically focusing on two outputs `Y2` and `Y4` based on states represented by `y[1]` and `y[3]`.
+
+### Breakdown of the States and Transitions
+
+The states in one-hot encoding are:
+
+- State A: `y = 000001` (1)
+- State B: `y = 000010` (2)
+- State C: `y = 000100` (4)
+- State D: `y = 001000` (8)
+- State E: `y = 010000` (16)
+- State F: `y = 100000` (32)
+
+Now let's analyze the state transitions based on the input `w`:
+
+1. **From State A (y[0])**
+   - On `w = 0` -> Stay in A
+   - On `w = 1` -> Transition to B
+   
+2. **From State B (y[1])**
+   - On `w = 0` -> Transition to C
+   - On `w = 1` -> Transition to D
+
+3. **From State C (y[2])**
+   - On `w = 0` -> Transition to E
+   - On `w = 1` -> Transition to D
+
+4. **From State D (y[3])**
+   - On `w = 0` -> Transition to F
+   - On `w = 1` -> Transition to A
+
+5. **From State E (y[4])**
+   - On `w = 0` -> Stay in E
+   - On `w = 1` -> Transition to D
+
+6. **From State F (y[5])**
+   - On `w = 0` -> Transition to C
+   - On `w = 1` -> Transition to D
+
+### Logic Equations for Y2 and Y4
+
+We will derive the output logic equations for `Y2` and `Y4` based on the specified states (which correspond to `y[1]` and `y[3]`):
+
+- **Y2 (y[1] for state B):**
+  - `Y2` is `1` when in state B.
+  - So: 
+    \[
+    Y2 = y[1]
+    \]
+
+- **Y4 (y[3] for state D):**
+  - `Y4` is `1` when in state D.
+  - So: 
+    \[
+    Y4 = y[3]
+    \]
+
+### Verilog Implementation of `TopModule`
+
+Here’s how you could implement the `TopModule` in Verilog:
+
+```verilog
+module TopModule (
+    input  [6:0] y, // 7-bit input for states
+    input  w,
+    output Y1, // Not specified in the problem but must be defined
+    output Y2,
+    output Y3  // Not specified in the problem but must be defined
+);
+
+    // Assign Y2 and Y4 based on the state encoding
+    assign Y2 = y[1]; // Is 1 when in state B
+    assign Y4 = y[3]; // Is 1 when in state D
+
+   // Note: Y1 and Y3 are not defined in the conditions provided.
+   // You may need to define logic based on requirements or context.
+
+endmodule
+```
+
+### Summary
+- `Y2` reflects whether the system is in state B.
+- `Y4` reflects whether the system is in state D.
+- The module implements the logic assignation directly from the state encoding with `y[1]` and `y[3]`.

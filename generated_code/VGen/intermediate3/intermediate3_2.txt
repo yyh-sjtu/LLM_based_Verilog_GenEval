@@ -1,32 +1,20 @@
-First, we need to define the feedback logic for the LFSR with taps at bit positions 5 and 3. The feedback value can be calculated by XORing certain bits of the current state.
+// Implementing the feedback logic using XOR gates
+assign feedback_value = r_reg[4] ^ r_reg[2] ^ r_reg[0]; 
 
-```verilog
-assign feedback_value = r_reg[4] ^ r_reg[2] ^ r_reg[1]; 
-```
-
-Next, we need to implement the logic to update the LFSR state on each clock cycle.
-
-```verilog
-always @(posedge clk or posedge reset) begin
-    if (reset) begin
-        r_reg <= 5'b1; // Initial state
-    end else begin
-        r_reg <= r_next;
-    end
+// Creating the next state logic for the LFSR
+always @(posedge clk or posedge reset)
+begin
+	if(reset)
+		begin
+			r_reg <= 5'b1;
+		end
+	else
+		begin
+			r_reg <= {r_reg[3:0], feedback_value};
+		end
 end
-```
 
-Now, we need to calculate the next state based on the current state and feedback value.
-
-```verilog
-assign r_next[4:1] = r_reg[3:0]; // Shift right
-assign r_next[0] = feedback_value; // XOR feedback value
-```
-
-Finally, we need to assign the output as the current state of the LFSR.
-
-```verilog
+// Assigning the current state to the output
 assign q = r_reg;
-```
 
-With these implementations, the Verilog module for a 5-bit maximal-length Galois LFSR with taps at bit positions 5 and 3 is complete.
+endmodule

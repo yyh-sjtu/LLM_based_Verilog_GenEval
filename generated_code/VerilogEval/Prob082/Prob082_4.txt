@@ -1,0 +1,37 @@
+Certainly! Below is a Verilog code implementation for a `TopModule` that meets your specified requirements for a 32-bit Galois Linear Feedback Shift Register (LFSR):
+
+```verilog
+module TopModule (
+    input  wire clk,
+    input  wire reset,
+    output reg [31:0] q
+);
+
+    // Galois LFSR feedback taps: 32, 22, 2, and 1
+    wire feedback = q[31] ^ q[21] ^ q[1] ^ q[0]; // Tap positions 32, 22, 2, and 1
+
+    always @(posedge clk) begin
+        if (reset) begin
+            q <= 32'h1; // Reset output to 32'h1 on synchronous reset
+        end else begin
+            // Shift register operation
+            q <= {q[30:0], feedback}; // Shift the register and insert feedback bit
+        end
+    end
+
+endmodule
+```
+
+### Explanation:
+1. **Module Declaration**: The module is defined with the required input and output ports.
+2. **Feedback Calculation**: The `feedback` wire computes the next input for the MSB (most significant bit) of the register. The feedback is the XOR of the bits at the specified tap positions.
+3. **Always Block**: 
+   - It is triggered on the rising edge of the `clk`.
+   - If the `reset` signal is high, `q` is set to `32'h1`. This is a synchronous reset, meaning it only takes effect on the clock edge.
+   - If not resetting, the contents of `q` are shifted left by 1 bit, and the feedback value is inserted into the least significant bit (LSB).
+  
+### Usage:
+- This LFSR can be instantiated in a higher-level module or tested with a testbench that drives the `clk` and `reset` signals. 
+- The operation of the LFSR will yield a sequence of bits based on the initial state defined by the reset signal.
+
+Feel free to ask if you need additional modifications or explanations!

@@ -1,4 +1,33 @@
-// Define the truth table values
-assign f = (!x3 & !x2 & !x1) | (!x3 & !x2 & x1) | (!x3 & x2 & !x1) | (!x3 & x2 & x1) | (x3 & !x2 & !x1) | (x3 & !x2 & x1) | (x3 & x2 & !x1) | (x3 & x2 & x1); 
+Certainly! Based on the provided truth table, you can simplify this logic circuit to generate the desired output `f`. 
+
+From the table, the output `f` is `1` for the following input combinations:
+- `000` (x3=0, x2=0, x1=0)
+- `001` (x3=0, x2=0, x1=1)
+- `011` (x3=0, x2=1, x1=1)
+- `110` (x3=1, x2=1, x1=0)
+
+We can observe that the function can be expressed by the logical expression:
+\[ f = \overline{x3} \cdot \overline{x2} + \overline{x3} \cdot x1 + \overline{x3} \cdot x2 \cdot x1 + x3 \cdot x2 \cdot \overline{x1} \]
+
+Using this expression, here’s how we can implement the Verilog module:
+
+```verilog
+module truthtable (
+    input x3,
+    input x2,
+    input x1,
+    output f
+);
+
+    assign f = (~x3 & ~x2) | (~x3 & x1) | (~x3 & x2 & x1) | (x3 & x2 & ~x1);
 
 endmodule
+```
+
+### Explanation:
+- **`~`** represents the NOT operation, which inverts the signal.
+- **`&`** is the AND operation.
+- **`|`** is the OR operation.
+- The expression combines the necessary conditions for `f` to be true (1) based on the provided truth table.
+
+This module can be synthesized to provide the correct results for all specified inputs. You can also test this design using a testbench to ensure it operates as expected.

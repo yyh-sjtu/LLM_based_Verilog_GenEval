@@ -1,44 +1,50 @@
-module CLA_16bit (A, B, Ci, S, Co);
-  input [15:0] A, B;
-  input Ci;
-  output [15:0] S;
-  output Co;
+module clacell(A, B, G, P, C0, C1);
 
-  wire [15:0] p, g;
-  wire [16:0] C;
-  
-  assign p = A ^ B;
-  assign g = A & B;
-  
-  assign C[0] = g[0] | (p[0] & Ci);
-  
-  genvar i;
-  generate
-    for (i = 0; i < 15; i = i + 1) begin : gen
-      assign C[i+1] = g[i+1] | (p[i+1] & C[i]);
-    end
-  endgenerate
+input A, B, G;
+output P, C0, C1;
 
-  assign S = A ^ B ^ Ci;
-  assign Co = g[15] | (p[15] & C[15]);
+assign P = A ^ B;
+assign C0 = A & B;
+assign C1 = A | B;
+
 endmodule
 
-module adder_32bit (
-  input [32:1] A,
-  input [32:1] B,
-  output [32:1] S,
-  output C32
-);
+module clacascade(A, B, Cin, P, G, Cout);
 
-  wire [31:0] Cin, Cout;
-  wire [31:0] S_temp;
-  wire C_out;
+input A, B, Cin;
+output P, G, Cout;
 
-  CLA_16bit CLA[1:2](.A(A[16:1]), .B(B[16:1]), .Ci(Cin[0]), .S(S_temp[16:1]), .Co(Cout[0]);
-  CLA_16bit CLA[3:4](.A(S_temp[16:1]), .B(B[32:17]), .Ci(Cout[0]), .S(S[32:17]), .Co(Cout[1]);
+wire P1, G1, C0, C1;
 
-  assign Cin = 'b0;
-  assign C32 = Cout[1];
-  
+clacell cell1(A, B, G1, P1, C0, C1);
+clacell cell2(Cin, P1, G, P, C1, Cout);
+
+endmodule
+
+module adder_32bit(A, B, S, C32);
+
+input [31:0] A, B;
+output [31:0] S;
+output C32;
+
+wire [15:0] P, G, Cin_next;
+wire [31:0] C;
+
+clacascade cascades[15:0](A[0], B[0], 1'b0, P[0], G[0], C[0]);
+
+assign Cin_next[0] = G[0] | (P[0] & 1'b0);
+
+genvar i;
+
+generate
+    for (i = 1; i < 16; i = i+1) begin
+        clacascade cascades[A[i], B[i], Cin_next[i-1], P[i], G[i], C[i]];
+        assign Cin_next[i] = G[i] | (P[i] & Cin_next[i-1]);
+    end
+endgenerate
+
+assign S = {C[31], C[15:0]};
+assign C32 = Cin_next[15];
+
 endmodule
 

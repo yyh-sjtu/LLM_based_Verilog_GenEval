@@ -1,0 +1,22 @@
+Sure, here is the RTL code for the TopModule implementing a 2-to-1 multiplexer:
+
+```verilog
+module TopModule (
+    input a,
+    input b,
+    input sel,
+    output reg out
+);
+
+always @(*) begin
+    if (sel == 0) begin
+        out = a;
+    end else begin
+        out = b;
+    end
+end
+
+endmodule
+```
+
+This code defines a module named TopModule with input ports a, b, and sel, and output port out. Inside the always block, the multiplexer logic is implemented based on the value of sel. If sel is 0, the output out is set to input a. If sel is 1, the output out is set to input b.

@@ -1,0 +1,23 @@
+Certainly! Below is a simple implementation of a 2-to-1 multiplexer in Verilog, which matches the interface you've specified:
+
+```verilog
+module TopModule (
+    input wire a,    // Input a
+    input wire b,    // Input b
+    input wire sel,  // Selector input
+    output wire out  // Output
+);
+
+    // Mux functionality implementation
+    assign out = (sel) ? b : a;
+
+endmodule
+```
+
+### Explanation:
+- **Inputs**: `a` and `b` are the data inputs, while `sel` is the select signal that determines which input to pass to the output.
+- **Output**: `out` is the output of the multiplexer.
+- **Behavior**: The `assign` statement uses a conditional (ternary) operator. If `sel` is low (`0`), it outputs `a`, and if `sel` is high (`1`), it outputs `b`.
+
+### Usage
+Make sure to instantiate this `TopModule` in your testbench or higher-level design as needed. You can simulate and verify its functionality to ensure it behaves as expected.

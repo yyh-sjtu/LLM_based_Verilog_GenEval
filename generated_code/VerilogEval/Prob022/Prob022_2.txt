@@ -1,0 +1,25 @@
+Certainly! Below is a Verilog implementation of a simple 2-to-1 multiplexer as per your requirements. The module named `TopModule` takes three inputs (`a`, `b`, and `sel`) and outputs a single bit `out`.
+
+```verilog
+module TopModule (
+    input wire a,      // Input a
+    input wire b,      // Input b
+    input wire sel,    // Select signal
+    output wire out    // Output
+);
+
+    assign out = (sel == 1'b0) ? a : b;  // Multiplexer logic
+
+endmodule
+```
+
+### Explanation:
+- **Inputs and Outputs:** The module has three input ports (`a`, `b`, and `sel`) and one output port (`out`).
+- **Select Logic:** The `assign` statement implements the multiplexer logic:
+  - If `sel` is `0`, `out` is assigned the value of `a`.
+  - If `sel` is `1`, `out` is assigned the value of `b`.
+  
+### Usage:
+Instantiate the `TopModule` in your testbench or another module, connect the inputs, and observe the output to ensure it behaves as a 2-to-1 multiplexer.
+
+Feel free to ask if you need testbenches or want more details!

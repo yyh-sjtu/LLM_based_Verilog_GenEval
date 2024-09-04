@@ -1,0 +1,84 @@
+To design the `TopModule`, we need to implement the state transition logic and output logic for the specified state machine using one-hot encoding. Below is the Verilog code for the `TopModule` based on your specification.
+
+Each state is represented by a one-hot encoding where `state[i]` is `1` if the machine is in state `Si`, and `0` otherwise. 
+
+### State Transition
+1. **S0:** stays in S0 on `in=0` or transitions to S1 on `in=1`.
+2. **S1:** transitions to S0 on `in=0` or S2 on `in=1`.
+3. **S2:** transitions to S0 on `in=0` or S3 on `in=1`.
+4. **S3:** transitions to S0 on `in=0` or S4 on `in=1`.
+5. **S4:** transitions to S0 on `in=0` or S5 on `in=1`.
+6. **S5:** transitions to S8 on `in=0` or S6 on `in=1`.
+7. **S6:** transitions to S9 on `in=0` or S7 on `in=1`.
+8. **S7:** stays in S7 on `in=1` or transitions to S0 on `in=0`.
+9. **S8:** transitions to S0 on `in=0` or S1 on `in=1`.
+10. **S9:** transitions to S0 on `in=0` or S1 on `in=1`.
+
+### Outputs
+1. **S7:** outputs (0, 1)
+2. **S8:** outputs (1, 0)
+3. **S9:** outputs (1, 1)
+4. All other states output (0, 0).
+
+### Verilog Code
+
+```verilog
+module TopModule(
+    input wire in,
+    input wire [9:0] state,
+    output reg [9:0] next_state,
+    output reg out1,
+    output reg out2
+);
+
+always @(*) begin
+    // Default values
+    next_state = 10'b0000000000;
+    out1 = 0;
+    out2 = 0;
+
+    if (state[0]) begin // S0
+        next_state[0] = (in == 0) ? 1 : 0;
+        next_state[1] = (in == 1) ? 1 : 0;
+    end else if (state[1]) begin // S1
+        next_state[0] = (in == 0) ? 1 : 0;
+        next_state[2] = (in == 1) ? 1 : 0;
+    end else if (state[2]) begin // S2
+        next_state[0] = (in == 0) ? 1 : 0;
+        next_state[3] = (in == 1) ? 1 : 0;
+    end else if (state[3]) begin // S3
+        next_state[0] = (in == 0) ? 1 : 0;
+        next_state[4] = (in == 1) ? 1 : 0;
+    end else if (state[4]) begin // S4
+        next_state[0] = (in == 0) ? 1 : 0;
+        next_state[5] = (in == 1) ? 1 : 0;
+    end else if (state[5]) begin // S5
+        next_state[8] = (in == 0) ? 1 : 0;
+        next_state[6] = (in == 1) ? 1 : 0;
+    end else if (state[6]) begin // S6
+        next_state[9] = (in == 0) ? 1 : 0;
+        next_state[7] = (in == 1) ? 1 : 0;
+    end else if (state[7]) begin // S7
+        next_state[0] = (in == 0) ? 1 : 0;
+        next_state[7] = (in == 1) ? 1 : 0;
+        out2 = 1; // S7 output
+    end else if (state[8]) begin // S8
+        next_state[0] = (in == 0) ? 1 : 0;
+        next_state[1] = (in == 1) ? 1 : 0;
+        out1 = 1; // S8 output
+    end else if (state[9]) begin // S9
+        next_state[0] = (in == 0) ? 1 : 0;
+        next_state[1] = (in == 1) ? 1 : 0;
+        out1 = 1; // S9 output
+        out2 = 1; // S9 output
+    end
+end
+
+endmodule
+```
+
+### Notes
+- The module uses combinatorial logic to determine the next state and output based on the current state and input.
+- The `always @(*)` block is sensitive to any changes in the state or input.
+- The outputs are assigned zeros by default and only changed when the conditions for specific states are met.
+- Ensure to connect this module to a flip-flop/register-based state holding mechanism to create a full state machine as states are not retained in this module.

@@ -1,0 +1,9 @@
+As a professional RTL designer, I would start by creating a Verilog module named TopModule with the specified interface. I would define the input and output ports according to the given requirements.
+
+Next, I would implement the Rule 90 cellular automaton logic inside the TopModule. I would create a 512-cell array q[511:0], where each cell represents a bit. The logic would calculate the next state of each cell based on the XOR operation of its two neighbors (left and right). I would handle the boundary conditions where q[-1] and q[512] are both zero.
+
+To ensure that the system advances by one time step each clock cycle, I would trigger all sequential logic on the positive edge of the clk signal. When the load input is high, I would load the initial state of the system with the values from the data input.
+
+I would write testbenches to verify the functionality of the TopModule, including tests for different input patterns and edge cases. I would also perform simulations and timing analysis to ensure the design meets the required performance and functionality criteria.
+
+Overall, I would approach this task with a focus on efficient design, clear documentation, and rigorous testing to deliver a reliable and functional implementation of the Rule 90 cellular automaton in Verilog.

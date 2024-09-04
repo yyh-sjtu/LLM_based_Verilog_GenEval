@@ -1,3 +1,4 @@
+
 module alu (
     input [31:0] a,
     input [31:0] b,
@@ -29,16 +30,9 @@ parameter SRAV = 6'b000111;
 parameter LUI = 6'b001111;
 
 reg [31:0] res;
-reg [4:0] shamt;
+reg [4:0] shift_amount;
 
-assign flag = (aluc == SLT || aluc == SLTU) ? 1'b1 : 1'bz;
-assign zero = (res == 32'b0) ? 1'b1 : 1'b0;
-assign negative = res[31];
-assign carry = 1'b0;
-assign overflow = 1'b0;
-
-always @(*)
-begin
+always @* begin
     case(aluc)
         ADD: res = a + b;
         ADDU: res = a + b;
@@ -48,20 +42,25 @@ begin
         OR: res = a | b;
         XOR: res = a ^ b;
         NOR: res = ~(a | b);
-        SLT: res = (a < b) ? 32'b1 : 32'b0;
-        SLTU: res = (a < b) ? 32'b1 : 32'b0;
-        SLL: res = a << b[4:0];
-        SRL: res = a >>> b[4:0];
-        SRA: res = a >> b[4:0];
-        SLLV: res = a << b;
-        SRLV: res = a >>> b;
-        SRAV: res = a >> b;
-        LUI: res = {a[31:16], 16'b0};
-        default: res = 32'bz;
+        SLT: res = (a < b) ? 1 : 0;
+        SLTU: res = (a < b) ? 1 : 0;
+        SLL: res = a << (b[4:0]);
+        SRL: res = a >> (b[4:0]);
+        SRA: res = a >>> (b[4:0]);
+        SLLV: res = a << (b & 0x1F);
+        SRLV: res = a >> (b & 0x1F);
+        SRAV: res = a >>> (b & 0x1F);
+        LUI: res = {16'b0, a[15:0]};
+        default: res = 32'bzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzz;
     endcase
 end
+
+assign zero = (res == 32'b0) ? 1 : 0;
+assign carry = (res[31] == 1) ? 1 : 0;
+assign negative = (res[31] == 1) ? 1 : 0;
+assign overflow = 1'b0;
+assign flag = (aluc == SLT || aluc == SLTU) ? 1 : 1'bz;
 
 assign r = res;
 
 endmodule
-

@@ -1,18 +1,22 @@
 module ram #( parameter ADDR_WIDTH=6, parameter DATA_WIDTH=8) (
-    input [DATA_WIDTH-1:0] data,
-    input [ADDR_WIDTH-1:0] addr,
-    input we,
-    input clk,
-    output reg [DATA_WIDTH-1:0] q
+  input [DATA_WIDTH-1:0] data,
+  input [ADDR_WIDTH-1:0] addr,
+  input we, clk,
+  output reg [DATA_WIDTH-1:0] q
 );
-
-    reg [DATA_WIDTH-1:0] ram[0:(2**ADDR_WIDTH)-1];
-
-    always @(posedge clk) begin
-        if(we) begin
-            ram[addr] <= data;
-        end
-        q <= ram[addr];
+  
+  reg [DATA_WIDTH-1:0] ram[2**ADDR_WIDTH-1:0];
+  
+  always @(posedge clk) begin
+    if (we) begin
+      ram[addr] <= data;
     end
-
+    q <= ram[addr];
+  end
 endmodule
+
+This module defines a RAM (Random Access Memory) with the specified data width and address width. It takes in data, address, write enable (we), and clock inputs, and outputs the data at the specified address through the 'q' output.
+
+Inside the always block, we check if the write enable signal is active. If it is, we write the data input to the RAM at the specified address. Then, we always output the data stored at the address specified by 'addr' to the output 'q'.
+
+This Verilog code should implement a basic RAM module suitable for your requirements.

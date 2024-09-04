@@ -1,0 +1,33 @@
+Sure! Below is a simple implementation of a Verilog module named `TopModule` that computes the even parity bit for an 8-bit input byte.
+
+### Verilog Code for TopModule
+
+```verilog
+module TopModule (
+    input  [7:0] in,    // 8-bit input
+    output parity       // 1-bit parity output
+);
+
+    // Compute the parity bit using XOR
+    assign parity = ~(in[0] ^ in[1] ^ in[2] ^ in[3] ^ in[4] ^ in[5] ^ in[6] ^ in[7]);
+    
+endmodule
+```
+
+### Explanation
+1. **Input and Output Port Declaration**:
+   - The module has one input port `in`, which is an 8-bit vector.
+   - The output port `parity` is a single bit.
+
+2. **Parity Calculation**:
+   - The parity bit is calculated using the XOR operation on all 8 bits of the input. 
+   - The output is negated to achieve even parity: if the number of 1s in the input is odd, the parity bit will be `1` to make it even; if the number of 1s is even, the parity bit will be `0`.
+
+3. **Instantiation**:
+   - This module can be instantiated in a larger design or tested using a testbench to ensure it operates correctly.
+
+### Additional Considerations
+- Make sure to simulate the module with various 8-bit inputs to validate the parity output.
+- Adjust the parity calculation if you'd like to implement odd parity instead (simply remove the negation).
+
+Feel free to ask if you need further adjustments or additional features!

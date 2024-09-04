@@ -1,0 +1,21 @@
+To implement the TopModule with the given interface for a 2-1 multiplexer, the Verilog code would look like:
+
+```verilog
+module TopModule (
+  input [99:0] a,
+  input [99:0] b,
+  input sel,
+  output [99:0] out
+);
+
+  always @* begin
+    if (sel == 0)
+      out = a;
+    else
+      out = b;
+  end
+
+endmodule
+```
+
+This Verilog module will select either input `a` or input `b` based on the value of the `sel` signal, and assign the selected input to the output signal `out`. The output `out` will be 100 bits wide, same as the inputs `a` and `b`.

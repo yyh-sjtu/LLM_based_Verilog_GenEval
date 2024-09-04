@@ -1,0 +1,51 @@
+Certainly! Below is a Verilog implementation of the `TopModule` based on your requirements. The module includes a 4-bit shift register that shifts the input data and decrements the counter based on the control signals:
+
+```verilog
+module TopModule (
+    input  wire clk,
+    input  wire shift_ena,
+    input  wire count_ena,
+    input  wire data,
+    output reg  [3:0] q
+);
+
+// Initial value for the register
+initial begin
+    q = 4'b0000;
+end
+
+always @(posedge clk) begin
+    // Shift operation
+    if (shift_ena) begin
+        q <= {data, q[3:1]}; // Shift in data at the MSB and shift others to the right
+    end
+    // Count down operation
+    else if (count_ena) begin
+        if (q > 4'b0000) begin
+            q <= q - 1; // Decrement unless it's already 0
+        end
+    end
+end
+
+endmodule
+```
+
+### Explanation:
+1. **Inputs and Outputs**:
+   - `clk`: The clock signal for synchronizing the operation.
+   - `shift_ena`: When high, shifts the incoming data into the most-significant-bit of the register.
+   - `count_ena`: When high, decrements the current value of the shift register.
+   - `data`: The bit that gets shifted in to the register.
+   - `q`: The 4-bit output representing the value held in the shift register.
+
+2. **Register Initialization**:
+   - The `q` register is initialized to `0000` on the first simulation time step.
+
+3. **Always Block**:
+   - The `always @(posedge clk)` block is triggered at the positive edge of the clock.
+   - Inside the block, it first checks if `shift_ena` is high. If so, it shifts `data` into the most significant bit and keeps the remaining bits (3:1) unchanged.
+   - If `shift_ena` is not high, it checks if `count_ena` is high. If so, it decrements the value of `q` unless `q` is already at `0`.
+
+### Notes:
+- The design assumes that `shift_ena` and `count_ena` are never high at the same time, and thus behavior in that case is not defined per your specifications.
+- Ensure proper testing of this module to verify its behavior in all desired scenarios.

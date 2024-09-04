@@ -1,0 +1,103 @@
+
+module TopModule (
+    input  clk,
+    input  resetn,
+    input  x,
+    input  y,
+    output reg f,
+    output reg g
+);
+
+    // State encoding
+    typedef enum reg [2:0] {
+        STATE_A, // Reset state
+        STATE_B, // f = 1 state
+        STATE_C, // Monitor x for 1, 0, 1
+        STATE_D, // g = 1 and monitor y
+        STATE_E  // g = 0 and monitor y
+    } state_t;
+
+    state_t current_state, next_state;
+    
+    // x state detection
+    reg [2:0] x_count;
+
+    // Sequential logic for state transitions
+    always @(posedge clk or negedge resetn) begin
+        if (!resetn) begin
+            current_state <= STATE_A;
+            f <= 0;
+            g <= 0;
+            x_count <= 0;
+        end else begin
+            current_state <= next_state;
+        end
+    end
+
+    // Combinational logic for next state logic
+    always @(*) begin
+        // Default values
+        next_state = current_state; // Default to stay in the same state
+        f = 0; // Default to f = 0
+        g = 0; // Default to g = 0
+
+        case (current_state)
+            STATE_A: begin
+                // If reset is asserted, stay in state A
+                if (!resetn)
+                    next_state = STATE_A;
+                else
+                    next_state = STATE_B;
+            end
+            
+            STATE_B: begin
+                f = 1; // Set f = 1 for one clock cycle
+                next_state = STATE_C;
+                x_count = 0; // Reset x_count
+            end
+            
+            STATE_C: begin
+                // Monitor x for the pattern: 1, 0, 1
+                if (x_count == 2) begin
+                    // Transition to state D to set g = 1
+                    next_state = STATE_D;
+                end else if (x == 1) begin
+                    // Count the occurrences of 1
+                    x_count = x_count + 1;
+                end else if (x == 0 && x_count == 1) begin
+                    // After a 1, if we see a 0, count it
+                    x_count = x_count + 1;
+                end else begin
+                    x_count = x_count; // Stay the same if no change
+                end
+            end
+                
+            STATE_D: begin
+                g = 1; // Set g = 1
+                if (y) begin
+                    // g remains 1 if y is detected as 1
+                    next_state = STATE_D;
+                end else begin
+                    // else wait for y for up to 2 clock cycles
+                    next_state = STATE_E; 
+                end
+            end
+            
+            STATE_E: begin
+                // Monitor y for two cycles
+                g = 0; // Set g = 0
+                
+                if (!y) begin
+                    next_state = STATE_E; // Stay in this state
+                end else if (y) begin
+                    next_state = STATE_D; // If y is 1, go back to STATE_D
+                end
+            end
+            
+            default: begin
+                next_state = STATE_A; // Default to state A
+            end
+        endcase
+    end 
+
+endmodule

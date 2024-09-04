@@ -1,0 +1,14 @@
+Here is an RTL design implementation in Verilog for the TopModule with the specified interface:
+
+```verilog
+module TopModule (
+    input [7:0] in,
+    output [7:0] out
+);
+
+assign out = {in[7], in[6], in[5], in[4], in[3], in[2], in[1], in[0]};
+
+endmodule
+```
+
+This code snippet defines a module named TopModule that takes an 8-bit input in and outputs the reversed bit ordering to the out port. The assign statement reverses the order of the input bits and assigns them to the output port.

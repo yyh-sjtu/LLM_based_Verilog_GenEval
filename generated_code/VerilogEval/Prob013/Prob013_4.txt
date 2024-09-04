@@ -1,0 +1,21 @@
+Certainly! Below is a simple Verilog implementation for the module `TopModule` that represents a 2-input NOR gate. 
+
+```verilog
+module TopModule (
+    input  wire in1,  // First input
+    input  wire in2,  // Second input
+    output wire out   // Output
+);
+
+    // Implementing 2-input NOR gate
+    assign out = ~(in1 | in2);
+
+endmodule
+```
+
+### Explanation:
+- **Module Declaration**: The module is named `TopModule` and takes two 1-bit inputs, `in1` and `in2`, and produces one 1-bit output, `out`.
+- **Logical Operation**: The NOR operation is implemented using the expression `assign out = ~(in1 | in2);`. This expression indicates that `out` is high (`1`) only when both `in1` and `in2` are low (`0`).
+
+### Usage:
+You can instantiate this module in a testbench or other modules as needed, providing appropriate signals for `in1` and `in2` to observe the output `out`.

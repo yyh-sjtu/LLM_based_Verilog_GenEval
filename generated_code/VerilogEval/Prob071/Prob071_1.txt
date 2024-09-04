@@ -1,0 +1,38 @@
+To implement the `TopModule` as a priority encoder for an 8-bit input, you can write the RTL code in Verilog. Below is the Verilog code that implements the required functionality:
+
+```verilog
+module TopModule (
+    input  [7:0] in,   // 8-bit input
+    output reg [2:0] pos // 3-bit output
+);
+
+// Always block to describe the functionality
+always @* begin
+    // Default output to 3'b000 (zero)
+    pos = 3'b000; 
+    
+    // Check each bit from LSB to MSB
+    if (in[0]) pos = 3'd0;   // If bit 0 is high
+    else if (in[1]) pos = 3'd1; // If bit 1 is high
+    else if (in[2]) pos = 3'd2; // If bit 2 is high
+    else if (in[3]) pos = 3'd3; // If bit 3 is high
+    else if (in[4]) pos = 3'd4; // If bit 4 is high
+    else if (in[5]) pos = 3'd5; // If bit 5 is high
+    else if (in[6]) pos = 3'd6; // If bit 6 is high
+    else if (in[7]) pos = 3'd7; // If bit 7 is high
+end
+
+endmodule
+```
+
+### Explanation:
+
+1. **Module Definition**: The `TopModule` is defined with an 8-bit input `in` and a 3-bit output `pos`.
+
+2. **Always Block**: We use an `always @*` block, which is sensitive to any changes in input `in`. This indicates that we want to reevaluate the output `pos` whenever there is a change in `in`.
+
+3. **Default Output**: The output `pos` is initialized to `3'b000`, which corresponds to zero.
+
+4. **Priority Encoding Logic**: The code checks each bit of the input `in` from the least significant bit (LSB) to the most significant bit (MSB). The first (least significant) bit that is `1` will assign the corresponding value to `pos`. If none of the bits are high, it remains `3'b000`.
+
+This design correctly implements a priority encoder as specified. You can synthesize it using your preferred synthesis tool to create hardware or use it in a simulation environment to verify its functionality.

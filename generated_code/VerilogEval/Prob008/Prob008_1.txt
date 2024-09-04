@@ -1,0 +1,30 @@
+Certainly! Below is an example of a simple RTL design for a `TopModule` in Verilog that meets your requirements. The module has a single input port named `in` and a single output port named `out`, and it assigns the output port to the same value as the input port in a combinational manner.
+
+```verilog
+module TopModule (
+    input wire in,   // 1-bit input
+    output wire out  // 1-bit output
+);
+
+// Combinational assignment
+assign out = in;
+
+endmodule
+```
+
+### Explanation:
+1. **Module Declaration**:
+   - `module TopModule (...)`: This line declares the module with the name `TopModule`.
+   
+2. **Ports**:
+   - `input wire in`: Defines a 1-bit input port named `in`.
+   - `output wire out`: Defines a 1-bit output port named `out`.
+
+3. **Combinational Logic**:
+   - `assign out = in;`: This line assigns the value of `in` to `out`, establishing the combinational relationship. As soon as the value of `in` changes, `out` will also reflect that change immediately.
+
+4. **End Module**:
+   - `endmodule`: Indicates the end of the module definition.
+
+### Usage
+To use this module in a larger design, you would instantiate it within another module or testbench. Make sure to handle synthesizable logic, as this design is straightforward and efficient for hardware implementation.

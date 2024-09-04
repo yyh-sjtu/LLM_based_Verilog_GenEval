@@ -1,20 +1,34 @@
-module priority_encoder(
+Sure! A 3-bit priority encoder outputs the position of the highest-order "1" bit in the input. In this case, if multiple bits are high, the encoder should return the position of the highest-priority (highest-order) bit set to "1". 
+
+Here's an implementation of the requested `priority_encoder` module in Verilog:
+
+```verilog
+module priority_encoder( 
     input [2:0] in,
-    output reg [1:0] pos
+    output reg [1:0] pos 
 );
 
-always @(*) begin
-    case(in)
-        3'b000: pos = 2'b00;
-        3'b001: pos = 2'b00;
-        3'b010: pos = 2'b01;
-        3'b011: pos = 2'b01;
-        3'b100: pos = 2'b10;
-        3'b101: pos = 2'b10;
-        3'b110: pos = 2'b10;
-        3'b111: pos = 2'b11;
-        default: pos = 2'b00;
-    endcase
-end
+    always @* begin
+        casez (in)
+            3'b1??: pos = 2'b10;  // If the highest bit (2) is 1
+            3'b01?: pos = 2'b01;  // If the second bit (1) is 1
+            3'b00?: pos = 2'b00;  // If the lowest bit (0) is 1
+            default: pos = 2'bxx;  // If no bits are high
+        endcase
+    end
 
 endmodule
+```
+
+### Explanation:
+- The input `in` is a 3-bit vector.
+- The output `pos` is a 2-bit vector that indicates the position of the highest priority "1" bit.
+- The `always @*` block is used to implement combinational logic that updates `pos` based on the value of `in`.
+- The `casez` statement is used to simplify checking for high bits, allowing for "don't care" conditions represented by `?`. This helps in identifying which bits are high.
+- The encoding is as follows:
+  - `pos = 2'b10` for `in[2]` high (position 2)
+  - `pos = 2'b01` for `in[1]` high (position 1)
+  - `pos = 2'b00` for `in[0]` high (position 0)
+- If none of the bits are high, `pos` is set to `2'bxx`, representing an invalid state.
+
+This module can be instantiated in a larger design and will give the position of the highest set bit in the specified input vector.

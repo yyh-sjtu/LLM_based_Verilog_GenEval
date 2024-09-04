@@ -1,4 +1,4 @@
-module
+
 module advshift(
     input clk,
     input load,
@@ -8,25 +8,38 @@ module advshift(
     output reg [63:0] q
 );
 
-// Define internal registers for shift operations
-reg [63:0] temp;
+reg [63:0] shift_data;
 
-// Always block triggered by positive edge of clock
 always @(posedge clk) begin
     if (load) begin
-        // Load data when load signal is high
-        q <= data;
-    end else if (ena) begin
-        // Perform shift operations based on amount selected
+        shift_data <= data;
+    end else begin
         case(amount)
-            2'b00: temp <= {q[62:0], 1'b0}; // Shift left by 1 bit
-            2'b01: temp <= {q[55:0], 8'b0}; // Shift left by 8 bits
-            2'b10: temp <= {1'b0, q[63:1]}; // Shift right by 1 bit
-            2'b11: temp <= {8'b0, q[63:8]}; // Shift right by 8 bits
+            2'b00: begin // shift left by 1 bit
+                shift_data <= {shift_data[62:0], 1'b0};
+            end
+            2'b01: begin // shift left by 8 bits
+                shift_data <= {shift_data[55:0], 8'b00000000};
+            end
+            2'b10: begin // shift right by 1 bit
+                shift_data <= {1'b0, shift_data[63:1]};
+            end
+            2'b11: begin // shift right by 8 bits
+                shift_data <= {8'b00000000, shift_data[63:8]};
+            end
+            default: begin
+                shift_data <= data;
+            end
         endcase
-        q <= temp;
+    end
+end
+
+always @(*) begin
+    if (ena) begin
+        q = shift_data;
+    end else begin
+        q = data;
     end
 end
 
 endmodule
-

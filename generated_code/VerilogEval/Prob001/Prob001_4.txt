@@ -1,0 +1,16 @@
+Certainly! Here is the RTL code for the TopModule that always outputs a LOW:
+
+```verilog
+module TopModule (
+    output reg zero
+);
+
+// Set the output 'zero' to always be LOW
+always @* begin
+    zero = 1'b0;
+end
+
+endmodule
+``` 
+
+This module will continuously output a LOW signal on the 'zero' output port. Let me know if you need any further assistance or modifications.

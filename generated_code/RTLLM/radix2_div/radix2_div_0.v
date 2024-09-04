@@ -1,5 +1,5 @@
 
-module radix2_div (
+module radix2_div(
     input clk,
     input rst,
     input sign,
@@ -10,39 +10,38 @@ module radix2_div (
     output reg [15:0] result
 );
 
-reg [7:0] SR; // Shift register
-reg [7:0] NEG_DIVISOR; // Negated absolute value of divisor
-reg [3:0] cnt; // Counter
-reg start_cnt; // Start counter
+reg [15:0] SR;
+reg [7:0] NEG_DIVISOR;
+reg [3:0] cnt;
+reg start_cnt;
 
 always @(posedge clk or posedge rst) begin
     if (rst) begin
-        SR <= 8'b0;
+        SR <= 16'b0;
         NEG_DIVISOR <= 8'b0;
         cnt <= 4'b0;
         start_cnt <= 1'b0;
         res_valid <= 1'b0;
     end else begin
         if (opn_valid && !res_valid) begin
-            SR <= dividend << 1;
-            NEG_DIVISOR <= -divisor;
-            cnt <= 4'b1;
+            SR <= {1'b0, dividend} << 1;
+            NEG_DIVISOR <= sign ? -divisor : divisor;
             start_cnt <= 1'b1;
         end
-        
         if (start_cnt) begin
             if (cnt == 4'b1000) begin
-                // Division complete
-                result[15:8] <= SR;
-                result[7:0] <= cnt > 3'b111 ? dividend : SR; // Quotient 
+                cnt <= 4'b0;
                 start_cnt <= 1'b0;
+                result <= {SR[15], SR[14:8]};
                 res_valid <= 1'b1;
             end else begin
                 cnt <= cnt + 1;
-                // Subtract NEG_DIVISOR
-                integer diff = SR - NEG_DIVISOR;
-                // Select result based on borrow
-                SR <= diff[7] ? {SR[6:0], 1'b0} : {SR[6:0], 1'b1};
+                if(SR[15]) begin
+                    SR <= {SR[14:0], 1'b0};
+                end else begin
+                    SR <= SR - {1'b0, NEG_DIVISOR}; // Perform subtraction
+                    SR <= SR << 1;
+                end
             end
         end
     end

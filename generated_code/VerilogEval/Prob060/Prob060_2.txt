@@ -1,0 +1,49 @@
+Certainly! Below is an implementation of the `TopModule` which adheres to the specifications you provided. The module implements a 4-bit shift register using four D flip-flops and has an active-low synchronous reset.
+
+### Verilog Code
+
+```verilog
+module TopModule (
+    input  wire clk,      // Clock input
+    input  wire resetn,   // Active-low reset
+    input  wire in,       // Input data
+    output wire out       // Output data
+);
+
+    // Internal register to hold the state of the shift register
+    reg [3:0] shift_reg;  // 4-bit shift register
+
+    // Shift register functionality
+    always @(posedge clk) begin
+        if (!resetn) begin
+            shift_reg <= 4'b0000;  // Reset shift register to 0
+        end else begin
+            // Shift the register left and insert the new input
+            shift_reg <= {shift_reg[2:0], in}; 
+        end
+    end
+
+    // Output the most significant bit of the shift register
+    assign out = shift_reg[3];
+
+endmodule
+```
+
+### Explanation:
+
+1. **Inputs and Outputs**:
+   - `clk`: Clock signal that triggers the D flip-flops.
+   - `resetn`: Active-low reset signal. When it is low, the shift register resets to `0000`.
+   - `in`: The input data bit that will be shifted into the register.
+   - `out`: The output which represents the most significant bit (MSB) of the shift register.
+
+2. **Shift Register Logic**:
+   - The `shift_reg` is a 4-bit register initialized to zero on reset.
+   - On every positive edge of the clock, the following occurs:
+     - If `resetn` is low (reset active), the register is cleared to `0000`.
+     - Otherwise, the current value of the shift register is shifted left by one bit, with the new input `in` being inserted into the least significant bit (LSB).
+
+3. **Output**:
+   - The `out` port is assigned to the most significant bit of the shift register, which is `shift_reg[3]`.
+
+This implementation should meet the specified design requirements. If you have further questions or need modifications, feel free to ask!

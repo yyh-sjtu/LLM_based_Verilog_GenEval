@@ -1,0 +1,17 @@
+Here is the Verilog code for the TopModule module:
+
+```verilog
+module TopModule (
+    input in,
+    output reg out
+);
+
+// Behave like a wire
+always @* begin
+    out = in;
+end
+
+endmodule
+```
+
+In this code, the TopModule module has an input port named 'in' and an output port named 'out'. The module behaves like a wire, meaning that the output 'out' will simply mirror the input 'in'. The 'always @*' block continuously assigns the value of 'in' to 'out', ensuring that it functions as a simple wire.

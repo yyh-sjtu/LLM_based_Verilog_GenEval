@@ -12,18 +12,19 @@ reg [3:0] cnt;
 
 always @(posedge clk or negedge rst_n) begin
     if (~rst_n) begin
-        cnt <= 4'b0;
-        dout_parallel <= 8'b0;
-        dout_valid <= 1'b0;
+        cnt <= 4'b0000;
+        dout_parallel <= 8'b00000000;
+        dout_valid <= 0;
     end else begin
         if (din_valid) begin
             if (cnt < 4'd7) begin
                 cnt <= cnt + 1;
-                dout_parallel <= {dout_parallel[6:0], din_serial};
+                dout_parallel[cnt] <= din_serial;
+                dout_valid <= 0;
             end else begin
-                cnt <= 4'b0;
-                dout_parallel <= {dout_parallel[6:0], din_serial};
-                dout_valid <= 1'b1;
+                cnt <= 4'b0000;
+                dout_parallel[cnt] <= din_serial;
+                dout_valid <= 1;
             end
         end
     end

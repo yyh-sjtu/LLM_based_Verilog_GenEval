@@ -1,21 +1,27 @@
-module left_rotate(
-  input clk,
-  input reset,
-  input [2:0] amount,
-  input [7:0] data,
-  input load,
-  output reg [7:0] out
+
+module left_rotate (
+    input clk,
+    input reset,
+    input [2:0] amount,
+    input [7:0] data,
+    input load,
+    output reg [7:0] out
 );
 
-  always @(posedge clk or posedge reset) begin
+reg [7:0] shift_reg;
+
+always @(posedge clk or posedge reset) begin
     if (reset) begin
-      out <= 0;
-    end else if (load) begin
-      out <= data;
+        shift_reg <= 8'h00;
     end else begin
-      out <= {data[amount - 1:0], data[7:amount]};
+        if (load) begin
+            shift_reg <= data;
+        end else begin
+            shift_reg <= {shift_reg[(7-amount):0], shift_reg[7:(8-amount)]};
+        end
     end
-  end
+end
+
+assign out = shift_reg;
 
 endmodule
-

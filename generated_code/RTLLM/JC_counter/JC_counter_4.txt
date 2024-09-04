@@ -1,21 +1,22 @@
 ```verilog
-module JC_counter (
-    input wire clk,
-    input wire rst_n,
+module JC_counter(
+    input clk,
+    input rst_n,
     output reg [63:0] Q
 );
 
 always @(posedge clk or negedge rst_n) begin
     if (~rst_n) begin
-        Q <= 64'h0000_0000_0000_0000;
+        Q <= 64'b0; // Reset condition
     end else begin
         if (Q[0] == 1'b0) begin
-            Q <= {Q[63:1], 1'b1};
+            Q <= {Q[63], Q[63:1]}; // Increment
         end else begin
-            Q <= {Q[63:1], 1'b0};
+            Q <= {Q[63], Q[63:1]}; // Decrement
         end
     end
 end
 
 endmodule
 ```
+This code implements a 64-bit Johnson counter with a synchronous operation using the clock signal (clk) and an active-low reset signal (rst_n) to initialize the counter. The output Q represents the current count value. The counter either increments or decrements based on the value of the least significant bit (Q[0]) on each clock cycle or reset condition.

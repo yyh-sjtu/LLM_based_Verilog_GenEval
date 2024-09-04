@@ -1,0 +1,15 @@
+Sure, here is the RTL code implementation of the TopModule module:
+
+```verilog
+module TopModule (
+    input [31:0] in,
+    output [31:0] out
+);
+
+// Implementing the byte reversal logic
+assign out = {in[7:0], in[15:8], in[23:16], in[31:24]};
+
+endmodule
+```
+
+This code takes a 32-bit input vector 'in' and reverses the byte order to generate the output vector 'out' using concatenation operations in Verilog. Feel free to reach out if you need any further assistance or modifications.

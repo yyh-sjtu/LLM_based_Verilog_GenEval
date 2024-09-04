@@ -1,0 +1,25 @@
+Sure, here is a RTL code implementation of the TopModule with the specified interface:
+
+```verilog
+module TopModule (
+    input clk,
+    input reset,
+    output reg [3:0] q
+);
+
+always @(posedge clk) begin
+    if (reset) begin
+        q <= 4'b0000;
+    end else begin
+        if (q == 4'b1001) begin
+            q <= 4'b0000;
+        end else begin
+            q <= q + 1;
+        end
+    end
+end
+
+endmodule
+```
+
+This code implements a decade counter that counts from 0 to 9 with a period of 10, and resets to 0 when the reset input is asserted. The counter increments on every positive edge of the clock signal. Let me know if you need any further modifications or have any additional requirements.

@@ -1,81 +1,49 @@
-module clacell(P,G,Cin,Sum,Co);
-    input P,G,Cin;
-    output Sum,Co;
-    wire t1,t2,t3,t4;
-    assign t1 = P & G;
-    assign t2 = P ^ G;
-    assign t3 = t2 & Cin;
-    assign Sum = t2 ^ Cin;
-    assign t4 = t1 | t3;
-    assign Co = t4;
-
-endmodule
-
-module clacarry(Cin, P, G, Co);
-    input Cin;
-    output [1:0]P,G;
-    output Co;
-    assign P = Cin;
-    assign G = Cin;
-    assign Co = Cin;
-
-endmodule
-
-module clalevel(P, G, Cin, Sum, Co);
-    input [3:0]P,G;
-    input Cin;
-    output [1:0]Sum;
-    output Co;
-    wire t1,t2,t3,t4;
-    assign t1 = P[0] & G[0];
-    assign t2 = P[1] & G[1];
-    assign t3 = t1 | (t2 & P[0]) | (G[1] & G[0]);
-    assign Sum[0] = P[0] ^ G[0] ^ Cin;
-    assign Sum[1] = P[1] ^ G[1] ^ t3;
-    assign t4 = t1 | (t2 & P[0]) | (G[1] & G[0]);
-    assign Co = (t1 & G[1]) | (t2 & G[1]) | (t1 & P[0]);
-
-endmodule
-
-module adder_32bit(
-    input [31:0]A,
-    input [31:0]B,
-    output [31:0]S,
+```verilog
+module adder_32bit (
+    input [31:0] A,
+    input [31:0] B,
+    output [31:0] S,
     output C32
 );
 
-    wire [4:0]pArray, gArray;
-    wire [1:0]sumArray2;
-    wire [4:0]coArray;
+wire [15:0] S0, S1;
+wire [16:0] G, P;
+wire [7:0] G0, G1, P0, P1;
+wire [8:0] G_propagate, G_generate, P_generate;
 
-    assign gArray[0] = 1'b0;
-    genvar i;
-    generate
-        for (i=1;i<=4;i=i+1) begin: generateCells
-            clacarry carry(
-                .Cin(coArray[i-1]),
-                .P(pArray[i]),
-                .G(gArray[i]),
-                .Co(coArray[i])
-            );
+CLA_16bit clablock0(
+    .A(A[15:0]),
+    .B(B[15:0]),
+    .S(S0),
+    .G(G0),
+    .P(P0)
+);
 
-            clacell cell(
-                .P(pArray[i]),
-                .G(gArray[i]),
-                .Cin(A[i]),
-                .Sum(S[i]),
-                .Co(sumArray2[0])
-            );
+CLA_16bit clablock1(
+    .A(A[31:16]),
+    .B(B[31:16]),
+    .S(S1),
+    .G(G1),
+    .P(P1)
+);
 
-            clalevel level(
-                .P({pArray[i-1], sumArray2[0]}),
-                .G({gArray[i-1], 1'b0}),
-                .Cin(coArray[i-1]),
-                .Sum(sumArray2),
-                .Co(coArray[i-1])
-            );         
-        end
-    endgenerate
+generate
+    assign G_propagate[7:0] = {G1[7] & P0[7], G1[6] & P0[6], G1[5] & P0[5], G1[4] & P0[4],
+                               G1[3] & P0[3], G1[2] & P0[2], G1[1] & P0[1], G1[0] & P0[0]};
+    
+    assign G_generate[7:0] = {G1[7] | (P1[7] & G0[7]), G1[6] | (P1[6] & G0[6]),
+                              G1[5] | (P1[5] & G0[5]), G1[4] | (P1[4] & G0[4]),
+                              G1[3] | (P1[3] & G0[3]), G1[2] | (P1[2] & G0[2]),
+                              G1[1] | (P1[1] & G0[1]), G1[0] | (P1[0] & G0[0])};
+    
+    assign P_generate = G1[7] | (P1[7] & G0[7]);
 
-    assign C32 = coArray[4];
+    assign C32 = G_generate[7] | (P_generate & G_propagate[7]);
+endgenerate
+
+assign S = {S1, S0};
+    
 endmodule
+```
+
+This code provides a 32-bit adder using the Carry-Lookahead Adder (CLA) architecture. The 32-bit adder is divided into two 16-bit CLA blocks, which are instantiated and connected together. The carry-out bit C32 is calculated based on the generate and propagate signals from each 16-bit block. The sum output S is concatenated from the outputs of the two 16-bit CLA blocks.

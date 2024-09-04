@@ -4,30 +4,40 @@ module multi_pipe_4bit (
     input rst_n,
     input [3:0] mul_a,
     input [3:0] mul_b,
-    output reg [7:0] mul_out
+    output [7:0] mul_out
 );
 
 parameter size = 4;
 
-reg [7:0] reg_partial[size-1:0];
+reg [7:0] partial_products [0:size-1];
+reg [7:0] mult_accumulator;
 
 always @(posedge clk or negedge rst_n) begin
     if (~rst_n) begin
-        for (int i = 0; i < size; i = i + 1) begin
-            reg_partial[i] <= 8'd0;
+        for (int i = 0; i < size; i++) begin
+            partial_products[i] <= 8'h0;
         end
-    end
-    else begin
-        for (int i = 0; i < size; i = i + 1) begin
+        mult_accumulator <= 8'h0;
+    end else begin
+        for (int i = 0; i < size; i++) begin
             if (mul_b[i] == 1) begin
-                reg_partial[i] <= {mul_a, 4'd0} << i;
+                partial_products[i] <= {mul_a, {size{1'b0}}} << i;
+            end else begin
+                partial_products[i] <= 8'h0;
             end
         end
-        
-        mul_out <= reg_partial[size-1];
-        for (int i = 0; i < size-1; i = i + 1) begin
-            mul_out <= mul_out + reg_partial[i];
+
+        for (int i = 0; i < size; i++) begin
+            mult_accumulator <= mult_accumulator + partial_products[i];
         end
+    end
+end
+
+always @(posedge clk or negedge rst_n) begin
+    if (~rst_n) begin
+        mul_out <= 8'h0;
+    end else begin
+        mul_out <= mult_accumulator;
     end
 end
 

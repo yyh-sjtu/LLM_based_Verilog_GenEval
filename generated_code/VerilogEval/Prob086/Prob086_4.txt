@@ -1,0 +1,27 @@
+Here is the verilog code for implementing the TopModule module with the specified interface and functionality:
+
+```verilog
+module TopModule (
+    input clk,
+    input reset,
+    output reg [4:0] q
+);
+
+reg [4:0] lfsr_state;
+
+always @(posedge clk) begin
+    if (reset) begin
+        lfsr_state <= 5'b1;
+    end else begin
+        lfsr_state <= {lfsr_state[3] ^ lfsr_state[4], lfsr_state[4:1]};
+    end
+end
+
+assign q = lfsr_state;
+
+endmodule
+```
+
+This code defines a TopModule module with a 5-bit maximal-length Galois LFSR that cycles through 31 states before repeating. The LFSR has taps at bit positions 5 and 3. The output q is assigned with the current state of the LFSR. The LFSR is reset to 1 on the positive edge of the clock when the reset signal is high.
+
+Please let me know if you need any further clarification or assistance.

@@ -1,0 +1,28 @@
+Here is an RTL design for the TopModule module implementation:
+
+```verilog
+module TopModule (
+    input clk,
+    input w,
+    input R,
+    input E,
+    input L,
+    output reg Q
+);
+
+reg Q_next;
+
+always @ (posedge clk) begin
+    if (E) begin
+        if (L) begin
+            Q <= R;
+        end else begin
+            Q <= w;
+        end
+    end
+end
+
+endmodule
+```
+
+In this design, the output Q will be updated based on the inputs E, R, L, and the previous stage input w on the rising edge of the clock. If the enable signal E is high, the module will either load the value R into Q if the load signal L is asserted, or otherwise pass the input w to Q. This design should be part of a larger shift register circuit where each stage operates sequentially.

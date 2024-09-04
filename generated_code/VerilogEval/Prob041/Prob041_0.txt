@@ -1,0 +1,34 @@
+Sure! Below is a Verilog implementation of the `TopModule` that includes 8 D flip-flops (DFFs) with an active high synchronous reset. Each DFF is triggered by the positive edge of the `clk` signal. When the `reset` signal is high, the outputs are set to zero; otherwise, the outputs will hold the value of the `d` input.
+
+```verilog
+module TopModule (
+    input  wire clk,     // Clock input
+    input  wire reset,   // Synchronous reset input
+    input  wire [7:0] d, // 8-bit data input
+    output reg [7:0] q   // 8-bit output
+);
+
+// Define a register for the output
+always @(posedge clk) begin
+    if (reset) begin
+        q <= 8'b00000000; // Set output to zero on reset
+    end else begin
+        q <= d; // Otherwise, set output to the input
+    end
+end
+
+endmodule
+```
+
+### Explanation:
+- **clk**: Clock signal input.
+- **reset**: Synchronous reset signal (active high); when high, all DFF outputs will be set to zero.
+- **d**: 8-bit input data signal that will be stored in the D flip-flops.
+- **q**: 8-bit output from the D flip-flops.
+
+### Behavioral Modeling:
+- The `always @(posedge clk)` block indicates that the outputs (`q`) will be updated on the rising edge of the clock.
+- Inside the block, it first checks if `reset` is active; if true, it sets `q` to `8'b00000000`.
+- If `reset` is not active, it sets `q` to the value of the input `d`.
+
+This implementation is straightforward and follows the requirements set forth in your question, achieving the functionality of 8 D flip-flops with synchronous reset.

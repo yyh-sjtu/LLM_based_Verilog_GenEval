@@ -1,0 +1,43 @@
+Certainly! Below is the Verilog code for the `TopModule` that implements a D flip-flop with the specified interface, which includes a clock input, a data input, an output, and an asynchronous reset input.
+
+```verilog
+module TopModule (
+    input  wire clk,   // Clock input
+    input  wire ar,    // Asynchronous reset
+    input  wire d,     // Data input
+    output reg q       // Output
+);
+
+    // Asynchronous reset behavior
+    always @(*) begin
+        if (ar) begin
+            q <= 1'b0;  // Reset output to 0
+        end else begin
+            q <= q;     // Maintain the current state
+        end
+    end
+   
+    // Positive edge triggered behavior
+    always @(posedge clk) begin
+        if (!ar) begin
+            q <= d;      // Capture input 'd' on positive clock edge
+        end
+    end
+
+endmodule
+```
+
+### Explanation:
+
+1. **Asynchronous Reset**:
+   - The output `q` is reset to `0` whenever `ar` (asynchronous reset) is high, regardless of the clock signal.
+
+2. **Positive Edge Triggered**:
+   - On the positive edge of `clk`, if `ar` is low (indicating the reset is not active), the value of `d` is captured and assigned to `q`.
+
+3. **Blocking versus Non-blocking Assignments**:
+   - I chose to use `<=` (non-blocking) for the sequential logic to avoid race conditions in simulation and to ensure proper timing behavior during synthesis.
+
+### Notes:
+- This simple D flip-flop assumes that `ar` takes precedence over the `clk` signal for resetting the output.
+- Make sure to simulate and test the design to confirm the expected behavior.

@@ -1,0 +1,22 @@
+Here is the RTL code for the TopModule implementing a D flip flop with active high synchronous reset:
+
+```verilog
+module TopModule (
+    input clk,
+    input d,
+    input r,
+    output reg q
+);
+
+always @(posedge clk or posedge r) begin
+    if (r) begin
+        q <= 1'b0; // reset output to 0
+    end else begin
+        q <= d; // update output with input d on clock edge
+    end
+end
+
+endmodule
+```
+
+This code defines a module named TopModule with the specified interface. The D flip flop behavior is implemented using a clocked always block that triggers on the positive edge of the clock signal. When the reset signal `r` is asserted (high), the output `q` is set to 0. Otherwise, the output `q` follows the input `d` on the clock edge.

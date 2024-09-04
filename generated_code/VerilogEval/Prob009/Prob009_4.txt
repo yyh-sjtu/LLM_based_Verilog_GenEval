@@ -1,0 +1,48 @@
+Certainly! To implement a module named `TopModule` that performs a population count on a 3-bit input and produces a 2-bit output representing the count of '1's in that input, we can use a simple combinatorial approach.
+
+Here is an example of how you might write this in Verilog:
+
+```verilog
+module TopModule (
+    input  [2:0] in,  // 3-bit input
+    output [1:0] out  // 2-bit output
+);
+
+    // Internal signal to hold the population count
+    wire [1:0] count;
+
+    // Count the number of '1's in the input
+    assign count[0] = in[0] ^ in[1] ^ in[2]; // XOR for LSB of population count
+    assign count[1] = (in[0] & in[1]) | (in[0] & in[2]) | (in[1] & in[2]); // ANDs and ORs for MSB
+
+    assign out = count;
+
+endmodule
+```
+
+### Explanation:
+
+1. **Input and Output Definition**:
+   - `input [2:0] in`: This defines a 3-bit input.
+   - `output [1:0] out`: This defines a 2-bit output.
+
+2. **Population Count Logic**:
+   - We use combinational logic to calculate the number of '1's in the input.
+   - The LSB of the `count` (`count[0]`) is obtained by XORing all three bits, which gives us `1` if an odd number of inputs is `1`. 
+   - The MSB of the `count` (`count[1]`) is computed using the combination of AND and OR gates to check for pairs of `1` inputs.
+
+3. **Assign Statement**:
+   - The final output is assigned the value of the count.
+
+### Expected Outputs:
+- If `in = 3'b000`, then `out = 2'b00` (0 ones).
+- If `in = 3'b001`, then `out = 2'b01` (1 one).
+- If `in = 3'b010`, then `out = 2'b01` (1 one).
+- If `in = 3'b011`, then `out = 2'b10` (2 ones).
+- If `in = 3'b100`, then `out = 2'b01` (1 one).
+- If `in = 3'b101`, then `out = 2'b10` (2 ones).
+- If `in = 3'b110`, then `out = 2'b10` (2 ones).
+- If `in = 3'b111`, then `out = 2'b11` (3 ones).
+
+### Note:
+This is a basic combinational logic implementation. Depending on your requirements, you might also consider using behavioral constructs like `always` blocks or more advanced techniques for larger input sizes. However, for counting '1's in a 3-bit vector, this implementation is efficient and straightforward.

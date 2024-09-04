@@ -8,20 +8,20 @@ module adder_8bit (
 );
 
 reg c;
+reg [7:0] carry;
 
-// First Full Adder
-full_adder FA0 (.a(a[0]), .b(b[0]), .cin(cin), .sum(sum[0]), .cout(c));
+// First full adder
+full_adder fa0(a[0], b[0], cin, sum[0], carry[0]);
 
-// Intermediate Full Adders
+// Remaining full adders
 genvar i;
 generate
-    for (i = 1; i < 7; i = i + 1) begin : FA_gen
-        full_adder FA (.a(a[i]), .b(b[i]), .cin(c), .sum(sum[i]), .cout(c));
-    end
+  for(i = 1; i < 8; i=i+1) begin : adder_loop
+    full_adder fa(a[i], b[i], carry[i-1], sum[i], carry[i]);
+  end
 endgenerate
 
-// Last Full Adder
-full_adder FA7 (.a(a[7]), .b(b[7]), .cin(c), .sum(sum[7]), .cout(cout);
+assign cout = carry[7];
 
 endmodule
 
@@ -30,12 +30,12 @@ module full_adder (
     input b,
     input cin,
     output reg sum,
-    output reg cout
+    output reg carry
 );
 
-always @* begin
+always @(*) begin
     sum = a ^ b ^ cin;
-    cout = (a & b) | (a & cin) | (b & cin);
+    carry = (a & b) | (a & cin) | (b & cin);
 end
 
 endmodule

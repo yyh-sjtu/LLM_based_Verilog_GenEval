@@ -1,44 +1,38 @@
 
 module multi_pipe_4bit (
-    input wire clk,
-    input wire rst_n,
-    input wire [3:0] mul_a,
-    input wire [3:0] mul_b,
+    input clk,
+    input rst_n,
+    input [3:0] mul_a,
+    input [3:0] mul_b,
     output reg [7:0] mul_out
 );
 
 parameter size = 4;
 
-reg [7:0] partial_prods [0:size-1];
-reg [7:0] sum_reg;
+reg [7:0] partial_products [0:size-1];
+reg [7:0] sums [0:size-1];
 
 always @ (posedge clk or negedge rst_n) begin
     if (~rst_n) begin
         for (int i = 0; i < size; i = i + 1) begin
-            partial_prods[i] <= 8'h00;
+            partial_products[i] <= 8'b0;
+            sums[i] <= 8'b0;
         end
-        sum_reg <= 8'h00;
+        mul_out <= 8'b0;
     end else begin
         for (int i = 0; i < size; i = i + 1) begin
-            if (mul_b[i] == 1'b1) begin
-                partial_prods[i] <= {mul_a, {i{1'b0}}};
+            if (mul_b[i] == 1) begin
+                partial_products[i] <= {mul_a, {size{1'b0}}} << i;
             end else begin
-                partial_prods[i] <= 8'h00;
+                partial_products[i] <= 8'b0;
             end
         end
-        
-        sum_reg <= 8'h00;
-        for (int i = 0; i < size; i = i + 1) begin
-            sum_reg <= sum_reg + partial_prods[i];
-        end
-    end
-end
 
-always @ (posedge clk or negedge rst_n) begin
-    if (~rst_n) begin
-        mul_out <= 8'h00;
-    end else begin
-        mul_out <= sum_reg;
+        for (int i = 0; i < size; i = i + 1) begin
+            sums[i] <= partial_products[i] + sums[i];
+        end
+
+        mul_out <= sums[size-1];
     end
 end
 

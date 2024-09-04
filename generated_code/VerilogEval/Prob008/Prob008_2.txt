@@ -1,0 +1,23 @@
+Sure! Here is a simple Verilog implementation of the `TopModule` that meets your requirements. This module will connect the input port `in` to the output port `out` combinationally.
+
+```verilog
+module TopModule (
+    input wire in,  // 1-bit input
+    output wire out // 1-bit output
+);
+
+// Assign the output to the same value as the input
+assign out = in;
+
+endmodule
+```
+
+### Explanation:
+
+1. **Module Declaration**: The module is named `TopModule` and it has two ports: `in` (input) and `out` (output), both are one-bit wide.
+  
+2. **Port Types**: The `input` and `output` ports are declared using `input wire` and `output wire` keywords. The `wire` means that these are combinational connections.
+
+3. **Assign Statement**: The `assign` statement is used to create a continuous assignment, meaning that `out` will always reflect the value of `in` immediately, making it a combinational logic.
+
+This implementation should behave as required, forwarding the input to the output directly. If you need further modifications or additional functionality, feel free to ask!

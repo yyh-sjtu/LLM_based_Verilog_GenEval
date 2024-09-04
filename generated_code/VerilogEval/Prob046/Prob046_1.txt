@@ -1,0 +1,38 @@
+```verilog
+module TopModule (
+    input clk,
+    input reset,
+    input [7:0] d,
+    output reg [7:0] q
+);
+
+reg [7:0] d_ff [7:0]; // array of 8 D flip-flops
+
+always @(negedge clk or posedge reset)
+begin
+    if (reset)
+    begin
+        for (int i=0; i<8; i=i+1)
+        begin
+            d_ff[i] <= 8'h34; // reset to 0x34
+        end
+    end
+    else
+    begin
+        for (int i=0; i<8; i=i+1)
+        begin
+            d_ff[i] <= d[i]; // store input
+        end
+    end
+end
+
+always @(*)
+begin
+    for (int i=0; i<8; i=i+1)
+    begin
+        q[i] <= d_ff[i]; // output stored value
+    end
+end
+
+endmodule
+```

@@ -7,41 +7,43 @@ module pulse_detect (
 );
 
 // State declaration
-reg [2:0] state;
+reg [1:0] state;
 
-// State definitions
-parameter IDLE = 3'b000;
-parameter STATE_A = 3'b001;
-parameter STATE_B = 3'b010;
-parameter STATE_C = 3'b011;
+// State definition
+parameter IDLE = 2'b00;
+parameter STATE_1 = 2'b01;
+parameter STATE_2 = 2'b10;
 
-always @(posedge clk or negedge rst_n) begin
+// Initial state assignment
+initial begin
+    state = IDLE;
+    data_out = 0;
+end
+
+// State machine
+always @ (posedge clk or negedge rst_n)
+begin
     if (~rst_n) begin
         state <= IDLE;
         data_out <= 0;
-    end else begin
+    end
+    else begin
         case (state)
-            IDLE: begin
+            IDLE:
                 if (data_in) begin
-                    state <= STATE_A;
+                    state <= STATE_1;
+                    data_out <= 0;
                 end
-            end
-            STATE_A: begin
+            STATE_1:
                 if (!data_in) begin
-                    state <= STATE_B;
+                    state <= STATE_2;
+                    data_out <= 0;
                 end
-            end
-            STATE_B: begin
+            STATE_2:
                 if (data_in) begin
-                    state <= STATE_C;
-                end
-            end
-            STATE_C: begin
-                if (!data_in) begin
                     state <= IDLE;
                     data_out <= 1;
                 end
-            end
         endcase
     end
 end

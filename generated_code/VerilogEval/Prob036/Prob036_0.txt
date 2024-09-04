@@ -1,0 +1,33 @@
+Sure! Below is an example of a Verilog implementation for the `TopModule` as per your requirements:
+
+```verilog
+module TopModule (
+    input wire ring,
+    input wire vibrate_mode,
+    output wire ringer,
+    output wire motor
+);
+
+    // Logic to determine the state of ringer and motor
+    assign ringer = ring & ~vibrate_mode;  // Ringer is active only when ring signal is high and not in vibrate mode
+    assign motor = ring & vibrate_mode;     // Motor is active only when ring signal is high and in vibrate mode
+
+endmodule
+```
+
+### Explanation:
+
+- **Inputs:**
+  - `ring`: This input indicates whether there's an incoming call.
+  - `vibrate_mode`: This input indicates whether the phone is set to vibrate mode.
+
+- **Outputs:**
+  - `ringer`: This output will be high (1) if the phone should ring.
+  - `motor`: This output will be high (1) if the phone should vibrate.
+
+### Logic:
+- The output `ringer` is activated when there's an incoming call (`ring` is 1) and `vibrate_mode` is 0 (i.e., the phone is not in vibrate mode).
+  
+- The output `motor` is activated when there's an incoming call (`ring` is 1) and `vibrate_mode` is set to 1 (i.e., the phone is in vibrate mode).
+
+In this way, the module ensures that both the ringer and the motor cannot be on simultaneously.

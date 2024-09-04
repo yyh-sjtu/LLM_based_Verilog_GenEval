@@ -1,0 +1,70 @@
+Certainly! Below is an implementation of the `TopModule` in Verilog that meets your specified requirements. We will define the states using a one-hot encoding scheme and implement the specified Mealy finite-state machine.
+
+### Verilog Code for TopModule
+
+```verilog
+module TopModule (
+    input  wire clk,
+    input  wire areset,
+    input  wire x,
+    output reg  z
+);
+
+    // State declarations using one-hot encoding
+    reg [1:0] state; // 2 bits are enough for 2 states in one-hot encoding
+    parameter A = 2'b01; // State A
+    parameter B = 2'b10; // State B
+  
+    // Sequential logic for state transitions
+    always @(posedge clk or posedge areset) begin
+        if (areset) begin
+            state <= A; // Reset to state A
+        end else begin
+            case (state)
+                A: begin
+                    if (x) begin
+                        state <= B; // Transition to B
+                    end
+                    // If x=0, remain in A
+                end
+                B: begin
+                    if (x) begin
+                        state <= B; // Remain in B
+                    end
+                    // If x=0, remain in B
+                end
+            endcase
+        end
+    end
+
+    // Combinational logic for output z based on the current state and input x
+    always @(*) begin
+        case (state)
+            A: begin
+                z = x; // z = 1 when in state A and x=1, else z=0
+            end
+            B: begin
+                z = ~x; // z = 1 when in state B and x=0, else z=0
+            end
+            default: z = 0; // Default case
+        endcase
+    end
+   
+endmodule
+```
+
+### Explanation
+1. **State Declaration**: We define two states `A` and `B` using a 2-bit register with one-hot encoding.
+   - `A` is represented as `2'b01` and `B` as `2'b10`.
+
+2. **Asynchronous Reset Logic**: When `areset` is asserted (high), it immediately sets the state back to `A`.
+
+3. **State Transition Logic**:
+   - In state `A`, if `x` is `1`, transition to state `B`. If `x` is `0`, remain in state `A`.
+   - In state `B`, if `x` is `1`, remain in state `B`. If `x` is `0`, also remain in state `B`.
+
+4. **Output Logic**: The output `z` is determined based on the current state:
+   - In state `A`, output `z = x`.
+   - In state `B`, output `z = ~x` (the negation of `x`).
+
+With this implementation, the `TopModule` meets the specifications of the Mealy finite-state machine that functions as a 2's complementer with one-hot encoded states.

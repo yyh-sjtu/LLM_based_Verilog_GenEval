@@ -1,0 +1,48 @@
+Certainly! Below is a Verilog implementation of a module named `TopModule` that takes four 8-bit input values (a, b, c, d) and outputs the minimum of these values.
+
+```verilog
+module TopModule (
+    input  [7:0] a,
+    input  [7:0] b,
+    input  [7:0] c,
+    input  [7:0] d,
+    output [7:0] min
+);
+
+    // Intermediate variable to hold minimum value
+    reg [7:0] min_reg;
+
+    always @(*) begin
+        // Initial assumption
+        min_reg = a;
+
+        // Compare with b
+        if (b < min_reg) min_reg = b;
+        
+        // Compare with c
+        if (c < min_reg) min_reg = c;
+        
+        // Compare with d
+        if (d < min_reg) min_reg = d;
+    end
+
+    // Assign the minimum value to the output
+    assign min = min_reg;
+
+endmodule
+```
+
+### Explanation:
+
+1. **Module Declaration**: The module is defined with the specified input and output ports.
+
+2. **Intermediate Register**: A register `min_reg` is used to hold the minimum value found during comparisons.
+
+3. **Always Block**: This block is triggered whenever there is a change in any of the inputs:
+   - It initializes `min_reg` to `a`.
+   - Then, it sequentially compares `min_reg` with each of the other inputs (`b`, `c`, `d`) and updates `min_reg` accordingly.
+
+4. **Output Assignment**: The minimum value is assigned to the output port `min`.
+
+### Usage:
+To use this module in a design, you simply create instances of `TopModule`, providing appropriate connections for `a`, `b`, `c`, `d`, and reading `min` as the output. This implementation efficiently finds the minimum of the four 8-bit unsigned integers through simple comparisons.

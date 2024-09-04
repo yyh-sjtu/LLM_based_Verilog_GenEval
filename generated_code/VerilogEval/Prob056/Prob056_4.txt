@@ -1,0 +1,23 @@
+Here is the RTL code for the TopModule implementing a JK flip-flop:
+
+```verilog
+module TopModule (
+    input clk,
+    input j,
+    input k,
+    output reg Q
+);
+
+always @(posedge clk) begin
+    if (j & ~k)
+        Q <= 1;
+    else if (~j & k)
+        Q <= 0;
+    else if (j & k)
+        Q <= ~Q;
+end
+
+endmodule
+```
+
+This code defines a module named TopModule with inputs clk, j, and k, and output Q. Inside the always block sensitive to the positive edge of the clock, the JK flip-flop logic is implemented based on the truth table provided. The output Q is updated accordingly.

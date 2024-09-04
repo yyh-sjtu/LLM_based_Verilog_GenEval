@@ -1,0 +1,17 @@
+Sure, here is the RTL code for the TopModule implementing a half adder:
+
+```verilog
+module TopModule (
+    input a,
+    input b,
+    output sum,
+    output cout
+);
+
+assign sum = a ^ b; // XOR operation for sum
+assign cout = a & b; // AND operation for carry-out
+
+endmodule
+```
+
+This module takes two input bits `a` and `b`, performs an XOR operation to get the sum, and an AND operation to get the carry-out. This implementation satisfies the requirements for a half adder module. Let me know if you need any further modifications or assistance.

@@ -1,0 +1,19 @@
+Here is the Verilog code for the TopModule implementing the functionality of the 7420 chip:
+
+```verilog
+module TopModule (
+    input  p1a, p1b, p1c, p1d,
+    input  p2a, p2b, p2c, p2d,
+    output reg p1y,
+    output reg p2y
+);
+
+always @(*) begin
+    p1y = ~(p1a & p1b & p1c & p1d); // 4-input NAND gate
+    p2y = ~(p2a & p2b & p2c & p2d); // 4-input NAND gate
+end
+
+endmodule
+```
+
+This code defines a module named TopModule with the specified inputs and outputs. Inside the module, there are two 4-input NAND gates implemented using bitwise AND and bitwise NOT operators in the always block. The output signals p1y and p2y will reflect the output of the NAND gates based on the input signals p1a, p1b, p1c, p1d, p2a, p2b, p2c, and p2d.

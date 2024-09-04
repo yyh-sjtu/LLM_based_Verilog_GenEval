@@ -1,7 +1,7 @@
-Here is the complete Verilog code for the 4bit unsigned number pipeline multiplier:
+Here is the Verilog code for the 4-bit unsigned number pipeline multiplier:
 
 ```verilog
-module multi_pipe_4bit (
+module multi_pipe_4bit(
     input clk,
     input rst_n,
     input [3:0] mul_a,
@@ -12,35 +12,32 @@ module multi_pipe_4bit (
 parameter size = 4;
 
 reg [7:0] partial_products [0:size-1];
-reg [7:0] sum_reg;
+reg [7:0] product_reg;
 
 always @(posedge clk or negedge rst_n) begin
     if (~rst_n) begin
-        for (int i = 0; i < size; i = i + 1) begin
-            partial_products[i] <= 8'b0;
+        for (int i = 0; i < size; i=i+1) begin
+            partial_products[i] <= 8'd0;
         end
-        sum_reg <= 8'b0;
+        product_reg <= 8'd0;
     end else begin
-        for (int i = 0; i < size; i = i + 1) begin
+        for (int i = 0; i < size; i=i+1) begin
             if (mul_b[i] == 1) begin
-                partial_products[i] <= {mul_a, {i{1'b0}}};
+                partial_products[i] <= {mul_a, {(size-1)-i{1'b0}}};
             end else begin
-                partial_products[i] <= 8'b0;
+                partial_products[i] <= 8'd0;
             end
         end
-        sum_reg <= {partial_products};
+        product_reg <= partial_products[0];
+        for (int i = 1; i < size; i=i+1) begin
+            product_reg <= product_reg + partial_products[i];
+        end
     end
 end
 
-always @(posedge clk or negedge rst_n) begin
-    if (~rst_n) begin
-        mul_out <= 8'b0;
-    end else begin
-        mul_out <= sum_reg;
-    end
-end
+assign mul_out = product_reg;
 
 endmodule
 ```
 
-This Verilog module implements a 4bit unsigned number pipeline multiplier with two levels of registers to store intermediate values and control the multiplication process. The module extends the input signals, performs multiplication operations, adds partial products, and calculates the final product on the positive edge of the clock signal or the falling edge of the reset signal.
+This Verilog module implements a 4-bit unsigned number pipeline multiplier as described. The module takes in a clock signal (clk), a reset signal (rst_n), two 4-bit operands (mul_a and mul_b), and outputs an 8-bit product (mul_out). The module uses registers to store intermediate partial products and the final product, performing the multiplication process on each clock cycle or reset condition.

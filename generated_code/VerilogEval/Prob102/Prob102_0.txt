@@ -1,0 +1,17 @@
+As a professional RTL designer, I will implement the TopModule module based on the provided simulation waveforms. 
+
+```verilog
+module TopModule (
+    input a,
+    input b,
+    input c,
+    input d,
+    output q
+);
+
+assign q = (b & c) | (a & d);
+
+endmodule
+```
+
+The logic implemented in this module matches the behavior described in the simulation waveforms provided. Let me know if you need any further assistance or modifications.

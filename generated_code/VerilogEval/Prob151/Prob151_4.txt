@@ -1,0 +1,97 @@
+Here's a Verilog implementation of the `TopModule` finite-state machine (FSM) to meet your requirements. The FSM will monitor the input `data`, detect the specific pattern `1101`, and manage the output signals accordingly. 
+
+```verilog
+module TopModule (
+    input clk,
+    input reset,
+    input data,
+    input done_counting,
+    input ack,
+    output reg shift_ena,
+    output reg counting,
+    output reg done
+);
+    
+    // State encoding
+    typedef enum reg [2:0] {
+        IDLE,        // Waiting for pattern 1101
+        SHIFTING,    // Shifting in 4 bits
+        COUNTING,    // Waiting for done counting
+        DONE         // Timer timed out
+    } state_t;
+
+    state_t current_state, next_state;
+    reg [3:0] shift_counter; // Counter to manage shift operation
+
+    // State transition
+    always @ (posedge clk or posedge reset) begin
+        if (reset) begin
+            current_state <= IDLE;
+        end else begin
+            current_state <= next_state;
+        end
+    end
+
+    // Next state logic
+    always @ (*) begin
+        // Default assignments for outputs
+        shift_ena = 0;
+        counting = 0;
+        done = 0;
+        next_state = current_state; // Default to hold current state
+        
+        case (current_state)
+            IDLE: begin
+                // Wait for the sequence 1101 
+                if (shift_counter == 3) begin
+                    // After receiving 1101
+                    next_state = SHIFTING;
+                    shift_counter = 0; // Reset for post pattern shifting
+                end else if (data) begin
+                    shift_counter = shift_counter + 1; // Increment for each bit
+                end else begin
+                    shift_counter = 0; // Reset on mismatch
+                end
+            end
+            
+            SHIFTING: begin
+                // Shift for 4 clock cycles
+                shift_ena = 1;
+                if (shift_counter < 3) begin
+                    shift_counter = shift_counter + 1;
+                end else begin
+                    next_state = COUNTING;
+                    counting = 1; // Indicate that we are counting
+                end
+            end
+            
+            COUNTING: begin
+                if (done_counting) begin
+                    next_state = DONE; // Move to done state
+                end
+            end
+
+            DONE: begin
+                done = 1; // Notify user timer has timed out
+                if (ack) begin
+                    next_state = IDLE; // Reset to wait for the next pattern
+                end
+            end
+            
+            default: next_state = IDLE; // Default state
+        endcase
+    end
+
+endmodule
+```
+
+### Key Components Explained:
+- **State Encoding**: Four states are defined—`IDLE`, `SHIFTING`, `COUNTING`, and `DONE`—to represent the various stages of the timer function.
+- **State Transition Logic**: The actions taken during each state are defined within a `case` statement in the `next_state` logic.
+- **Reset Behavior**: Active-high synchronous reset sets the state back to `IDLE`, preparing to look for the `1101` pattern.
+- **Shift Enable Signal**: `shift_ena` is asserted for a fixed duration when entering the `SHIFTING` state.
+- **Counting Logic**: The FSM moves to the `COUNTING` state after `SHIFTING` and waits for a `done_counting` signal.
+- **Final Notification**: Upon completing the counting, the FSM indicates completion (the `done` signal) and then waits for an acknowledgment (the `ack` signal) before returning to the `IDLE` state.
+
+### Note:
+This implementation assumes sequential logic triggered at the positive clock edge and utilizes a simple register to manage the state and transition to the next state based on conditions. Adjustments may be needed based on complete system tests and specific constraints of the design environment.

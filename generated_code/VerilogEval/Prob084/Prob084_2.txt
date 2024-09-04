@@ -1,0 +1,57 @@
+Certainly! Below is the Verilog code for the `TopModule` as per your specifications. This module contains an 8-bit shift register and a multiplexer for reading the memory. 
+
+```verilog
+module TopModule (
+    input wire clk,
+    input wire enable,
+    input wire S,
+    input wire A,
+    input wire B,
+    input wire C,
+    output wire Z
+);
+
+    // Internal signal declarations
+    reg [7:0] Q; // 8-bit shift register
+    wire [2:0] addr; // Address for the multiplexer
+    wire [7:0] mux_out;
+
+    // Shift Register Logic
+    always @(posedge clk) begin
+        if (enable) begin
+            Q <= {S, Q[7:1]}; // Shift in S at Q[0] and shift rest right
+        end
+    end
+
+    // Address calculation from inputs A, B, C
+    assign addr = {A, B, C}; // Concatenate A, B, C to form a 3-bit address
+
+    // Multiplexer Logic to select output Z based on address
+    assign Z = (addr == 3'b000) ? Q[0] :
+               (addr == 3'b001) ? Q[1] :
+               (addr == 3'b010) ? Q[2] :
+               (addr == 3'b011) ? Q[3] :
+               (addr == 3'b100) ? Q[4] :
+               (addr == 3'b101) ? Q[5] :
+               (addr == 3'b110) ? Q[6] :
+               (addr == 3'b111) ? Q[7] : 1'b0; // In case of invalid address
+
+endmodule
+```
+
+### Explanation:
+1. **Shift Register**: 
+   - The shift register uses a single 8-bit register (`Q`) stored in a `reg` type. 
+   - On each clock cycle, if the `enable` input is high, the shift register shifts right, with the input bit `S` being fed into the least significant bit (LSB) `Q[0]`. The remaining bits are shifted right.
+  
+2. **Address Calculation**:
+   - The `addr` wire is created by concatenating the inputs `A`, `B`, and `C`. This forms a 3-bit binary value that represents the address to read from the shift register.
+
+3. **Multiplexer**:
+   - The output `Z` is selected based on the value of `addr`. The conditions are specified such that `Z` takes the corresponding value from the shift register (`Q`) based on the binary value of `addr`.
+
+### Usage:
+- To write to the memory, feed a bit into `S` and enable shifting with `enable` high.
+- To read from the memory, set `A`, `B`, and `C` to the desired address and observe the output on `Z`. 
+
+This design meets the specified requirements and implements the necessary functionality efficiently.

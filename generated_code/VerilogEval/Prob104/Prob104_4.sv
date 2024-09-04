@@ -1,0 +1,53 @@
+
+module TopModule (
+  input clk,
+  input L,
+  input q_in,
+  input r_in,
+  output Q
+);
+ 
+  wire [2:0] q_out_1, q_out_2, q_out_3;
+  reg [2:0] r_out_1, r_out_2, r_out_3;
+  reg L_1, L_2, L_3;
+
+  full_module full_module_inst1 (
+    .r(r_out_1),
+    .L(L_1),
+    .clk(clk),
+    .q(q_out_1)
+  );
+
+  full_module full_module_inst2 (
+    .r(r_out_2),
+    .L(L_2),
+    .clk(clk),
+    .q(q_out_2)
+  );
+
+  full_module full_module_inst3 (
+    .r(r_out_3),
+    .L(L_3),
+    .clk(clk),
+    .q(q_out_3)
+  );
+
+  reg [2:0] Q_internal;
+
+  always @* begin
+    if (q_in)
+      Q_internal = q_out_1;
+    else
+      Q_internal = q_out_2;
+  end
+
+  always @* begin
+    if (r_in)
+      r_out_1 = q_out_3;
+    else
+      r_out_1 = {q_out_2[1] ^ q_out_2[2], q_out_2[0], q_out_2[2]};
+  end
+
+  assign Q = Q_internal;
+
+endmodule

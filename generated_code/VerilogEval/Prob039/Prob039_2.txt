@@ -1,0 +1,43 @@
+Sure! Below is an example of an RTL design for a `TopModule` that implements a 2-to-1 multiplexer using both continuous assignment and procedural assignment. We'll use Verilog for this implementation.
+
+```verilog
+module TopModule (
+    input wire a,
+    input wire b,
+    input wire sel_b1,
+    input wire sel_b2,
+    output wire out_assign,
+    output reg out_always
+);
+
+// Continuous assignment for out_assign using assign statement
+assign out_assign = (sel_b1 && sel_b2) ? b : a;
+
+// Procedural assignment for out_always using an always block
+always @(*) begin
+    if (sel_b1 && sel_b2) begin
+        out_always = b;
+    end else begin
+        out_always = a;
+    end
+end
+
+endmodule
+```
+
+### Explanation:
+1. **Inputs**:
+   - `a`: First input for the multiplexer.
+   - `b`: Second input for the multiplexer.
+   - `sel_b1`: First selection input.
+   - `sel_b2`: Second selection input.
+
+2. **Outputs**:
+   - `out_assign`: Output assigned using a continuous assignment statement (assign).
+   - `out_always`: Output assigned using a procedural `always` block.
+
+3. **Functionality**:
+   - The `out_assign` output will choose `b` if both `sel_b1` and `sel_b2` are true; otherwise, it will choose `a`.
+   - The `out_always` output achieves the same functionality but does so in a procedural way using an `always` block.
+
+This implementation is straightforward and commonly used in RTL designs.

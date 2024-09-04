@@ -1,0 +1,16 @@
+Here is the RTL code for the TopModule implementing the sign-extension functionality:
+
+```verilog
+module TopModule (
+    input [7:0] in,
+    output reg [31:0] out
+);
+
+always @(in) begin
+    out = {{24{in[7]}}, in};
+end
+
+endmodule
+```
+
+In this code, we declare a module named TopModule with an 8-bit input port 'in' and a 32-bit output port 'out'. Inside the always block triggered by any change in 'in', we concatenate 24 copies of the most significant bit of 'in' followed by the 8-bit number itself. This replicates the sign bit to 24 additional bits, effectively sign-extending the 8-bit number to 32 bits in two's complement form.

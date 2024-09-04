@@ -1,9 +1,10 @@
-module mux(
+module mux( 
   input [4:0] a, b,
   input sel,
-  output [4:0] out
-);
+  output [4:0] out );
   
-  assign out = (sel) ? b : a;
+  assign out = (sel == 1'b0) ? a : b;
   
 endmodule
+
+This Verilog module represents a 2-to-1 multiplexer that selects either input 'a' or input 'b' based on the value of the 'sel' input. If 'sel' is 0, the output 'out' will be equal to input 'a'. If 'sel' is 1, the output 'out' will be equal to input 'b'.

@@ -1,3 +1,4 @@
+
 module RAM (
     input clk,
     input rst_n,
@@ -11,14 +12,13 @@ module RAM (
 
 parameter WIDTH = 6;
 parameter DEPTH = 8;
-
-reg [WIDTH-1:0] RAM [0:DEPTH-1];
+reg [DEPTH-1:0] RAM [2**WIDTH-1:0]; // Dual-port RAM
 
 always @(posedge clk or negedge rst_n) begin
     if (!rst_n) begin
-        for (int i = 0; i < DEPTH; i = i + 1) begin
+        // Initialize memory to all zeros
+        foreach (RAM[i])
             RAM[i] <= 6'b000000;
-        end
     end else begin
         if (write_en) begin
             RAM[write_addr] <= write_data;
@@ -28,15 +28,13 @@ end
 
 always @(posedge clk or negedge rst_n) begin
     if (!rst_n) begin
+        // Initialize the read_data register to 0
         read_data <= 6'b000000;
     end else begin
         if (read_en) begin
             read_data <= RAM[read_addr];
-        end else begin
-            read_data <= 6'b000000;
         end
     end
 end
 
 endmodule
-

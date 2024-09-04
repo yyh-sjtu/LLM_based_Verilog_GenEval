@@ -1,3 +1,10 @@
+// Verilog code for the wire_assign module
+module wire_assign(
+    input in,
+    output out
+);
 
 assign out = in;
+
 endmodule
+// End of verilog code

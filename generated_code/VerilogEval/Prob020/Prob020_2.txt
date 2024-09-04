@@ -1,0 +1,22 @@
+Here is the RTL code for the TopModule implementing the circuit as described:
+
+```verilog
+module TopModule (
+    input [1:0] A,
+    input [1:0] B,
+    output reg z
+);
+
+always @(*) begin
+    if (A == B) begin
+        z = 1;
+    end
+    else begin
+        z = 0;
+    end
+end
+
+endmodule
+```
+
+This code defines a module TopModule with two 2-bit inputs A and B, and an output z. Inside the module, there is a combinational logic that checks if A is equal to B, and assigns the value of 1 to z if they are equal, otherwise assigns 0 to z.

@@ -1,0 +1,44 @@
+Below is a Verilog implementation of the `TopModule`, which serves as a decade counter that counts from 0 to 9. It incorporates the specified interface with a synchronous reset and handles the `slowena` signal to control when the counter increments.
+
+```verilog
+module TopModule (
+    input  wire clk,       // Clock input
+    input  wire reset,     // Synchronous reset input
+    input  wire slowena,   // Enable signal for slow counting
+    output reg  [3:0] q    // 4-bit output for the counter
+);
+
+// Synchronous reset and counting logic
+always @(posedge clk) begin
+    if (reset) begin
+        // Reset the counter to 0 if reset is high
+        q <= 4'b0000;
+    end else if (slowena) begin
+        // Increment the counter on each clock cycle if slowena is high
+        if (q == 4'b1001) begin
+            q <= 4'b0000; // Reset to 0 after reaching 9
+        end else begin
+            q <= q + 1'b1; // Increment the counter
+        end
+    end
+end
+
+endmodule
+```
+
+### Explanation:
+
+1. **Module Declaration**:
+   - The `module TopModule` declaration starts with the specified ports. `clk`, `reset`, and `slowena` are defined as input wires, while `q` is defined as a 4-bit output register.
+
+2. **Always Block**:
+   - The `always @(posedge clk)` block triggers on the rising edge of the clock signal.
+
+3. **Reset Logic**:
+   - The first condition checks for the `reset` signal. If it's high, the counter `q` is set to `0`. This ensures the reset is synchronous.
+
+4. **Counting Logic**:
+   - The next condition evaluates whether `slowena` is high. If `slowena` is high, the counter increments on each clock cycle.
+   - If the current value of `q` reaches `4'b1001` (which is decimal 9), it resets back to `0` on the next increment. Otherwise, it simply increments `q` by `1`.
+
+This implementation ensures that the module behaves correctly according to the specifications you've provided, counting from 0 to 9 and resetting as needed.

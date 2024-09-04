@@ -1,0 +1,26 @@
+Sure, here is the RTL implementation of the TopModule:
+
+```verilog
+module TopModule (
+    input clk,
+    input areset,
+    input [7:0] d,
+    output reg [7:0] q
+);
+
+reg [7:0] q_reg;
+
+always @(posedge clk or posedge areset)
+begin
+    if (areset)
+        q_reg <= 8'b00000000;
+    else
+        q_reg <= d;
+end
+
+assign q = q_reg;
+
+endmodule
+```
+
+In this implementation, there are 8 D flip-flops with an active high asynchronous reset. The output `q` is initialized to 0 and updates based on the input data `d` on the positive edge of the clock `clk`. The asynchronous reset `areset` is used to clear all flip-flops to 0.

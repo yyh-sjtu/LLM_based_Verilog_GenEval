@@ -1,5 +1,5 @@
 ```verilog
-module adder_pipe_64bit(
+module adder_pipe_64bit (
     input clk,
     input rst_n,
     input i_en,
@@ -9,35 +9,60 @@ module adder_pipe_64bit(
     output reg o_en
 );
 
-reg [63:0] sum1, sum2, sum3, sum4;
-reg c1, c2, c3;
-
+// Pipeline stage 0
+reg [64:0] sum0;
 always @(posedge clk or negedge rst_n) begin
     if (~rst_n) begin
-        sum1 <= 64'b0;
-        sum2 <= 64'b0;
-        sum3 <= 64'b0;
-        sum4 <= 64'b0;
-        c1 <= 1'b0;
-        c2 <= 1'b0;
-        c3 <= 1'b0;
-        result <= 65'b0;
-        o_en <= 1'b0;
-    end
-    else begin
+        sum0 <= 0;
+    end else begin
         if (i_en) begin
-            sum1 <= adda + addb;
-            c1 <= sum1[63];
-            sum2 <= sum1 + {1'b0, c1};
-            c2 <= sum2[64];
-            sum3 <= sum2 + {1'b0, c2};
-            c3 <= sum3[65];
-            sum4 <= sum3 + {1'b0, c3};
-            result <= {c3, sum4};
-            o_en <= 1'b1;
+            sum0 <= {1'b0, adda} + {1'b0, addb};
+        end
+    end
+end
+
+// Pipeline stage 1
+reg [64:0] sum1;
+always @(posedge clk or negedge rst_n) begin
+    if (~rst_n) begin
+        sum1 <= 0;
+    end else begin
+        sum1 <= sum0;
+    end
+end
+
+// Pipeline stage 2
+reg [64:0] sum2;
+always @(posedge clk or negedge rst_n) begin
+    if (~rst_n) begin
+        sum2 <= 0;
+    end else begin
+        sum2 <= sum1;
+    end
+end
+
+// Output generation
+always @* begin
+    if (sum2[64] == 1) begin
+        result = {1'b1, sum2[64:1]};
+    end else begin
+        result = sum2;
+    end
+end
+
+// Output enable generation
+always @(posedge clk or negedge rst_n) begin
+    if (~rst_n) begin
+        o_en <= 0;
+    end else begin
+        if (i_en) begin
+            o_en <= 1;
+        end else begin
+            o_en <= 0;
         end
     end
 end
 
 endmodule
 ```
+This verilog code implements a 64-bit ripple carry adder with pipeline stages and output enable signal synchronization.

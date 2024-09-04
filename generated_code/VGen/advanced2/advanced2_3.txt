@@ -1,35 +1,28 @@
-Sure, here is the Verilog code for the module described:
+Sure, here is the verilog code for the decade counter module as described:
 
 ```verilog
-module count_slow(
+module decade_counter (
     input clk,
     input slowena,
     input reset,
     output reg [3:0] q
 );
 
-    // Internal signals
-    reg [3:0] count;
-
-    // Decade counter logic
-    always @(posedge clk) begin
-        if (reset) begin
-            count <= 4'b0000;
-        end else if (slowena) begin
-            if (count == 4'b1001) begin
-                count <= 4'b0000;
+always @(posedge clk) begin
+    if (reset) begin
+        q <= 4'b0000;
+    end else begin
+        if (slowena) begin
+            if (q == 4'b1001) begin
+                q <= 4'b0000;
             end else begin
-                count <= count + 1;
+                q <= q + 4'b0001;
             end
         end
     end
-
-    // Output logic
-    always @(*) begin
-        q = count;
-    end
+end
 
 endmodule
 ```
 
-This module implements a decade counter that counts from 0 through 9 when the `slowena` input is high. The counter is reset to 0 when the `reset` input is high. The internal `count` register holds the current count value, and it is incremented on each positive edge of the `clk` signal when `slowena` is high. The output `q` is the current count value.
+This verilog module describes a decade counter that counts from 0 through 9, inclusive. The counter increments by 1 each time the `slowena` signal is high. The counter is reset to 0 when the `reset` signal is high. The counter operates on the positive edge of the clock signal `clk` and the current count value is stored in the 4-bit register `q`.

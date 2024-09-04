@@ -1,10 +1,11 @@
 module
-module and_gate( 
-  input a, 
-  input b, 
-  output out );
+module and_gate(
+  input a,
+  input b,
+  output out
+);
 
-  assign out = a & b; // Using bitwise AND to implement AND gate
+  assign out = a & b;
 
 endmodule
 

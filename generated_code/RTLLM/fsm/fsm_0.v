@@ -6,57 +6,89 @@ module fsm (
     output reg MATCH
 );
 
-reg [4:0] state;
-reg [4:0] next_state;
+// Define states for the FSM
+parameter IDLE = 2'd0;
+parameter STATE1 = 2'd1;
+parameter STATE2 = 2'd2;
+parameter STATE3 = 2'd3;
+parameter STATE4 = 2'd4;
+parameter STATE5 = 2'd5;
+parameter STATE6 = 2'd6;
+parameter STATE7 = 2'd7;
+parameter STATE8 = 2'd8;
 
-parameter S0 = 5'b00000;
-parameter S1 = 5'b00001;
-parameter S2 = 5'b00010;
-parameter S3 = 5'b00011;
-parameter S4 = 5'b00100;
+// Define signals for the FSM
+reg [1:0] state, next_state;
 
-always @(posedge CLK or posedge RST) begin
+// Define a counter to keep track of the number of input signals
+reg [3:0] input_count;
+
+always @ (posedge CLK or posedge RST) begin
     if (RST) begin
-        state <= S0;
+        state <= IDLE;
+        input_count <= 0;
         MATCH <= 0;
     end else begin
         state <= next_state;
+        input_count <= input_count + 1;
     end
 end
 
-always @* begin
+always @ (*) begin
     next_state = state;
+    MATCH = 0;
+
     case (state)
-        S0: begin
-            if (IN)
-                next_state = S1;
-            else
-                next_state = S0;
+        IDLE: begin
+            if (IN == 1) begin
+                next_state = STATE1;
+                input_count <= 0;
+            end
         end
-        S1: begin
-            if (!IN)
-                next_state = S2;
-            else
-                next_state = S0;
+        STATE1: begin
+            if (IN == 0) begin
+                next_state = STATE2;
+            end
         end
-        S2: begin
-            if (!IN)
-                next_state = S3;
-            else
-                next_state = S0;
+        STATE2: begin
+            if (IN == 0) begin
+                next_state = STATE3;
+            end
         end
-        S3: begin
-            if (IN)
-                next_state = S4;
-            else
-                next_state = S0;
+        STATE3: begin
+            if (IN == 1) begin
+                next_state = STATE4;
+            end
         end
-        S4: begin
-            if (IN)
-                MATCH <= 1;
-            next_state = S0;
+        STATE4: begin
+            if (IN == 1) begin
+                next_state = STATE5;
+            end
         end
-        default: next_state = S0;
+        STATE5: begin
+            if (IN == 1) begin
+                next_state = STATE6;
+            end
+        end
+        STATE6: begin
+            if (IN == 0) begin
+                next_state = STATE7;
+            end
+        end
+        STATE7: begin
+            if (IN == 0) begin
+                next_state = STATE8;
+            end
+        end
+        STATE8: begin
+            if (IN == 1) begin
+                MATCH = (input_count == 4) || (input_count == 8);
+                next_state = IDLE;
+            end
+        end
+        default: begin
+            next_state = IDLE;
+        end
     endcase
 end
 

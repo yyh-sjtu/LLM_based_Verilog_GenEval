@@ -1,0 +1,52 @@
+Here is the RTL code for the TopModule implementing the finite-state machine described:
+
+```
+module TopModule (
+  input clk,
+  input reset,
+  input x,
+  output reg z
+);
+
+typedef enum logic [2:0] {
+  S_000,
+  S_001,
+  S_010,
+  S_011,
+  S_100
+} state_t;
+
+reg [2:0] y, next_y;
+
+always @(posedge clk) begin
+  if (reset) begin
+    y <= S_000;
+    z <= 0;
+  end else begin
+    y <= next_y;
+    case(y)
+      S_000:
+        if (x) next_y = S_001;
+        else next_y = S_000;
+      S_001:
+        if (x) next_y = S_100;
+        else next_y = S_001;
+      S_010:
+        if (x) next_y = S_001;
+        else next_y = S_010;
+      S_011:
+        next_y = S_010;
+        z <= 1;
+      S_100:
+        if (x) next_y = S_100;
+        else next_y = S_011;
+      default:
+        next_y = S_000;
+    endcase
+  end
+end
+
+endmodule
+```
+
+This RTL code creates a finite-state machine with the specified state transitions and output based on the input signals. The FSM is reset to state 000 when the reset signal is high. The sequential logic is triggered on the positive edge of the clock. The module has inputs clk, reset, x, and an output z as described.

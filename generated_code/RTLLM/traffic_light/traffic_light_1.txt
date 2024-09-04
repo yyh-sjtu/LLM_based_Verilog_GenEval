@@ -1,98 +1,103 @@
-Here is the complete Verilog code for the traffic light module:
+Here is the complete Verilog code for the traffic light controller:
 
 ```verilog
-module traffic_light(
-    input wire rst_n,
-    input wire clk,
-    input wire pass_request,
+module traffic_light (
+    input rst_n,
+    input clk,
+    input pass_request,
     output reg [7:0] clock,
     output reg red,
     output reg yellow,
     output reg green
 );
 
-// Parameters for state enumeration
-parameter idle = 2'b00;
-parameter s1_red = 2'b01;
-parameter s2_yellow = 2'b10;
-parameter s3_green = 2'b11;
+parameter idle = 2'b00, s1_red = 2'b01, s2_yellow = 2'b10, s3_green = 2'b11;
 
-// Registers and wires
-reg [7:0] cnt;
 reg [1:0] state;
-reg p_red, p_yellow, p_green;
+reg [1:0] next_state;
+reg [7:0] cnt;
+reg p_red;
+reg p_yellow;
+reg p_green;
 
-// State transition logic
 always @(posedge clk or negedge rst_n) begin
-    if (!rst_n) begin
+    if (!rst_n)
         cnt <= 10;
-        state <= s1_red;
-    end else begin
+    else begin
         case(state)
             idle: begin
-                red <= 0;
-                yellow <= 0;
-                green <= 0;
-                state <= s1_red;
+                next_state <= s1_red;
             end
             s1_red: begin
-                if (cnt == 3)
-                    state <= s3_green;
-                else
-                    state <= s1_red;
+                next_state <= (cnt == 3) ? s3_green : s1_red;
             end
             s2_yellow: begin
-                if (cnt == 3)
-                    state <= s1_red;
-                else
-                    state <= s2_yellow;
+                next_state <= (cnt == 3) ? s1_red : s2_yellow;
             end
             s3_green: begin
-                if (cnt == 3)
-                    state <= s2_yellow;
-                else
-                    state <= s3_green;
+                next_state <= (cnt == 3) ? s2_yellow : s3_green;
             end
         endcase
     end
 end
 
-// Counting logic
 always @(posedge clk or negedge rst_n) begin
     if (!rst_n)
         cnt <= 10;
-    else if (pass_request && green)
-        cnt <= 10;
-    else if (!green && p_green)
-        cnt <= 60;
-    else if (!yellow && p_yellow)
-        cnt <= 5;
-    else if (!red && p_red)
-        cnt <= 10;
-    else
-        cnt <= cnt - 1;
+    else begin
+        if (pass_request && p_green)
+            cnt <= 10;
+        else if (!p_green && green)
+            cnt <= 60;
+        else if (!p_yellow && yellow)
+            cnt <= 5;
+        else if (!p_red && red)
+            cnt <= 10;
+        else
+            cnt <= cnt - 1;
+    end
 end
 
-// Assign internal count value to output clock
-assign clock = cnt;
-
-// Output signal logic
 always @(posedge clk or negedge rst_n) begin
     if (!rst_n) begin
-        p_red <= 0;
-        p_yellow <= 0;
-        p_green <= 0;
+        state <= idle;
+        red <= 0;
+        yellow <= 0;
+        green <= 0;
     end else begin
+        state <= next_state;
         p_red <= red;
         p_yellow <= yellow;
         p_green <= green;
+
+        case(state)
+            idle: begin
+                red <= 0;
+                yellow <= 0;
+                green <= 0;
+            end
+            s1_red: begin
+                red <= 1;
+                yellow <= 0;
+                green <= 0;
+            end
+            s2_yellow: begin
+                red <= 0;
+                yellow <= 1;
+                green <= 0;
+            end
+            s3_green: begin
+                red <= 0;
+                yellow <= 0;
+                green <= 1;
+            end
+        endcase
     end
-    red <= (state == s1_red) ? 1'b1 : 1'b0;
-    yellow <= (state == s2_yellow) ? 1'b1 : 1'b0;
-    green <= (state == s3_green) ? 1'b1 : 1'b0;
 end
 
-endmodule
-```
+assign clock = cnt;
 
-This Verilog code implements the traffic light controller as described, including the state transition logic, counting logic, and output signal logic. The code is designed to simulate the behavior of a traffic light with the specified timings and interactions with the pedestrian request signal.
+endmodule
+``` 
+
+This Verilog code describes a traffic light controller with the specified functionality. It includes state transition logic, counting logic, and output signal assignment. The code implements the behavior of the traffic light and pedestrian button interaction, as well as the timing requirements for the traffic light signals.

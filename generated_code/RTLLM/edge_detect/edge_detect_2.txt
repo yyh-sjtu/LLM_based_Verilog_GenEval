@@ -1,33 +1,32 @@
 ```verilog
 module edge_detect (
-    input wire clk,
-    input wire rst_n,
-    input wire a,
+    input clk,
+    input rst_n,
+    input a,
     output reg rise,
     output reg down
 );
 
-reg a_prev;
+reg a_d1; // Delayed input signal
 
 always @(posedge clk or negedge rst_n) begin
     if (~rst_n) begin
-        a_prev <= 1'b0;
-        rise <= 1'b0;
-        down <= 1'b0;
+        rise <= 0;
+        down <= 0;
+        a_d1 <= 0;
     end else begin
-        if (a_prev == 1'b0 && a == 1'b1) begin
-            rise <= 1'b1;
-        end else begin
-            rise <= 1'b0;
-        end
+        a_d1 <= a;
         
-        if (a_prev == 1'b1 && a == 1'b0) begin
-            down <= 1'b1;
+        if (a_d1 == 0 && a == 1) begin // Rising edge detected
+            rise <= 1;
+            down <= 0;
+        end else if (a_d1 == 1 && a == 0) begin // Falling edge detected
+            rise <= 0;
+            down <= 1;
         end else begin
-            down <= 1'b0;
+            rise <= 0;
+            down <= 0;
         end
-        
-        a_prev <= a;
     end
 end
 

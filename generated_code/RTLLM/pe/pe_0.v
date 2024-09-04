@@ -1,4 +1,4 @@
-module pe(
+module pe (
     input clk,
     input rst,
     input [31:0] a,
@@ -6,11 +6,11 @@ module pe(
     output reg [31:0] c
 );
 
-always @(posedge clk or posedge rst) begin
+always @(posedge clk, posedge rst) begin
     if (rst) begin
         c <= 0;
     end else begin
-        c <= c + a * b;
+        c <= c + (a * b);
     end
 end
 

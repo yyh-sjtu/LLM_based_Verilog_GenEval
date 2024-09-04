@@ -1,26 +1,37 @@
+// Define states
+parameter STATE_0 = 1'b0;
+parameter STATE_1 = 1'b1;
+
 always @(posedge clk or posedge reset) begin
-    if (reset) begin
-        present_state <= 0;
-    end else begin
+    if(reset) begin
+        present_state <= STATE_0;
+    end
+    else begin
         present_state <= next_state;
     end
 end
 
-always @* begin
-    next_state = present_state;
-    case (present_state)
-        0: begin
-            out = 1;
-            if (in == 0) begin
-                next_state = 1;
+always @(*) begin
+    case(present_state)
+        STATE_0: begin
+            out = 1'b1;
+            if(in) begin
+                next_state = STATE_1;
+            end
+            else begin
+                next_state = STATE_0;
             end
         end
-        1: begin
-            out = 0;
-            if (in == 0) begin
-                next_state = 0;
+        STATE_1: begin
+            out = 1'b0;
+            if(in) begin
+                next_state = STATE_1;
+            end
+            else begin
+                next_state = STATE_0;
             end
         end
     endcase
 end
+
 endmodule

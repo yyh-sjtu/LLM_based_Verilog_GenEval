@@ -1,0 +1,40 @@
+Sure! Below is a simple implementation of a module named `TopModule` in Verilog that meets your requirements. It uses eight D flip-flops with active high synchronous reset.
+
+```verilog
+module TopModule (
+    input  clk,
+    input  reset,
+    input  [7:0] d,
+    output reg [7:0] q
+);
+
+// D Flip-Flops with synchronous reset
+always @(posedge clk) begin
+    if (reset) begin
+        q <= 8'b0; // Set output to zero on reset
+    end else begin
+        q <= d; // Capture input d on rising edge of clk
+    end
+end
+
+endmodule
+```
+
+### Explanation:
+
+1. **Module Declaration**:
+   - The module is named `TopModule` and has the specified input and output ports.
+
+2. **Input and Output Ports**:
+   - `clk`: Clock input, triggered on the rising edge.
+   - `reset`: Active high synchronous reset input.
+   - `d`: 8-bit data input.
+   - `q`: 8-bit output, which holds the current state of the D flip-flops.
+
+3. **Always Block**:
+   - The `always` block is sensitive to the positive edge of `clk`.
+   - Inside the block, there’s a check for the `reset` signal:
+     - If `reset` is high, the output `q` is set to `0`.
+     - If `reset` is low, the output `q` captures the value of `d` on the clock's rising edge.
+
+This implementation provides the functionality required by your specification. If you have any other requirements or questions, feel free to ask!

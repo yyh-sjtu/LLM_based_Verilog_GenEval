@@ -1,0 +1,18 @@
+Here is the Verilog code for the TopModule:
+
+```verilog
+module TopModule (
+    input [3:0] in,
+    output out_and,
+    output out_or,
+    output out_xor
+);
+
+assign out_and = in[3] & in[2] & in[1] & in[0];
+assign out_or = in[3] | in[2] | in[1] | in[0];
+assign out_xor = in[3] ^ in[2] ^ in[1] ^ in[0];
+
+endmodule
+```
+
+This Verilog code defines a module named TopModule with the specified interface. The module implements a combinational circuit with four inputs in[3:0] and three outputs out_and, out_or, and out_xor. The outputs are connected to the result of a 4-input AND gate, a 4-input OR gate, and a 4-input XOR gate respectively, based on the input values.
