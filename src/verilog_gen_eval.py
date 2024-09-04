@@ -33,7 +33,11 @@ file_patterns = {
 def get_args():
     parser = argparse.ArgumentParser()
     parser.add_argument("--model_name", type=str, default="gpt-3.5-turbo")
+<<<<<<< HEAD
     parser.add_argument("--benchmark", type=str, default="RTLLM")
+=======
+    parser.add_argument("--benchmark", type=str, default="RTLLM", help="Currently, there are four valid options: RTLLM, VGen, VerilogEval, all.")
+>>>>>>> 6f978b6 (clean redundants)
     parser.add_argument("--api_key", type=str, default="sk-")
     parser.add_argument("--base_url", type=str, default="")
     parser.add_argument("--pass_at_n", type=int, default=5)  # pass@5
