@@ -1,0 +1,8 @@
+module TopModule (
+	input [99:0] in,
+	output [99:0] out
+);
+    parameter N = 20;
+    assign out = {in[N-1],in[N-2]};
+endmodule
+

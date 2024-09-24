@@ -1,0 +1,15 @@
+module TopModule (
+    input [2:0] y,
+    input w,
+    output Y1
+);
+    reg [1:0] state;
+    assign Y1 = state;
+    always @(y)
+    begin
+        if (w)
+            state <= 2'b00;
+        else
+            state <= 2'b01;
+    end
+endmodule

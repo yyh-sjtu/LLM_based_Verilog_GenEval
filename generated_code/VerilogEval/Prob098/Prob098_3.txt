@@ -1,0 +1,23 @@
+Based on the provided simulation waveforms, the TopModule appears to be a D flip-flop with asynchronous reset functionality. When the clock signal (clk) transitions from 0 to 1, the output (q) will take on the value of the input (a). Additionally, if the input a is set to 1, the output q will remain at 1 regardless of the clock signal.
+
+Here is the RTL code implementation of TopModule:
+
+```verilog
+module TopModule (
+    input clk,
+    input a,
+    output reg q
+);
+
+always @(posedge clk or negedge a) begin
+    if (!a) begin
+        q <= 1'b0;
+    end else begin
+        q <= a;
+    end
+end
+
+endmodule
+```
+
+This code snippet describes the behavior of a D flip-flop with an asynchronous reset signal (a). The output q is updated on the positive edge of the clock signal and is set to 0 when the reset signal a is low (0), and takes on the value of the input a when the reset signal is high (1).

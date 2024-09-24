@@ -1,0 +1,30 @@
+Certainly! Below is a Verilog implementation of the `TopModule` that sign-extends an 8-bit input to a 32-bit output by replicating the sign bit as specified.
+
+### Verilog Code for `TopModule`
+
+```verilog
+module TopModule (
+    input [7:0] in,  // 8-bit input
+    output [31:0] out // 32-bit output
+);
+
+    // Sign-extend the 8-bit input to 32 bits
+    assign out = { {24{in[7]}}, in }; 
+
+endmodule
+```
+
+### Explanation:
+- **Inputs and Outputs:** 
+  - The module has one 8-bit input `in` and a 32-bit output `out`.
+- **Sign Extension:**
+  - The `assign` statement constructs the `out` signal. 
+  - `in[7]` is the sign bit of the 8-bit input.
+  - `{24{in[7]}}` replicates this sign bit 24 times to create the most significant 24 bits of the output.
+  - `in` is appended to this replicated sign bit to form the complete 32-bit value.
+
+### Example:
+- If `in = 8'b01010101` (which is positive), the output will be `out = 32'b00000000_00000000_00000000_01010101`.
+- If `in = 8'b11010101` (which is negative), the output will be `out = 32'b11111111_11111111_11111111_11010101`.
+
+This module effectively handles the sign extension of an 8-bit input to a 32-bit output, preserving the signed value.

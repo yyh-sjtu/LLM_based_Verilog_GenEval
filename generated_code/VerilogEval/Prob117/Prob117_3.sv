@@ -1,0 +1,53 @@
+
+module TopModule(
+    input clk,
+    input a,
+    output reg [2:0] q
+);
+
+// Define state register
+reg [2:0] state;
+
+// Sequential logic based on state transitions
+always @(posedge clk) begin
+    case (state)
+        3'b100: // State 4
+            if (a) begin
+                q <= 3'b100; // Output is 4
+                state <= 3'b100;
+            end
+            else begin
+                q <= 3'b101; // Output is 5
+                state <= 3'b101;
+            end
+        3'b101: // State 5
+            if (a) begin
+                q <= 3'b101; // Output is 5
+                state <= 3'b101;
+            end
+            else begin
+                q <= 3'b110; // Output is 6
+                state <= 3'b110;
+            end
+        3'b110: // State 6
+            if (a) begin
+                q <= 3'b110; // Output is 6
+                state <= 3'b110;
+            end
+            else begin
+                q <= 3'b000; // Output is 0
+                state <= 3'b000;
+            end
+        default: // Initial state
+            if (a) begin
+                q <= 3'b100; // Output is 4
+                state <= 3'b100;
+            end
+            else begin
+                q <= 3'bxxx; // Output is undefined
+                state <= 3'b000; // Next state is 0
+            end
+    endcase
+end
+
+endmodule

@@ -1,0 +1,31 @@
+Certainly! Below is an example of a Verilog implementation for the `TopModule` that reverses the byte order of a 32-bit input vector.
+
+### Verilog Code for TopModule
+
+```verilog
+module TopModule (
+    input  [31:0] in,  // 32-bit input
+    output [31:0] out  // 32-bit output
+);
+
+    // Reversing the byte order
+    assign out = {in[7:0], in[15:8], in[23:16], in[31:24]};
+
+endmodule
+```
+
+### Explanation:
+- The `in` input is a 32-bit vector which is divided into four bytes:
+  - `in[7:0]` is the least significant byte (LSB)
+  - `in[15:8]` is the second byte
+  - `in[23:16]` is the third byte
+  - `in[31:24]` is the most significant byte (MSB)
+
+- The output `out` is constructed by assembling these bytes in reverse order:
+  - The LSB (`in[7:0]`) becomes the most significant byte of `out`.
+  - The second byte (`in[15:8]`) becomes the next most significant byte of `out`.
+  - The third byte (`in[23:16]`) follows.
+  - The MSB (`in[31:24]`) becomes the least significant byte of `out`.
+
+### Simulation and Synthesis:
+You can synthesize this module using any standard synthesizer, and it should work seamlessly when instantiated in a larger design or simulation environment.

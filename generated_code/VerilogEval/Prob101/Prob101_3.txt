@@ -1,0 +1,17 @@
+Here is the Verilog code for the TopModule based on the provided simulation waveforms:
+
+```verilog
+module TopModule(
+    input a,
+    input b,
+    input c,
+    input d,
+    output q
+);
+
+assign q = (a & b) | (c & d);
+
+endmodule
+```
+
+This code implements a combinational circuit that computes the output q based on the input signals a, b, c, and d as per the given simulation waveforms. In this circuit, q is calculated as the OR operation between the AND of inputs a and b, and the AND of inputs c and d.

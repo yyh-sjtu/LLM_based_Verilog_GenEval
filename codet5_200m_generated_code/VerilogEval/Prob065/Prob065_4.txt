@@ -1,0 +1,56 @@
+module TopModule (
+	input p1a,
+	input p1b,
+	input p1c,
+	input p1d,
+	input p2a,
+	input p2b,
+	input p2c,
+	input p2d,
+	output p1y,
+	output p2y
+);
+    wire [3:0] nand0;
+    wire [3:0] nand1;
+    nand nand2 (nand0[0], nand0[1], nand0[2], nand0[3], nand0[4]);
+    nand nand3 (nand1[0], nand1[1], nand1[2], nand1[3], nand1[4]);
+    nand nand4 (nand2[0], nand2[1], nand2[2], nand2[3], nand2[4]);
+    nand nand5 (nand3[0], nand3[1], nand3[2], nand3[3], nand3[4]);
+    nand nand6 (nand6[0], nand6[1], nand6[2], nand6[3], nand6[4]);
+    nand nand7 (nand7[0], nand7[1], nand7[2], nand7[3], nand7[4]);
+    nand nand8 (nand8[0], nand8[1], nand8[2], nand8[3], nand8[4]);
+    nand nand9 (nand9[0], nand9[1], nand9[2], nand9[3], nand9[4]);
+    nand nand10 (nand10[0], nand10[1], nand10[2], nand10[3], nand10[4]);
+    nand nand11 (nand11[0], nand11[1], nand11[2], nand11[3], nand11[4]);
+    nand nand12 (nand12[0], nand12[1], nand12[2], nand12[3], nand12[4]);
+    nand nand13 (nand13[0], nand13[1], nand13[2], nand13[3], nand13[4]);
+    nand nand 14 (nand14[0], nand14[1], nand14[2], nand14[3], nand14[4]);
+    nand nand 15 (nand 15[0], nand15[1], nand15[2], nand15[3], nand15[4]);
+    nand nand 16 (nand 16[0], nand 16[1], nand16[2], nand16[3], nand16[4]);
+    nand nand 17 (nand 17[0], nand 17[1], nand17[2], nand17[3], nand17[4]);
+    n and  (nand 17[1], nand 17[2], nand17[3], nand17[4]);
+    n and  (nand 17[2], nand 17[3], nand17[4]);
+    n and  (nand 17[3], nand 17[2], nand17[3], nand17[4]);
+    n and  (nand 17[4], nand 17[1], nand17[2], nand17[3], nand17[4]);
+    n and  (nand 17[3], nand 17[2], nand17[3], nand17[4]);
+    n and  (nand 17[4], nand 17[1], nand17[2], nand17[3], nand17[4]);
+    n and  (nand 17[2], nand 17[1], nand17[3], nand17[4]);
+    n and  (nand 17[3], nand 17[2], nand17[3], nand17[4]);
+    n and  (nand 17[4], nand 17[2], nand17[3], nand17[4]);
+    n and  (nand 17[4], nand 17[2], nand17[3], nand17[4]);
+    n and  (nand 17[5], nand 5[0], nand 5[1], nand 5[2], nand 5[3]);
+    n and  (nand 17[5], nand 5[2], nand 5[3], nand 5[4]);
+    n and  (nand 17[6], nand 6[0], nand 6[1], nand 6[2], nand 5[3]);
+    n and  (nand 17[6], nand 6[1], nand 6[2], nand 5[3]);
+    n and  (nand 17[7], nand 7[0], nand 7[1], nand 7[2], nand 7[3]);
+    n and  (nand 17[8], nand 8[0], nand 8[1], nand 8[2], nand 8[3]);
+    n and  (nand 17[9], nand 9[0], nand 9[1], nand 9[2], nand 10[0], nand 10[1], nand 11[0], nand 12[0], nand 13[0], nand 12[1], nand 13[1], nand 14[0], nand 15[0], nand 16[0], nand 15[1], nand 16[1], nand 15[1], nand 16[1], nand 16[2], nand 12[0], nand 15[1], nand 16[2], nand 12[0], nand 14[0], nand 15[1], nand 16[1], nand 16[2], nand 14[0], nand 15[1], nand 16[2], nand 15[1], nand 16[2], nand 15[1], nand 16[3]);
+    n and  (nand 17[8], nand 8[0], nand 9[0], nand 10[0], nand 11[0], nand 12[0], nand 14[0], nand 15[1], nand 16[1], nand 16[2], nand 12[0], nand 14[0], nand 15[1], nand 14[1], nand 15[1], nand 14[1], nand 15[2], nand 14[1], nand 15[2], nand 15[3]);
+    n and  (nand 17[9], nand 9[0], nand 10[0], nand 11[0], nand 12[0], nand 14[1], nand 14[1], nand 15[2], nand 14[1], nand 15[2], nand 15[3]);
+    n and  (nand 17[10], nand 10[0], nand 10[0], nand 11[0], nand 12[0], nand 14[1], nand 14[1], nand 15[2], nand 12[0], nand 14[1], nand 15[2], nand 14[1], nand 15[3]);
+    n and  (nand 17[11], nand 11[0], nand 11[0], nand 12[0], nand 13[0], nand 14[1], nand 15[2], nand 14[1], nand 15[2], nand 15[3]);
+    n and  (nand 17[12], nand 12[0], nand 12[1], nand 12[1], nand 13[0], nand 14[1], nand 13[0], nand 14[1], nand 15[2], nand 14[1], nand 15[2], nand 14[1], nand 15[3]);
+    n and  (nand 17[13], nand 13[0], nand 13[0], nand 13[1], nand 14[1], nand 13[1], nand 14[2], nand 15[3], nand 14[2], nand 15[3], nand 14[3]);
+    n and  (nand 17[14], nand 14[1], nand 14[2], nand 14[3], nand 14[3], nand 14[2], nand 15[3], nand 14[3], nand 15[4], nand 14[4], nand 15[4], nand 15[4], nand 15[5], nand 14[5], nand 14[6], nand 15[6], nand 15[4], nand 15[5], nand 14[6], nand 15[4], nand 15[5], nand 14[6], nand 15[7]);
+    n and  (nand 17[15], nand 15[6], nand 15[7]);
+    n and  (nand 17[16], nand 16[16], nand 16[16

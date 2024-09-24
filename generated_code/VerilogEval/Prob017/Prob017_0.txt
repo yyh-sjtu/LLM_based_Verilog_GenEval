@@ -1,0 +1,31 @@
+Certainly! Below is the Verilog implementation of the `TopModule` which serves as a 2-to-1 multiplexer for two 100-bit inputs, `a` and `b`, based on the input select line `sel`.
+
+```verilog
+module TopModule (
+    input  [99:0] a,   // 100-bit input a
+    input  [99:0] b,   // 100-bit input b
+    input         sel,  // 1-bit select input
+    output [99:0] out   // 100-bit output
+);
+
+    // Mux logic
+    assign out = (sel == 1'b0) ? a : b;
+
+endmodule
+```
+
+### Explanation:
+
+1. **Module Declaration**:
+   - The module is named `TopModule` and has three input ports and one output port.
+   - `a` and `b` are both 100-bit wide input vectors.
+   - `sel` is a single-bit input used to select which input to output.
+   - `out` is a 100-bit output reflecting the selected input.
+
+2. **Mux logic**:
+   - The `assign` statement utilizes a conditional (ternary) operator:
+     - If `sel` is `0`, the output `out` will be assigned the value of `a`.
+     - If `sel` is `1`, the output `out` will be assigned the value of `b`.
+
+### Simulation:
+To test the functionality of this multiplexer, you can write a testbench that varying the `sel` signal and changing the values of `a` and `b`. If you need assistance with the testbench or any other modifications, feel free to ask!

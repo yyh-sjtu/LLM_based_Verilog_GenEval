@@ -1,0 +1,13 @@
+module TopModule (
+    input clock,
+    input a,
+    output p,
+    output q
+);
+    reg [4:0] a_r;
+    always @(posedge clock)
+        a_r <= a;
+    assign p = a_r;
+    assign q = a_r;
+endmodule
+

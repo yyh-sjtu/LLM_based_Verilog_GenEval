@@ -1,0 +1,20 @@
+module TopModule (
+    input clk,
+    input load,
+    input [511:0] data,
+    output [511:0] q
+);
+    reg [511:0] code;
+    initial
+    begin
+        code = 'h000000;
+    end
+    always @(posedge clk)
+    begin
+        if(load)
+            code = {data[9:0], data[7:4]};
+        else
+            code = code ^ data[511:0];
+    end
+    assign q = code;
+endmodule

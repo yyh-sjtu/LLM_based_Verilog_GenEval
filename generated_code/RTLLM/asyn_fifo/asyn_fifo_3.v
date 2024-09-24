@@ -1,0 +1,106 @@
+
+module dual_port_RAM(
+    input wclk,
+    input wenc,
+    input [$clog2(DEPTH)-1:0] waddr,
+    input [WIDTH-1:0] wdata,
+    input rclk,
+    input renc,
+    input [$clog2(DEPTH)-1:0] raddr,
+    output reg [WIDTH-1:0] rdata
+);
+
+    reg [WIDTH-1:0] RAM_MEM [0:DEPTH-1];
+    
+    always @(posedge wclk) begin
+        if(wenc)
+            RAM_MEM[waddr] <= wdata;
+    end
+    
+    always @(posedge rclk) begin
+        if(renc)
+            rdata <= RAM_MEM[raddr];
+    end
+    
+endmodule
+
+module asyn_fifo(
+    input wclk,
+    input rclk,
+    input wrstn,
+    input rrstn,
+    input winc,
+    input rinc,
+    input [WIDTH-1:0] wdata,
+    output reg wfull,
+    output reg rempty,
+    output reg [WIDTH-1:0] rdata
+);
+
+parameter WIDTH = 8;
+parameter DEPTH = 16;
+
+reg [WIDTH-1:0] wptr, rptr;
+reg [WIDTH-1:0] wptr_buff, rptr_buff;
+reg [WIDTH-1:0] waddr_bin, raddr_bin;
+reg [WIDTH-1:0] rptr_syn;
+reg [WIDTH-1:0] neg_msb_raddr;
+wire [WIDTH-1:0] msb_rptr;
+
+assign msb_rptr = {rptr[WIDTH-1], rptr[WIDTH-1:1]};
+assign neg_msb_raddr = {~raddr_bin[WIDTH-1], raddr_bin[WIDTH-1:1]};
+
+dual_port_RAM ram_inst(
+    .wclk(wclk),
+    .wenc(winc),
+    .waddr(waddr_bin),
+    .wdata(wdata),
+    .rclk(rclk),
+    .renc(rinc),
+    .raddr(raddr_bin),
+    .rdata(rdata)
+);
+
+always @(posedge wclk or negedge wrstn) begin
+    if(~wrstn)
+        wptr <= 0;
+    else if(winc)
+        wptr <= wptr + 1;
+end
+
+always @(posedge rclk or negedge rrstn) begin
+    if(~rrstn)
+        rptr <= 0;
+    else if(rinc)
+        rptr <= rptr + 1;
+end
+
+always @(posedge wclk) begin
+    wptr_buff <= wptr;
+end
+
+always @(posedge rclk) begin
+    rptr_buff <= rptr;
+end
+
+always @(wptr, wptr_buff) begin
+    waddr_bin = wptr ^ (wptr >> 1);
+end
+
+always @(rptr, rptr_buff) begin
+    rptr_syn = rptr ^ (rptr >> 1);
+end
+
+always @(*) begin
+    if(wptr == rptr_syn)
+        rempty = 1;
+    else
+        rempty = 0;
+    
+    if(wptr == {~msb_raddr, raddr_bin[WIDTH-2:0]})
+        wfull = 1;
+    else
+        wfull = 0;
+end
+
+endmodule

@@ -1,0 +1,23 @@
+
+initial begin
+    present_state = 0;
+    next_state = 0;
+end
+
+always @(posedge clk or posedge reset) begin
+    if (reset) begin
+        present_state <= 0;
+        next_state <= 0;
+    end else begin
+        present_state <= next_state;
+        if (in == 0) begin
+            next_state <= ~present_state;
+        end
+    end
+end
+
+assign out = present_state;
+
+endmodule
+
+This Verilog module implements a simple Moore state machine with two states (0 and 1), one input (in), and one output (out). The reset state is 0 and the output is high when the state is 0. If the input (in) is low, the state transitions to the next state. The state transitions are controlled by the clock (clk) and a reset signal.

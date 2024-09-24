@@ -1,0 +1,19 @@
+Certainly! Below is a simple implementation of a module named `TopModule` in Verilog that satisfies your requirements. This module has one output port named `out`, which always drives a logic low (0).
+
+```verilog
+module TopModule (
+    output wire out
+);
+
+    assign out = 1'b0; // Always drive out to logic low (0)
+
+endmodule
+```
+
+### Explanation:
+
+- **module TopModule**: This line defines the module named `TopModule`.
+- **output wire out**: This line declares a one-bit output port named `out`.
+- **assign out = 1'b0**: This continuous assignment always drives the output `out` to logic low (0).
+
+This implementation will ensure that the output remains at logic low regardless of any changes in input (though no inputs are defined in your specifications). If you have any further requirements or modifications, feel free to ask!

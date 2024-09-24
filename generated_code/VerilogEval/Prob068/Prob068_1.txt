@@ -1,0 +1,87 @@
+Here's a Verilog implementation of the `TopModule` that meets your specifications for a 4-digit BCD (Binary-Coded Decimal) counter. The module includes a synchronous active-high reset and outputs enable signals for each of the upper three digits.
+
+```verilog
+module TopModule (
+    input  wire clk,
+    input  wire reset,
+    output reg  [3:0] ena,
+    output reg  [15:0] q
+);
+
+    // Initialize the BCD counter
+    initial begin
+        q = 16'b0; // Initialize the output to all zeros
+        ena = 4'b0000; // Initialize enable signals to zero
+    end
+
+    always @(posedge clk or posedge reset) begin
+        if (reset) begin
+            q <= 16'b0; // Reset the counter to zero
+            ena <= 4'b0000; // Reset enable signals
+        end
+        else begin
+            // Increment the least significant digit (ones place)
+            if (q[3:0] == 4'b1001) begin
+                q[3:0] <= 4'b0000; // Roll over to 0
+                ena[0] <= 1'b1; // Enable carry to tens digit
+            end
+            else begin
+                q[3:0] <= q[3:0] + 1'b1; // Increment ones digit
+                ena[0] <= 1'b0; // Disable carry
+            end
+
+            // Increment the tens place if needed
+            if (ena[0]) begin
+                if (q[7:4] == 4'b1001) begin
+                    q[7:4] <= 4'b0000; // Roll over to 0
+                    ena[1] <= 1'b1; // Enable carry to hundreds digit
+                end
+                else begin
+                    q[7:4] <= q[7:4] + 1'b1; // Increment tens digit
+                    ena[1] <= 1'b0; // Disable carry
+                end
+            end
+
+            // Increment the hundreds place if needed
+            if (ena[1]) begin
+                if (q[11:8] == 4'b1001) begin
+                    q[11:8] <= 4'b0000; // Roll over to 0
+                    ena[2] <= 1'b1; // Enable carry to thousands digit
+                end
+                else begin
+                    q[11:8] <= q[11:8] + 1'b1; // Increment hundreds digit
+                    ena[2] <= 1'b0; // Disable carry
+                end
+            end
+
+            // Increment the thousands place if needed
+            if (ena[2]) begin
+                if (q[15:12] == 4'b1001) begin
+                    q[15:12] <= 4'b0000; // Roll over to 0
+                    ena[3] <= 1'b1; // Optional: can indicate overflow here
+                end
+                else begin
+                    q[15:12] <= q[15:12] + 1'b1; // Increment thousands digit
+                    ena[3] <= 1'b0; // Disable carry
+                end
+            end
+            
+        end
+    end
+endmodule
+```
+
+### Explanation:
+1. **Resets**: The module begins by resetting both the BCD output (`q`) and enable signals (`ena`) to 0 upon receiving a reset signal.
+  
+2. **Counter Logic**: The counting logic increments the BCD digits:
+   - Before incrementing, it checks for rollovers (i.e., if a digit reaches 10 in binary—`1001`).
+   - If a digit rolls over, it resets that digit to 0 and enables the next higher digit.
+  
+3. **Enable Signals**: 
+   - `ena[0]` enables the tens place when the ones place rolls over.
+   - Similarly, `ena[1]` enables the hundreds place when the tens place rolls over, and `ena[2]` enables the thousands when the hundreds place rolls over.
+   - `ena[3]` can be used as an overflow indicator when the thousands place rolls over.
+
+### Simulation and Testing:
+You should simulate the design to verify that it counts correctly in BCD and that enable signals are asserted as required. Ensure to include sufficient test cases, particularly around rollover values (e.g., 9, 10, 19, 99, and 999).

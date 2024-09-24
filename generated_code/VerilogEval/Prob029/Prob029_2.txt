@@ -1,0 +1,23 @@
+Here is the Verilog code for the TopModule module implementing the described circuit:
+
+```verilog
+module TopModule (
+    input in1,
+    input in2,
+    input in3,
+    output reg out
+);
+
+always @(*) begin
+    // Two-input XNOR gate
+    wire xnor_out;
+    assign xnor_out = in1 ^ in2;
+
+    // Two-input XOR gate
+    assign out = xnor_out ^ in3;
+end
+
+endmodule
+```
+
+This code implements the circuit as described, with the input signals 'in1' and 'in2' connected to a two-input XNOR gate whose output is then connected to a two-input XOR gate along with 'in3'. The final output 'out' is the result of the XOR gate.

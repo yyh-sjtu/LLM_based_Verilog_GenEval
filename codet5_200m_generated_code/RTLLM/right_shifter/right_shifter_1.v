@@ -1,0 +1,11 @@
+module right_shifter (
+	input clk,
+	input d,
+	output reg [7:0] q
+);
+    always @(posedge clk)
+        q <= q << 1;
+    always @(posedge clk)
+        q <= d;
+endmodule
+

@@ -1,0 +1,93 @@
+Certainly! Below is a Verilog implementation of the desired `TopModule` which implements the specified Moore state machine.
+
+```verilog
+module TopModule (
+    input clk,
+    input areset,
+    input in,
+    output reg out
+);
+
+// State encoding
+typedef enum reg [1:0] {
+    A = 2'b00,
+    B = 2'b01,
+    C = 2'b10,
+    D = 2'b11
+} state_t;
+
+// State variable
+state_t current_state, next_state;
+
+// Sequential logic: State transition
+always @(posedge clk or posedge areset) begin
+    if (areset) begin
+        current_state <= A;  // Reset to state A
+    end else begin
+        current_state <= next_state;  // Transition to next state
+    end
+end
+
+// Combinational logic: Next state and output logic
+always @(*) begin
+    // Default outputs and next state
+    out = 0; // Default output
+    next_state = current_state; // Default to current state
+
+    case (current_state)
+        A: begin
+            if (in) begin
+                next_state = B;  // Transition to state B
+            end else begin
+                next_state = A;  // Stay in state A
+            end
+            out = 0; // Output remains 0
+        end
+
+        B: begin
+            if (in) begin
+                next_state = B;  // Stay in state B
+            end else begin
+                next_state = C;  // Transition to state C
+            end
+            out = 0; // Output remains 0
+        end
+
+        C: begin
+            if (in) begin
+                next_state = D;  // Transition to state D
+            end else begin
+                next_state = A;  // Transition to state A
+            end
+            out = 0; // Output remains 0
+        end
+
+        D: begin
+            if (in) begin
+                next_state = B;  // Transition to state B
+            end else begin
+                next_state = C;  // Transition to state C
+            end
+            out = 1; // Output is 1
+        end
+
+        default: begin
+            next_state = A; // Default to state A on any unexpected state
+            out = 0; // Default output
+        end
+    endcase
+end
+
+endmodule
+```
+
+### Explanation:
+1. **State Encoding:** The states are defined as a 2-bit enumeration (`A`, `B`, `C`, `D`) to easily manage state transitions.
+  
+2. **Sequential Logic:** This logic utilizes a positive edge-triggered clock and handles asynchronous reset. When `areset` is high, the state machine resets to state `A`. On each clock cycle, it transitions to the next state.
+
+3. **Combinational Logic:** The next state and output are computed based on the current state and input. Each case specifies the next state for states `A`, `B`, `C`, and `D`, along with the corresponding output as per the provided state transition table.
+
+### Notes:
+- Ensure any testbench includes `areset` and toggles the `clk` and `in` signals to verify the functionality of the state machine.
+- This implementation uses Verilog's `always` block structure appropriately to handle both synchronous and asynchronous operations.

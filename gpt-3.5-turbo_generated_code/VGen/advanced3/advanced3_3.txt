@@ -1,0 +1,78 @@
+Certainly! Below is a Verilog implementation of the specified finite state machine (FSM) that recognizes the sequence `101` on the input signal `x`:
+
+```verilog
+module adv_fsm(
+    input clk,
+    input reset,
+    input x,
+    output reg z
+);
+    // State encoding
+    reg [1:0] present_state, next_state;
+    parameter IDLE = 2'b00, S1 = 2'b01, S10 = 2'b10, S101 = 2'b11;
+
+    // Sequential block for state transition
+    always @(posedge clk or posedge reset) begin
+        if (reset) 
+            present_state <= IDLE; // Reset state
+        else 
+            present_state <= next_state; // Update to next state
+    end
+
+    // Combinational block for next state logic
+    always @(*) begin
+        case (present_state)
+            IDLE: begin
+                if (x) 
+                    next_state = S1;  // Move to state S1 if x is 1
+                else 
+                    next_state = IDLE; // Stay in IDLE
+            end
+            
+            S1: begin
+                if (~x) 
+                    next_state = S10; // Move to state S10 if x is 0
+                else 
+                    next_state = IDLE; // Go back to IDLE if x is 1
+            end
+            
+            S10: begin
+                if (x) 
+                    next_state = S101; // Move to state S101 if x is 1
+                else 
+                    next_state = IDLE; // Go back to IDLE if x is 0
+            end
+            
+            S101: begin
+                next_state = IDLE; // Always go back to IDLE from S101
+            end
+            
+            default: next_state = IDLE; // Default case (should not occur)
+        endcase
+    end
+
+    // Output logic
+    always @(*) begin
+        if (present_state == S101)
+            z = 1; // Assert z when in state S101
+        else
+            z = 0; // Deassert z otherwise
+    end
+endmodule
+```
+
+### Explanation:
+1. **State Declaration**:
+   - The states are encoded using 2 bits: `IDLE`, `S1`, `S10`, and `S101`.
+
+2. **Sequential Logic**:
+   - The my current state (present state) is updated on the positive edge of the clock or reset to `IDLE` if `reset` is high.
+
+3. **Combinational Logic**:
+   - Based on the current state, the next state is determined and assigned to `next_state`.
+   - The FSM transitions as per the specified conditions.
+
+4. **Output Logic**:
+   - The output `z` is asserted high (1) when the current state is `S101`, otherwise, it is low (0).
+
+Feel free to ask if you have further questions or need modifications!

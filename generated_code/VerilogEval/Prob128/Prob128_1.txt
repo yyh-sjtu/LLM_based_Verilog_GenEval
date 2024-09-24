@@ -1,0 +1,75 @@
+Below is an example of a simple RTL Verilog implementation for the `TopModule` as per your requirements. This design consists of a state machine that detects the start of a message based on the condition specified in the prompt and gives a `done` signal after three bytes have been successfully processed.
+
+```verilog
+module TopModule (
+    input clk,
+    input reset,
+    input [7:0] in,
+    output reg done
+);
+
+    // State encoding
+    typedef enum logic [1:0] {
+        IDLE,       // Waiting for start of message
+        FIRST_BYTE, // First byte received
+        SECOND_BYTE // Second byte received
+    } state_t;
+
+    state_t current_state, next_state;
+
+    // State transition
+    always_ff @(posedge clk or posedge reset) begin
+        if (reset) begin
+            current_state <= IDLE;
+            done <= 1'b0; // Reset done signal
+        end else begin
+            current_state <= next_state;
+        end
+    end
+
+    // Next state logic
+    always_comb begin
+        // Default next_state and done output
+        next_state = current_state;
+        done = 1'b0;
+        
+        case (current_state)
+            IDLE: begin
+                if (in[3] == 1'b1) begin // Check for start of message
+                    next_state = FIRST_BYTE;
+                end
+            end
+            
+            FIRST_BYTE: begin
+                next_state = SECOND_BYTE; // Move to next state after receiving first byte
+            end
+            
+            SECOND_BYTE: begin
+                done = 1'b1; // Signal that the third byte is received (done on the next clock cycle)
+                next_state = IDLE; // Return to IDLE to wait for the next message
+            end
+        endcase
+    end
+endmodule
+```
+
+### Explanation:
+
+1. **State Definition:**
+   - We define three states:
+     - `IDLE`: Waiting for the start of a new message.
+     - `FIRST_BYTE`: The first byte of a message has been received.
+     - `SECOND_BYTE`: The second byte has been received.
+   - The final action, indicated by the `done` signal, is generated in this state.
+
+2. **State Transition Logic:**
+   - We have a synchronous reset, which resets the state machine to `IDLE` and clears the `done` signal.
+   - The state transitions happen on the rising edge of the clock:
+     - In the `IDLE` state, the state machine checks if `in[3]` is `1`. If so, it transitions to `FIRST_BYTE`.
+     - In the `FIRST_BYTE` state, we transition to `SECOND_BYTE`.
+     - In the `SECOND_BYTE` state, the `done` signal is asserted to indicate the completion of processing three bytes, and we transition back to `IDLE`.
+
+3. **Output Logic:**
+   - The output `done` signal is controlled in the state machine such that it is asserted for one clock cycle when returning to `IDLE`.
+
+This design should fulfill the requirements you've outlined for processing the PS/2 mouse protocol byte stream.

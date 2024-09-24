@@ -1,0 +1,256 @@
+module TopModule (
+	input clk,
+	input reset,
+	input in,
+	output done
+);
+    reg [7:0] data;
+    reg [3:0] state;
+    reg [3:0] next_state;
+    always @(posedge clk)
+        if (reset)
+            state <= 0;
+        else
+            state <= next_state;
+    always @(posedge clk)
+        if (reset)
+            data <= 0;
+        else
+            data <= data + 1;
+    always @(posedge clk)
+        if (reset)
+            next_state <= 0;
+        else
+            next_state <= next_state;
+    always @(posedge clk)
+        if (reset)
+            next_state <= 0;
+        else
+            next_state <= next_state;
+    always @(posedge clk)
+        if (reset)
+            next_state <= 0;
+        else
+            next_state <= next_state;
+    always @(posedge clk)
+        if (reset)
+            next_state <= 0;
+        else
+            next_state <= next_state;
+    always @(posedge clk)
+        if (reset)
+            next_state <= 0;
+        else
+            next_state <= next_state;
+    always @(posedge clk)
+        if (reset)
+            next_state <= 0;
+        else
+            next_state <= next_state;
+    always @(posedge clk)
+        if (reset)
+            next_state <= 0;
+        else
+            next_state <= next_state;
+    always @(posedge clk)
+        if (reset)
+            next_state <= 0;
+        else
+            next_state <= next_state;
+    always @(posedge clk)
+        if (reset)
+            next_state <= 0;
+        else
+            next_state <= next_state;
+    always @(posedge clk)
+        if (reset)
+            next_state <= 0;
+        else
+            next_state <= next_state;
+    always @(posedge clk)
+        if (reset)
+            next_state <= 0;
+        else
+            next_state <= next_state;
+    always @(posedge clk)
+        if (reset)
+            next_state <= 0;
+        else
+            next_state <= next_state;
+    always @(posedge clk)
+        if (reset)
+            next_state <= 0;
+        else
+            next_state <= next_state;
+    always @(posedge clk)
+        if (reset)
+            next_state <= 0;
+        else
+            next_state <= next_state;
+    always @(posedge clk)
+        if (reset)
+            next_state <= 0;
+        else
+            next_state <= next_state;
+    always @(posedge clk)
+        if (reset)
+            next_state <= 0;
+        else
+            next_state <= next_state;
+    always @(posedge clk)
+        if (reset)
+            next_state <= 0;
+        else
+            next_state <= next_state;
+    always @(posedge clk)
+        if (reset)
+            next_state <= 0;
+        else
+            next_state <= next_state;
+    always @(posedge clk)
+        if (reset)
+            next_state <= 0;
+        else
+            next_state <= next_state;
+    always @(posedge clk)
+        if (reset)
+            next_state <= 0;
+        else
+            next_state <= next_state;
+    always @(posedge clk)
+        if (reset)
+            next_state <= 0;
+        else
+            next_state <= next_state;
+    always @(posedge clk)
+        if (reset)
+            next_state <= 0;
+        else
+            next_state <= next_state;
+    always @(posedge clk)
+        if (reset)
+            next_state <= 0;
+        else
+            next_state <= next_state;
+    always @(posedge clk)
+        if (reset)
+            next_state <= 0;
+        else
+            next_state <= next_state;
+    always @(posedge clk)
+        if (reset)
+            next_state <= 0;
+        else
+            next_state <= next_state;
+    always @(posedge clk)
+        if (reset)
+            next_state <= 0;
+        else
+            next_state <= next_state;
+    always @(posedge clk)
+        if (reset)
+            next_state <= 0;
+        else
+            next_state <= next_state;
+    always @(posedge clk)
+        if (reset)
+            next_state <= 0;
+        else
+            next_state <= next_state;
+    always @(posedge clk)
+        if (reset)
+            next_state <= 0;
+        else
+            next_state <= next_state;
+    always @(posedge clk)
+        if (reset)
+            next_state <= 0;
+        else
+            next_state <= next_state;
+    always @(posedge clk)
+        if (reset)
+            next_state <= 0;
+        else
+            next_state <= next_state;
+    always @(posedge clk)
+        if (reset)
+            next_state <= 0;
+        else
+            next_state <= next_state;
+    always @(posedge clk)
+        if (reset)
+            next_state <= 0;
+        else
+            next_state <= next_state;
+    always @(posedge clk)
+        if (reset)
+            next_state <= 0;
+        else
+            next_state <= next_state;
+    always @(posedge clk)
+        if (reset)
+            next_state <= 0;
+        else
+            next_state <= next_state;
+    always @(posedge clk)
+        if (reset)
+            next_state <= 0;
+        else
+            next_state <= next_state;
+    always @(posedge clk)
+        if (reset)
+            next_state <= 0;
+        else
+            next_state <= next_state;
+    always @(posedge clk)
+        if (reset)
+            next_state <= 0;
+        else
+            next_state <= next_state;
+    always @(posedge clk)
+        if (reset)
+            next_state <= 0;
+        else
+            next_state <= next_state;
+    always @(posedge clk)
+        if (reset)
+            next_state <= 0;
+        else
+            next_state <= next_state;
+    always @(posedge clk)
+        if (reset)
+            next_state <= 0;
+        else
+            next_state <= next_state;
+    always @(posedge clk)
+        if (reset)
+            next_state <= 0;
+        else
+            next_state <= next_state;
+    always @(posedge clk)
+        if (reset)
+            next_state <= 0;
+        else
+            next_state <= next_state;
+    always @(posedge clk)
+        if (reset)
+            next_state <= 0;
+        else
+            next_state <= next_state;
+    always @(posedge clk)
+        if (reset)
+            next_state <= 0;
+        else
+            next_state <= next_state;
+    always @(posedge clk)
+        if (reset)
+            next_state <= 0;
+        else
+            next_state <= next_state;
+    always @(posedge clk)
+        if (reset)
+            next_state <= 0;
+        else
+            next_state <= next_state;
+    always @(posedge clk)
+        if

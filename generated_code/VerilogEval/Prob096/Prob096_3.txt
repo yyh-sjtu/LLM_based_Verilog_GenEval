@@ -1,0 +1,83 @@
+Certainly! Below is a Verilog implementation of the `TopModule` that fulfills the specified requirements. This module uses a finite-state machine (FSM) to detect the sequence `1101` in a continuous stream of input bits. When the sequence is detected, it sets the output `start_shifting` to `1` until reset is asserted.
+
+```verilog
+module TopModule (
+    input clk,
+    input reset,
+    input data,
+    output reg start_shifting
+);
+
+    // State definitions for the FSM
+    typedef enum reg [2:0] {
+        S0,  // Initial state
+        S1,  // Received '1'
+        S2,  // Received '11'
+        S3,  // Received '110'
+        S4   // Received '1101'
+    } state_t;
+
+    state_t current_state, next_state;
+
+    // State transition logic
+    always @(*) begin
+        case (current_state)
+            S0: begin
+                next_state = (data) ? S1 : S0;
+            end
+            S1: begin
+                next_state = (data) ? S2 : S0;
+            end
+            S2: begin
+                next_state = (data) ? S2 : S3;
+            end
+            S3: begin
+                next_state = (data) ? S4 : S0;
+            end
+            S4: begin
+                next_state = S4; // Remain in S4 when the sequence is found
+            end
+            default: next_state = S0; // Default state
+        endcase
+    end
+
+    // State update on clock edge, and reset handling
+    always @(posedge clk) begin
+        if (reset) begin
+            current_state <= S0;
+            start_shifting <= 0; // Reset start_shifting to 0
+        end else begin
+            current_state <= next_state;
+            start_shifting <= (current_state == S4) ? 1 : start_shifting; // Set to 1 when in S4
+        end
+    end
+
+    // Reset start_shifting when the FSM is reset
+    always @(posedge clk) begin
+        if (reset) begin
+            start_shifting <= 0;
+        end 
+    end
+
+endmodule
+```
+
+### Explanation:
+
+1. **State Definitions**: The FSM has five states:
+    - **S0**: Initial state where no bit has been matched.
+    - **S1**: The first `1` has been detected.
+    - **S2**: The second `1` has been detected (`11`).
+    - **S3**: `110` has been matched.
+    - **S4**: The complete sequence `1101` has been matched.
+
+2. **State Transition Logic**: The `always @(*)` block defines how the FSM transitions between different states based on the input `data`.
+
+3. **Sequential Logic**: The primary `always @(posedge clk)` block handles state updates on the clock cycle and implements synchronous reset functionality. It also manages the `start_shifting` output depending on the current state.
+
+4. **Reset Logic**: On a positive edge of the `clk`, if `reset` is high, the FSM resets to the initial state `S0` and sets `start_shifting` to `0`.
+
+### Notes:
+- The `start_shifting` signal will only be set to `1` when the FSM reaches the `S4` state, indicating that the sequence `1101` was detected.
+- The `start_shifting` will remain `1` until the reset signal is active.
+- The code assumes that all inputs and outputs are declared and managed properly in a larger FPGA or ASIC design environment.

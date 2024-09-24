@@ -1,0 +1,26 @@
+As a professional RTL designer, I would implement the TopModule as follows:
+
+```verilog
+module TopModule (
+    input [7:0] in,
+    output reg [2:0] pos
+);
+
+always @(*) begin
+    case(in)
+        8'b00000001: pos = 3'b0;
+        8'b00000010: pos = 3'b1;
+        8'b00000100: pos = 3'b2;
+        8'b00001000: pos = 3'b3;
+        8'b00010000: pos = 3'b4;
+        8'b00100000: pos = 3'b5;
+        8'b01000000: pos = 3'b6;
+        8'b10000000: pos = 3'b7;
+        default: pos = 3'b0;
+    endcase
+end
+
+endmodule
+```
+
+This module implements a priority encoder for an 8-bit input as per the given requirements. The logic within the 'always' block checks the input vector and assigns the corresponding output value based on the first (least significant) bit that is high. If no bits are high in the input vector, it outputs 3'b0.

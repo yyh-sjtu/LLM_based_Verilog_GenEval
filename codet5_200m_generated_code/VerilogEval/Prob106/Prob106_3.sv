@@ -1,0 +1,25 @@
+module TopModule (
+    input [15:0] scancode,
+    output left,
+    output down,
+    output right,
+    output up
+);
+    reg [7:0] code;
+    always @(scancode) begin
+        if(scancode == 16'b1010110) begin
+            code = 7'b10010;
+        end
+        else if(scancode == 16'b1010111) begin
+            code = 7'b101011;
+        end
+        else begin
+            code = 7'b111111;
+        end
+    end
+    assign left = code[9];
+    assign down = code[9];
+    assign right = code[9];
+    assign up = code[9];
+endmodule
+

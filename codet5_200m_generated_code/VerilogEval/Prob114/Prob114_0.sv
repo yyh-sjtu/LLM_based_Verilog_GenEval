@@ -1,0 +1,9 @@
+module TopModule (
+	input [7:0] code,
+	output [3:0] out,
+	output valid
+);
+    assign out = code;
+    assign valid = 1'b0;
+endmodule
+

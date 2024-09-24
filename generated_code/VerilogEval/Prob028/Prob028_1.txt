@@ -1,0 +1,38 @@
+Certainly! Below is an implementation of a D latch in Verilog named `TopModule`. The latch takes an input `d`, an enable signal `ena`, and produces an output `q`. The latch holds the value of `d` when `ena` is high, and retains its state when `ena` is low.
+
+### Verilog Code for TopModule
+
+```verilog
+module TopModule (
+    input  wire d,     // Data input
+    input  wire ena,   // Enable signal
+    output reg  q      // Output
+);
+
+    // D latch implementation
+    always @* begin
+        if (ena) begin
+            q = d;     // When enabled, output follows input
+        end
+        // If 'ena' is low, the output 'q' retains its previous value
+    end
+
+endmodule
+```
+
+### Explanation:
+
+1. **Module Declaration:** The module `TopModule` is declared with the specified input and output ports.
+   
+2. **Sensitivity List:** The `always @*` sensitivity list means that the block will be re-evaluated anytime any of the inputs change. 
+
+3. **D Latch Logic:** Inside the always block:
+   - If `ena` is high (`1`), the output `q` gets updated to the value of `d`. 
+   - If `ena` is low (`0`), `q` retains its last value (due to the absence of a statement in the else part, which signifies that it will keep whatever it previously held).
+
+### Important Considerations:
+
+- This code is synthesizable and effectively captures the behavior of a D latch.
+- Ensure that you are simulating and testing this module properly with appropriate test benches to validate its functionality.
+
+If you have any further questions or need additional modifications, feel free to ask!

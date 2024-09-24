@@ -1,0 +1,45 @@
+Certainly! Below is a Verilog implementation of the `TopModule` as described. This module uses a 64-bit register that can perform both left and right arithmetic shifts, with a synchronous load feature.
+
+```verilog
+module TopModule (
+    input  wire        clk,
+    input  wire        load,
+    input  wire        ena,
+    input  wire [1:0] amount,
+    input  wire [63:0] data,
+    output reg  [63:0] q
+);
+
+    always @(posedge clk) begin
+        if (load) begin
+            // Load the data into the shift register
+            q <= data;
+        end else if (ena) begin
+            // Shift operations based on amount
+            case (amount)
+                2'b00: q <= {q[62:0], 1'b0};         // Shift left by 1 bit
+                2'b01: q <= {q[55:0], 8'b0};         // Shift left by 8 bits
+                2'b10: q <= {q[63], q[63:1]};        // Shift right by 1 bit (arithmetic)
+                2'b11: q <= {q[63], q[63:8]};        // Shift right by 8 bits (arithmetic)
+                default: q <= q;                     // No operation
+            endcase
+        end
+    end
+
+endmodule
+```
+
+### Explanation:
+- **Module Definition**: The top-level module is defined with all the required inputs and outputs.
+- **Synchronous Logic**: The `always` block is triggered on the rising edge of the clock signal (`clk`).
+- **Loading Data**: If the `load` signal is high, the module loads the provided `data` into the output `q`.
+- **Shifting Logic**: If the `load` signal is low but `ena` is high, it executes a shift operation based on the value of `amount`.
+  - `2'b00`: Perform a logical shift left by 1 bit.
+  - `2'b01`: Perform a logical shift left by 8 bits.
+  - `2'b10`: Perform an arithmetic shift right by 1 bit, preserving the sign.
+  - `2'b11`: Perform an arithmetic shift right by 8 bits, preserving the sign.
+- **Default Case**: If an unexpected value is received for `amount`, it retains the current value of `q`.
+
+### Notes:
+- This module assumes the standard behavior of registers and shifting in Verilog.
+- Remember to synthesize and simulate this code in a suitable Verilog simulator to verify functionality and ensure it meets your design requirements.

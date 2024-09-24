@@ -1,0 +1,24 @@
+module TopModule (
+	input d,
+	input done_counting,
+	input ack,
+	input [9:0] state,
+	output B3_next,
+	output S_next,
+	output S1_next,
+	output Count_next,
+	output Wait_next,
+	output done,
+	output counting,
+	output shift_ena
+);
+    assign B3_next = 1'b1;
+    assign S_next = 1'b1;
+    assign S1_next = 1'b1;
+    assign Count_next = 1'b1;
+    assign Wait_next = 1'b1;
+    assign done = 1'b1;
+    assign counting = 1'b1;
+    assign shift_ena = 1'b1;
+endmodule
+

@@ -1,0 +1,99 @@
+To implement the `TopModule` with the given specifications, we will derive equations for the next states and outputs by observing the state machine behavior as described.
+
+### Moore State Machine Overview
+1. **State Encoding**: 
+   - S    = 10'b0000000001  
+   - S1   = 10'b0000000010  
+   - S11  = 10'b0000000100  
+   - S110 = 10'b0000001000  
+   - B0   = 10'b0000010000  
+   - B1   = 10'b0000100000  
+   - B2   = 10'b0001000000  
+   - B3   = 10'b0010000000  
+   - Count = 10'b0100000000  
+   - Wait  = 10'b1000000000  
+   
+### Next-State Logic Equations
+
+We'll derive the logic for `B3_next`, `S_next`, `S1_next`, `Count_next`, `Wait_next`.
+
+1. **B3_next**:
+   - B3 -> B3 (stay in B3) when `shift_ena` = 1.
+   - B3 -> Count when `shift_ena` = 1.
+   - `B3_next = B3 & shift_ena`
+
+2. **S_next**:
+   - S -> S when `d`=0.
+   - S -> S1 when `d`=1.
+   - `S_next = S & ~d | S1 & d`
+
+3. **S1_next**:
+   - S1 -> S when `d`=0.
+   - S1 -> S11 when `d`=1.
+   - `S1_next = S1 & ~d | S11 & d`
+
+4. **Count_next**:
+   - Count -> Count when `counting`=1 and `done_counting`=0.
+   - Count -> Wait when `counting`=1 and `done_counting`=1.
+   - `Count_next = Count & counting & ~done_counting | Wait & done_counting`
+
+5. **Wait_next**:
+   - Wait -> Wait when `done`=1 and `ack`=0.
+   - Wait -> S when `done`=1 and `ack`=1.
+   - `Wait_next = Wait & done & ~ack | S & done & ack`
+
+### Output Logic Equations
+
+Now we derive the output signals based on the current state:
+
+1. **done**:
+   - Done = 1 when in `Wait` state.
+   - `done = Wait`
+
+2. **counting**:
+   - Counting = 1 when in `Count` state.
+   - `counting = Count`
+
+3. **shift_ena**:
+   - Shift enable = 1 when in any state from `B0` to `B3`.
+   - `shift_ena = B0 | B1 | B2 | B3`
+
+### Verilog Implementation
+Here’s how we can implement the derived equations in Verilog:
+
+```verilog
+module TopModule (
+    input d,
+    input done_counting,
+    input ack,
+    input [9:0] state,
+    output B3_next,
+    output S_next,
+    output S1_next,
+    output Count_next,
+    output Wait_next,
+    output done,
+    output counting,
+    output shift_ena
+);
+    // Next state logic
+    assign B3_next = state[8] & 1; // B3 stays in B3
+    assign S_next = state[0] & ~d | state[1] & d; // S transition
+    assign S1_next = state[1] & ~d | state[2] & d; // S1 transition
+    assign Count_next = state[9] & 1 & ~done_counting | 1 & done_counting; // Count transition
+    assign Wait_next = state[9] & 1 & ~ack | state[0] & 1 & ack; // Wait transition
+
+    // Output logic
+    assign done = state[9]; // done is high when in Wait state
+    assign counting = state[9]; // counting is high when in Count state
+    assign shift_ena = state[4] | state[5] | state[6] | state[7]; // shift enable when in B0 to B3 states
+
+endmodule
+```
+
+### Explanation
+- Each output and next state is derived according to the state transitions and outputs defined in the state machine description.
+- The `while` logic in Verilog is used to define how the outputs and next states will respond to each state and input condition.
+- Ensure the correct ports are wired when integrating this module in a larger design. 
+
+Feel free to reach out for further clarifications.

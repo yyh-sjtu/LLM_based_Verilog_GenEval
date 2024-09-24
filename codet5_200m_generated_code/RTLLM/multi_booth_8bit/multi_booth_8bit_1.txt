@@ -1,0 +1,35 @@
+module multi_booth_8bit (
+	input clk,
+	input reset,
+	input [7:0] a,
+	input [7:0] b,
+	output [15:0] p,
+	output rdy
+);
+    reg [7:0] a_reg;
+    reg [7:0] b_reg;
+    reg [15:0] p_reg;
+    reg rdy_reg;
+    always @(posedge clk or posedge reset)
+    begin
+        if (reset)
+            a_reg <= 8'h00;
+        else
+            a_reg <= a;
+    end
+    always @(posedge clk or posedge reset)
+    begin
+        if (reset)
+            b_reg <= 8'h00;
+        else
+            b_reg <= b;
+    end
+    always @(posedge clk or posedge reset)
+    begin
+        if (reset)
+            p_reg <= 16'h00;
+        else
+            p_reg <= p_reg;
+    end
+    assign rdy = p_reg[15];
+endmodule

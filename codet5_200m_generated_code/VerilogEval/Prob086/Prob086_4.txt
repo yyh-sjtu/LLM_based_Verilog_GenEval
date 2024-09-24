@@ -1,0 +1,13 @@
+module TopModule (
+	input clk,
+	input reset,
+	output [4:0] q
+);
+    reg [4:0] lfsr;
+    assign q = lfsr[5];
+    always @(posedge clk or posedge reset)
+        if (reset)
+            lfsr <= 1'b1;
+        else
+            lfsr <= {lfsr[4:0], 1'b0};
+endmodule

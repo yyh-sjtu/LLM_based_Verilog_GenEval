@@ -1,0 +1,14 @@
+module TopModule (
+	input clk,
+	input reset,
+	output [31:0] q
+);
+    reg [31:0] sr;
+    always @(posedge clk or posedge reset)
+        if(reset)
+            sr <= 32'h1;
+        else
+            sr <= {sr[31:24], 1'b1};
+    assign q = sr;
+endmodule
+

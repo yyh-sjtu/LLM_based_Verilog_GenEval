@@ -1,0 +1,19 @@
+module TopModule (
+    input [15:0] scancode,
+    output left,
+    output down,
+    output right,
+    output up
+);
+    reg [15:0] code;
+    always @(negedge clk)
+        if (scancode[15:8] == 8'b11111111)
+            code <= 8'b11111111;
+        else
+            code <= {code[7:0], scancode[7:0]};
+    assign left = (code[7:0] == 8'b11111111)? 1'b1 : 1'b0;
+    assign down = (code[7:0] == 8'b11111111)? 1'b1 : 1'b0;
+    assign right = (code[7:0] == 8'b11111111)? 1'b1 : 1'b0;
+    assign up = (code[7:0] == 8'b11111111)? 1'b1 : 1'b0;
+endmodule
+

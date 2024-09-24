@@ -1,0 +1,68 @@
+
+module TopModule (
+    input clk,
+    input areset,
+    input bump_left,
+    input bump_right,
+    input ground,
+    output reg walk_left,
+    output reg walk_right,
+    output reg aaah
+);
+
+// Enum for state machine states
+typedef enum logic [1:0] {
+    WALK_LEFT,
+    WALK_RIGHT,
+    FALLING
+} state_t;
+
+// Declare state register
+reg [1:0] state;
+
+always_ff @(posedge clk or posedge areset) begin
+    if (areset) begin
+        state <= WALK_LEFT;
+    end else begin
+        case (state)
+            WALK_LEFT: begin
+                if (bump_left) begin
+                    walk_left <= 0;
+                    walk_right <= 1;
+                end else if (bump_right) begin
+                    walk_left <= 1;
+                    walk_right <= 0;
+                end else if (!ground) begin
+                    state <= FALLING;
+                end
+            end
+            WALK_RIGHT: begin
+                if (bump_left) begin
+                    walk_left <= 0;
+                    walk_right <= 1;
+                end else if (bump_right) begin
+                    walk_left <= 1;
+                    walk_right <= 0;
+                end else if (!ground) begin
+                    state <= FALLING;
+                end
+            end
+            FALLING: begin
+                aaah <= 1;
+                if (ground) begin
+                    aaah <= 0;
+                    if (state == WALK_LEFT) begin
+                        walk_left <= 1;
+                        walk_right <= 0;
+                    end else begin
+                        walk_left <= 0;
+                        walk_right <= 1;
+                    end
+                    state <= (state == WALK_LEFT) ? WALK_LEFT : WALK_RIGHT;
+                end
+            end
+        endcase
+    end
+end
+
+endmodule

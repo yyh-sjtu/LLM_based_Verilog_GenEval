@@ -1,0 +1,23 @@
+Below is an instruction that describes a task, paired with an input that provides further context. 
+Write a response that appropriately completes the request.
+
+
+### Instruction:
+Based on the functional description and defined module head, complete the Verilog code. 
+Note that you should return the codes only without including additional information. And you should include the module head in the generated codes for completeness.
+
+### Input:
+
+Description: The module `serial2parallel` implements a series-parallel conversion circuit that receives a serial input signal along with a control signal indicating the validity of the input data, converting it to an 8-bit parallel output when 8 valid inputs are received.
+Verilog code: 
+module serial2parallel (
+    input clk,
+    input rst_n,
+    input din_serial,
+    input din_valid,
+    output [7:0] dout_parallel,
+    output dout_valid
+);
+
+
+### Response:

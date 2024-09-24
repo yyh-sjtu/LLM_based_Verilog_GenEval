@@ -1,0 +1,32 @@
+Sure! Below is a simple Verilog implementation of a module named `TopModule` that reverses the byte order of a 32-bit input vector. In this implementation, the `in` port is defined as a 32-bit input, and the `out` port is the reversed 32-bit output.
+
+### Verilog Implementation
+
+```verilog
+module TopModule (
+    input  [31:0] in,  // 32-bit input
+    output [31:0] out  // 32-bit output
+);
+    
+    // Reverse byte order
+    assign out = {
+        in[7:0],   // Byte 0
+        in[15:8],  // Byte 1
+        in[23:16], // Byte 2
+        in[31:24]  // Byte 3
+    };
+
+endmodule
+```
+
+### Explanation
+- The `assign` statement is used to create a continuous assignment to the `out` port.
+- The brackets `{}` concatenate the selected bits from the input signal `in` in the reverse order.
+- Each byte of the 32-bit input is accessed by selecting the appropriate range:
+  - `in[7:0]` retrieves the first byte,
+  - `in[15:8]` retrieves the second byte,
+  - `in[23:16]` retrieves the third byte,
+  - `in[31:24]` retrieves the fourth byte.
+
+### Usage
+You can instantiate this `TopModule` in a testbench or another module to observe and verify its functionality. To do so, you would connect a 32-bit input vector and monitor the output to confirm that the byte order has been reversed correctly.

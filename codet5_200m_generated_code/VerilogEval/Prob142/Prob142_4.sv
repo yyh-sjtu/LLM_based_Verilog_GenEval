@@ -1,0 +1,38 @@
+module TopModule (
+	input clk,
+	input areset,
+	input bump_left,
+	input bump_right,
+	input ground,
+	output walk_left,
+	output walk_right,
+	output aaah
+);
+    reg [1:0] astate;
+    reg [1:0] bstate;
+    assign walk_left = astate[0];
+    assign walk_right = bstate[1];
+    always @(posedge clk or posedge areset) begin
+        if(~areset) begin
+            astate <= 2'd0;
+            bstate <= 2'd1;
+        end else if(bstate == 2'd0) begin
+            bstate <= 2'd1;
+            bstate <= 2'd2;
+        end else if(bstate == 2'd1) begin
+            bstate <= 2'd2;
+        end else begin
+            bstate <= bstate + 2'd1;
+        end
+    end
+    always @(posedge clk or posedge areset) begin
+        if(~areset) begin
+            astate <= 2'd0;
+            bstate <= 2'd1;
+        end else if(bstate == 2'd2) begin
+            astate <= 2'd0;
+            bstate <= 2'd1;
+        end
+    end
+endmodule
+

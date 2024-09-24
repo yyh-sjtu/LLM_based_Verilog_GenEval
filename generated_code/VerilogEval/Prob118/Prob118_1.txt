@@ -1,0 +1,51 @@
+Certainly! Below is a Verilog implementation of the `TopModule` according to the specifications you've provided. 
+
+This module includes the necessary logic to shift the history for branch predictions, handle mispredictions, and reset the history when requested.
+
+```verilog
+module TopModule (
+    input          clk,
+    input          areset,
+    input          predict_valid,
+    input          predict_taken,
+    input          train_mispredicted,
+    input          train_taken,
+    input   [31:0] train_history,
+    output reg [31:0] predict_history
+);
+
+    // Asynchronous reset and always block for state transition
+    always @(posedge clk or posedge areset) begin
+        if (areset) begin
+            // Reset the history to zero on reset
+            predict_history <= 32'b0;
+        end else if (train_mispredicted) begin
+            // Load the history after the mispredicted branch
+            predict_history <= {train_taken, train_history[31:1]};
+        end else if (predict_valid) begin
+            // Shift in the new prediction taken state
+            predict_history <= {predict_taken, predict_history[31:1]};
+        end
+        // If neither a misprediction nor a prediction is happening, 
+        // do nothing. The history remains unchanged.
+    end
+
+endmodule
+```
+
+### Explanation:
+1. **Inputs and Outputs**:
+   - The module has inputs for the clock (`clk`), reset (`areset`), prediction validity (`predict_valid`), prediction result (`predict_taken`), training signals for mispredicted and actual outcomes, and a 32-bit history to roll back to if a misprediction occurs.
+   - The output is a 32-bit `predict_history` which stores the current history of branch predictions.
+
+2. **Asynchronous Reset**:
+   - The history register resets to zero immediately if `areset` is high, ensuring the history register is ready for a fresh start.
+
+3. **Branch Prediction Logic**:
+   - On every positive clock edge, the module checks if a misprediction occurred. If `train_mispredicted` is high, it updates `predict_history` to reflect the correct outcomes after the mispredicted branch, loading `train_history` with the new `train_taken` as the least significant bit.
+   - If there's `predict_valid` and no misprediction, it shifts in `predict_taken` from the least significant bit and discards the oldest history bit.
+
+4. **Priority**:
+   - The misprediction logic takes precedence over the prediction logic whenever both occur because the design must reflect the state of the pipeline after a misprediction.
+
+This implementation ensures that the module behaves as expected under the provided conditions. Always simulate using testbenches to verify the functionality in a real scenario.

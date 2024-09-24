@@ -1,0 +1,60 @@
+To implement the `TopModule` based on the provided timing and signal behavior, we need to analyze the output (`q`) concerning the inputs. The output values appear to be following a specific pattern based on the values of the input signals.
+
+Here is a step-by-step derivation of the output based on the input signals during the specified simulation times:
+
+1. From the waveform data given, we can observe:
+   - The output `q` changes depending on the values of inputs `c`, `d`, and `e`.
+   - Specifically, for each distinct value of input `c`, `q` takes values dependent on the order of the incoming signals.
+
+2. The crucial observations from the simulation:
+   - For `c = 0`, `q = b`
+   - For `c = 1`, `q = e`
+   - For `c = 2`, `q = a`
+   - For `c = 3`, `q = d`
+   - For `c = 4` and onward, `q = f` (which appears to be the value of `e`, but the outputs stabilize at `f`).
+
+### Design of the Module
+
+The output can therefore be expressed as:
+
+- If `c == 0`: output `q = b`
+- If `c == 1`: output `q = e`
+- If `c == 2`: output `q = a`
+- If `c == 3`: output `q = d`
+- If `c >= 4`: output `q = e` (the last documented behavior)
+
+### RTL Implementation in Verilog
+
+```verilog
+module TopModule (
+    input [3:0] a,  // 4-bit input
+    input [3:0] b,  // 4-bit input
+    input [3:0] c,  // 4-bit input
+    input [3:0] d,  // 4-bit input
+    input [3:0] e,  // 4-bit input
+    output reg [3:0] q  // 4-bit output
+);
+    
+    always @* begin
+        case (c) // Combinational logic based on value of c
+            4'd0: q = b;
+            4'd1: q = e;
+            4'd2: q = a;
+            4'd3: q = d;
+            default: q = e; // For c >= 4
+        endcase
+    end
+    
+endmodule
+```
+
+### Explanation of the Code
+
+1. **Module Declaration:** The module is named `TopModule`, and it has required input and output ports.
+2. **Always Block:** The `always @*` block indicates that the output `q` is combinational. It will be evaluated whenever any of the inputs change.
+3. **Case Statement:** A `case` statement is used to select the output `q` based on the value of input `c`. Each case corresponds to the conditions derived from the timing data.
+4. **Default Case:** For any values of `c` that are 4 or greater, we default `q` to be equal to `e`.
+
+### Conclusion
+
+This design implements the behavior as observed in the provided waveform simulation. The logic handles the output as required based on variations in the inputs.

@@ -1,0 +1,90 @@
+To implement the specified `TopModule` as a Mealy finite state machine (FSM) using one-hot encoding, we'll follow the given state transitions and behaviors. Let's break down the requirements:
+
+1. We have two states: 
+    - **State A:** (Reset state)
+    - **State B:**
+
+2. The transitions and output behaviors are:
+    - From State A, if `x` is 0, remain in A and output `z = 0`.
+    - From State A, if `x` is 1, transition to B and output `z = 1`.
+    - From State B, if `x` is 0, remain in B and output `z = 1`.
+    - From State B, if `x` is 1, remain in B and output `z = 0`.
+
+### VHDL Implementation:
+
+Here's a sample RTL implementation of the `TopModule` in Verilog:
+
+```verilog
+module TopModule (
+    input       clk,
+    input       areset,
+    input       x,
+    output reg  z
+);
+
+    // State encoding using one-hot encoding
+    typedef enum reg [1:0] {
+        A = 2'b01,
+        B = 2'b10
+    } state_t;
+
+    state_t current_state, next_state;
+
+    // Sequential logic for state transition
+    always @(posedge clk or posedge areset) begin
+        if (areset) begin
+            current_state <= A; // Reset to state A
+        end else begin
+            current_state <= next_state; // Transition to next state
+        end
+    end
+
+    // Combinational logic for next state and output
+    always @(*) begin
+        // Default values
+        next_state = current_state;
+        z = 1'b0;
+
+        case (current_state)
+            A: begin
+                if (x) begin
+                    next_state = B; // Transition to B
+                    z = 1'b1;       // Output z = 1
+                end // if x == 0, z remains 0 and stay in state A
+            end
+
+            B: begin
+                if (x) begin
+                    z = 1'b0; // Output z = 0
+                end else begin
+                    // x is 0, remain in B
+                    z = 1'b1; // Output z = 1
+                end
+            end
+
+            default: begin
+                next_state = A; // Default to state A for safety
+            end
+        endcase
+    end
+
+endmodule
+```
+
+### Description of the Code:
+
+1. **State Definitions:** 
+   - The states are defined using an enumerated type (`state_t`), where `A` is represented as `2'b01` and `B` as `2'b10`.
+
+2. **State Transition Logic:**
+   - The next state is calculated in a combinational always block and assigned during the positive edge of the clock.
+   - If the `areset` signal is high, the FSM resets to state A.
+
+3. **Output Logic:**
+   - Output `z` is calculated as part of the combinational logic, depending on the current state and the input `x`. 
+
+4. **Safety Default Assignment:**
+   - A default case is included to ensure that in case of undefined states, the FSM will default back to state A.
+
+### Note:
+- Ensure that the simulation and synthesis tools you are using are set up to support this coding style and that the code meets your specific design requirements and constraints in practice.

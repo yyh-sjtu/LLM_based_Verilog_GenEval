@@ -1,0 +1,21 @@
+module freq_div (
+    input CLK_in,
+    input RST,
+    output CLK_50,
+    output CLK_10,
+    output CLK_1
+);
+    reg [7:0] count;
+    reg [7:0] count_reg;
+    always @(posedge CLK_in or posedge RST)
+    begin
+        if (RST)
+            count <= 0;
+        else
+            count <= count + 1;
+    end
+    assign CLK_50 = count_reg[7];
+    assign CLK_10 = count_reg[7];
+    assign CLK_1 = count_reg[7];
+endmodule
+

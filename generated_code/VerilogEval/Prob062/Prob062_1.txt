@@ -1,0 +1,22 @@
+The bug in the original implementation of the 2-to-1 multiplexer is due to the incorrect assignment of the `out` signal. The `out` signal is defined as a scalar (single bit) in the `output` port but is using 8-bit inputs (`a` and `b`). In order to properly implement an 8-bit 2-to-1 multiplexer, the `out` signal should also be defined as an 8-bit signal.
+
+Here's the corrected version of the module:
+
+```verilog
+module TopModule (
+    input        sel,
+    input  [7:0] a,
+    input  [7:0] b,
+    output [7:0] out // Changed from single bit to 8 bits
+);
+
+    assign out = (sel) ? b : a; // Corrected the output assignment to choose whole buses
+
+endmodule
+```
+
+### Key Changes:
+1. **Output Port Type**: Changed `output` from a single bit to 8 bits: `output [7:0] out`.
+2. **Output Assignment**: Used a conditional operator for better readability and to directly select between `a` and `b` based on the `sel` signal. 
+
+This ensures that when the `sel` signal is high, the output will reflect `b`, and when `sel` is low, the output will reflect `a`, both correctly handling the full 8-bit signals.

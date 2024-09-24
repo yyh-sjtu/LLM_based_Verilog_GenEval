@@ -1,0 +1,38 @@
+Sure, I can help you with implementing the TopModule module with the specified interface.
+
+Here is the Verilog code for the TopModule:
+
+```verilog
+module TopModule(
+    input clk,
+    input areset,
+    input predict_valid,
+    input predict_taken,
+    input train_mispredicted,
+    input train_taken,
+    input [31:0] train_history,
+    output reg [31:0] predict_history
+);
+
+reg [31:0] branch_history_reg;
+
+always @(posedge clk) begin
+    if (areset) begin
+        branch_history_reg <= 32'b0;
+    end else begin
+        if (train_mispredicted) begin
+            branch_history_reg <= {train_history, train_taken};
+        end else if (predict_valid) begin
+            branch_history_reg <= {branch_history_reg[30:0], predict_taken};
+        end
+    end
+end
+
+assign predict_history = branch_history_reg;
+
+endmodule
+```
+
+In this module, I have implemented the functionality as described in the interface specifications. The 32-bit global history shift register is updated based on the values of predict_valid, predict_taken, train_mispredicted, and train_taken signals. The branch_history_reg register holds the history of branch predictions.
+
+Let me know if you need any more help or modifications in the code.

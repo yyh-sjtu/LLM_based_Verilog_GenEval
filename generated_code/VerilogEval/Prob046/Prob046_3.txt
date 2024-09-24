@@ -1,0 +1,31 @@
+Here is the Verilog code implementation of the TopModule module as per the given requirements:
+
+```verilog
+module TopModule (
+    input clk,
+    input reset,
+    input [7:0] d,
+    output reg [7:0] q
+    );
+
+    reg [7:0] d_reg;
+
+    always @ (negedge clk or posedge reset)
+    begin
+        if (reset)
+            d_reg <= 8'b00110100; // Reset to 0x34
+        else
+            d_reg <= d;
+    end
+
+    always @ (negedge clk)
+    begin
+        q <= d_reg;
+    end
+
+endmodule
+```
+
+In this implementation, I have declared an 8-bit register `d_reg` to hold the value of input `d`. The values of `d_reg` are updated on the negative edge of the clock signal. When the `reset` signal is active high, the reset value 0x34 is loaded into `d_reg`. The value of `q` is updated with the contents of `d_reg`.
+
+Please let me know if you need any further modifications or clarification.

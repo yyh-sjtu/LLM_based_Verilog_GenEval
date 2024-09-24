@@ -1,0 +1,12 @@
+module TopModule (
+	input x,
+	input y,
+	output z
+);
+    reg a;
+    always @(x or y) begin
+        a = y? 1'b1 : 1'bz;
+    end
+    assign z = a;
+endmodule
+

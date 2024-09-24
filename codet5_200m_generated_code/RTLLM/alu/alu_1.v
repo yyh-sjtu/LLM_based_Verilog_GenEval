@@ -1,0 +1,18 @@
+module alu (
+    input [31:0] a,
+    input [31:0] b,
+    input [5:0] aluc,
+    output [31:0] r,
+    output zero,
+    output carry,
+    output negative,
+    output overflow,
+    output flag
+);
+    assign flag = aluc[5];
+    assign zero = aluc[4];
+    assign carry = aluc[3];
+    assign negative = aluc[2];
+    assign overflow = aluc[1];
+endmodule
+

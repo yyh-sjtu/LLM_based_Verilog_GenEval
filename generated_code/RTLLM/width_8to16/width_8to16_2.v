@@ -1,0 +1,34 @@
+
+module width_8to16 (
+    input clk,
+    input rst_n,
+    input valid_in,
+    input [7:0] data_in,
+    output valid_out,
+    output reg [15:0] data_out
+);
+
+reg [7:0] data_reg;
+reg flag;
+
+always @(posedge clk or negedge rst_n) begin
+    if (!rst_n) begin
+        flag <= 0;
+        data_reg <= 8'b00000000;
+        data_out <= 16'b0000000000000000;
+    end else begin
+        if (valid_in) begin
+            if (!flag) begin
+                data_reg <= data_in;
+                flag <= 1;
+            end else begin
+                data_out <= {data_reg, data_in};
+                flag <= 0;
+            end
+        end
+    end
+end
+
+assign valid_out = flag;
+
+endmodule

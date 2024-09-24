@@ -1,0 +1,15 @@
+Sure, here is the RTL code for the TopModule implementing a 2-input AND gate:
+
+```verilog
+module TopModule (
+    input a,
+    input b,
+    output out
+);
+
+assign out = a & b;
+
+endmodule
+```
+
+This code defines a module named TopModule with input ports a and b, and an output port out. The output out is assigned the result of the AND operation between inputs a and b. This module effectively implements a 2-input AND gate. Let me know if you need any further modifications or assistance.

@@ -1,0 +1,85 @@
+Certainly! Below is the Verilog code for the `TopModule` implementing the finite state machine (FSM) as described:
+
+```verilog
+module TopModule (
+    input clk,
+    input reset,
+    input s,
+    input w,
+    output reg z
+);
+    // State Encoding
+    typedef enum reg [1:0] {
+        A = 2'b00,
+        B = 2'b01
+    } state_t;
+
+    // State and Next State Variables
+    state_t current_state, next_state;
+
+    // Counter to keep track of the number of '1's seen in w
+    reg [1:0] count_w;
+
+    // State Transition Logic
+    always @(posedge clk or posedge reset) begin
+        if (reset) begin
+            current_state <= A;
+            count_w <= 2'b00;
+            z <= 1'b0;
+        end else begin
+            current_state <= next_state;
+        end
+    end
+
+    // FSM Next State Logic
+    always @* begin
+        case (current_state)
+            A: begin
+                if (s) begin
+                    next_state = B;
+                    count_w = 2'b00; // Reset count on state transition
+                    z = 1'b0;
+                end else begin
+                    next_state = A;
+                    z = 1'b0;
+                end
+            end
+            B: begin
+                // Shift count and check w
+                if (count_w < 2'b11) begin
+                    count_w = count_w + (w ? 1'b1 : 1'b0);
+                    next_state = B;
+                    z = 1'b0;
+                end else begin
+                    if (count_w == 2'b10) begin
+                        z = 1'b1; // Set z if we've seen '1's exactly 2 times
+                    end else begin
+                        z = 1'b0; // Otherwise reset z
+                    end
+                    next_state = B; // Stay in state B
+                end
+            end
+            default: begin
+                next_state = A;
+                z = 1'b0;
+            end
+        endcase
+    end
+endmodule
+```
+
+### Explanation:
+1. **State Encoding**: We define two states: `A` and `B`. State `A` is the reset state where the FSM waits for `s` to become `1`. State `B` is where it counts the `w` inputs.
+  
+2. **State Transition Logic**: 
+   - When `reset` is activated, the FSM resets to state `A`, and the counting of `w` is set to zero.
+   - On the positive edge of `clk`, the current state is updated to the next state.
+
+3. **Next State Logic**: 
+   - In state `A`, if `s` is `1`, transition to state `B` and reset the `count_w`.
+   - In state `B`, the FSM collects `w` inputs for 3 clock cycles. It maintains a count of how many times `1` has been seen. If exactly two `1`s are seen in the three cycles, `z` is set to `1`; otherwise, it continues to keep `z` at `0`.
+
+### Notes:
+1. This implementation keeps `count_w` for tracking the number of `1`s seen within a cycle and distinguishes between two scenarios of counting `1`s exactly. Care must be taken while implementing the counting logic since it is not limited by `count_w` directly within the state transition.
+2. Due to restrictions in the question, further refinements and FSM optimizations can be made if the functionality allows specifics about the encodings for the number of counted states.
+3. Ensure you simulate the FSM for different sequences of `s` and `w` inputs to verify its correct operation.

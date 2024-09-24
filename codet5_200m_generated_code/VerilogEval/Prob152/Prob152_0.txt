@@ -1,0 +1,113 @@
+module TopModule (
+	input clk,
+	input areset,
+	input bump_left,
+	input bump_right,
+	input ground,
+	input dig,
+	output walk_left,
+	output walk_right,
+	output aaah,
+	output digging
+);
+    parameter ST_PIN        =        ST_PIN_0;
+    parameter ST_PIN_1        =        ST_PIN_2;
+    parameter ST_PIN_3        =        ST_PIN_4;
+    parameter ST_PIN_5        =        ST_PIN_6;
+    parameter ST_PIN_6    =        ST_PIN_7;
+    parameter ST_PIN_7        =        ST_PIN_8;
+    parameter ST_PIN_8        =        ST_PIN_9;
+    parameter ST_PIN_9        =        ST_PIN_10;
+    parameter ST_PIN_10        =        ST_PIN_11;
+    parameter ST_PIN_11        =        ST_PIN_12;
+    parameter ST_PIN_12        =        ST_PIN_13;
+    parameter ST_PIN_13        =        ST_PIN_14;
+    parameter ST_PIN_14        =        ST_PIN_15;
+    parameter ST_PIN_15        =        ST_PIN_16;
+    parameter ST_PIN_16        =        ST_PIN_17;
+    parameter ST_PIN_17        =        ST_PIN_18;
+    parameter ST_PIN_18        =        ST_PIN_19;
+    parameter ST_PIN_19        =        ST_PIN_20;
+    parameter ST_PIN_20        =        ST_PIN_21;
+    parameter ST_PIN_21        =        ST_PIN_22;
+    parameter ST_PIN_22        =        ST_PIN_23;
+    parameter ST_PIN_23        =        ST_PIN_24;
+    parameter ST_PIN_24        =        ST_PIN_25;
+    parameter ST_PIN_25        =        ST_PIN_26;
+    parameter ST_PIN_26        =        ST_PIN_27;
+    parameter ST_PIN_27        =        ST_PIN_28;
+    parameter ST_PIN_28        =        ST_PIN_29;
+    parameter ST_PIN_29        =        ST_PIN_30;
+    parameter ST_PIN_30        =        ST_PIN_31;
+    parameter ST_PIN_31        =        ST_PIN_30;
+    parameter ST_PIN_30        =        ST_PIN_31;
+    parameter ST_PIN_30        =        ST_PIN_31;
+    parameter ST_PIN_31        =        ST_PIN_32;
+    parameter ST_PIN_32        =        ST_PIN_33;
+    parameter ST_PIN_33        =        ST_PIN_33;
+    parameter ST_PIN_34        =        ST_PIN_34;
+    parameter ST_PIN_33        =        ST_PIN_32;
+    parameter ST_PIN_33        =        ST_PIN_33;
+    parameter ST_PIN_34        =        ST_PIN_33;
+    parameter ST_PIN_34        =        ST_PIN_33;
+    parameter ST_PIN_34        =        ST_PIN_33;
+    parameter ST_PIN_34        =        ST_PIN_33;
+    parameter ST_PIN_33        =        ST_PIN_33;
+    parameter ST_PIN_33        =        ST_PIN_34;
+    parameter ST_PIN_33        =        ST_PIN_33;
+    parameter ST_PIN_33        =        ST_PIN_33;
+    parameter ST_PIN_34        =    ST_PIN_33;
+    parameter ST_PIN_33        =    ST_PIN_33;
+    parameter ST_PIN_33        =    ST_PIN_33;
+    parameter ST_PIN_33        =    ST_PIN_33;
+    parameter ST_PIN_33        =    ST_PIN_33;
+    parameter ST_PIN_33        =    ST_PIN_33;
+    parameter ST_PIN_33        =    ST_PIN_33;
+    parameter ST_PIN_33        =    ST_PIN_33;
+    parameter ST_PIN_33        =    ST_PIN_33;
+    parameter ST_PIN_33        =    ST_PIN_33;
+    parameter ST_PIN_33        =    ST_PIN_33;
+    parameter ST_PIN_33        =    ST_PIN_33;
+    parameter ST_PIN_33        =    ST_PIN_33;
+    parameter ST_PIN_33        =    ST_PIN_33;
+    parameter ST_PIN_33        =    ST_PIN_33;
+    parameter ST_PIN_33        =    ST_PIN_33;
+    parameter ST_PIN_33        =    ST_PIN_33;
+    parameter ST_PIN_33        =    ST_PIN_33;
+    parameter ST_PIN_33        =    ST_PIN_33;
+    parameter ST_PIN_33        =    ST_PIN_33;
+    parameter ST_PIN_33        =    ST_PIN_33;
+    parameter ST_PIN_33        =    ST_PIN_33;
+    parameter ST_PIN_33        =    ST_PIN_33;
+    parameter ST_PIN_33        =    ST_PIN_33;
+    parameter ST_PIN_33        =    ST_PIN_33;
+    parameter ST_PIN_33        =    ST_PIN_33;
+    parameter ST_PIN_33        =    ST_PIN_33;
+    parameter ST_PIN_33        =    ST_PIN_33;
+    parameter ST_PIN_33        =    ST_PIN_33;
+    parameter ST_PIN_33        =    ST_PIN_33;
+    parameter ST_PIN_33        =    ST_PIN_33;
+    parameter ST_PIN_33        =    ST_PIN_33;
+    parameter ST_PIN_33        =    ST_PIN_33;
+    parameter ST_PIN_33        =    ST_PIN_33;
+    parameter ST_PIN_33        =    ST_PIN_33;
+    parameter ST_PIN_33        =    ST_PIN_33;
+    parameter ST_PIN_33        =    ST_PIN_33;
+    parameter ST_PIN_33        =    ST_PIN_33;
+    parameter ST_PIN_33        =    ST_PIN_33;
+    parameter ST_PIN_33        =    ST_PIN_33;
+    parameter ST_PIN_33        =    ST_PIN_33;
+    parameter ST_PIN_33        =    ST_PIN_33;
+    parameter ST_PIN_33        =    ST_PIN_33;
+    parameter ST_PIN_33        =    ST_PIN_33;
+    parameter ST_PIN_33        =    ST_PIN_33;
+    parameter ST_PIN_33        =    ST_PIN_33;
+    parameter ST_PIN_33        =    ST_PIN_33;
+    parameter ST_PIN_33        =    ST_PIN_33;
+    parameter ST_PIN_33        =    ST_PIN_33;
+    parameter ST_PIN_33        =    ST_PIN_33;
+    parameter ST_PIN_33        =    ST_PIN_33;
+    parameter ST_PIN_33        =    ST_PIN_33;
+    parameter ST_PIN_33        =    ST_PIN_33;
+    parameter ST_PIN_33        =    ST_PIN_33;
+    parameter ST

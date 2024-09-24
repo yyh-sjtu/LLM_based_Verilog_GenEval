@@ -1,0 +1,79 @@
+As a professional RTL designer, I would implement the TopModule as follows:
+
+```verilog
+module TopModule (
+    input in,
+    input [9:0] state,
+    output [9:0] next_state,
+    output out1,
+    output out2
+);
+
+// State transition logic
+always @* begin
+    case(state)
+        10'b0000000001: begin // S0
+            if(in)
+                next_state = 10'b0000000010; // S1
+            else
+                next_state = 10'b0000000001; // S0
+        end
+        10'b0000000010: begin // S1
+            if(in)
+                next_state = 10'b0000000011; // S2
+            else
+                next_state = 10'b0000000001; // S0
+        end
+        10'b0000000011: begin // S2
+            if(in)
+                next_state = 10'b0000000100; // S3
+            else
+                next_state = 10'b0000000001; // S0
+        end
+        10'b0000000100: begin // S3
+            if(in)
+                next_state = 10'b0000000101; // S4
+            else
+                next_state = 10'b0000000001; // S0
+        end
+        10'b0000000101: begin // S4
+            if(in)
+                next_state = 10'b0000000110; // S5
+            else
+                next_state = 10'b0000000001; // S0
+        end
+        10'b0000000110: begin // S5
+            if(in)
+                next_state = 10'b0000001000; // S8
+            else
+                next_state = 10'b0000000110; // S5
+        end
+        10'b0000001000: begin // S8
+            if(in)
+                next_state = 10'b0000000010; // S1
+            else
+                next_state = 10'b0000000001; // S0
+        end
+        10'b0000000111: begin // S6
+            if(in)
+                next_state = 10'b0000000111; // S6
+            else
+                next_state = 10'b0000001001; // S9
+        end
+        10'b0000001001: begin // S9
+            if(in)
+                next_state = 10'b0000000010; // S1
+            else
+                next_state = 10'b0000000001; // S0
+        end
+    endcase
+end
+
+// Output logic
+assign out1 = state[7]; // Output is the 8th bit of the current state
+assign out2 = state[8]; // Output is the 9th bit of the current state
+
+endmodule
+```
+
+In this implementation, the state transition logic is implemented using a case statement that checks the current state and input to determine the next state. The output logic assigns the values of out1 and out2 based on the 8th and 9th bits of the current state.

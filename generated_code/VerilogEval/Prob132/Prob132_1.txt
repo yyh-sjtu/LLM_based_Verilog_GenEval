@@ -1,0 +1,40 @@
+Sure! The current implementation of the `TopModule` has a potential issue with the `shut_off_computer` and `keep_driving` outputs, mainly because their values aren't defined in all paths, which can lead to unintended latches being inferred in synthesis. For every branch in both `always` blocks, we should ensure that all outputs have a defined state.
+
+Here’s the corrected version of the module:
+
+```verilog
+module TopModule (
+    input      cpu_overheated,
+    output reg shut_off_computer,
+    input      arrived,
+    input      gas_tank_empty,
+    output reg keep_driving
+);
+
+    always @(*) begin
+        // Default assignment to avoid latch inference
+        shut_off_computer = 0; // Default value 
+      
+        if (cpu_overheated)
+            shut_off_computer = 1; // Set to 1 only if cpu_overheated is true   
+    end
+
+    always @(*) begin
+        // Default assignment to avoid latch inference
+        keep_driving = 1; // Default value 
+
+        if (~arrived)
+            keep_driving = ~gas_tank_empty; // Set keep_driving based on gas_tank_empty only if not arrived
+    end
+
+endmodule
+```
+
+### Key Changes Made:
+1. **Default Assignments**: For both `shut_off_computer` and `keep_driving`, I provided a default assignment. This ensures that both signals have a defined value in all cases, preventing unwanted latches from being inferred.
+   
+2. **Clarified Logic**: The logic within each `always` block remains unchanged, but with the default assignments, there’s clearer behavior defined in case the conditions are not met.
+
+3. **Clarity in Code**: The code is structured for clear understanding and maintenance while retaining the intended functionality. 
+
+This approach effectively resolves the issues while preserving the original intended signal behaviors.

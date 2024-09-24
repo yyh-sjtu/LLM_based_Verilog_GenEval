@@ -1,0 +1,48 @@
+Certainly! Below is an example of an RTL design for the `TopModule` in Verilog. This module implements a counter that counts from 0 to 999 in a synchronized manner to a 1000-cycle period.
+
+### Verilog Code
+
+```verilog
+module TopModule (
+    input wire clk,
+    input wire reset,
+    output reg [9:0] q // 10 bits to count up to 999
+);
+
+    // Internal register for counting
+    reg [9:0] count;
+
+    always @(posedge clk) begin
+        if (reset) begin
+            count <= 10'b0; // Reset the counter to 0
+        end else if (count < 10'd999) begin
+            count <= count + 1; // Increment the counter
+        end else begin
+            count <= 10'b0; // Reset the counter back to 0 after reaching 999
+        end
+    end
+
+    assign q = count; // Output the count value
+
+endmodule
+```
+
+### Explanation
+1. **Module Declaration**: The module `TopModule` takes `clk`, `reset` as inputs and outputs a 10-bit signal `q`.
+
+2. **Internal Counter**: 
+   - We define a 10-bit register `count` to track our value.
+   - The maximum count will be `999`, which fits within 10 bits.
+
+3. **Always Block**: 
+   - The always block triggers on the positive edge of the clock.
+   - If a reset is detected (i.e., `reset` is high), the counter is set back to `0`.
+   - Otherwise, the counter increments by `1` if it’s less than `999`. When it reaches `999`, it resets back to `0`.
+
+4. **Output Assignment**: The current count value is assigned to `q`.
+
+### Simulation
+To ensure correctness, you may want to simulate the module to verify the counting behavior, especially around the boundary conditions of 0 and 999. 
+
+### Usage
+In a larger design, you can instantiate this module and connect it to a clock signal and reset signal to use it as a counter.

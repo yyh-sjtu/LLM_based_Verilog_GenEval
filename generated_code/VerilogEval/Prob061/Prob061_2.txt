@@ -1,0 +1,40 @@
+Certainly! Below is a simple RTL implementation for the `TopModule` as specified. This module has the ability to either load a new value, shift a value from the previous stage, or hold its current value based on the input control signals.
+
+```verilog
+module TopModule (
+    input  wire clk, // Clock input
+    input  wire w,   // Input from the previous stage
+    input  wire R,   // Value to load (will be treated as the new value)
+    input  wire E,   // Enable shift
+    input  wire L,   // Load signal
+    output reg  Q    // Output value
+);
+
+    always @(posedge clk) begin
+        if (L) begin
+            // Load new value R into Q when L is asserted
+            Q <= R;
+        end else if (E) begin
+            // Shift in the value from the previous stage (input w)
+            Q <= w;
+        end
+        // If neither L nor E is asserted, Q retains its current value
+    end
+endmodule
+```
+
+### Explanation of the Code:
+
+1. **Inputs and Outputs:** 
+   - The module has inputs `clk`, `w`, `R`, `E`, `L` and a single output `Q`.
+   - All inputs are 1-bit.
+
+2. **Clocking Behavior:**
+   - The `always @(posedge clk)` block ensures that the logic inside it is executed on the positive edge of the clock.
+
+3. **Control Logic:**
+   - If `L` (Load) is asserted, the output `Q` is loaded with the value from `R`.
+   - If `L` is not asserted and `E` (Enable Shift) is asserted, the output `Q` is updated with the value from the previous stage (`w`).
+   - If neither `L` nor `E` is asserted, the output `Q` retains its current value.
+
+This basic module is designed to act as a stage in an n-bit shift register where each instance can load a value, shift a value from the previous stage, or hold its current state as dictated by the control signals.

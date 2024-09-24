@@ -1,0 +1,22 @@
+Certainly! Below is an RTL implementation of a `TopModule` in Verilog. This module takes an 8-bit input and sign-extends it to a 32-bit output by replicating the sign bit (the most significant bit of the input) and concatenating it with the original input.
+
+```verilog
+module TopModule (
+    input  [7:0] in,  // 8-bit input
+    output [31:0] out // 32-bit output
+);
+
+    // Sign-extend the 8-bit input to 32 bits
+    assign out = { {24{in[7]}}, in }; // Concatenating 24 copies of the sign bit with the original input
+
+endmodule
+```
+
+### Explanation:
+- **Input/Output Declaration**: The module `TopModule` has one input port called `in`, which is 8 bits wide, and one output port called `out`, which is 32 bits wide.
+- **Sign Extension Logic**: The assignment to `out` uses concatenation:
+  - `{24{in[7]}}` replicates the sign bit (bit 7) of the input `in` 24 times. This operation produces a 24-bit value where all bits are the same as `in[7]`.
+  - `in` is the original 8-bit input.
+  - The two parts are concatenated together to form a 32-bit output.
+
+This module will correctly produce a 32-bit sign-extended output from an 8-bit signed input.

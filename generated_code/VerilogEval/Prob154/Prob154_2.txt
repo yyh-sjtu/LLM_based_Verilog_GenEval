@@ -1,0 +1,93 @@
+Let's implement the `TopModule` with an FSM (Finite State Machine) to detect message boundaries based on the provided specifications. The module will include a sequential logic block for state transitions and a combinational logic block for output assignments.
+
+Here’s a Verilog implementation of the `TopModule` that meets the required functionality:
+
+```verilog
+module TopModule (
+    input clk,
+    input reset,
+    input [7:0] in,
+    output reg [23:0] out_bytes,
+    output reg done
+);
+
+    // State Declaration
+    typedef enum reg [1:0] {
+        IDLE,
+        COLLECT_BYTE1,
+        COLLECT_BYTE2,
+        COLLECT_BYTE3
+    } state_t;
+
+    state_t current_state, next_state;
+
+    // State Transition
+    always @(posedge clk) begin
+        if (reset) begin
+            current_state <= IDLE;
+        end else begin
+            current_state <= next_state;
+        end
+    end
+
+    // Next State Logic
+    always @(*) begin
+        done = 0; // Default done is low
+        next_state = current_state; // Default to hold the state
+
+        case (current_state)
+            IDLE: begin
+                if (in[3]) begin // Check if current byte indicates start of new message
+                    next_state = COLLECT_BYTE1;
+                end
+            end
+            
+            COLLECT_BYTE1: begin
+                out_bytes[23:16] = in; // Store first byte
+                next_state = COLLECT_BYTE2;
+            end
+            
+            COLLECT_BYTE2: begin
+                out_bytes[15:8] = in; // Store second byte
+                next_state = COLLECT_BYTE3;
+            end
+            
+            COLLECT_BYTE3: begin
+                out_bytes[7:0] = in; // Store third byte
+                done = 1; // Signal that message is done at next clock edge
+                next_state = IDLE; // Go back to IDLE state
+            end
+            
+            default: begin
+                next_state = IDLE; // Fallback to IDLE for other states
+            end
+        endcase
+    end
+
+endmodule
+```
+
+### Explanation of the Module
+
+1. **State Declaration**:
+   - We define an enumeration type `state_t` for our FSM states: `IDLE`, `COLLECT_BYTE1`, `COLLECT_BYTE2`, and `COLLECT_BYTE3`.
+
+2. **State Transition Logic**:
+   - We use a synchronous reset; when the `reset` signal is high, it will reset the `current_state` to `IDLE`.
+   - On each clock cycle, based on the current state and the value of `in`, we determine the next state.
+
+3. **Combinational Logic for Next State**:
+   - In the `IDLE` state, if the condition `in[3]` is true (indicating a potential start of a new message), we transition to `COLLECT_BYTE1`.
+   - In `COLLECT_BYTE1`, we store the incoming byte in the upper 8 bits of `out_bytes` and transition to `COLLECT_BYTE2`.
+   - In `COLLECT_BYTE2`, we store the second byte and transition to `COLLECT_BYTE3`.
+   - In `COLLECT_BYTE3`, we store the third byte and assert `done`, indicating that the full message has been received. After that, we transition back to `IDLE`.
+
+4. **Output Assignment**:
+   - The outputs `out_bytes` and `done` are assigned within the state logic, ensuring that `out_bytes` holds valid data when `done` is asserted.
+
+### Notes
+- The signal `done` will be high for one clock cycle (specifically right after the third byte is received).
+- The `out_bytes` is assigned valid values only when `done` is asserted, else it can be set to don't-care values. 
+- Always ensure that during simulation, the reset condition is properly handled for an initial burst of incoming data. 
+
+This implementation operates under the assumption that the incoming byte stream is continuous and determined by external logic that isn't included here.

@@ -1,0 +1,7 @@
+module TopModule (
+    input [254:0] in,
+    output [7:0] out
+);
+    assign out = in[255:0];
+endmodule
+

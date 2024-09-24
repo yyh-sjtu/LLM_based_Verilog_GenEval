@@ -1,0 +1,42 @@
+
+
+// Declare the output signal
+reg z;
+
+// Define the states
+always@(posedge clk or posedge reset)
+begin
+   if(reset)
+      cur_state <= IDLE;
+   else
+      cur_state <= next_state;
+end
+
+// Define the next state logic
+always@(cur_state, a, b)
+begin
+   case(cur_state)
+      IDLE: if(a && b) next_state <= SAB;
+            else if(a) next_state <= SA;
+            else if(b) next_state <= SB;
+            else next_state <= IDLE;
+      SA: if(b) next_state <= SAB;
+          else if(a) next_state <= SA;
+          else next_state <= IDLE;
+      SB: if(a) next_state <= SAB;
+          else if(b) next_state <= SB;
+          else next_state <= IDLE;
+      SAB: next_state <= SAB;
+   endcase
+end
+
+// Define the output logic
+always@(cur_state)
+begin
+   case(cur_state)
+      SA, SB, SAB: z <= 1;
+      default: z <= 0;
+   endcase
+end
+
+endmodule

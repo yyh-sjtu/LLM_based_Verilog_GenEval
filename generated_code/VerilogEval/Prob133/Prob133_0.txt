@@ -1,0 +1,94 @@
+To implement the `TopModule` as specified in your request, we will design an FSM that transitions between states based on the inputs `s` and `w`, keeping track of the number of 1s observed in the last three clock cycles when in state B.
+
+Given the description, we can define the states as follows:
+- **State A**: The reset state. The FSM stays in this state as long as input `s` is 0. It transitions to State B when `s` becomes 1.
+- **State B**: In this state, the FSM examines the input `w` for the next three clock cycles to count how many times `w` is 1. After the third clock cycle, it determines whether the output `z` should be 1 or 0 based on the number of 1s counted.
+
+The output `z` is asserted high if exactly two 1s are detected in the last three clock cycles. The FSM continues checking `w` indefinitely once it is in state B, cycling through sets of three cycles.
+
+Here is a Verilog implementation of the `TopModule`:
+
+```verilog
+module TopModule(
+    input clk,
+    input reset,
+    input s,
+    input w,
+    output reg z
+);
+    
+    // State encoding
+    typedef enum reg [1:0] {
+        A = 2'b00,  // Reset State
+        B = 2'b01   // Counting State
+    } state_t;
+
+    state_t current_state, next_state;
+    
+    // Cycle counter for state B
+    reg [1:0] count;     // Counting w = 1 in last three cycles
+    reg [1:0] cycle;     // Counts current cycles within state B
+    reg [2:0] w_history;  // Shift register to track w's last three values
+
+    // State transition logic
+    always @(posedge clk) begin
+        if (reset) begin
+            current_state <= A;
+            count <= 2'b00;
+            cycle <= 2'b00;
+            z <= 1'b0;
+            w_history <= 3'b000;
+        end else begin
+            current_state <= next_state;
+            // Update z based on the count and cycle
+            if (next_state == B && cycle == 3) begin
+                z <= (count == 2) ? 1'b1 : 1'b0; // Set z based on count
+            end else if (next_state != B) begin
+                z <= 1'b0; // Reset z when not in state B
+            end
+        end
+    end
+
+    // Next state logic
+    always @* begin
+        case (current_state)
+            A: begin
+                if (s) begin
+                    next_state = B; // Transition to state B when s = 1
+                    count = 2'b00;  // Reset count
+                    cycle = 2'b00;  // Reset cycle counter
+                    w_history = 3'b000;  // Reset history
+                end else begin
+                    next_state = A; // Stay in state A while s = 0
+                end
+            end
+            B: begin
+                if (cycle < 3) begin
+                    w_history = {w_history[1:0], w}; // Shift w into the history
+                    count = count + w; // Count the number of 1s
+                    cycle = cycle + 1;  // Increment cycle
+                    next_state = B; // Stay in state B
+                end else begin
+                    // After 3 cycles, reset count and cycle
+                    count = (w_history[0] + w_history[1] + w_history[2]);
+                    cycle = 0; // Reset cycle counter
+                    next_state = B; // Remain in state B
+                end
+            end
+            default: begin
+                next_state = A; // Default to state A
+            end
+        endcase
+    end
+
+endmodule
+```
+
+### Explanation:
+
+1. **State Definition**: We use an `enum` to represent the states A and B for clarity.
+2. **State Transitions**: The FSM transitions from state A to B based on input `s`. In state B, we track the last three values of `w` and count the number of 1s observed.
+3. **Cycle Tracking**: A cycle counter is used to manage three clock cycles in state B. At the end of three cycles, we evaluate the count to determine the output `z`.
+4. **Output Logic**: The output `z` is driven based on whether exactly two instances of `w = 1` were observed during the last three cycles.
+
+This inherently ensures that we are respecting the synchronous reset and the positive edge behavior of the clock.

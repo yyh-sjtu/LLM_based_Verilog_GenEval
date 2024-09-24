@@ -1,0 +1,20 @@
+module TopModule (
+    input clock,
+    input a,
+    output p,
+    output q
+);
+    reg [31:0] r;
+    initial begin
+        $display("");
+        r = 0;
+    end
+    always @(posedge clock) begin
+        r <= r + 1;
+        if (r == 0) begin
+            $display("");
+            p = 0;
+            q = 0;
+        end
+    end
+endmodule

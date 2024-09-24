@@ -1,0 +1,27 @@
+Here is the RTL code for the TopModule implementing the described functionality:
+
+```verilog
+module TopModule (
+    input clk,
+    input reset,
+    output reg shift_ena
+);
+
+reg [3:0] counter;
+
+always @ (posedge clk) begin
+    if (reset) begin
+        counter <= 4'b1111;
+        shift_ena <= 1'b1;
+    end else if (counter > 0) begin
+        counter <= counter - 1;
+        shift_ena <= 1'b1;
+    end else begin
+        shift_ena <= 1'b0;
+    end
+end
+
+endmodule
+```
+
+In this code, the `TopModule` checks for the reset signal on the positive edge of the clock. When reset is active, the counter is loaded with 4 and shift_ena is asserted for 4 cycles. After that, shift_ena is deasserted until the next reset signal. The `counter` variable is used to keep track of the number of cycles for which to assert shift_ena. The module ensures that shift_ena is enabled for exactly 4 clock cycles whenever the proper bit pattern is detected.

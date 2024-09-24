@@ -1,0 +1,37 @@
+always @(posedge clk or posedge reset) begin
+    if (reset) begin
+        present_state <= 0;
+    end else begin
+        present_state <= next_state;
+    end
+end
+
+always @(present_state, in) begin
+    case (present_state)
+        0: begin
+            out = 1;
+            if (in == 0) begin
+                next_state = 1;
+            end else begin
+                next_state = 0;
+            end
+        end
+        1: begin
+            out = 0;
+            if (in == 0) begin
+                next_state = 0;
+            end else begin
+                next_state = 1;
+            end
+        end
+    endcase
+end
+endmodule
+
+This Verilog module implements a simple Moore state machine with two states, 0 and 1. The module has inputs for clock (clk), reset, and in, as well as an output for out. The reset state is set to 0.
+
+The present_state and next_state registers are used to hold the current state and the next state of the state machine. The module has two always blocks - the first one updates the present_state based on the clock and reset signal, and the second one updates the output and next_state based on the present_state and input signal.
+
+In state 0, the output is high and if the input signal is low, the state transitions to state 1. In state 1, the output is low and if the input signal is low, the state transitions back to state 0.
+
+This simple FSM module can be used in larger designs where sequential logic with state machines is required.

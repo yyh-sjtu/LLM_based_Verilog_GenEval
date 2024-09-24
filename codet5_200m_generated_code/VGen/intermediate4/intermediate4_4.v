@@ -1,0 +1,21 @@
+module simple_fsm (
+	input clk,
+	input reset,
+	input in,
+	output out
+);
+  reg [1:0] state;
+  reg [1:0] next_state;
+  always @(posedge clk or posedge reset)
+    if(reset)
+      state <= 0;
+    else
+      state <= next_state;
+  always @(posedge clk or posedge reset)
+    if(reset)
+      next_state <= 0;
+    else
+      next_state <= state;
+  assign out = state == 0? 1'bz : state == 1? 1'b0 : next_state;
+endmodule
+

@@ -1,0 +1,43 @@
+Certainly! Below is a simple implementation of the `TopModule` that functions as a 4-bit priority encoder in Verilog.
+
+```verilog
+module TopModule (
+    input   [3:0] in,  // 4-bit input
+    output  [1:0] pos  // 2-bit output
+);
+    
+    // Internal signal to hold the output
+    reg [1:0] position;
+    
+    // Always block for combinational logic
+    always @(*) begin
+        casez (in) // casez allows for don't care conditions
+            4'b1???: position = 2'd3; // If in[3] is high
+            4'b01??: position = 2'd2; // If in[2] is high
+            4'b001?: position = 2'd1; // If in[1] is high
+            4'b0001: position = 2'd0; // If in[0] is high
+            default: position = 2'd0;   // If none are high
+        endcase
+    end
+    
+    // Assign the computed position to the output
+    assign pos = position;
+
+endmodule
+```
+
+### Explanation:
+- The module `TopModule` has a 4-bit input called `in` and a 2-bit output called `pos`.
+- The internal variable `position` holds the output value based on which input bit is the highest priority (first `1` bit).
+- An `always` block is used to evaluate the input vector and assign the appropriate output using a `casez` statement, which conveniently allows the use of don't-care conditions (`?`).
+    - If `in[3]` is high, the output is `3` (binary `11`).
+    - If `in[2]` is high, the output is `2` (binary `10`).
+    - If `in[1]` is high, the output is `1` (binary `01`).
+    - If `in[0]` is high, the output is `0` (binary `00`).
+    - If none of the bits are high, the output defaults to `0`.
+- The output `pos` is assigned the value of `position`.
+
+### Test:
+To verify the functionality of this module, you can create a testbench where you apply various combinations of the input and check the output.
+
+Feel free to ask if you have any more questions or need further modifications!

@@ -1,0 +1,108 @@
+Sure! Below is a Verilog implementation of the `TopModule` according to the specifications of the state machine you provided. 
+
+### Verilog Implementation
+
+```verilog
+module TopModule (
+    input clk,
+    input reset,
+    input w,
+    output reg z
+);
+
+    // State encoding
+    typedef enum reg [2:0] {
+        A = 3'b000,
+        B = 3'b001,
+        C = 3'b010,
+        D = 3'b011,
+        E = 3'b100,
+        F = 3'b101
+    } state_t;
+
+    // State variables
+    state_t current_state, next_state;
+
+    // Flip-flops for state memory
+    always @(posedge clk or posedge reset) begin
+        if (reset) begin
+            current_state <= A; // reset to state A
+        end else begin
+            current_state <= next_state; // update current state
+        end
+    end
+
+    // Next state logic for the FSM
+    always @(*) begin
+        case (current_state)
+            A: begin
+                if (w) 
+                    next_state = B;
+                else 
+                    next_state = A;
+            end
+            
+            B: begin
+                if (w) 
+                    next_state = C;
+                else 
+                    next_state = D;
+            end
+            
+            C: begin
+                if (w) 
+                    next_state = E;
+                else 
+                    next_state = D;
+            end
+            
+            D: begin
+                if (w) 
+                    next_state = F;
+                else 
+                    next_state = A;
+            end
+            
+            E: begin
+                if (w) 
+                    next_state = E;
+                else 
+                    next_state = D;
+            end
+            
+            F: begin
+                if (w) 
+                    next_state = C;
+                else 
+                    next_state = D;
+            end
+            
+            default: next_state = A; // Default case for safety
+        endcase
+    end
+
+    // Output logic for z
+    always @(*) begin
+        case (current_state)
+            A, B, D: z = 0; // Output z = 0 in states A, B, D
+            C, E, F: z = 1; // Output z = 1 in states C, E, F
+            default: z = 0; // Default case for safety
+        endcase
+    end
+
+endmodule
+```
+
+### Explanation of the Code
+
+1. **State Encoding**: We used a 3-bit encoding for the six states (A, B, C, D, E, F). The `typedef` construct defines the states for readability.
+
+2. **Current State and Next State**: Two state variables are declared: `current_state` to hold the state of the FSM, and `next_state` to compute the next state based on the current state and the input `w`.
+
+3. **State Flip-Flops**: In the first `always` block, we have a synchronous reset that initializes the `current_state` to state `A` when reset is high. On clock edges, it updates to `next_state`.
+
+4. **Next State Logic**: The second `always` block contains the combinational logic that determines what the next state should be based on the `current_state` and the input `w`.
+
+5. **Output Logic (`z`)**: The output `z` is produced based on the `current_state`. It is set to `1` in states C, E, and F, and `0` in states A, B, and D. 
+
+This design adheres to your requirements, ensuring a clear separation of the state logic and output logic, and uses synchronous resets as specified.

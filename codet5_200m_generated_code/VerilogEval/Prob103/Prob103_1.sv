@@ -1,0 +1,15 @@
+module TopModule (
+    input a,
+    input b,
+    input c,
+    input d,
+    output q
+);
+    always @ (a or b or c or d) begin
+        if (a || b || c || d)
+            q <= 1;
+        else if (c || d)
+            q <= 0;
+    end
+endmodule
+

@@ -1,0 +1,13 @@
+module TopModule (
+	input [99:0] in,
+	output [99:0] out_both,
+	output [99:0] out_any,
+	output [99:0] out_different
+);
+    wire [3:0] code;
+    assign code = in[0:99];
+    assign out_both = code[3:0];
+    assign out_any = code[9:11];
+    assign out_different = code[9:11];
+endmodule
+

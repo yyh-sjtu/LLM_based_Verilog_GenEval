@@ -1,0 +1,42 @@
+To implement a JK flip-flop in RTL (Register Transfer Level) using Verilog, we can define a module named `TopModule` with input ports `clk`, `j`, `k` and an output port `Q`. The behavior of the flip-flop is defined by the truth table you provided. Below is an implementation of the JK flip-flop:
+
+```verilog
+module TopModule (
+    input clk,
+    input j,
+    input k,
+    output reg Q
+);
+
+    always @(posedge clk) begin
+        case ({j, k})
+            2'b00: Q <= Q;      // Do nothing, maintain current state (Qold)
+            2'b01: Q <= 1'b0;   // Reset state to 0
+            2'b10: Q <= 1'b1;   // Set state to 1
+            2'b11: Q <= ~Q;     // Toggle state
+        endcase
+    end
+
+endmodule
+```
+
+### Explanation of the Code:
+
+1. **Module Declaration**:
+    - The module is named `TopModule` and has inputs `clk`, `j`, `k`, and output `Q`.
+
+2. **Output Declaration**:
+    - `Q` is declared as `reg` type since it holds a value that can change inside an always block.
+
+3. **Always Block**:
+    - The `always @(posedge clk)` block triggers on the rising edge of the `clk` signal.
+
+4. **Case Statement**:
+    - The case statement checks the combination of the inputs `j` and `k`:
+        - `2'b00`: The output `Q` retains its previous value (Qold).
+        - `2'b01`: The output `Q` is set to `0`.
+        - `2'b10`: The output `Q` is set to `1`.
+        - `2'b11`: The output `Q` toggles its current state (using `~Q`).
+
+### Usage:
+You can instantiate this `TopModule` in a testbench or another module as needed to simulate or synthesize the JK flip-flop behavior in your design.

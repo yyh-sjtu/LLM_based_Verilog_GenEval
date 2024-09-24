@@ -1,0 +1,99 @@
+Certainly! Below is an implementation of the `TopModule` in Verilog that describes the functionality of the finite state machine (FSM) as specified.
+
+### Verilog Implementation
+
+```verilog
+module TopModule (
+    input wire x,
+    input wire [2:0] y,
+    output reg Y0,
+    output reg z
+);
+    // Next state logic based on the current state and input x
+    always @* begin
+        // Default values
+        Y0 = 0;
+        z = 0;
+
+        case (y)
+            3'b000: begin
+                if (x) begin
+                    Y0 = 0; // Next state is 000
+                    z = 0;  // Output z = 0
+                end else begin
+                    Y0 = 1; // Next state is 001
+                    z = 0;  // Output z = 0
+                end
+            end
+
+            3'b001: begin
+                if (x) begin
+                    Y0 = 0; // Next state is 100
+                    z = 0;  // Output z = 0
+                end else begin
+                    Y0 = 1; // Next state is 001
+                    z = 0;  // Output z = 0
+                end
+            end
+
+            3'b010: begin
+                if (x) begin
+                    Y0 = 1; // Next state is 001
+                    z = 0;  // Output z = 0
+                end else begin
+                    Y0 = 0; // Next state is 010
+                    z = 0;  // Output z = 0
+                end
+            end
+
+            3'b011: begin
+                if (x) begin
+                    Y0 = 0; // Next state is 010
+                    z = 1;  // Output z = 1
+                end else begin
+                    Y0 = 1; // Next state is 001
+                    z = 1;  // Output z = 1
+                end
+            end
+
+            3'b100: begin
+                if (x) begin
+                    Y0 = 0; // Next state is 100
+                    z = 1;  // Output z = 1
+                end else begin
+                    Y0 = 1; // Next state is 011
+                    z = 1;  // Output z = 1
+                end
+            end
+
+            default: begin
+                Y0 = 0;
+                z = 0;  // Default case
+            end
+        endcase
+    end
+
+endmodule
+```
+
+### Explanation
+
+1. **Inputs and Outputs:**
+   - Inputs: 
+     - `x` (1 bit) - Determines which transition to follow.
+     - `y` (3 bits) - Represents the current state of the FSM.
+   - Outputs:
+     - `Y0` (1 bit) - Corresponds to the least significant bit of the next state.
+     - `z` (1 bit) - An output that depends on both the current state and the input `x`.
+
+2. **State Transition Logic:**
+   - A combinational always block is used to determine the next state (`Y0`) and output (`z`) based on the current state (`y`) and the input (`x`). 
+   - The state transitions and outputs are implemented using a `case` statement based on the current state `y`.
+
+3. **Output Logic:**
+   - The output `z` is set to 1 for states `y = 011` and `y = 100` when the input `x` is considered properly.
+
+4. **Default Handling:**
+   - Default values are set for `Y0` and `z` to prevent latches and handle unexpected input conditions.
+
+You can synthesize this module using standard synthesis tools, and it should function as specified for the FSM described.

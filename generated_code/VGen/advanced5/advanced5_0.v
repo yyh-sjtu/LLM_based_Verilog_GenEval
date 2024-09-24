@@ -1,0 +1,66 @@
+module
+module abro(
+    input clk,
+    input reset,
+    input  a,
+    input  b,
+    output reg z
+);
+
+// State registers
+reg [1:0] cur_state, next_state;
+
+// State transitions
+always @(posedge clk or posedge reset) begin
+    if (reset) begin
+        cur_state <= IDLE;
+    end else begin
+        cur_state <= next_state;
+    end
+end
+
+// Next state logic
+always @(*) begin
+    case(cur_state)
+        IDLE: begin
+            if(a & b) begin
+                next_state = SAB;
+            end else if(a) begin
+                next_state = SA;
+            end else if(b) begin
+                next_state = SB;
+            end else begin
+                next_state = IDLE;
+            end
+        end
+        SA: begin
+            if(b) begin
+                next_state = SAB;
+            end else begin
+                next_state = IDLE;
+            end
+        end
+        SB: begin
+            if(a) begin
+                next_state = SAB;
+            end else begin
+                next_state = IDLE;
+            end
+        end
+        SAB: begin
+            next_state = IDLE;
+        end
+    endcase
+end
+
+// Output logic
+always @(*) begin
+    if(cur_state == SAB) begin
+        z = 1;
+    end else begin
+        z = 0;
+    end
+end
+
+endmodule
+

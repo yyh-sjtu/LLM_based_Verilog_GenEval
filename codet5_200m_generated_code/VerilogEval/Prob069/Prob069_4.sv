@@ -1,0 +1,17 @@
+module TopModule (
+	input x3,
+	input x2,
+	input x1,
+	output f
+);
+    parameter [31:0] CNT = 32'h000000;
+    parameter [31:0] CNT_1 = 32'h0000;
+    parameter [31:0] CNT_2 = 32'h000000;
+    parameter [31:0] CNT_3 = 32'h0000;
+    assign f = CNT_2;
+    initial
+    begin
+        $display("##%L: CNT_3 = %h", CNT_3, CNT_2);
+    end
+endmodule
+

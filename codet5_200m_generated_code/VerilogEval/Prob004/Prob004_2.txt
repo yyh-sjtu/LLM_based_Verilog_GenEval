@@ -1,0 +1,13 @@
+module TopModule (
+    input [31:0] in,
+    output [31:0] out
+);
+    wire [31:0] code;
+    assign out = code;
+    task _reverse_code;
+        input [31:0] value;
+        begin
+            code = value;
+        end
+    endtask
+endmodule

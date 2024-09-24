@@ -1,0 +1,16 @@
+module TopModule (
+	input clk,
+	input areset,
+	input j,
+	input k,
+	output out
+);
+    reg [1:0] state;
+    always @(posedge clk or posedge areset)
+        if (areset)
+            state <= 2'b00;
+        else
+            state <= state + 2'b1;
+    assign out = state[1];
+endmodule
+

@@ -1,0 +1,29 @@
+Sure! Below is an example of how to implement the `TopModule` in Verilog that includes both the assign statement and a combinational always block to perform the AND operation.
+
+```verilog
+module TopModule (
+    input  wire a,
+    input  wire b,
+    output wire out_assign,
+    output reg  out_alwaysblock
+);
+
+// Assign statement for AND operation
+assign out_assign = a & b;
+
+// Combinational always block for AND operation
+always @* begin
+    out_alwaysblock = a & b;
+end
+
+endmodule
+```
+
+### Explanation:
+1. **Module Declaration**: We define a module named `TopModule` with inputs and outputs as specified.
+
+2. **Assign Statement**: `assign out_assign = a & b;` directly computes the AND of `a` and `b` and assigns it to `out_assign`.
+
+3. **Combinational Always Block**: The `always @*` block is triggered whenever there is a change in any of its input signals. Inside the block, the same AND operation is performed, and the result is assigned to `out_alwaysblock`.
+
+You can instantiate this module in a top-level design or testbench to verify its functionality. Make sure to simulate it to observe the output behavior.

@@ -1,0 +1,22 @@
+module TopModule (
+    input clk,
+    input reset,
+    input s,
+    input w,
+    output z
+);
+    reg [1:0] A;
+    reg [1:0] state;
+    always @(posedge clk)
+        if (reset)
+            A <= 0;
+        else if (s)
+            A <= 1;
+    always @(posedge clk)
+        if (reset)
+            state <= 0;
+        else if (w)
+            state <= 1;
+    assign z = (state == 0)? 1'b1 : 1'b0;
+endmodule
+

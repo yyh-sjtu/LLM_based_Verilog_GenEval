@@ -1,0 +1,16 @@
+As a professional RTL designer, I would create the implementation of the TopModule as follows:
+
+```verilog
+module TopModule (
+    input in,
+    output reg out
+);
+
+always @* begin
+    out = in;
+end
+
+endmodule
+```
+
+In this design, the TopModule takes in a single bit input `in` and simply outputs it on the `out` port, effectively behaving like a wire. This implementation is concise and aligned with the specified requirements for the module interface.

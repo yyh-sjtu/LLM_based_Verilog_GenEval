@@ -1,0 +1,24 @@
+Sure, here is the RTL code for the TopModule implementing the described functionality:
+
+```verilog
+module TopModule (
+    input [4:0] a,
+    input [4:0] b,
+    input [4:0] c,
+    input [4:0] d,
+    input [4:0] e,
+    input [4:0] f,
+    output reg [7:0] w,
+    output reg [7:0] x,
+    output reg [7:0] y,
+    output reg [7:0] z
+);
+
+always @* begin
+    {w, x, y, z} = {a, b, c, d, e, f, 2'b11};
+end
+
+endmodule
+```
+
+In this implementation, the concatenation of the input vectors `a`, `b`, `c`, `d`, `e`, and `f` is stored in the output vectors `w`, `x`, `y`, and `z` with two LSB bits set to '1'.

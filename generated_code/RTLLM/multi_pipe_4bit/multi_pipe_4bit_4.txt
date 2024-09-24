@@ -1,0 +1,44 @@
+Here's the complete Verilog code for the 4bit unsigned number pipeline multiplier:
+
+```verilog
+module multi_pipe_4bit (
+    input clk,
+    input rst_n,
+    input [3:0] mul_a,
+    input [3:0] mul_b,
+    output reg [7:0] mul_out
+);
+
+parameter size = 4;
+
+reg [7:0] partial_products [0:size-1];
+reg [7:0] sums [0:size-1];
+
+always @ (posedge clk or negedge rst_n) begin
+    if (~rst_n) begin
+        for (int i = 0; i < size; i = i + 1) begin
+            partial_products[i] <= 8'b0;
+            sums[i] <= 8'b0;
+        end
+        mul_out <= 8'b0;
+    end else begin
+        for (int i = 0; i < size; i = i + 1) begin
+            if (mul_b[i] == 1) begin
+                partial_products[i] <= {mul_a, {size{1'b0}}} << i;
+            end else begin
+                partial_products[i] <= 8'b0;
+            end
+        end
+
+        for (int i = 0; i < size; i = i + 1) begin
+            sums[i] <= partial_products[i] + sums[i];
+        end
+
+        mul_out <= sums[size-1];
+    end
+end
+
+endmodule
+```
+
+This Verilog module multiplies two 4-bit unsigned numbers using pipeline multiplier architecture. The module calculates the partial products and then accumulates them to get the final product. The result is stored in `mul_out` as an 8-bit number.

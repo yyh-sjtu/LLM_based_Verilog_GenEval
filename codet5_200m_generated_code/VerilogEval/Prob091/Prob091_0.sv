@@ -1,0 +1,79 @@
+module TopModule (
+	input [5:0] y,
+	input w,
+	output Y1,
+	output Y3
+);
+    parameter S_INV_1 = 2'b00;
+    parameter S_INV_2 = 2'b01;
+    parameter S_INV_3 = 2'b10;
+    parameter S_INV_4 = 2'b11;
+    parameter S_INV_5 = 2'b12;
+    parameter S_INV_6 = 2'b13;
+    parameter S_INV_7 = 2'b14;
+    parameter S_INV_8 = 2'b15;
+    parameter S_INV_9 = 2'b16;
+    parameter S_INV_10 = 2'b17;
+    parameter S_INV_11 = 2'b18;
+    parameter S_INV_12 = 2'b19;
+    parameter S_INV_13 = 2'b20;
+    parameter S_INV_14 = 2'b21;
+    parameter S_INV_15 = 2'b22;
+    parameter S_INV_16 = 2'b23;
+    parameter S_INV_17 = 2'b24;
+    parameter S_INV_18 = 2'b21;
+    parameter S_INV_19 = 2'b20;
+    parameter S_INV_20 = 2'b21;
+    parameter S_INV_21 = 2'b21;
+    parameter S_INV_22 = 2'b21;
+    parameter S_INV_23 = 2'b22;
+    parameter S_INV_24 = 2'b23;
+    parameter S_INV_25 = 2'b24;
+    parameter S_INV_26 = 2'b21;
+    parameter S_INV_27 = 2'b24;
+    parameter S_INV_28 = 2'b24;
+    parameter S_INV_29 = 2'b23;
+    parameter S_INV_30 = 2'b24;
+    parameter S_INV_31 = 2'b24;
+    parameter S_INV_32 = 2'b24;
+    parameter S_INV_33 = 2'b24;
+    parameter S_INV_34 = 2'b24;
+    parameter S_INV_35 = 2'b24;
+    parameter S_INV_36 = 2'b24;
+    parameter S_INV_37 = 2'b24;
+    parameter S_INV_38 = 2'b24;
+    parameter S_INV_39 = 2'b24;
+    parameter S_INV_40 = 2'b24;
+    parameter S_INV_41 = 2'b24;
+    parameter S_INV_42 = 2'b24;
+    parameter S_INV_43 = 2'b24;
+    parameter S_INV_41 = 2'b24;
+    parameter S_INV_42 = 2'b24;
+    parameter S_INV_43 = 2'b24;
+    parameter S_INV_41 = 2'b24;
+    parameter S_INV_43 = 2'b24;
+    parameter S_INV_42 = 2'b24;
+    parameter S_INV_43 = 2'b24;
+    parameter S_INV_44 = 2'b24;
+    parameter S_INV_44 = 2'b24;
+    parameter S_INV_45 = 2'b24;
+    parameter S_INV_45 = 2'b24;
+    parameter S_INV_45 = 2'b24;
+    parameter S_INV_45 = 2'b24;
+    parameter S_INV_45 = 2'b24;
+    parameter S_INV_45 = 2'b24;
+    parameter S_INV_45 = 2'b24;
+    parameter S_INV_45 = 2'b24;
+    parameter S_INV_45 = 2'b24;
+    parameter S_INV_45 = 2'b24;
+    parameter S_INV_45 = 2'b24;
+    parameter S_INV_45 = 2'b24;
+    parameter S_INV_45 = 2'b24;
+    parameter S_INV_45 = 2'b24;
+    parameter S_INV_45 = 2'b24;
+    parameter S_INV_45 = 2'b24;
+    parameter S_INV_45 = 2'b24;
+    parameter S_INV_45 = 2'b24;
+    parameter S_INV_45 = 2'b24;
+endmodule
+

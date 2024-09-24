@@ -1,0 +1,15 @@
+Here is the Verilog code for the TopModule implementing the described combinational circuit:
+
+```verilog
+module TopModule (
+    input a,
+    input b,
+    output q
+);
+
+assign q = a & b;
+
+endmodule
+```
+
+The circuit performs a logical AND operation between inputs 'a' and 'b', and the result is output at 'q' as shown in the provided simulation waveforms. Let me know if you need any further assistance.

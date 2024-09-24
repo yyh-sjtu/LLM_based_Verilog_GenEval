@@ -1,0 +1,7 @@
+// Implementing the permutation block module
+always @* begin
+  for(i=0; i<len_table; i=i+1) begin
+    Out32[i] = In32[In32table[i]];
+  end
+end
+endmodule

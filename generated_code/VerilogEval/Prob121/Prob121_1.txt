@@ -1,0 +1,99 @@
+Certainly! Here’s a Verilog implementation of the `TopModule` that describes a finite-state machine (FSM) based on the state transition table you've provided.
+
+```verilog
+module TopModule (
+    input clk,
+    input reset,
+    input x,
+    output reg z
+);
+
+    // Define state encoding
+    reg [2:0] state, next_state;
+
+    // State encoding
+    localparam STATE_000 = 3'b000,
+               STATE_001 = 3'b001,
+               STATE_010 = 3'b010,
+               STATE_011 = 3'b011,
+               STATE_100 = 3'b100;
+
+    // Sequential logic: update state on clock edge
+    always @(posedge clk) begin
+        if (reset) begin
+            state <= STATE_000; // Reset to state 000
+        end else begin
+            state <= next_state; // Transition to the next state
+        end
+    end
+
+    // Combinational logic: determine next state and output
+    always @(*) begin
+        case (state)
+            STATE_000: begin
+                if (x) begin
+                    next_state = STATE_001;
+                end else begin
+                    next_state = STATE_000;
+                end
+                z = 1'b0; // Output is 0
+            end
+            
+            STATE_001: begin
+                if (x) begin
+                    next_state = STATE_100;
+                end else begin
+                    next_state = STATE_001;
+                end
+                z = 1'b0; // Output is 0
+            end
+            
+            STATE_010: begin
+                if (x) begin
+                    next_state = STATE_001;
+                end else begin
+                    next_state = STATE_010;
+                end
+                z = 1'b0; // Output is 0
+            end
+            
+            STATE_011: begin
+                if (x) begin
+                    next_state = STATE_010;
+                end else begin
+                    next_state = STATE_001;
+                end
+                z = 1'b1; // Output is 1
+            end
+            
+            STATE_100: begin
+                if (x) begin
+                    next_state = STATE_100;
+                end else begin
+                    next_state = STATE_011;
+                end
+                z = 1'b1; // Output is 1
+            end
+            
+            default: begin
+                next_state = STATE_000; // Default to state 000
+                z = 1'b0; // Output is 0
+            end
+        endcase
+    end
+    
+endmodule
+```
+
+### Explanation:
+
+1. **State Encoding**: The states are encoded as 3-bit values, with each state represented by a unique combination of bits.
+  
+2. **Sequential Logic**: The FSM transitions to the next state at the positive edge of the clock or resets to `STATE_000` when the reset signal is high.
+
+3. **Combinational Logic**: Based on the current state and input `x`, the next state and output `z` are computed.
+
+4. **Default Cases**: In the default case of the final combinational always block, if the state is somehow undefined (which shouldn't happen in this design), it defaults to the initial state.
+
+### Simulation/Verification:
+While the module provided is functionally correct according to your state transition table, it is always good to create a testbench to verify the functionality of the FSM with various input sequences and check if it behaves as expected under different scenarios.

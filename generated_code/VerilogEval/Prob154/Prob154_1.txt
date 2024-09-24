@@ -1,0 +1,120 @@
+Sure! I'll provide you an RTL implementation of the `TopModule` as you described, using Verilog. We'll define a finite state machine (FSM) and a simple data path to store the received bytes.
+
+Here's how we can structure this design:
+
+1. Define the states for the FSM.
+2. Implement the state transitions based on the input conditions.
+3. Create a storage mechanism for received bytes.
+4. Generate the `done` signal and control the output logic.
+
+### Verilog Code for `TopModule`
+
+```verilog
+module TopModule (
+    input clk,
+    input reset,
+    input [7:0] in,
+    output reg [23:0] out_bytes,
+    output reg done
+);
+    
+    // State Encoding
+    typedef enum reg [1:0] {
+        IDLE      = 2'b00,
+        BYTE1     = 2'b01,
+        BYTE2     = 2'b10,
+        BYTE3     = 2'b11
+    } state_t;
+    
+    state_t current_state, next_state;
+    
+    // State Transition Logic
+    always @(posedge clk or posedge reset) begin
+        if (reset) begin
+            current_state <= IDLE;
+        end else begin
+            current_state <= next_state;
+        end
+    end
+    
+    // Next State Logic
+    always @* begin
+        case (current_state)
+            IDLE: begin
+                if (in[3]) begin // looking for start of message
+                    next_state = BYTE1;
+                end else begin
+                    next_state = IDLE;
+                end
+                done = 0; // done signal is not asserted
+            end
+            
+            BYTE1: begin
+                next_state = BYTE2;
+                done = 0; // done signal is not asserted
+            end
+            
+            BYTE2: begin
+                next_state = BYTE3;
+                done = 0; // done signal is not asserted
+            end
+            
+            BYTE3: begin
+                next_state = IDLE;
+                done = 1; // done signal is asserted
+            end
+            
+            default: begin
+                next_state = IDLE;
+                done = 0;
+            end
+        endcase
+    end
+    
+    // Data Path Logic
+    always @(posedge clk) begin
+        if (reset) begin
+            out_bytes <= 24'b0; // reset output
+        end else begin
+            case (current_state)
+                BYTE1: begin
+                    out_bytes[23:16] <= in; // Store 1st byte
+                end
+                
+                BYTE2: begin
+                    out_bytes[15:8] <= in; // Store 2nd byte
+                end
+                
+                BYTE3: begin
+                    out_bytes[7:0] <= in; // Store 3rd byte
+                end
+                
+                default: begin
+                    // No change to out_bytes in IDLE or any other state
+                end
+            endcase
+        end
+    end
+
+endmodule
+```
+
+### Explanation of the Code
+
+1. **State Enumeration**:
+   - We define an enumeration `state_t` for the four states: `IDLE`, `BYTE1`, `BYTE2`, and `BYTE3`.
+
+2. **State Transition Logic**:
+   - The state transitions are governed by an always block that triggers on the positive edge of the clock or when reset is high. Upon reset, the FSM transitions to the `IDLE` state.
+
+3. **Next State Logic**:
+   - The next state is determined based on the current state:
+     - In `IDLE`, we check for the condition (`in[3]`) to transition to `BYTE1`.
+     - From `BYTE1` to `BYTE3`, the states transition sequentially.
+     - Upon reaching `BYTE3`, we loop back to `IDLE` and assert the `done` signal.
+
+4. **Data Path Logic**:
+   - The `out_bytes` register is updated based on the current state. The first, second, and third bytes are stored in `out_bytes` during states `BYTE1`, `BYTE2`, and `BYTE3`, respectively. The output is reset when the module is reset.
+
+### Simulation
+You can use this Verilog code in your FPGA or simulation environment. This implementation meets the detailed specifications you provided for message boundary detection and handling.

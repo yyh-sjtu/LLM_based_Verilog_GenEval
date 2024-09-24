@@ -1,0 +1,69 @@
+Certainly! Below is an RTL implementation of the `TopModule` in Verilog that takes a 16-bit input and outputs the upper and lower 8 bits as specified.
+
+```verilog
+// Define the module
+module TopModule (
+    input  [15:0] in,   // 16-bit input
+    output [7:0] out_hi, // 8 bits upper half
+    output [7:0] out_lo  // 8 bits lower half
+);
+
+    // Assigning the upper and lower bytes from the 16-bit input
+    assign out_hi = in[15:8]; // Upper byte (bits 15 to 8)
+    assign out_lo = in[7:0];  // Lower byte (bits 7 to 0)
+
+endmodule
+```
+
+### Explanation:
+- The `TopModule` declares a 16-bit input `in` and two 8-bit outputs `out_hi` and `out_lo`.
+- The `assign` statements directly map the corresponding bits from the input `in` to the output ports:
+  - `out_hi` takes bits 15 to 8 from `in`, which represent the upper byte.
+  - `out_lo` takes bits 7 to 0 from `in`, which represent the lower byte.
+
+### Testing the Module:
+You might want to create a testbench to validate the functionality. Here's a simple example of how you can do that:
+
+```verilog
+module tb_TopModule;
+
+    reg [15:0] in; // Test input
+    wire [7:0] out_hi; // Output for upper byte
+    wire [7:0] out_lo; // Output for lower byte
+
+    // Instantiate the TopModule
+    TopModule uut (
+        .in(in),
+        .out_hi(out_hi),
+        .out_lo(out_lo)
+    );
+
+    initial begin
+        // Test various inputs
+        in = 16'hA5A5; // Example input
+        #10; // Wait for 10 time units
+        $display("Input: %h, out_hi: %h, out_lo: %h", in, out_hi, out_lo);
+        
+        in = 16'h1234;
+        #10;
+        $display("Input: %h, out_hi: %h, out_lo: %h", in, out_hi, out_lo);
+        
+        in = 16'hFFFF;
+        #10;
+        $display("Input: %h, out_hi: %h, out_lo: %h", in, out_hi, out_lo);
+        
+        in = 16'h0000;
+        #10;
+        $display("Input: %h, out_hi: %h, out_lo: %h", in, out_hi, out_lo);
+
+        // End simulation
+        $finish;
+    end
+
+endmodule
+```
+
+### Notes:
+- This testbench initializes the `in` signal and checks the outputs periodically with a display statement.
+- Be sure to adapt the timing in the testbench (`#10`) to your simulation requirements.
+- You can run this code in any Verilog simulator to observe the functionality and validate the behavior of your `TopModule`.

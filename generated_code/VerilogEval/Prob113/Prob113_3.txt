@@ -1,0 +1,18 @@
+To implement the TopModule with the given functionality, we can use a combinational logic circuit using logical gates.
+
+Here is the Verilog code for the TopModule implementing the function f based on the provided Karnaugh map:
+
+```verilog
+module TopModule (
+    input [3:0] x,
+    output f
+);
+
+assign f = !(x[2] & !x[3]) | (x[0] & !x[1]) | (x[0] & x[2] & !x[1]) | (x[1] & !x[2] & x[3]);
+
+endmodule
+```
+
+In this code, we are using the input x to calculate the output f based on the conditions provided in the Karnaugh map. The logical operations used in the assign statement represent the conditions specified in the truth table.
+
+Please let me know if you need any further clarification or assistance with this implementation.

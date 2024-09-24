@@ -1,0 +1,149 @@
+module TopModule (
+	input clk,
+	input reset,
+	input ena,
+	output pm,
+	output [7:0] hh,
+	output [7:0] mm,
+	output [7:0] ss
+);
+    reg [12:0] h;
+    reg [12:0] h1, h2, h3, h4, h5, h6, h7, h8, h9, h10, h11, h12;
+    reg [12:0] h16, h17, h18, h19, h20, h21, h22, h23;
+    reg [12:0] h19, h22, h23;
+    reg [12:0] h24, h24;
+    reg [12:0] h25, h25;
+    reg [12:0] h26, h26;
+    reg [12:0] h25, h26;
+    reg [12:0] h26, h24, h25;
+    reg [12:0] h27, h27;
+    reg [12:0] h28;
+    reg [12:0] h28, h28;
+    reg [12:0] h29, h29;
+    reg [12:0] h30, h30;
+    reg [12:0] h31, h31;
+    reg [12:0] h32, h32;
+    reg [7:0] h31, h32;
+    assign pm = h20 | h27 | h28 | h30 | h31 | h32;
+    assign h = h21 | h28 | h30;
+    assign h2 = h23 | h24 | h24;
+    assign h3 = h31 | h30 | h24;
+    assign h4 = h31 | h31;
+    assign h5 = h28 | h27 | h28;
+    assign h6 = h30 | h28;
+    assign h7 = h30 | h28;
+    assign h8 = h29 | h29 | h30;
+    assign h9 = h24 | h24;
+    assign h10 = h29 | h24;
+    assign h11 = h22 | h23;
+    assign h12 = h31 | h29;
+    assign h16 = h29 | h27;
+    assign h17 = h28 | h28;
+    assign h18 = h29 | h27;
+    assign h19 = h30 | h28;
+    assign h21 = h30 | h28;
+    assign h22 = h30 | h28;
+    assign h23 = h29 | h28;
+    assign h24 = h28 | h27;
+    assign h25 = h28 | h25;
+    assign h26 = h28 | h25;
+    assign h24 = h28 | h25;
+    assign h25 = h28 | h25;
+    assign h24 = h28 | h25;
+    assign h22 = h28 | h28;
+    assign h24 = h28 | h25;
+    assign h24 = h28 | h27;
+    assign h25 = h28 | h24;
+    assign h26 = h28 | h25;
+    assign h26 = h27 | h24;
+    assign h26 = h28 | h26;
+    assign h24 = h28 | h25;
+    assign h25 = h28 | h25;
+    assign h26 = h27 | h28;
+    assign h24 = h25 | h26;
+    assign h26 = h25 | h28;
+    assign h25 = h26 | h25;
+    assign h25 = h25 | h26;
+    assign h26 = h25 | h25;
+    assign h25 = h28 | h25;
+    always @ (posedge clk or posedge reset) begin
+        if (reset) begin
+            h <= 12'd0;
+            h1 <= 12'd0;
+            h2 <= 12'd0;
+            h3 <= 12'd0;
+            h4 <= 12'd0;
+            h5 <= 12'd0;
+            h6 <= 12'd0;
+            h7 <= 12'd0;
+            h8 <= 12'd0;
+            h9 <= 12'd0;
+            h10 <= 12'd0;
+            h11 <= 12'd0;
+            h12 <= 12'd0;
+            h13 <= 12'd0;
+            h14 <= 12'd0;
+            h15 <= 12'd0;
+            h16 <= 12'd0;
+            h19 <= 12'd0;
+            h18 <= 12'd0;
+            h19 <= 12'd0;
+            h20 <= 12'd0;
+            h21 <= 12'd0;
+            h22 <= 12'd0;
+            h23 <= 12'd0;
+            h24 <= 12'd0;
+            h25 <= 12'd0;
+            h24 <= 12'd0;
+            h22 <= 12'd0;
+            h22 <= 12'd0;
+            h24 <= 12'd0;
+            h24 <= 12'd0;
+            h19 <= 12'd0;
+            h22 <= 12'd0;
+            h24 <= 12'd0;
+            h25 <= 12'd0;
+            h23 <= 12'd0;
+            h24 <= 12'd0;
+            h22 <= 12'd0;
+            h22 <= 12'd0;
+            h24 <= 12'd0;
+            h24 <= 12'd0;
+            h24 <= 12'd0;
+            h24 <= 12'd0;
+            h25 <= 12'd0;
+            h25 <= 12'd0;
+            h28 <= 12'd0;
+        end else begin
+            if (ena) begin
+                h <= h1;
+                h1 <= h0;
+                h2 <= h1;
+                h3 <= h2;
+                h4 <= h3;
+                h5 <= h4;
+                h6 <= h5;
+                h7 <= h6;
+                h8 <= h7;
+                h9 <= h9;
+                h10 <= h10;
+                h11 <= h11;
+                h12 <= h12;
+                h20 <= h20;
+                h21 <= h21;
+                h22 <= h22;
+                h20 <= h21;
+                h21 <= h21;
+                h22 <= h22;
+                h24 <= h24;
+                h22 <= h22;
+                h23 <= h23;
+                h24 <= h24;
+                h22 <= h22;
+                h24 <= h24;
+                h24 <= h24;
+                h25 <= h25;
+            end
+        end
+end
+endmodule

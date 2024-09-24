@@ -1,0 +1,10 @@
+// Verilog code for TopModule implementing a NOT gate
+
+module TopModule (
+    input in,
+    output out
+);
+
+assign out = ~in;
+
+endmodule

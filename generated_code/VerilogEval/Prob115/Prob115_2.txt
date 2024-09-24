@@ -1,0 +1,50 @@
+Certainly! Below is the Verilog implementation of the `TopModule` according to your requirements for a 64-bit arithmetic shift register with synchronous load capabilities.
+
+```verilog
+module TopModule (
+    input         clk,
+    input         load,
+    input         ena,
+    input  [1:0] amount,
+    input  [63:0] data,
+    output reg [63:0] q
+);
+
+    always @(posedge clk) begin
+        if (load) begin
+            // Load data into the register
+            q <= data;
+        end else if (ena) begin
+            // Shift operations
+            case (amount)
+                2'b00: q <= {q[62:0], 1'b0};       // Shift left by 1 bit
+                2'b01: q <= {q[55:0], 8'b0};       // Shift left by 8 bits
+                2'b10: q <= {q[63], q[63:1]};      // Arithmetic right shift by 1 bit
+                2'b11: q <= {q[63], q[63:8]};      // Arithmetic right shift by 8 bits
+                default: q <= q;                   // Retain current state if amount is invalid
+            endcase
+        end
+    end
+endmodule
+```
+
+### Explanation:
+
+1. **Inputs and Outputs**:
+   - The module has inputs for `clk`, `load`, `ena`, `amount`, and `data`. It has a 64-bit output `q`.
+
+2. **Synchronous Load**:
+   - If the `load` signal is high, the current `data` (64 bits) is loaded into the register `q`.
+
+3. **Shift Logic**:
+   - If `load` is low but `ena` is high, the module will perform a shift operation based on the `amount` input:
+     - `2'b00`: Left shift by 1 bit. The new least significant bit will be `0`.
+     - `2'b01`: Left shift by 8 bits. The 8 least significant bits will be `0`.
+     - `2'b10`: Arithmetic right shift by 1 bit. The sign bit (MSB) is used for padding, keeping the sign intact.
+     - `2'b11`: Arithmetic right shift by 8 bits. Again, the sign bit is used for padding.
+
+4. **Default Case**:
+   - The default case in the `case` statement ensures `q` retains its current value if `amount` is invalid.
+
+### Usage:
+You can instantiate this module in a higher-level design where the inputs `clk`, `load`, `ena`, `amount`, and `data` are driven, and then observe the output `q` after triggering the clock signal.

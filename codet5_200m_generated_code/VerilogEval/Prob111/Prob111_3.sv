@@ -1,0 +1,70 @@
+module TopModule (
+    input clk,
+    input reset,
+    input j,
+    input k,
+    output out
+);
+    localparam CNT_START = 0;
+    localparam CNT_FINISH = 1;
+    parameter CNT_FINISH_DEFAULT = 2'b00;
+    parameter CNT_START_REPEAT = 3'b01;
+    parameter CNT_FINISH_DEFAULT = 3'b10;
+    reg [CNT_START:0] j_counter = 1;
+    reg [CNT_FINISH:0] k_counter = 1;
+    reg [CNT_FINISH_REPEAT:0] out_counter = 1;
+    reg [1:0] current_state = CNT_START;
+    always @ (posedge clk, posedge reset) begin
+        if(reset) begin
+            j_counter <= CNT_START;
+            k_counter <= CNT_FINISH_DEFAULT;
+            out_counter <= CNT_FINISH_DEFAULT;
+        end
+        else begin
+            j_counter <= 0;
+            k_counter <= 0;
+            out_counter <= 0;
+            current_state <= current_state;
+        end
+    end
+    always @ (posedge clk, posedge reset) begin
+        if(reset) begin
+            current_state <= CNT_START_REPEAT;
+            out_counter <= 0;
+        end
+        else begin
+            current_state <= current_state + 1;
+        end
+    end
+    always @ (j, k, out) begin
+        if(j) begin
+            if(k) begin
+                out_counter <= 0;
+                out_counter <= CNT_FINISH;
+            end
+            else begin
+                out_counter <= 0;
+                out_counter <= 0;
+            end
+        end
+    end
+    always @ (j, k, out) begin
+        if(out_counter == 0) begin
+            j_counter <= CNT_START_REPEAT;
+            k_counter <= CNT_FINISH_DEFAULT;
+            out_counter <= 0;
+        end
+        else begin
+            j_counter <= j_counter + 1;
+            k_counter <= k_counter - 1;
+            out_counter <= 0;
+            if(j_counter == CNT_START_REPEAT) begin
+                j_counter <= CNT_FINISH_REPEAT;
+            end
+            else begin
+                j_counter <= j_counter + 1;
+            end
+        end
+    end
+endmodule
+

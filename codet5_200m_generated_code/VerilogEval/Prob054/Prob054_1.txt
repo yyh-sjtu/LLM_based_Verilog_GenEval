@@ -1,0 +1,11 @@
+module TopModule (
+	input clk,
+	input [7:0] in,
+	output [7:0] pedge
+);
+    reg [7:0] code;
+    always @(posedge clk)
+        if (in[0]) code <= 8'h00;
+        else code <= 8'h01;
+    assign pedge = code[7];
+endmodule

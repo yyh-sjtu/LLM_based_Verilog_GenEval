@@ -1,0 +1,15 @@
+Sure, here is the RTL code for the TopModule implementing the specified interface:
+
+```verilog
+module TopModule(
+    output reg out
+);
+
+always @* begin
+    out = 1'b0; // always drive logic low
+end
+
+endmodule
+```
+
+This code defines a module named TopModule with a single output port named out. The output port is always driven to logic low. Let me know if you have any questions or need any further clarification.

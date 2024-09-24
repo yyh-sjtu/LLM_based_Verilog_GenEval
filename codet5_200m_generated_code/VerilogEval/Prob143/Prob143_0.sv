@@ -1,0 +1,19 @@
+module TopModule (
+	input in,
+	input [9:0] state,
+	output [9:0] next_state,
+	output out1,
+	output out2
+);
+    reg [9:0] next_reg = 0;
+    always @ (*)
+        case (state)
+            1'b1: next_reg = 10'b01100011;
+            1'b0: next_reg = 10'b10101010;
+            1'b1: next_reg = 10'b0101111;
+            default: next_reg = 10'b01100001;
+        endcase
+    assign out1 = in && (in);
+    assign out2 = in && (in);
+endmodule
+

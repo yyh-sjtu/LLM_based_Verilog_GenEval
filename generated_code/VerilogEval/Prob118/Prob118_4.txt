@@ -1,0 +1,40 @@
+As a professional RTL designer, I would start by creating a Verilog module named TopModule with the specified input and output ports. I would then implement the functionality described in the requirements.
+
+Here is the Verilog code for the TopModule module:
+
+```verilog
+module TopModule (
+    input clk,
+    input areset,
+    input predict_valid,
+    input predict_taken,
+    input train_mispredicted,
+    input train_taken,
+    input [31:0] train_history,
+    output reg [31:0] predict_history
+);
+
+reg [31:0] branch_history_reg;
+
+always @(posedge clk or posedge areset) begin
+    if (areset) begin
+        branch_history_reg <= 32'b0;
+    end else begin
+        if (train_mispredicted) begin
+            branch_history_reg <= {train_history, train_taken};
+        end else if (predict_valid) begin
+            branch_history_reg <= {branch_history_reg[30:0], predict_taken};
+        end
+    end
+end
+
+assign predict_history = branch_history_reg;
+
+endmodule
+```
+
+In this code, I have created a shift register `branch_history_reg` to store the 32-bit global history. The logic inside the always block updates the history register based on the input signals predict_valid, predict_taken, train_mispredicted, train_taken, and train_history. The predict_history output ports the value of the branch history register.
+
+This implementation ensures that the branch history register is updated correctly based on predictions and mispredictions, with support for rolling back state in response to a pipeline flush caused by a misprediction. The asynchronous reset areset is also implemented to reset the history counter to zero.
+
+I would then simulate and verify the functionality of the TopModule using a testbench to ensure that it behaves as expected according to the requirements.

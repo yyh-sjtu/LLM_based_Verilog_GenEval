@@ -1,0 +1,17 @@
+Sure, here is the RTL code for the TopModule implementing a NOR gate:
+
+```verilog
+module TopModule(
+    input a,
+    input b,
+    output out
+);
+
+assign out = ~(a | b);
+
+endmodule
+```
+
+This module takes two input signals 'a' and 'b', performs a logical OR operation on them, and then negates the result to implement a NOR gate. The output 'out' will be high (1) if both 'a' and 'b' are low (0), otherwise it will be low (0).
+
+Let me know if you need any further modifications or assistance.

@@ -1,0 +1,7 @@
+module TopModule (
+	input [3:0] x,
+	output f
+);
+    assign f = KarnaughMap[x];
+endmodule
+

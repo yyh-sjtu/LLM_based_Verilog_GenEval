@@ -1,0 +1,21 @@
+module accu (
+	input clk,
+	input rst_n,
+	input [7:0] data_in,
+	input valid_in,
+	output valid_out,
+	output [9:0] data_out
+);
+    reg [7:0] code;
+    always @(posedge clk or negedge rst_n)
+    begin
+        if(!rst_n)
+            code <= 0;
+        else
+            if(valid_in)
+                code <= data_in + 1;
+    end
+    assign valid_out = code[0];
+    assign data_out = code[1];
+endmodule
+

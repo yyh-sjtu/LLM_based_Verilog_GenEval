@@ -1,0 +1,10 @@
+module TopModule (
+	input d,
+	input ena,
+	output q
+);
+    always @ (d or ena) begin
+        if (ena) q <= 1;
+    end
+endmodule
+

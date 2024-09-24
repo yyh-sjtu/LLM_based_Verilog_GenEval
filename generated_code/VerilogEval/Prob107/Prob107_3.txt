@@ -1,0 +1,81 @@
+Certainly! Below is a Verilog implementation of the `TopModule` described in your request. This module represents a Moore state machine with two states (A and B), one input (`in`), and one output (`out`). The output is determined by the current state of the machine.
+
+### Verilog Code
+
+```verilog
+module TopModule (
+    input clk,
+    input reset,
+    input in,
+    output reg out
+);
+
+// State encoding
+typedef enum reg [1:0] {
+    B = 2'b00, // State B
+    A = 2'b01  // State A
+} state_t;
+
+// State register
+state_t current_state, next_state;
+
+// Synchronous state transition
+always @(posedge clk or posedge reset) begin
+    if (reset) begin
+        current_state <= B; // Reset to state B
+    end else begin
+        current_state <= next_state; // Transition to the next state
+    end
+end
+
+// Next state logic
+always @(*) begin
+    case (current_state)
+        B: begin
+            if (in == 0) begin
+                next_state = A; // B --in=0--> A
+                out = 1; // Output 1 in state B
+            end else begin
+                next_state = B; // B --in=1--> B
+                out = 1; // Output 1 in state B
+            end
+        end
+        A: begin
+            if (in == 0) begin
+                next_state = B; // A --in=0--> B
+                out = 0; // Output 0 in state A
+            end else begin
+                next_state = A; // A --in=1--> A
+                out = 0; // Output 0 in state A
+            end
+        end
+        default: begin
+            next_state = B; // Fallback to state B if undefined state
+            out = 1; // Default output in state B
+        end
+    endcase
+end
+
+endmodule
+```
+
+### Explanation:
+
+1. **State Encoding**: 
+   - States are defined using an enumerated type for better readability. We have `B` (encoded as `2'b00`) and `A` (encoded as `2'b01`).
+
+2. **State Register**:
+   - The current state is updated on the rising edge of the clock (`clk`) or when `reset` is high.
+
+3. **Next State Logic**:
+   - Depending on the current state and the input (`in`), the next state (`next_state`) is determined. 
+   - In state `B`, if `in` is `0`, it transitions to `A`; if `in` is `1`, it stays in `B`.
+   - In state `A`, if `in` is `0`, it transitions back to `B`; if `in` is `1`, it remains in `A`.
+   - The output is set based on the current state: `out = 1` when in state `B` and `out = 0` when in state `A`.
+
+4. **Reset Behavior**:
+   - The machine resets to state `B` when `reset` is high.
+
+### Notes:
+- The above code assumes a synchronous reset. The output is registered and is updated based on the current state, following Moore machine principles.
+- Make sure to simulate and test the module to ensure its correctness in your specific FPGA/ASIC development environment.

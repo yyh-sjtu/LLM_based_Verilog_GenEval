@@ -1,0 +1,50 @@
+module clacell(A, B, G, P, C0, C1);
+
+input A, B, G;
+output P, C0, C1;
+
+assign P = A ^ B;
+assign C0 = A & B;
+assign C1 = A | B;
+
+endmodule
+
+module clacascade(A, B, Cin, P, G, Cout);
+
+input A, B, Cin;
+output P, G, Cout;
+
+wire P1, G1, C0, C1;
+
+clacell cell1(A, B, G1, P1, C0, C1);
+clacell cell2(Cin, P1, G, P, C1, Cout);
+
+endmodule
+
+module adder_32bit(A, B, S, C32);
+
+input [31:0] A, B;
+output [31:0] S;
+output C32;
+
+wire [15:0] P, G, Cin_next;
+wire [31:0] C;
+
+clacascade cascades[15:0](A[0], B[0], 1'b0, P[0], G[0], C[0]);
+
+assign Cin_next[0] = G[0] | (P[0] & 1'b0);
+
+genvar i;
+
+generate
+    for (i = 1; i < 16; i = i+1) begin
+        clacascade cascades[A[i], B[i], Cin_next[i-1], P[i], G[i], C[i]];
+        assign Cin_next[i] = G[i] | (P[i] & Cin_next[i-1]);
+    end
+endgenerate
+
+assign S = {C[31], C[15:0]};
+assign C32 = Cin_next[15];
+
+endmodule
+

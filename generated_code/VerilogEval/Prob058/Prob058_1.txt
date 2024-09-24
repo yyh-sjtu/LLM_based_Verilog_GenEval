@@ -1,0 +1,29 @@
+Here is the Verilog code for the TopModule implementing an XOR gate using three different methods:
+
+```verilog
+module TopModule (
+    input clk,
+    input a,
+    input b,
+    output out_assign,
+    output out_always_comb,
+    output reg out_always_ff
+);
+
+// Using assign statement
+assign out_assign = a ^ b;
+
+// Using combinational always block
+always @* begin
+    out_always_comb = a ^ b;
+end
+
+// Using clocked always block
+always @(posedge clk) begin
+    out_always_ff <= a ^ b;
+end
+
+endmodule
+```
+
+In this code, the XOR gate is implemented using assign statement, a combinational always block, and a clocked always block as specified in the interface. The output from the assign statement is directly assigned to `out_assign`, the output from the combinational always block is assigned to `out_always_comb`, and the output from the clocked always block is registered and delayed by one clock cycle in `out_always_ff`.

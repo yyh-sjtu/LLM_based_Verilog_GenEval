@@ -1,0 +1,55 @@
+Here's an RTL implementation of the `TopModule` according to your specifications in Verilog. This module incorporates a down-counter that loads a value when the `load` signal is high, decrements when `load` is low, and asserts the terminal count (`tc`) when the countdown reaches zero.
+
+```verilog
+module TopModule (
+    input clk,
+    input load,
+    input [9:0] data,
+    output reg tc
+);
+
+    reg [9:0] counter; // Internal 10-bit counter
+
+    always @(posedge clk) begin
+        if (load) begin
+            // Load the counter with the specified data when load is high
+            counter <= data;
+            tc <= 1'b0; // Reset terminal count when loading new value
+        end else begin
+            // Decrement the counter if load is low
+            if (counter > 0) begin
+                counter <= counter - 1;
+            end
+            // Assert tc signal if the counter reaches 0
+            if (counter == 1) begin
+                tc <= 1'b1; // Terminal count asserted when reaching 0
+            end else begin
+                tc <= 1'b0; // Terminal count not asserted otherwise
+            end
+        end
+    end
+
+endmodule
+```
+
+### Explanation of the Code:
+
+1. **Module Declaration**:
+   - The module `TopModule` accepts inputs for `clk`, `load`, and `data`, and provides an output `tc`.
+
+2. **Internal Register**:
+   - A 10-bit register named `counter` is defined to hold the countdown value.
+
+3. **Always Block**:
+   - Triggered on the positive edge of `clk`, the block performs the following:
+     - If `load` is high, it loads the `data` into `counter` and resets `tc` to 0.
+     - If `load` is low, the counter decrements if it is greater than 0.
+     - The terminal count signal `tc` is asserted when the counter is about to reach 0 (after decrementing).
+
+4. **tc Output Logic**:
+   - The output `tc` is set to 1 only when the counter is 1 just before the next decrement; otherwise, it is reset to 0.
+
+### Additional Notes:
+- The counter does not go negative due to the check `if (counter > 0)`, so it stops counting down once it reaches zero. 
+- If a new value is loaded into the counter while it is counting down (when `load` is asserted), the countdown is reset appropriately. 
+- Ensure that any simulation or testing environment initializes the `counter` and `tc` values adequately.

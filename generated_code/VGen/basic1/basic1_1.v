@@ -1,0 +1,4 @@
+module wire_assign( input in, output out );
+   assign out = in;
+endmodule
+

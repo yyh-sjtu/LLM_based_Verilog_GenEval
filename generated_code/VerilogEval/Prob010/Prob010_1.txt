@@ -1,0 +1,27 @@
+Certainly! Below is the Verilog code for a module named `TopModule` that implements the specified boolean function \( z = (x \oplus y) \land x \).
+
+```verilog
+module TopModule (
+    input wire x,
+    input wire y,
+    output wire z
+);
+    // Internal signal to hold the result of the XOR operation
+    wire xor_result;
+
+    // Compute the XOR of x and y
+    assign xor_result = x ^ y;
+
+    // Compute z = (x ^ y) & x
+    assign z = xor_result & x;
+
+endmodule
+```
+
+### Explanation:
+- **Inputs and Outputs**: The module has two input ports (`x` and `y`), and one output port (`z`).
+- **XOR Operation**: The result of the XOR operation between `x` and `y` is stored in the internal wire `xor_result`.
+- **AND Operation**: The output `z` is obtained by performing an AND operation between `xor_result` and `x`.
+
+### Usage:
+You can instantiate this module in a testbench or any other module to see its functionality. Ensure to simulate and test to confirm that it works as expected. Let me know if you need further assistance!

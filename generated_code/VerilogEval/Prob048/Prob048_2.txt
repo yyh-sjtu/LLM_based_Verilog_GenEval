@@ -1,0 +1,22 @@
+Sure, here is the Verilog code for the TopModule implementing the simple D flip flop with active high synchronous reset:
+
+```verilog
+module TopModule (
+    input clk,
+    input d,
+    input r,
+    output reg q
+);
+
+always @(posedge clk) begin
+    if (r) begin
+        q <= 1'b0;
+    end else begin
+        q <= d;
+    end
+end
+
+endmodule
+```
+
+This code describes a synchronous D flip flop with an active high synchronous reset. The flip flop captures the input data `d` on the rising edge of the clock signal `clk`, and resets the output `q` to 0 when the reset signal `r` is high.

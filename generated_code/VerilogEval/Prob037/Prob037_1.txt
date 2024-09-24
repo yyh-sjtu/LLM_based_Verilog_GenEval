@@ -1,0 +1,29 @@
+Below is an RTL code implementation of the TopModule with the specified interface:
+
+```verilog
+module TopModule(
+    input clk,
+    input reset,
+    output [9:0] q
+);
+
+reg [9:0] counter;
+
+always @(posedge clk) begin
+    if (reset) begin
+        counter <= 0;
+    end else begin
+        if (counter == 999) begin
+            counter <= 0;
+        end else begin
+            counter <= counter + 1;
+        end
+    end
+end
+
+assign q = counter;
+
+endmodule
+```
+
+This implementation of TopModule uses a sequential always block to increment the counter on each positive clock edge, resetting it to 0 when the reset input is high. The counter is a 10-bit register that ranges from 0 to 999, with the output q representing the current count value. The period of the counter is 1000 cycles, as requested.

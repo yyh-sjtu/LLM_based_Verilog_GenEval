@@ -1,0 +1,28 @@
+Here is the Verilog code for the TopModule implementing the functionality to find the minimum of the four input values:
+
+```verilog
+module TopModule(
+    input [7:0] a,
+    input [7:0] b,
+    input [7:0] c,
+    input [7:0] d,
+    output reg [7:0] min
+);
+
+always @* begin
+    min = a;
+    
+    if (b < min)
+        min = b;
+    if (c < min)
+        min = c;
+    if (d < min)
+        min = d;
+end
+
+endmodule
+```
+
+In this Verilog code, the TopModule takes four 8-bit input values (a, b, c, d) and calculates the minimum value among them using conditional statements. The minimum value is then assigned to the output port min.
+
+Please let me know if you need any further clarification or modifications.

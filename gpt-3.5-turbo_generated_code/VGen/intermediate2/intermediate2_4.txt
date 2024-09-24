@@ -1,0 +1,41 @@
+Sure! Below is a Verilog implementation of a 4-bit counter that counts from 1 to 12 and wraps around back to 1 after reaching 12. This module takes a clock signal and a reset signal as inputs, and it outputs the current count value.
+
+```verilog
+module counter( 
+    input clk,
+    input reset,
+    output reg [3:0] q
+);
+    
+    // State initialization
+    initial begin
+        q = 4'b0001; // Start counting from 1
+    end
+
+    always @(posedge clk or posedge reset) begin
+        if (reset) begin
+            q <= 4'b0001; // Reset the counter to 1
+        end else begin
+            if (q < 4'b1100) begin // If q is less than 12 (1100 in binary)
+                q <= q + 1; // Increment the counter
+            end else begin
+                q <= 4'b0001; // Wrap around to 1
+            end
+        end
+    end
+
+endmodule
+```
+
+### Explanation:
+
+1. **Module Declaration**: The module is named `counter` with inputs `clk` and `reset`, and output `q` which is a 4-bit register.
+
+2. **Initial Block**: Initializes the counter to 1 at the start.
+
+3. **Always Block**: 
+   - It is sensitive to the positive edge of the clock and the positive edge of the reset signal.
+   - If the `reset` signal is high, the counter (`q`) is reset to 1.
+   - On each clock cycle, if the current count (`q`) is less than 12, it increments the count. If it reaches 12, it wraps back around to 1.
+
+This implementation is simple and efficiently counts from 1 to 12. If you have other specifications (like synchronous reset, enable signal, etc.), please let me know!

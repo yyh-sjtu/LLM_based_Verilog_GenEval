@@ -1,0 +1,20 @@
+module TopModule (
+	input in,
+	input [1:0] state,
+	output [1:0] next_state,
+	output out
+);
+    reg [1:0] state_reg;
+    reg [1:0] next_state_reg;
+    assign out = state_reg[1];
+    always @(state or in)
+    begin
+        case (state)
+            2'b00: next_state_reg = 2'b01;
+            2'b01: next_state_reg = 2'b10;
+            2'b10: next_state_reg = 2'b11;
+            default: next_state_reg = 2'b00;
+        endcase
+    end
+endmodule
+

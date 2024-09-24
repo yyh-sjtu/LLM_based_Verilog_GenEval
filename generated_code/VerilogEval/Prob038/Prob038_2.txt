@@ -1,0 +1,37 @@
+Certainly! Below is a simple RTL implementation in Verilog for the `TopModule`, which includes a 4-bit binary counter. This counter counts from 0 to 15, resets to 0 upon a high reset signal, and is clocked on the positive edge.
+
+```verilog
+module TopModule (
+    input  clk,
+    input  reset,
+    output reg [3:0] q // 4-bit output
+);
+
+// Always block triggered on the positive edge of the clock or when reset is high
+always @(posedge clk) begin
+    if (reset) begin
+        // Reset counter to 0
+        q <= 4'b0000;
+    end else begin
+        // Increment counter; wrap around to 0 after reaching 15
+        q <= q + 1;
+    end
+end
+
+endmodule
+```
+
+### Explanation:
+1. **Module Declaration**:
+    - The module is named `TopModule`.
+    - Inputs are `clk` and `reset`, and the output `q` is a 4-bit register.
+
+2. **Sequential Logic**:
+    - An `always` block is triggered on the positive edge of `clk`.
+    - Inside this block, we first check if `reset` is high.
+    - If `reset` is high, we assign the value `0` to `q`.
+    - If `reset` is low (i.e., the counter is not being reset), we increment `q` by 1. The inherent properties of a 4-bit register ensure that adding 1 to `15` wraps around to `0`.
+
+### Additional Considerations:
+- **Synthesis Friendly**: The code is written in a way that is compatible with most synthesis tools. It leverages a synchronous reset to initialize the counter and ensures that the counting operation is properly handled within a clock cycle.
+- **Simulation and Testing**: To ensure the module behaves as intended, you would typically write a testbench that applies a clock signal, resets the counter, and checks the output `q` after several clock cycles.

@@ -1,0 +1,56 @@
+Here is the RTL code for the TopModule implementing the Lemmings game:
+
+```verilog
+module TopModule (
+    input clk,
+    input areset,
+    input bump_left,
+    input bump_right,
+    output walk_left,
+    output walk_right
+);
+
+// Define states for the finite state machine
+parameter WALK_LEFT = 2'b00;
+parameter WALK_RIGHT = 2'b01;
+
+// Define state register and next state logic
+reg [1:0] state, next_state;
+
+always @ (posedge clk or posedge areset) begin
+    if (areset) begin
+        state <= WALK_LEFT;
+    end else begin
+        state <= next_state;
+    end
+end
+
+// State transition logic
+always @ (*) begin
+    case (state)
+        WALK_LEFT: begin
+            if (bump_right) begin
+                next_state = WALK_RIGHT;
+            end else begin
+                next_state = WALK_LEFT;
+            end
+        end
+        
+        WALK_RIGHT: begin
+            if (bump_left) begin
+                next_state = WALK_LEFT;
+            end else begin
+                next_state = WALK_RIGHT;
+            end
+        end
+    endcase
+end
+
+// Output logic
+assign walk_left = (state == WALK_LEFT);
+assign walk_right = (state == WALK_RIGHT);
+
+endmodule
+```
+
+This RTL code defines the TopModule module that implements the Lemmings game using a finite state machine. The module has inputs for clk, areset, bump_left, and bump_right, and outputs walk_left and walk_right. The Lemming starts by walking left and switches directions based on bump_left and bump_right inputs. The state machine transitions between WALK_LEFT and WALK_RIGHT states accordingly. The module is triggered on the positive edge of the clock and asynchronously resets to WALK_LEFT state on areset signal.

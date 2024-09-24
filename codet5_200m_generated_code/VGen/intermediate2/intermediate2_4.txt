@@ -1,0 +1,6 @@
+module counter (
+	input clk,
+	input reset,
+	output reg [3:0] q
+);
+The module `counter` implements a 4-bit counter that increments on each rising edge of the clock when the reset signal is active, with the output 'q' reflecting the current count value.

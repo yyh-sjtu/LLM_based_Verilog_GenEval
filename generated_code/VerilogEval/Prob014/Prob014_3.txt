@@ -1,0 +1,28 @@
+Certainly! Below is a simple implementation of a module named `TopModule` that functions as a 2-input AND gate in Verilog:
+
+```verilog
+module TopModule (
+    input wire a,   // 1-bit input a
+    input wire b,   // 1-bit input b
+    output wire out // 1-bit output out
+);
+
+// Implementing the AND operation
+assign out = a & b;
+
+endmodule
+```
+
+### Explanation:
+
+- **Module Declaration**: The module is defined with the `module` keyword, followed by the name `TopModule`.
+- **Ports**:
+  - `input wire a`: Declares a 1-bit input port named `a`.
+  - `input wire b`: Declares a 1-bit input port named `b`.
+  - `output wire out`: Declares a 1-bit output port named `out`.
+  
+- **AND Operation**: The `assign` statement computes the logical AND of `a` and `b`, resulting in `out`.
+
+### Usage:
+
+You can instantiate this module in your testbench or another module where you'd like to use the AND gate functionality.

@@ -1,0 +1,62 @@
+Certainly! Below is a sample implementation of the `TopModule` in Verilog, which fulfills the requirements you've provided for a heating/cooling thermostat controller.
+
+### Verilog Implementation of TopModule
+
+```verilog
+module TopModule (
+    input wire mode,        // 1 for heating, 0 for cooling
+    input wire too_cold,    // 1 if too cold
+    input wire too_hot,     // 1 if too hot
+    input wire fan_on,      // 1 if fan should be turned on
+    output reg heater,      // 1 to turn on heater
+    output reg aircon,      // 1 to turn on aircon
+    output reg fan          // 1 to turn on fan
+);
+
+    always @(*) begin
+        // Default outputs
+        heater = 0;
+        aircon = 0;
+        fan = 0;
+
+        if (fan_on) begin
+            fan = 1; // Turn on fan if requested
+        end
+        else begin
+            // Check mode to control heater and aircon
+            if (mode) begin
+                // Heating mode
+                if (too_cold) begin
+                    heater = 1; // Turn on heater if too cold
+                    fan = 1;    // Turn on fan for circulation
+                end
+            end else begin
+                // Cooling mode
+                if (too_hot) begin
+                    aircon = 1; // Turn on aircon if too hot
+                    fan = 1;    // Turn on fan for circulation
+                end
+            end
+        end
+    end
+endmodule
+```
+
+### Explanation of the Code
+
+1. **Module Declaration**: The module `TopModule` is declared with specified input and output ports.
+
+2. **Default Output Initialization**: The outputs (`heater`, `aircon`, and `fan`) are set to 0 at the beginning of the always block.
+
+3. **Fan Control**: The fan is turned on if `fan_on` is high (1), regardless of the heating or cooling state.
+
+4. **Heating Mode**:
+   - When `mode` is 1 (heating mode), the heater is turned on if `too_cold` is high (1). The fan is also activated to circulate the air.
+
+5. **Cooling Mode**:
+   - When `mode` is 0 (cooling mode), the air conditioner is turned on if `too_hot` is high (1). Again, the fan is turned on for air circulation.
+
+### Testing the Module
+You may want to simulate this module with various combinations of inputs (`mode`, `too_cold`, `too_hot`, and `fan_on`) to ensure it responds correctly.
+
+Feel free to ask if you need further modifications or additional functionality!

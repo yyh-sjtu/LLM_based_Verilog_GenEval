@@ -1,0 +1,43 @@
+Certainly! Below is a Verilog implementation of the requested `TopModule`, which behaves as a 4-bit right shift register with the specified functionalities.
+
+```verilog
+module TopModule (
+    input  wire clk,
+    input  wire areset,
+    input  wire load,
+    input  wire ena,
+    input  wire [3:0] data,
+    output reg  [3:0] q
+);
+
+    // Always block for asynchronous reset and synchronous operations
+    always @(posedge clk or posedge areset) begin
+        if (areset) begin
+            // Asynchronous reset: Set q to 0
+            q <= 4'b0000;
+        end else if (load) begin
+            // Load operation: Load data into q
+            q <= data;
+        end else if (ena) begin
+            // Shift right operation: Shift q to the right
+            q <= {1'b0, q[3:1]};
+        end
+        // If none of the conditions are met (default case), keep the current value
+    end
+
+endmodule
+```
+
+### Explanation:
+
+1. **Asynchronous Reset**: The block responds to `areset` immediately regardless of the clock state. If `areset` is high, the register `q` is set to `4'b0000`.
+
+2. **Load Operation**: If `load` is asserted high, the `data` input (4 bits) will load into `q`, which overrides the shift operation.
+
+3. **Shift Enable**: If `ena` is asserted high and `load` is not asserted, the current value in `q` shifts right by inserting a `0` in the most significant bit (MSB) position. The least significant bit (LSB) is discarded.
+
+4. **Non-blocking assignments**: The assignments within the always block are non-blocking (`<=`), which ensures proper simulation and synthesizes logically correct hardware.
+
+5. **Maintaining current value**: If neither `load` nor `ena` is asserted, the value of `q` remains unchanged.
+
+This implementation follows the given specifications precisely and should function correctly when simulated in a Verilog environment.

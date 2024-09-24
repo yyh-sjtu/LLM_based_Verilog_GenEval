@@ -1,0 +1,22 @@
+module TopModule (
+	input clk,
+	input resetn,
+	input x,
+	input y,
+	output f,
+	output g
+);
+    parameter [1:0] INIT = 2'b00;
+    parameter [1:0] WAIT = 2'b01;
+    parameter [1:0] WAIT_1 = 2'b10;
+    reg [1:0] state;
+    reg [1:0] next_state;
+    always @(posedge clk or negedge resetn)
+        if (!resetn)
+            state <= INIT;
+        else
+            state <= next_state;
+    assign f = state[0];
+    assign g = state[1];
+endmodule
+

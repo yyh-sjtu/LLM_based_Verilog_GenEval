@@ -1,0 +1,14 @@
+module TopModule (
+	input [1023:0] in,
+	input [7:0] sel,
+	output [3:0] out
+);
+    reg [2:0] a;
+    reg [7:0] b;
+    assign out = a[sel];
+    always @(*) begin
+        a = in;
+        b = sel;
+    end
+endmodule
+

@@ -1,0 +1,18 @@
+module TopModule (
+    input [31:0] in,
+    output [31:0] out
+);
+    always @(*)
+    begin
+        case (in[31:24])
+            24'h000000: out[24] = in[25];
+            24'h0000000: out[24] = in[26];
+            24'h0000000: out[24] = in[27];
+            24'h0000000: out[24] = in[28];
+            24'h0000000: out[24] = in[29];
+            24'h0000000: out[24] = in[30];
+            24'h0000000: out[24] = in[31];
+        endcase
+    end
+endmodule
+

@@ -1,0 +1,55 @@
+Certainly! Below is the implementation of a 64-bit arithmetic shift register with synchronous load in Verilog based on your specifications. The module will shift left or right based on the `amount` input and has a synchronous load feature.
+
+```verilog
+module advshift(
+    input clk,
+    input load,
+    input ena,
+    input [1:0] amount,
+    input [63:0] data,
+    output reg [63:0] q
+);
+
+    always @(posedge clk) begin
+        if (load) begin
+            // Synchronous load of data when load is high
+            q <= data;
+        end
+        else if (ena) begin
+            // Perform shifting based on amount
+            case (amount)
+                2'b00: q <= q << 1;     // Shift left by 1 bit
+                2'b01: q <= q << 8;     // Shift left by 8 bits
+                2'b10: q <= q >> 1;     // Shift right by 1 bit
+                2'b11: q <= q >> 8;     // Shift right by 8 bits
+                default: q <= q;        // Maintain current value on invalid input
+            endcase
+        end
+    end
+
+endmodule
+```
+
+### Explanation:
+- **Inputs**:
+  - `clk`: The clock signal for synchronization.
+  - `load`: When high, the module loads the provided `data`.
+  - `ena`: When high, shifting is allowed.
+  - `amount`: Selects the shift operation (left or right, by either 1 or 8 bits).
+  - `data`: The input data to load into the shift register.
+
+- **Output**:
+  - `q`: The 64-bit output register that holds the shifted or loaded value.
+
+### Behavior:
+1. On the rising edge of the `clk`, if `load` is asserted, the `data` will be loaded into `q`.
+2. If `load` is not asserted and `ena` is high, the module will perform a shift operation based on the `amount` signal:
+   - `2'b00`: Shift left by 1 position.
+   - `2'b01`: Shift left by 8 positions.
+   - `2'b10`: Shift right by 1 position.
+   - `2'b11`: Shift right by 8 positions.
+3. If `amount` is invalid, `q` retains its current value.
+
+### Important Notes:
+- Remember to consider simulation and synthesis environments to verify the behavior of the design.
+- Ensure to test the design in various scenarios, such as simultaneous loading and shifting.

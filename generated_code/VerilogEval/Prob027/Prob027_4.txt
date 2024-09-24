@@ -1,0 +1,24 @@
+Sure, I can help you with that. Here is the Verilog code for the TopModule implementing a full adder with the specified interface:
+
+```verilog
+module TopModule (
+    input a,
+    input b,
+    input cin,
+    output reg cout,
+    output reg sum
+);
+
+always @(*)
+begin
+    // Full adder logic
+    sum = a ^ b ^ cin;
+    cout = (a & b) | (b & cin) | (a & cin);
+end
+
+endmodule
+```
+
+This code defines a module named TopModule with the specified input and output ports. Inside the module, there is an always block that calculates the sum and carry-out based on the inputs a, b, and cin using the logic of a full adder. The sum is calculated using XOR gates, and the carry-out is calculated using OR gates. 
+
+Please let me know if you need any further assistance or modifications to the code.

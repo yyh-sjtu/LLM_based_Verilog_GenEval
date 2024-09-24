@@ -1,0 +1,46 @@
+Certainly! A "population count" circuit counts the number of '1's in a given input. Since the input is 3 bits wide, the possible values range from 0 to 3, translating directly to the 2-bit wide output.
+
+Here’s an RTL implementation of a module named `TopModule` to achieve this functionality in Verilog:
+
+```verilog
+module TopModule (
+    input  [2:0] in,  // 3-bit input
+    output [1:0] out  // 2-bit output
+);
+
+// Internal signal to hold the population count
+reg [1:0] count;
+
+always @(*) begin
+    count = 2'b00; // Initialize to 0
+    if (in[0] == 1'b1) count = count + 2'b01; // Check the first bit
+    if (in[1] == 1'b1) count = count + 2'b01; // Check the second bit
+    if (in[2] == 1'b1) count = count + 2'b01; // Check the third bit
+end
+
+assign out = count; // Assign the result to output
+
+endmodule
+```
+
+### Explanation:
+1. **Input and Output**:
+   - The module takes a 3-bit input `in` and produces a 2-bit output `out`.
+
+2. **Population Count Logic**:
+   - A `reg [1:0] count` is used to hold the population count.
+   - The `always @(*)` block implements combinatorial logic to calculate the count.
+   - Each of the three bits of `in` is checked. If a bit is '1', the count is incremented.
+
+3. **Output Assignment**:
+   - Finally, the calculated count is assigned to the output `out`.
+
+### Simulation and Testing:
+You can test this module by simulating it with various inputs to confirm that it produces the correct counts for inputs from `000` to `111`. Here are a few test cases:
+
+- For `in = 3'b000`, `out` should be `2'b00` (count = 0).
+- For `in = 3'b001`, `out` should be `2'b01` (count = 1).
+- For `in = 3'b011`, `out` should be `2'b10` (count = 2).
+- For `in = 3'b111`, `out` should be `2'b11` (count = 3).
+
+This basic implementation is efficient for a 3-bit input and can be easily extended or modified for wider bit sizes if required!

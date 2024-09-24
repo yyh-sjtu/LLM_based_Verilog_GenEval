@@ -1,0 +1,58 @@
+Certainly! Below is an RTL (Register Transfer Level) implementation of a module named `TopModule` as per your specifications. We'll use Verilog, a popular hardware description language, for this implementation.
+
+```verilog
+module TopModule (
+    input wire clk,
+    input wire reset,
+    input wire [31:0] in,
+    output reg out
+);
+
+    // Internal signal to track the previous state of input
+    reg [31:0] prev_in;
+
+    always @(posedge clk) begin
+        if (reset) begin
+            // Synchronous reset
+            out <= 1'b0;          // Reset the output
+            prev_in <= 32'b0;     // Reset the previous input
+        end else begin
+            // Check for rising edge from 1 to 0 in any of the bits
+            if (prev_in == 1'b1 && in == 1'b0) begin
+                out <= 1'b1;      // Set output to 1 if condition is met
+            end else begin
+                out <= out;       // Maintain current output state
+            end
+            
+            // Update previous input for the next cycle
+            prev_in <= in;
+        end
+    end
+
+endmodule
+```
+
+### Explanation:
+
+1. **Ports**:
+    - `clk`: Clock input.
+    - `reset`: Active high synchronous reset signal.
+    - `in`: A 32-bit input vector.
+    - `out`: A 32-bit output vector indicating the captured state.
+
+2. **Internal Signal**:
+    - `prev_in`: A 32-bit register that holds the value of `in` from the previous clock cycle.
+
+3. **Always Block**:
+    - Triggered on the positive edge of the clock.
+    - If `reset` is high, the output (`out`) and `prev_in` are reset to 0.
+    - Otherwise, it checks if there is a transition from 1 to 0 in any bit of the `in` vector:
+        - If the previous input was 1 (`prev_in == 1`) and the current input is 0 (`in == 0`), it sets `out` to 1.
+        - If the condition isn't met, it maintains the current state of the output.
+    - The `prev_in` is updated with the current input at the end of each clock cycle.
+
+### Important Points:
+- The output `out` will maintain its state high (1) until a reset is triggered.
+- Ensure that `out` is defined as a reg type since it behaves as a storage element that reflects changes on the clock edge. 
+
+Let me know if you need further modifications or enhancements!

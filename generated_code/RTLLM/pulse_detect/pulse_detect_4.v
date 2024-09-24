@@ -1,0 +1,68 @@
+module pulse_detect (
+    input clk,
+    input rst_n,
+    input data_in,
+    output reg data_out
+);
+
+// State declarations
+parameter idle = 2'b00;
+parameter first_high = 2'b01;
+parameter second_low = 2'b10;
+parameter third_high = 2'b11;
+
+reg [1:0] state;
+
+// Initial state and output signal assignment
+initial begin
+    state = idle;
+    data_out = 0;
+end
+
+// State machine for pulse detection
+always @(posedge clk or negedge rst_n) begin
+    if (~rst_n) begin
+        state <= idle;
+        data_out <= 0;
+    end
+    else begin
+        case(state)
+            idle: begin
+                if (data_in) begin
+                    state <= first_high;
+                end
+                else begin
+                    state <= idle;
+                end
+            end
+            first_high: begin
+                if (!data_in) begin
+                    state <= second_low;
+                end
+                else begin
+                    state <= first_high;
+                end
+            end
+            second_low: begin
+                if (data_in) begin
+                    state <= third_high;
+                end
+                else begin
+                    state <= second_low;
+                end
+            end
+            third_high: begin
+                if (!data_in) begin
+                    data_out <= 1;
+                    state <= idle;
+                end
+                else begin
+                    state <= third_high;
+                end
+            end
+        endcase
+    end
+end
+
+endmodule
+

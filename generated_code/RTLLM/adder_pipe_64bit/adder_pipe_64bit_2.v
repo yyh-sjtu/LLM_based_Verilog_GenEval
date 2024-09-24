@@ -1,0 +1,41 @@
+
+module adder_pipe_64bit (
+    input clk,
+    input rst_n,
+    input i_en,
+    input [63:0] adda,
+    input [63:0] addb,
+    output reg [64:0] result,
+    output reg o_en
+);
+
+reg [63:0] sum1, sum2, sum3, sum4;
+reg [65:0] carry1, carry2, carry3;
+
+always @(posedge clk or negedge rst_n) begin
+    if (~rst_n) begin
+        sum1 <= 64'b0;
+        sum2 <= 64'b0;
+        sum3 <= 64'b0;
+        sum4 <= 64'b0;
+        carry1 <= 66'b0;
+        carry2 <= 66'b0;
+        carry3 <= 66'b0;
+        o_en <= 0;
+    end else begin
+        if (i_en) begin
+            sum1 <= adda + addb;
+            carry1 <= {1'b0, sum1};
+            sum2 <= sum1 + carry1[63:0];
+            carry2 <= {1'b0, sum2};
+            sum3 <= sum2 + carry2[63:0];
+            carry3 <= {1'b0, sum3};
+            sum4 <= sum3 + carry3[63:0];
+            o_en <= 1;
+        end
+    end
+end
+
+assign result = sum4;
+
+endmodule

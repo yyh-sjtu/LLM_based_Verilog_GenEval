@@ -1,0 +1,58 @@
+Certainly! Below is the Verilog implementation for the `TopModule` as specified. This module will act as a 100-bit left/right rotator with synchronous loading capabilities.
+
+```verilog
+module TopModule (
+    input       clk,
+    input       load,
+    input [1:0] ena,
+    input [99:0] data,
+    output reg [99:0] q
+);
+
+    always @(posedge clk) begin
+        if (load) begin
+            // Load data into the register
+            q <= data;
+        end else begin
+            case (ena)
+                2'b01: begin
+                    // Rotate right by 1 bit
+                    q <= {q[0], q[99:1]}; // Shift right and wrap around the bit
+                end
+                2'b10: begin
+                    // Rotate left by 1 bit
+                    q <= {q[98:0], q[99]}; // Shift left and wrap around the bit
+                end
+                default: begin
+                    // 2'b00: Do not rotate
+                    // 2'b11: Do not rotate
+                    q <= q; // Retain current value
+                end
+            endcase
+        end
+    end
+
+endmodule
+```
+
+### Explanation of the Code:
+1. **Inputs and Outputs**:
+   - `clk`: The clock signal used for synchronous behavior.
+   - `load`: When high, the `data` input is loaded into the rotator.
+   - `ena`: This 2-bit signal determines the rotation direction.
+   - `data`: The 100-bit input used for loading into the rotator.
+   - `q`: The current state of the rotator output.
+
+2. **Behavior**:
+   - The `always` block is triggered on the rising edge of `clk`.
+   - If `load` is high, the module loads the `data` input into `q`.
+   - Otherwise, based on the value of `ena`:
+       - For `2'b01`, the contents of `q` are rotated right by 1 bit.
+       - For `2'b10`, the contents of `q` are rotated left by 1 bit.
+       - For `2'b00` and `2'b11`, no rotation occurs, and the value of `q` remains unchanged.
+
+3. **Rotation Logic**:
+   - The right rotation is performed by placing the least significant bit (LSB) at the most significant position (MSB).
+   - The left rotation is performed by placing the most significant bit (MSB) at the least significant position (LSB).
+
+This module meets the requirements provided for a 100-bit left/right rotator with synchronous loading and enable functionality.

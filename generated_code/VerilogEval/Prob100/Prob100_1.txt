@@ -1,0 +1,79 @@
+Certainly! Below is the Verilog code for the `TopModule` implementing the required state transition logic and output logic for the specified Moore state machine. The module takes the current state and input, and based on these values, it computes the next state and output.
+
+```verilog
+module TopModule (
+    input wire in,
+    input wire [1:0] state,
+    output reg [1:0] next_state,
+    output reg out
+);
+    
+    always @(*) begin
+        // Default values
+        next_state = state; // Default to stay in the current state
+        out = 0;            // Default output
+        
+        case (state)
+            2'b00: begin // State A
+                if (in == 0) begin
+                    next_state = 2'b00; // Stay in A
+                end else begin
+                    next_state = 2'b01; // Transition to B
+                end
+                out = 0; // Output for state A
+            end
+            
+            2'b01: begin // State B
+                if (in == 0) begin
+                    next_state = 2'b10; // Transition to C
+                end else begin
+                    next_state = 2'b01; // Stay in B
+                end
+                out = 0; // Output for state B
+            end
+            
+            2'b10: begin // State C
+                if (in == 0) begin
+                    next_state = 2'b00; // Transition to A
+                end else begin
+                    next_state = 2'b11; // Transition to D
+                end
+                out = 0; // Output for state C
+            end
+            
+            2'b11: begin // State D
+                if (in == 0) begin
+                    next_state = 2'b10; // Transition to C
+                end else begin
+                    next_state = 2'b01; // Transition to B
+                end
+                out = 1; // Output for state D
+            end
+            
+            default: begin
+                next_state = 2'b00; // Default case
+                out = 0;
+            end
+        endcase
+    end
+
+endmodule
+```
+
+### Explanation:
+
+1. **Inputs and Outputs**:
+   - The module accepts one input `in` and a 2-bit input `state` representing the current state. 
+   - It outputs a 2-bit `next_state` and one 1-bit output `out`.
+
+2. **State Transition Logic**:
+   - Inside the always block, which is triggered on any changes to `in` or `state`, we use a `case` statement to determine the next state and output based on the current `state` and input `in`.
+
+3. **State Definitions**:
+   - Each state is defined by the given state encoding (A=2'b00, B=2'b01, C=2'b10, D=2'b11).
+   - The transitions are made according to the state transition table provided.
+
+4. **Output Logic**:
+   - The output `out` is set according to the state it's in, as defined in your table.
+
+This implementation adheres to the guidelines for designing Moore state machines, ensuring the output depends solely on the current state.

@@ -1,0 +1,29 @@
+module TopModule (
+	input clk,
+	input aresetn,
+	input x,
+	output z
+);
+    reg [9:0] z_reg;
+    reg [9:0] state;
+    always @(negedge clk or negedge aresetn)
+        if (!aresetn)
+            z_reg <= 3'b000;
+        else if (x)
+            z_reg <= z_reg + 2'b01;
+    always @*
+        case (state)
+            3'b000:
+                case (z_reg)
+                    3'b001: z_reg <= 3'b010;
+                    3'b010: z_reg <= 3'b011;
+                    3'b011: z_reg <= 3'b100;
+                    3'b100: z_reg <= 3'b101;
+                    3'b101: z_reg <= 3'b110;
+                    3'b101: z_reg <= 3'b111;
+                endcase
+            default:
+                z_reg <= 3'b000;
+        endcase
+endmodule
+

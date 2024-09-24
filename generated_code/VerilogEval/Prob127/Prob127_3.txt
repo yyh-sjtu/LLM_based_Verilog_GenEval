@@ -1,0 +1,56 @@
+Here is an RTL code snippet implementing the TopModule described:
+
+```verilog
+module TopModule (
+    input clk,
+    input areset,
+    input bump_left,
+    input bump_right,
+    output reg walk_left,
+    output reg walk_right
+);
+
+// Define states
+parameter WALK_LEFT = 2'b00;
+parameter WALK_RIGHT = 2'b01;
+
+// Define state register
+reg [1:0] state;
+
+always @(posedge clk or posedge areset) begin
+    if (areset) begin
+        state <= WALK_LEFT;
+    end else begin
+        case(state)
+            WALK_LEFT: begin
+                if (bump_left) begin
+                    state <= WALK_RIGHT;
+                end
+            end
+            WALK_RIGHT: begin
+                if (bump_right) begin
+                    state <= WALK_LEFT;
+                end
+            end
+        endcase
+    end
+end
+
+// Output logic
+always @(state) begin
+    case(state)
+        WALK_LEFT: begin
+            walk_left = 1;
+            walk_right = 0;
+        end
+        WALK_RIGHT: begin
+            walk_left = 0;
+            walk_right = 1;
+        end
+    endcase
+end
+
+endmodule
+```
+
+This Verilog module implements the Lemmings game logic as described, with a Moore state machine that transitions between walking left and walking right based on the input bump signals. The module resets to walking left on the positive edge of the areset signal. The outputs walk_left and walk_right indicate the current direction of the Lemming critter.

@@ -1,0 +1,134 @@
+module TopModule (
+	input clk,
+	input enable,
+	input S,
+	input A,
+	input B,
+	input C,
+	output Z
+);
+    reg [7:0] mem[0:7];
+    always @(posedge clk)
+        if (enable)
+            mem[0] <= S? A : mem[0];
+    always @(posedge clk)
+        if (enable)
+            mem[1] <= S? B : mem[1];
+    always @(posedge clk)
+        if (enable)
+            mem[2] <= S? A : mem[2];
+    always @(posedge clk)
+        if (enable)
+            mem[3] <= S? B : mem[3];
+    always @(posedge clk)
+        if (enable)
+            mem[4] <= S? A : mem[4];
+    always @(posedge clk)
+        if (enable)
+            mem[5] <= S? B : mem[5];
+    always @(posedge clk)
+        if (enable)
+            mem[6] <= S? A : mem[6];
+    always @(posedge clk)
+        if (enable)
+            mem[7] <= S? B : mem[7];
+    always @(posedge clk)
+        if (enable)
+            mem[8] <= S? A : mem[8];
+    always @(posedge clk)
+        if (enable)
+            mem[9] <= S? B : mem[9];
+    always @(posedge clk)
+        if (enable)
+            mem[10] <= S? A : mem[10];
+    always @(posedge clk)
+        if (enable)
+            mem[11] <= S? B : mem[11];
+    always @(posedge clk)
+        if (enable)
+            mem[12] <= S? A : mem[12];
+    always @(posedge clk)
+        if (enable)
+            mem[13] <= S? B : mem[13];
+    always @(posedge clk)
+        if (enable)
+            mem[14] <= S? A : mem[14];
+    always @(posedge clk)
+        if (enable)
+            mem[15] <= S? B : mem[15];
+    always @(posedge clk)
+        if (enable)
+            mem[16] <= S? B : mem[16];
+    always @(posedge clk)
+        if (enable)
+            mem[17] <= S? A : mem[17];
+    always @(posedge clk)
+        if (enable)
+            mem[18] <= S? B : mem[18];
+    always @(posedge clk)
+        if (enable)
+            mem[19] <= S? A : mem[19];
+    always @(posedge clk)
+        if (enable)
+            mem[20] <= S? A : mem[20];
+    always @(posedge clk)
+        if (enable)
+            mem[21] <= S? A : mem[21];
+    always @(posedge clk)
+        if (enable)
+            mem[22] <= S? B : mem[22];
+    always @(posedge clk)
+        if (enable)
+            mem[23] <= S? B : mem[23];
+    always @(posedge clk)
+        if (enable)
+            mem[24] <= S? A : mem[24];
+    always @(posedge clk)
+        if (enable)
+            mem[25] <= S? B : mem[25];
+    always @(posedge clk)
+        if (enable)
+            mem[26] <= S? B : mem[26];
+    always @(posedge clk)
+        if (enable)
+            mem[27] <= S? A : mem[27];
+    always @(posedge clk)
+        if (enable)
+            mem[28] <= S? B : mem[28];
+    always @(posedge clk)
+        if (enable)
+            mem[29] <= S? A : mem[29];
+    always @(posedge clk)
+        if (enable)
+            mem[30] <= S? A : mem[30];
+    always @(posedge clk)
+        if (enable)
+            mem[31] <= S? B : mem[31];
+    always @(posedge clk)
+        if (enable)
+            mem[32] <= S? A : mem[32];
+    always @(posedge clk)
+        if (enable)
+            mem[33] <= S? B : mem[33];
+    always @(posedge clk)
+        if (enable)
+            mem[34] <= S? A : mem[34];
+    always @(posedge clk)
+        if (enable)
+            mem[35] <= S? B : mem[35];
+    always @(posedge clk)
+        if (enable)
+            mem[35] <= S? A : mem[35];
+    always @(posedge clk)
+        if (enable)
+            mem[36] <= S? B : mem[36];
+    always @(posedge clk)
+        if (enable)
+            mem[37] <= S? A : mem[37];
+    always @(posedge clk)
+        if (enable)
+            mem[37] <= S? B : mem[37];
+    always @(posedge clk)
+        if (enable)
+            mem[37] <= S? C : mem[37];
+endmodule

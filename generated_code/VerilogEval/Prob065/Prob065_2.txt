@@ -1,0 +1,81 @@
+To create the `TopModule` that implements the functionality of the 7420 chip (two 4-input NAND gates), we will be using Verilog HDL. The 7420 chip has two separate NAND gates, each having four inputs. The output of each NAND gate will be routed to the appropriate output port in `TopModule`.
+
+Here’s how you can implement the module:
+
+```verilog
+module TopModule (
+    input  wire p1a,
+    input  wire p1b,
+    input  wire p1c,
+    input  wire p1d,
+    input  wire p2a,
+    input  wire p2b,
+    input  wire p2c,
+    input  wire p2d,
+    output wire p1y,
+    output wire p2y
+);
+
+// Implement the first 4-input NAND gate
+assign p1y = ~(p1a & p1b & p1c & p1d);
+
+// Implement the second 4-input NAND gate
+assign p2y = ~(p2a & p2b & p2c & p2d);
+
+endmodule
+```
+
+### Explanation:
+
+- **Module Definition**: We start by defining the `TopModule` with the specified input and output ports.
+  
+- **NAND Gate Logic**: 
+  - The NAND gate output `p1y` is defined using the logical AND operator (`&`) followed by the NOT operator (`~`). This effectively creates a 4-input NAND logic for inputs `p1a`, `p1b`, `p1c`, `p1d`.
+  - Similarly, `p2y` implements the same functionality for the second set of inputs `p2a`, `p2b`, `p2c`, `p2d`.
+
+### Testing:
+
+To ensure the module works as intended, you could also create a testbench to simulate various input combinations and verify the outputs. Here’s an example testbench you could use:
+
+```verilog
+module Testbench;
+
+    reg p1a, p1b, p1c, p1d;
+    reg p2a, p2b, p2c, p2d;
+    wire p1y, p2y;
+
+    // Instantiate the TopModule
+    TopModule uut (
+        .p1a(p1a),
+        .p1b(p1b),
+        .p1c(p1c),
+        .p1d(p1d),
+        .p2a(p2a),
+        .p2b(p2b),
+        .p2c(p2c),
+        .p2d(p2d),
+        .p1y(p1y),
+        .p2y(p2y)
+    );
+
+    initial begin
+        // Apply test vectors
+        {p1a, p1b, p1c, p1d} = 4'b0000; // Expected p1y = 1
+        {p2a, p2b, p2c, p2d} = 4'b0000; // Expected p2y = 1
+        #10;
+
+        {p1a, p1b, p1c, p1d} = 4'b1111; // Expected p1y = 0
+        {p2a, p2b, p2c, p2d} = 4'b1111; // Expected p2y = 0
+        #10;
+
+        // More test cases can be added here...
+
+        $finish; // End simulation
+    end
+
+endmodule
+```
+
+### Key Points:
+- This implementation accurately reflects the function of the 7420 chip using basic logic gates.
+- You may need to run synthesis and simulation tools provided by your FPGA/ASIC vendor to test the design on actual hardware after proper verification through simulation.

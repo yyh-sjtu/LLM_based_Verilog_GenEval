@@ -1,0 +1,67 @@
+To implement the `TopModule` based on the observed simulation waveforms, we can analyze the behavior of the output `q` with respect to inputs `a`, `b`, `c`, and `d`.
+
+### Analyzing the Truth Table
+
+From the waveform data provided:
+
+| time | a | b | c | d | q |
+|------|---|---|---|---|---|
+| 0    | 0 | 0 | 0 | 0 | 0 |
+| 20   | 0 | 0 | 0 | 1 | 0 |
+| 25   | 0 | 0 | 1 | 0 | 1 |
+| 30   | 0 | 0 | 1 | 1 | 1 |
+| 35   | 0 | 1 | 0 | 0 | 1 |
+| 40   | 0 | 1 | 0 | 1 | 1 |
+| 45   | 0 | 1 | 1 | 0 | 1 |
+| 50   | 0 | 1 | 1 | 1 | 1 |
+| 55   | 1 | 0 | 0 | 0 | 0 |
+| 60   | 1 | 0 | 0 | 1 | 0 |
+| 65   | 1 | 0 | 1 | 0 | 1 |
+| 70   | 1 | 0 | 1 | 1 | 1 |
+| 75   | 1 | 1 | 0 | 0 | 1 |
+| 80   | 1 | 1 | 0 | 1 | 1 |
+| 85   | 1 | 1 | 1 | 0 | 1 |
+| 90   | 1 | 1 | 1 | 1 | 1 |
+
+### Observations
+- `q = 0` for `(a, b, c, d) = (0, 0, 0, 0)`, `(0, 0, 0, 1)`, and `(1, 0, 0, 0)`, `(1, 0, 0, 1)`.
+- `q = 1` in all other cases.
+
+### Simplifying the Logic
+1. `q = 0` when:
+   - `a = 0`, `b = 0` and `c = 0`
+   - `a = 1` and `b = 0`
+   
+2. Based on this analysis:
+   - The output `q` can be expressed as:
+     
+     ```
+     q = !(a & !b) & !(b & !c & !d)
+     ```
+
+Now we can implement this logic in Verilog.
+
+### Verilog Code
+```verilog
+module TopModule (
+    input wire a,
+    input wire b,
+    input wire c,
+    input wire d,
+    output wire q
+);
+
+    assign q = (a & b & c) | (a & b & d) | (a & c & d) | 
+               (b & c & d) | (!a & b & c) | (!a & b & d) | 
+               (!a & c & d) | (!b & c & d) | 
+               (!a & !b & d) | (!a & !b & c);
+
+endmodule
+```
+
+### Explanation of the Implementation
+- The `assign` statement in Verilog is used to define the combinational logic for `q`.
+- The logic uses bitwise and logical operations to generate the output based on the input combinations that have been observed.
+- This implementation should now produce the expected behavior as seen in the simulation waveform data.
+
+Ensure to run simulations with this module to verify that it accurately reproduces the observed waveforms.

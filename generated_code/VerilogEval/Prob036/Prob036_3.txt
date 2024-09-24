@@ -1,0 +1,43 @@
+Sure! Below is a Verilog implementation of the `TopModule`. This module will control the ringer and vibration motor based on the given inputs.
+
+```verilog
+module TopModule (
+    input wire ring,
+    input wire vibrate_mode,
+    output reg ringer,
+    output reg motor
+);
+
+// Always block that triggers on changes to inputs
+always @(*) begin
+    // Initialize outputs to 0
+    ringer = 0;
+    motor = 0;
+    
+    // Control logic for ringer and motor
+    if (ring) begin
+        if (vibrate_mode) begin
+            motor = 1;  // Activate motor in vibrate mode
+        end else begin
+            ringer = 1; // Activate ringer when not in vibrate mode
+        end
+    end
+end
+
+endmodule
+```
+
+### Explanation:
+1. **Module Declaration**: The module `TopModule` takes two inputs (`ring` and `vibrate_mode`) and produces two outputs (`ringer` and `motor`).
+
+2. **Always Block**: The `always @(*)` block is executed whenever there is a change in the input signals. This makes it combinatorial logic.
+
+3. **Output Initialization**: The outputs `ringer` and `motor` are initialized to 0 to ensure they are turned off at the start.
+
+4. **Control Logic**:
+   - First, it checks if an incoming call is indicated by the `ring` signal.
+   - If `ring` is high and `vibrate_mode` is low, the `ringer` output is set to 1.
+   - If `ring` is high and `vibrate_mode` is high, the `motor` output is set to 1.
+   - Note that the outputs are mutually exclusive due to the use of the `else` clause.
+
+This design ensures that only one of the outputs can be activated at a time, fulfilling the operational requirement you specified.

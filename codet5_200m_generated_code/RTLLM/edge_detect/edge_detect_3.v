@@ -1,0 +1,17 @@
+module edge_detect (
+    input clk,
+    input rst_n,
+    input a,
+    output rise,
+    output down
+);
+    reg [3:0] code;
+    always @(posedge clk or negedge rst_n)
+        if (!rst_n)
+            code <= 4'b0000;
+        else
+            code <= code + 4'b1;
+    assign rise = code[0];
+    assign down = code[1];
+endmodule
+

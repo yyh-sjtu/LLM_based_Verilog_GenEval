@@ -1,0 +1,41 @@
+Certainly! Below is an RTL Verilog implementation of the `TopModule`, which counts from 0 to 999 with the specifications you provided.
+
+```verilog
+module TopModule (
+    input wire clk,
+    input wire reset,
+    output reg [9:0] q
+);
+
+    // Counter's maximum value
+    localparam MAX_COUNT = 10'd999;
+
+    // Synchronous reset and counting behavior
+    always @(posedge clk) begin
+        if (reset) begin
+            // Reset the counter to 0 when reset is high
+            q <= 10'd0;
+        end else begin
+            // Increment the counter on every clock cycle
+            if (q < MAX_COUNT) begin
+                q <= q + 10'd1;
+            end else begin
+                // Reset back to 0 after reaching 999
+                q <= 10'd0;
+            end
+        end
+    end
+
+endmodule
+```
+
+### Explanation:
+
+- **Module Definition**: The module `TopModule` takes a clock (`clk`), a synchronous reset (`reset`), and produces a 10-bit output (`q`).
+- **Counter Logic**:
+  - A local parameter `MAX_COUNT` is defined to represent the maximum count value (999).
+  - On each positive edge of the clock, if `reset` is asserted (active high), the counter (`q`) is set to 0.
+  - If `reset` is not asserted, the counter increments by 1 each clock cycle until it reaches 999. If it exceeds 999, it resets back to 0.
+  
+### Synthesis:
+The above code synthesizes into a simple counter circuit. Make sure to test it in a simulation environment to confirm it behaves as expected across different scenarios, such as asserting the reset and the normal counting sequence.

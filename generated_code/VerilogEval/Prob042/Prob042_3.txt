@@ -1,0 +1,26 @@
+Sure, here is the RTL code for the TopModule implementing the sign extension functionality:
+
+```verilog
+module SignExtender (
+    input [7:0] in,
+    output reg [31:0] out
+);
+
+reg [7:0] sign; // sign bit (MSB) of the input number
+
+// Determine the sign bit of the input number
+always @* begin
+    sign = in[7];
+end
+
+// Perform sign extension by replicating the sign bit 24 times
+always @* begin
+    out = { {24 {sign}}, in };
+end
+
+endmodule
+```
+
+This module takes an 8-bit input number, determines its sign bit, and then replicates this sign bit 24 times before concatenating it with the original input number to produce a 32-bit sign-extended output.
+
+Please let me know if you need any further clarification or modifications to the design.

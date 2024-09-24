@@ -1,0 +1,11 @@
+module TopModule (
+	input x,
+	input y,
+	output z
+);
+    reg z_i;
+    initial
+    begin
+        z_i <= 1'b0;
+    end
+endmodule

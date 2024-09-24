@@ -1,0 +1,38 @@
+Certainly! Below is a SystemVerilog implementation of a module named `TopModule` that meets the specified requirements. It includes 8 D flip-flops with an active-high asynchronous reset.
+
+```systemverilog
+module TopModule (
+    input logic clk,        // Clock input
+    input logic areset,     // Asynchronous reset input
+    input logic [7:0] d,    // 8-bit data input
+    output logic [7:0] q     // 8-bit data output
+);
+
+  // 8 D Flip-Flops
+  always_ff @(posedge clk or posedge areset) begin
+    if (areset) begin
+      q <= 8'b0;  // Reset output to 0
+    end else begin
+      q <= d;     // Update the output with input data
+    end
+  end
+
+endmodule
+```
+
+### Explanation:
+
+1. **Module Definition**: The module `TopModule` is defined with its input and output ports.
+
+2. **Input and Output Ports**:
+   - `clk`: The clock signal.
+   - `areset`: The active-high asynchronous reset signal.
+   - `d`: An 8-bit input data signal.
+   - `q`: An 8-bit output data signal which will hold the values from the D flip-flops.
+
+3. **Always Block**:
+   - The `always_ff` block is sensitive to the positive edge of the `clk` and the positive edge of `areset`.
+   - Inside the block, an if-condition checks if `areset` is asserted. If so, the output `q` is reset to `8'b0`.
+   - If `areset` is not asserted, on the positive edge of `clk`, the output `q` takes the value of the input `d`.
+
+This implementation effectively creates a synchronous register with the specified asynchronous reset behavior. You can instantiate this module in a testbench or another module as needed.

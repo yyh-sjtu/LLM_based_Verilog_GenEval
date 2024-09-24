@@ -1,0 +1,258 @@
+module asyn_fifo #(
+    parameter WIDTH = 8,
+    parameter DEPTH = 16
+)(
+    input wclk,
+    input rclk,
+    input wrstn,
+    input rrstn,
+    input winc,
+    input rinc,
+    input [WIDTH-1:0] wdata,
+    output wfull,
+    output rempty,
+    output reg [WIDTH-1:0] rdata
+);
+reg [WIDTH-1:0] mem [DEPTH-1:0];
+reg [WIDTH-1:0] rd_ptr;
+reg [WIDTH-1:0] wr_ptr;
+reg [WIDTH-1:0] rd_ptr_reg;
+always @(posedge wclk)
+begin
+    if (wrstn == 1'b0)
+    begin
+        wr_ptr <= 0;
+        wr_ptr_reg <= 0;
+    end
+    else if (rrstn == 1'b0)
+    begin
+        wr_ptr <= 0;
+        wr_ptr_reg <= 0;
+    end
+    else if (winc == 1'b1)
+    begin
+        wr_ptr <= wr_ptr + 1;
+        wr_ptr_reg <= wr_ptr_reg + 1;
+    end
+end
+always @(posedge rclk)
+begin
+    if (rinc == 1'b0)
+    begin
+        rd_ptr <= 0;
+        rd_ptr_reg <= 0;
+    end
+    else if (winc == 1'b1)
+    begin
+        rd_ptr <= rd_ptr + 1;
+        rd_ptr_reg <= rd_ptr_reg + 1;
+    end
+end
+always @(posedge wclk)
+begin
+    if (wrstn == 1'b0)
+    begin
+        wr_ptr <= 0;
+        wr_ptr_reg <= 0;
+    end
+    else if (rrstn == 1'b0)
+    begin
+        wr_ptr <= 0;
+        wr_ptr_reg <= 0;
+    end
+    else if (winc == 1'b1)
+    begin
+        wr_ptr <= wr_ptr + 1;
+        wr_ptr_reg <= wr_ptr_reg + 1;
+    end
+end
+always @(posedge rclk)
+begin
+    if (rinc == 1'b0)
+    begin
+        rd_ptr <= 0;
+        rd_ptr_reg <= 0;
+    end
+    else if (winc == 1'b1)
+    begin
+        rd_ptr <= rd_ptr + 1;
+        rd_ptr_reg <= rd_ptr_reg + 1;
+    end
+end
+always @(posedge wclk)
+begin
+    if (wrstn == 1'b0)
+    begin
+        wr_ptr <= 0;
+        wr_ptr_reg <= 0;
+    end
+    else if (rrstn == 1'b0)
+    begin
+        wr_ptr <= 0;
+        wr_ptr_reg <= 0;
+    end
+    else if (winc == 1'b1)
+    begin
+        wr_ptr <= wr_ptr_reg + 1;
+        wr_ptr_reg <= wr_ptr_reg + 1;
+    end
+end
+always @(posedge wclk)
+begin
+    if (wrstn == 1'b0)
+    begin
+        rd_ptr <= 0;
+        rd_ptr_reg <= 0;
+    end
+    else if (rrstn == 1'b0)
+    begin
+        rd_ptr <= rd_ptr_reg + 1;
+        rd_ptr_reg <= rd_ptr_reg + 1;
+    end
+end
+always @(posedge rclk)
+begin
+    if (wrstn == 1'b0)
+    begin
+        wr_ptr <= 0;
+        wr_ptr_reg <= 0;
+    end
+    else if (winc == 1'b1)
+    begin
+        wr_ptr <= wr_ptr_reg + 1;
+        wr_ptr_reg <= wr_ptr_reg + 1;
+    end
+end
+always @(posedge rclk)
+begin
+    if (wrstn == 1'b0)
+    begin
+        rd_ptr <= 0;
+        rd_ptr_reg <= 0;
+    end
+    else if (rrstn == 1'b0)
+    begin
+        rd_ptr <= rd_ptr_reg + 1;
+        rd_ptr_reg <= rd_ptr_reg + 1;
+    end
+end
+always @(posedge wclk)
+begin
+    if (wrstn == 1'b0)
+    begin
+        wr_ptr <= 0;
+        wr_ptr_reg <= 0;
+    end
+    else if (winc == 1'b1)
+    begin
+        wr_ptr <= wr_ptr_reg + 1;
+        wr_ptr_reg <= wr_ptr_reg + 1;
+    end
+end
+always @(posedge wclk)
+begin
+    if (wrstn == 1'b0)
+    begin
+        wr_ptr <= 0;
+        wr_ptr_reg <= 0;
+    end
+    else if (winc == 1'b1)
+    begin
+        wr_ptr <= wr_ptr_reg + 1;
+        wr_ptr_reg <= wr_ptr_reg + 1;
+    end
+end
+always @(posedge rclk)
+begin
+    if (wrstn == 1'b0)
+    begin
+        rd_ptr <= 0;
+        rd_ptr_reg <= 0;
+    end
+    else if (rrstn == 1'b0)
+    begin
+        rd_ptr <= rd_ptr_reg + 1;
+        rd_ptr_reg <= rd_ptr_reg + 1;
+    end
+end
+always @(posedge rclk)
+begin
+    if (wrstn == 1'b0)
+    begin
+        rd_ptr <= 0;
+        rd_ptr_reg <= 0;
+    end
+    else if (winc == 1'b1)
+    begin
+        rd_ptr <= rd_ptr_reg + 1;
+        rd_ptr_reg <= rd_ptr_reg + 1;
+    end
+end
+always @(posedge rclk)
+begin
+    if (wrstn == 1'b0)
+    begin
+        wr_ptr <= 0;
+        wr_ptr_reg <= 0;
+    end
+    else if (winc == 1'b1)
+    begin
+        wr_ptr <= wr_ptr_reg + 1;
+        wr_ptr_reg <= wr_ptr_reg + 1;
+    end
+end
+always @(posedge rclk)
+begin
+    if (wrstn == 1'b0)
+    begin
+        wr_ptr <= 0;
+        wr_ptr_reg <= 0;
+    end
+    else if (rrstn == 1'b0)
+    begin
+        wr_ptr <= wr_ptr_reg + 1;
+        wr_ptr_reg <= wr_ptr_reg + 1;
+    end
+end
+always @(posedge rclk)
+begin
+    if (wrstn == 1'b0)
+    begin
+        wr_ptr <= 0;
+        wr_ptr_reg <= 0;
+    end
+    else if (winc == 1'b1)
+    begin
+        wr_ptr <= wr_ptr_reg + 1;
+        wr_ptr_reg <= wr_ptr_reg + 1;
+    end
+end
+always @(posedge rclk)
+begin
+    if (wrstn == 1'b0)
+    begin
+        wr_ptr <= 0;
+        wr_ptr_reg <= 0;
+    end
+    else if (winc == 1'b1)
+    begin
+        wr_ptr <= wr_ptr_reg + 1;
+        wr_ptr_reg <= wr_ptr_reg + 1;
+    end
+end
+always @(posedge rclk)
+begin
+    if (wrstn == 1'b0)
+    begin
+        wr_ptr <= 0;
+        wr_ptr_reg <= wr_ptr_reg + 1;
+    end
+    else if (winc == 1'b1)
+    begin
+        wr_ptr <= wr_ptr_reg + 1;
+        wr_ptr_reg <= wr_ptr_reg + 1;
+    end
+end
+always @(posedge rclk)
+begin
+    if (w

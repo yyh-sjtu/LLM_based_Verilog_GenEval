@@ -1,0 +1,30 @@
+Sure! To implement the `TopModule` in Verilog with the specified circuit, we can denote the "bubble" (inversion) on the `in2` input using a NOT gate. The output of this NOT gate will be fed into the AND gate along with `in1`.
+
+Here's how you can implement the `TopModule` using Verilog:
+
+```verilog
+module TopModule (
+    input  wire in1,
+    input  wire in2,
+    output wire out
+);
+    
+    // Intermediate signal to hold the inverted input
+    wire in2_not;
+
+    // Invert in2
+    assign in2_not = ~in2;
+
+    // AND gate with in1 and inverted in2
+    assign out = in1 & in2_not;
+
+endmodule
+```
+
+### Explanation:
+1. **Module Declaration**: We declare the module `TopModule` with its input and output ports.
+2. **Intermediate Signal**: An intermediate wire `in2_not` is declared to hold the value of `in2` after inversion.
+3. **Inversion**: The `assign` statement for `in2_not` uses the bitwise NOT operator `~` to invert `in2`.
+4. **AND Operation**: Another `assign` statement computes the output `out` by performing a bitwise AND operation between `in1` and the inverted `in2`.
+
+This implementation meets your requirement of having an AND gate with a bubble (inversion) on `in2`, linked to the output `out`.

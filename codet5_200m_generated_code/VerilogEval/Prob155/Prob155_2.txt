@@ -1,0 +1,177 @@
+module TopModule (
+	input clk,
+	input areset,
+	input bump_left,
+	input bump_right,
+	input ground,
+	input dig,
+	output walk_left,
+	output walk_right,
+	output aaah,
+	output digging
+);
+    reg [3:0] code, code_next;
+    parameter P_Lemmings = 3'b000;
+    parameter P_D_Lemmings = 3'b001;
+    parameter P_D_Lemmings = 3'b010;
+    parameter P_D_Lemmings = 3'b011;
+    parameter P_D_Lemmings = 3'b100;
+    parameter P_D_Lemmings = 3'b101;
+    parameter P_D_Lemmings = 3'b110;
+    parameter P_D_Lemmings = 3'b111;
+    parameter P_D_Lemmings = 3'b110;
+    parameter P_D_Lemmings = 3'b111;
+    parameter P_D_Lemmings = 3'b111;
+    reg [1:0] state = P_Lemmings;
+    reg [3:0] next_state;
+    initial begin
+        code = 0;
+        next_state = P_Lemmings;
+    end
+    always @(posedge clk or negedge areset) begin
+        if(~areset) begin
+            next_state <= P_Lemmings;
+        end else begin
+            case(state)
+                P_Lemmings: begin
+                    case(code)
+                            P_Lemmings: begin
+                        if(bump_left) begin
+                            if(bump_right) begin
+                        next_state <= P_D_Lemmings;
+                        next_state <= P_D_Lemmings;
+                        next_state <= P_D_Lemmings;
+                        next_state <= P_D_Lemmings;
+                        next_state <= P_D_Lemmings;
+                        next_state <= P_D_Lemmings;
+                        next_state <= P_D_Lemmings;
+                        next_state <= P_D_Lemmings;
+                        next_state <= P_D_Lemmings;
+                        next_state <= P_D_Lemmings;
+                        next_state <= P_D_Lemmings;
+                        next_state <= P_D_Lemmings;
+                        next_state <= P_D_Lemmings;
+                        next_state <= P_D_Lemmings;
+                        next_state <= P_D_Lemmings;
+                        next_state <= P_D_Lemmings;
+                        next_state <= P_D_Lemmings;
+                        next_state <= P_D_Lemmings;
+                        next_state <= P_D_Lemmings;
+                        next_state <= P_D_Lemmings;
+                        next_state <= P_D_Lemmings;
+                        end
+                            endcase
+                        next_state <= P_D_Lemmings;
+                    end
+                    P_D_Lemmings: begin
+                    next_state <= P_D_Lemmings;
+                    end
+                    P_D_Lemmings: begin
+                    next_state <= P_D_Lemmings;
+                    end
+                    P_D_Lemmings: begin
+                    next_state <= P_D_Lemmings;
+                    end
+                    P_D_Lemmings: begin
+                    next_state <= P_D_Lemmings;
+                    end
+                    P_D_Lemmings: begin
+                    next_state <= P_D_Lemmings;
+                    end
+                    P_D_Lemmings: begin
+                    next_state <= P_D_Lemmings;
+                    end
+                    P_D_Lemmings: begin
+                    next_state <= P_D_Lemmings;
+                    end
+                    P_D_Lemmings: begin
+                    next_state <= P_D_Lemmings;
+                    end
+                    P_D_Lemmings: begin
+                    next_state <= P_D_Lemmings;
+                    end
+                    P_D_Lemmings: begin
+                    next_state <= P_D_Lemmings;
+                    end
+                    P_D_Lemmings: begin
+                    next_state <= P_D_Lemmings;
+                    end
+                    P_D_Lemmings: begin
+                    next_state <= P_D_Lemmings;
+                    end
+                    P_D_Lemmings: begin
+                    next_state <= P_D_Lemmings;
+                    end
+                    P_D_Lemmings: begin
+                    next_state <= P_D_Lemmings;
+                    end
+                    P_D_Lemmings: begin
+                    next_state <= P_D_Lemmings;
+                    P_D_Lemmings: begin
+                    next_state <= P_D_Lemmings;
+                    end
+                    P_D_Lemmings: begin
+                    next_state <= P_D_Lemmings;
+                    end
+                    P_D_Lemmings: begin
+                    next_state <= P_D_Lemmings;
+                    end
+                    P_D_Lemmings: begin
+                    next_state <= P_D_Lemmings;
+                    P_D_Lemmings: begin
+                    next_state <= P_D_Lemmings;
+                    end
+                    P_D_Lemmings: begin
+                    next_state <= P_D_Lemmings;
+                    end
+                    P_D_Lemmings: begin
+                    next_state <= P_D_Lemmings;
+                    P_D_Lemmings: begin
+                    next_state <= P_D_Lemmings;
+                    end
+                    P_D_Lemmings: begin
+                    next_state <= P_D_Lemmings;
+                    P_D_Lemmings: begin
+                    next_state <= P_D_Lemmings;
+                    end
+                    P_D_Lemmings: begin
+                    next_state <= P_D_Lemmings;
+                    end
+                    P_D_Lemmings: begin
+                    next_state <= P_D_Lemmings;
+                    P_D_Lemmings: begin
+                    next_state <= P_D_Lemmings;
+                    end
+                    P_D_Lemmings: begin
+                    next_state <= P_D_Lemmings;
+                    P_D_Lemmings: begin
+                    next_state <= P_D_Lemmings;
+                    end
+                    P_D_Lemmings: begin
+                    next_state <= P_D_Lemmings;
+                    P_D_Lemmings: begin
+                    next_state <= P_D_Lemmings;
+                    end
+                    P_D_Lemmings: begin
+                    next_state <= P_D_Lemmings;
+                    P_D_Lemmings: begin
+                    next_state <= P_D_Lemmings;
+                    P_D_Lemmings: begin
+                    next_state <= P_D_Lemmings;
+                    end
+                    P_D_Lemmings: begin
+                    next_state <= P_D_Lemmings;
+                    P_D_Lemmings: begin
+                    next_state <= P_D_Lemmings;
+                    end
+                    P_D_Lemmings: begin
+                    next_state <= P_D_Lemmings;
+                    P_D_Lemmings: begin
+                    next_state <= P_D_Lemmings;
+                    P_D_Lemmings: begin
+                    next_state <= P_D_Lemmings;
+                    end
+                    P_D_Lemmings: begin
+                    next_state <= P_D_Lemmings;
+                    P_D_Lemmings: begin
+                    

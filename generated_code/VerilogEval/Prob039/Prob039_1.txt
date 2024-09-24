@@ -1,0 +1,28 @@
+Sure, here is the RTL code for the TopModule module implementing the 2-to-1 mux using both assign statements and a procedural if statement:
+
+```verilog
+module TopModule (
+    input a,
+    input b,
+    input sel_b1,
+    input sel_b2,
+    output out_assign,
+    output out_always
+);
+
+// Using assign statements
+assign out_assign = (sel_b1 && sel_b2) ? b : a;
+
+// Using procedural if statement
+always @* begin
+    if (sel_b1 && sel_b2) begin
+        out_always = b;
+    end else begin
+        out_always = a;
+    end
+end
+
+endmodule
+```
+
+This code defines a module called TopModule with the specified interface. The module contains both assign statements and a procedural always block to implement the 2-to-1 mux functionality based on the given selection signals. The out_assign output will choose between a and b using assign statements, while the out_always output will do the same using a procedural if statement.

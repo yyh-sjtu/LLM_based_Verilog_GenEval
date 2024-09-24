@@ -1,0 +1,35 @@
+
+module accu (
+    input clk,
+    input rst_n,
+    input [7:0] data_in,
+    input valid_in,
+    output reg valid_out,
+    output reg [9:0] data_out
+);
+
+reg [7:0] data_accum [3:0];
+reg [3:0] count;
+
+always @(posedge clk or negedge rst_n) begin
+    if (~rst_n) begin
+        valid_out <= 0;
+        data_out <= 10'b0;
+        count <= 4'b0000;
+        data_accum[0] <= 8'b0;
+        data_accum[1] <= 8'b0;
+        data_accum[2] <= 8'b0;
+        data_accum[3] <= 8'b0;
+    end else begin
+        if (valid_in) begin
+            data_accum[count] <= data_in;
+            if (count == 3) begin
+                data_out <= data_accum[0] + data_accum[1] + data_accum[2] + data_accum[3];
+                valid_out <= 1;
+            end
+            count <= count + 1;
+        end
+    end
+end
+
+endmodule

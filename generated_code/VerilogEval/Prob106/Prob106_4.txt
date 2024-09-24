@@ -1,0 +1,52 @@
+As a professional RTL designer, I will start by creating the TopModule module in Verilog. Here is the Verilog code to implement the requested functionality:
+
+```verilog
+module TopModule (
+    input [15:0] scancode,
+    output reg left,
+    output reg down,
+    output reg right,
+    output reg up
+);
+
+always @(*) begin
+    case (scancode)
+        16'hE06B: begin
+            left = 1;
+            down = 0;
+            right = 0;
+            up = 0;
+        end
+        16'hE072: begin
+            left = 0;
+            down = 1;
+            right = 0;
+            up = 0;
+        end
+        16'hE074: begin
+            left = 0;
+            down = 0;
+            right = 1;
+            up = 0;
+        end
+        16'hE075: begin
+            left = 0;
+            down = 0;
+            right = 0;
+            up = 1;
+        end
+        default: begin
+            left = 0;
+            down = 0;
+            right = 0;
+            up = 0;
+        end
+    endcase
+end
+
+endmodule
+```
+
+In this code, I have defined a module called TopModule with inputs for the 16-bit scancode and outputs for the arrow keys (left, down, right, and up). Inside the module, I have defined a case statement that checks the scancode against the known values for the arrow keys and sets the appropriate output signals accordingly.
+
+This design will correctly identify the arrow key pressed based on the given scancode and assert the corresponding output signal. Let me know if you need any further assistance or modifications.

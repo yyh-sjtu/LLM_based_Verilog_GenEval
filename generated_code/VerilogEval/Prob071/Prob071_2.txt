@@ -1,0 +1,81 @@
+Certainly! Below is the RTL (Register Transfer Level) implementation of a Verilog module named `TopModule` that functions as a priority encoder for an 8-bit input. The module will produce a 3-bit output representing the position of the least significant '1' bit in the input vector.
+
+```verilog
+module TopModule (
+    input  [7:0] in,  // 8-bit input
+    output reg [2:0] pos // 3-bit output
+);
+
+    always @* begin
+        // Initialize pos to 3'b000 (zero)
+        pos = 3'b000;
+
+        // Check the input vector for the least significant 1-bit
+        if (in[0]) begin
+            pos = 3'd0; // Position 0
+        end else if (in[1]) begin
+            pos = 3'd1; // Position 1
+        end else if (in[2]) begin
+            pos = 3'd2; // Position 2
+        end else if (in[3]) begin
+            pos = 3'd3; // Position 3
+        end else if (in[4]) begin
+            pos = 3'd4; // Position 4
+        end else if (in[5]) begin
+            pos = 3'd5; // Position 5
+        end else if (in[6]) begin
+            pos = 3'd6; // Position 6
+        end else if (in[7]) begin
+            pos = 3'd7; // Position 7
+        end
+        // If no input bits are high, pos will remain 000 as initialized
+    end
+
+endmodule
+```
+
+### Explanation:
+- **Module Declaration**: The module is declared with input `in` (8 bits) and output `pos` (3 bits).
+  
+- **Always Block**: The `always @*` block is used to define combinational logic. This block evaluates whenever there is a change in the input `in`.
+
+- **Position Calculation**: The logic checks each bit of the input vector from the least significant bit (LSB) to the most significant bit (MSB). 
+  - If it finds a bit that is `1`, it sets the output `pos` to the corresponding index.
+  - If no bits are set, `pos` remains `3'b000` (zero), indicating that there is no '1' in the input.
+
+### Simulation/Testing:
+To verify the functionality, you can create a testbench that applies various 8-bit inputs to ensure the correct output is produced. Here’s a simple example:
+
+```verilog
+module testbench;
+    reg [7:0] test_in;
+    wire [2:0] test_pos;
+
+    TopModule uut (
+        .in(test_in),
+        .pos(test_pos)
+    );
+
+    initial begin
+        // Test cases
+        test_in = 8'b00000000;  // Expected output: 3'b000
+        #10;
+        
+        test_in = 8'b00000001;  // Expected output: 3'b000
+        #10;
+
+        test_in = 8'b00000100;  // Expected output: 3'b010
+        #10;
+
+        test_in = 8'b10010000;  // Expected output: 3'b100
+        #10;
+
+        test_in = 8'b11000000;  // Expected output: 3'b000
+        #10;
+
+        $stop;
+    end
+endmodule
+```
+
+This testbench simulates different 8-bit inputs and captures the output. You can analyze the results to validate that the `TopModule` is functioning correctly.

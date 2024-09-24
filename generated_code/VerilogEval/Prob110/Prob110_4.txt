@@ -1,0 +1,91 @@
+To implement the `TopModule` as a Moore state machine with the specified interface and behavior, we start by defining the states and creating a state transition diagram based on the provided conditions.
+
+### State Definitions:
+1. **OFF (State = 0):** Output `out = 0`
+2. **ON (State = 1):** Output `out = 1`
+
+### State Transitions:
+- **From OFF:**
+  - If `j = 0`, stay in OFF.
+  - If `j = 1`, transition to ON.
+  
+- **From ON:**
+  - If `k = 0`, stay in ON.
+  - If `k = 1`, transition to OFF.
+
+### RTL Implementation:
+Below is the Verilog implementation of the `TopModule`.
+
+```verilog
+module TopModule (
+    input  clk,
+    input  areset,
+    input  j,
+    input  k,
+    output reg out
+);
+
+    // State Encoding
+    typedef enum logic [1:0] {
+        OFF = 2'b00,
+        ON  = 2'b01
+    } state_t;
+
+    state_t current_state, next_state;
+
+    // Asynchronous Reset
+    always_ff @(posedge clk or posedge areset) begin
+        if (areset) begin
+            current_state <= OFF;
+            out <= 0; // Ensures out is reset when entering OFF
+        end else begin
+            current_state <= next_state;
+        end
+    end
+
+    // Output Logic (Moore Machine)
+    always_ff @(current_state) begin
+        case (current_state)
+            OFF: out = 0;
+            ON:  out = 1;
+            default: out = 0; // Safe default state
+        endcase
+    end
+
+    // Next State Logic
+    always_comb begin
+        case (current_state)
+            OFF: begin
+                if (j) begin
+                    next_state = ON;
+                end else begin
+                    next_state = OFF;
+                end
+            end
+            ON: begin
+                if (k) begin
+                    next_state = OFF;
+                end else begin
+                    next_state = ON;
+                end
+            end
+            default: next_state = OFF; // Safe default
+        endcase
+    end
+
+endmodule
+```
+
+### Explanation of the Code:
+
+1. **Module Declaration:** The module `TopModule` is defined with the specified input and output ports.
+  
+2. **State Encoding:** We use an enumeration to define the states, which makes it easy to manage state transitions. `OFF` is encoded as `00`, and `ON` is encoded as `01`.
+
+3. **State Transition Control:**
+   - **Asynchronous Reset:** The `current_state` is reset to `OFF` upon `areset`. The output `out` is also set to `0` during reset to match the `OFF` state behavior.
+   - **Next State Logic:** The `next_state` is determined based on the current state and the values of inputs `j` and `k`.
+
+4. **Output Logic:** In a Moore state machine, the output solely depends on the current state. Therefore, the output `out` is assigned based on the value of `current_state`.
+
+In this implementation, every combinational output and state transition logic is clearly separated, which enhances readability and maintainability. This design meets the specifications and behaves as described in the state transition rules.

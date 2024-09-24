@@ -1,0 +1,20 @@
+module adder_8bit (
+	input [7:0] a,
+	input [7:0] b,
+	input cin,
+	output [7:0] sum,
+	output cout
+);
+    wire [7:0] a_1, b_1;
+    wire cin_1;
+    wire [7:0] sum_1;
+    adder_8bit_1bit a_1 (a[0], b[0], cin_1, sum_1[0], cout_1[0]);
+    adder_8bit_1bit b_1 (b[1], a[1], b[1], sum_1[1], cin_1, sum_1[1], cout_1[1]);
+    adder_8bit_1bit cin_1 (cin_1, a[2], b[2], sum_1[2], cout_1[2]);
+    adder_8bit_1bit cin_2 (cin_2, a[3], b[3], sum_1[3], cout_2[3]);
+    adder_8bit_1bit cin_3 (cin_3, a[4], b[4], sum_1[4], cout_3[4]);
+    adder_8bit_1bit cin_4 (cin_4, a[5], b[5], sum_1[5], cout_4[5]);
+    adder_8bit_1bit cin_5 (cin_5, a[6], b[6], sum_1[6], cout_5[6]);
+    adder_8bit_1bit cin_6 (cin_6, a[7], b[7], sum_1[7], cout_6[7]);
+    adder_8bit_1bit cin_7 (cin_7, a[8], b[8], sum_1[8], cout_7[8]);
+endmodule

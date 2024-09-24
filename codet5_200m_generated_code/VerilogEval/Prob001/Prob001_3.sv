@@ -1,0 +1,5 @@
+module TopModule (
+	output zero
+);
+endmodule
+

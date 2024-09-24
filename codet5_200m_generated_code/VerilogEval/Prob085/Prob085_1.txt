@@ -1,0 +1,16 @@
+module TopModule (
+    input clk,
+    input areset,
+    input load,
+    input ena,
+    input [3:0] data,
+    output [3:0] q
+);
+    reg [3:0] code;
+    always @(posedge clk)
+        if (areset)
+            code <= 4'b0000;
+        else if (load)
+            code <= data;
+    assign q = code;
+endmodule

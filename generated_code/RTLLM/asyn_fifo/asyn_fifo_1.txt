@@ -1,0 +1,103 @@
+Here is the complete verilog code for the asynchronous FIFO module with the specified features:
+
+```verilog
+module dual_port_RAM #(parameter DEPTH = 16, parameter WIDTH = 8)
+(
+    input wclk, 
+    input wenc, 
+    input [$clog2(DEPTH)-1:0] waddr, 
+    input [WIDTH-1:0] wdata, 
+    input rclk, 
+    input renc, 
+    input [$clog2(DEPTH)-1:0] raddr, 
+    output reg [WIDTH-1:0] rdata
+);
+    reg [WIDTH-1:0] RAM_MEM [0:DEPTH-1];
+    
+    always @(posedge wclk)
+    begin
+        if(wenc)
+            RAM_MEM[waddr] <= wdata;
+    end
+    
+    always @(posedge rclk)
+    begin
+        if(renc)
+            rdata <= RAM_MEM[raddr];
+    end
+endmodule
+
+module asyn_fifo #(parameter WIDTH = 8, parameter DEPTH = 16)
+(
+    input wclk,
+    input rclk,
+    input wrstn,
+    input rrstn,
+    input winc,
+    input rinc,
+    input [WIDTH-1:0] wdata,
+    output reg wfull,
+    output reg rempty,
+    output reg [WIDTH-1:0] rdata
+);
+    
+    reg [$clog2(DEPTH)-1:0] waddr_bin;
+    reg [$clog2(DEPTH)-1:0] raddr_bin;
+    reg [$clog2(DEPTH)-1:0] wptr;
+    reg [$clog2(DEPTH)-1:0] rptr;
+    reg [$clog2(DEPTH)-1:0] wptr_buff;
+    reg [$clog2(DEPTH)-1:0] rptr_buff;
+    
+    reg [$clog2(DEPTH)-1:0] rptr_syn;
+    
+    always @ (posedge wclk)
+    begin
+        if(wrstn == 1'b0)
+            wptr <= 0;
+        else if(winc == 1'b1)
+            wptr <= wptr + 1;
+    end
+    
+    always @ (posedge rclk)
+    begin
+        if(rrstn == 1'b0)
+            rptr <= 0;
+        else if(rinc == 1'b1)
+            rptr <= rptr + 1;
+    end
+    
+    always @ (wptr or wclk)
+        waddr_bin <= wptr ^ (wptr >> 1);
+    
+    always @ (rptr or rclk)
+        raddr_bin <= rptr ^ (rptr >> 1);
+    
+    always @ (wptr_buff, rptr)
+        wfull <= (wptr == ~rptr[($clog2(DEPTH)-1)]) && (wptr != rptr);
+    
+    always @ (wptr, rptr)
+        rempty <= (rptr == wptr);
+    
+    always @ (posedge wclk)
+        wptr_buff <= wptr;
+    
+    always @ (posedge rclk)
+        rptr_buff <= rptr;
+    
+    assign rptr_syn = rptr_buff;
+    
+    dual_port_RAM #(.DEPTH(DEPTH), .WIDTH(WIDTH)) RAM_inst
+    (
+        .wclk(wclk),
+        .wenc(1'b1),
+        .waddr(waddr_bin),
+        .wdata(wdata),
+        .rclk(rclk),
+        .renc(1'b1),
+        .raddr(raddr_bin),
+        .rdata(rdata)
+    );
+endmodule
+```
+
+This verilog code implements an asynchronous FIFO module with configurable depth and width. It includes logic for managing read and write pointers, gray code conversion, pointer synchronization, and full/empty signal generation. The module uses a dual-port RAM module for data storage and provides input and output ports for write and read operations.

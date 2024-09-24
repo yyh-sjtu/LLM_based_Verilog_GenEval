@@ -1,0 +1,11 @@
+module and_gate (
+	input a,
+	input b,
+	output out
+);
+  specify
+    (a => out) = 0; 
+    (b => out) = 0; 
+  endspecify
+  assign out = a & b; 
+endmodule 

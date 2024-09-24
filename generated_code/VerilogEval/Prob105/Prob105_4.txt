@@ -1,0 +1,61 @@
+Certainly! Below is a Verilog implementation of a module named `TopModule`. This module implements a 100-bit left/right rotator based on the specified interface and functionality.
+
+```verilog
+module TopModule (
+    input  clk,
+    input  load,
+    input  [1:0] ena,
+    input  [99:0] data,
+    output reg [99:0] q
+);
+
+    always @(posedge clk) begin
+        if (load) begin
+            // Load the data into the rotator
+            q <= data;
+        end else begin
+            case (ena)
+                2'b01: begin
+                    // Rotate right by one bit
+                    q <= {q[0], q[99:1]};
+                end
+                2'b10: begin
+                    // Rotate left by one bit
+                    q <= {q[98:0], q[99]};
+                end
+                2'b00, 2'b11: begin
+                    // Do not rotate
+                    q <= q; // This line is not strictly necessary, but it makes the case explicit
+                end
+            endcase
+        end
+    end
+
+endmodule
+```
+
+### Explanation:
+
+1. **Inputs and Outputs:**
+   - `clk`: Clock signal used for synchronous operation.
+   - `load`: When high, the module loads the data input into the `q` register.
+   - `ena`: 2-bit enable signal that determines the direction and type of operation (rotate left, rotate right, or no operation).
+   - `data`: 100-bit input data to load into the rotator.
+   - `q`: 100-bit output representing the contents of the rotator.
+
+2. **Clock Behavior:**
+   - The module operates on the positive edge of the clock signal (`posedge clk`).
+
+3. **Loading Data:**
+   - When `load` is high, the contents of `data` are loaded into the register `q`.
+
+4. **Rotating Logic:**
+   - Using a case statement on `ena`, the module can rotate the contents of `q`:
+     - `2'b01`: Rotates right by one bit. The least significant bit (bit 0) wraps around to the most significant bit (bit 99).
+     - `2'b10`: Rotates left by one bit. The most significant bit (bit 99) wraps around to the least significant bit (bit 0).
+     - `2'b00` and `2'b11`: No rotation occurs; `q` retains its previous value.
+
+### Simulation and Testing:
+You should write a testbench to verify the functionality of the `TopModule`, simulating various scenarios such as loading data and performing rotations based on the `ena` signal.
+
+Let me know if you require any additional functionality or further explanations!

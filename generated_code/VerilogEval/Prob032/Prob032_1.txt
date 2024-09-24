@@ -1,0 +1,20 @@
+Here is the RTL code for the TopModule implementation:
+
+```verilog
+module TopModule (
+    input [2:0] vec,
+    output [2:0] outv,
+    output o2,
+    output o1,
+    output o0
+);
+
+assign outv = vec;
+assign o2 = vec[2];
+assign o1 = vec[1];
+assign o0 = vec[0];
+
+endmodule
+```
+
+This module takes a 3-bit input vector, passes it through as the output vector, and also separates it into three individual 1-bit outputs as specified. The output o0 corresponds to the least significant bit of the input vector, o1 to the middle bit, and o2 to the most significant bit.

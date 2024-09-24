@@ -1,0 +1,16 @@
+module TopModule (
+	input clk,
+	input d,
+	output q
+);
+    reg [7:0] code;
+    initial
+    begin
+        code = 8'h00;
+    end
+    always @(posedge clk)
+    begin
+        q <= code[7:0];
+    end
+endmodule
+

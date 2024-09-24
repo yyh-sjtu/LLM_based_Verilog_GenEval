@@ -1,0 +1,4 @@
+Evaluation results of VGen:
+intermediate6: 0.0% correct
+intermediate2: 0.0% correct
+advanced1: 0.0% correct

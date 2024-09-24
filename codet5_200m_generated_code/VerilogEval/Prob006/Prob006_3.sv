@@ -1,0 +1,13 @@
+module TopModule (
+	input [7:0] in,
+	output [7:0] out
+);
+    generate
+        if (8 == 2) begin
+            assign out = in[7];
+        end else begin
+            assign out = in[8];
+        end
+    endgenerate
+endmodule
+

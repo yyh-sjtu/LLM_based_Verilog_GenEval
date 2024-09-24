@@ -1,0 +1,33 @@
+Here’s an RTL implementation of the `TopModule` using Verilog, which meets the specified interface requirements:
+
+```verilog
+module TopModule (
+    input  [2:0] vec,  // 3-bit input vector
+    output [2:0] outv, // 3-bit output
+    output o2,         // Output for position 2
+    output o1,         // Output for position 1
+    output o0          // Output for position 0
+);
+
+// Assign the 3-bit output directly from the input vector
+assign outv = vec;
+
+// Split the input vector into 1-bit outputs
+assign o2 = vec[2]; // Output o2 from position 2 of vec
+assign o1 = vec[1]; // Output o1 from position 1 of vec
+assign o0 = vec[0]; // Output o0 from position 0 of vec
+
+endmodule
+```
+
+### Explanation of the Code:
+- **Module Declaration**: The module `TopModule` is declared with the specified input and output ports.
+- **Input Port**: `vec` is defined as a 3-bit input.
+- **Output Ports**: `outv` is a 3-bit output representing the same value as `vec`, while `o2`, `o1`, and `o0` are 1-bit outputs corresponding to the 3 bits of `vec`.
+- **Assignments**:
+  - `assign outv = vec;`: This directly assigns the 3-bit input to the 3-bit output.
+  - `assign o2 = vec[2];`: Assigns the most significant bit of `vec` to `o2`.
+  - `assign o1 = vec[1];`: Assigns the middle bit of `vec` to `o1`.
+  - `assign o0 = vec[0];`: Assigns the least significant bit of `vec` to `o0`.
+
+This implementation adheres to the requirements you specified and provides the necessary outputs based on the input vector.

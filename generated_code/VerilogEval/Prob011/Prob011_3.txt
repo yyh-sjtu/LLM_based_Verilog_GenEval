@@ -1,0 +1,15 @@
+Here is an RTL code for the TopModule implementing a NOR gate:
+
+```verilog
+module TopModule (
+    input a,
+    input b,
+    output out
+);
+
+assign out = ~(a | b);
+
+endmodule
+```
+
+This code defines the module `TopModule` with input ports `a` and `b`, and output port `out`. The output `out` is assigned the result of the NOR operation on inputs `a` and `b`.

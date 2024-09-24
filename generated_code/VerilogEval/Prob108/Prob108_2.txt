@@ -1,0 +1,30 @@
+As a professional RTL designer, I would implement the TopModule as described below:
+
+```verilog
+module TopModule (
+    input clk,
+    input load,
+    input [511:0] data,
+    output reg [511:0] q
+);
+
+always @(posedge clk) begin
+    if (load) begin
+        q <= data;
+    end else begin
+        q[0] = q[1] ^ q[0];
+        q[511] = q[510] ^ q[511];
+        for (int i = 1; i < 511; i = i + 1) begin
+            q[i] = q[i-1] ^ q[i+1];
+        end
+    end
+end
+
+endmodule
+```
+
+In this Verilog module, I have defined a TopModule with inputs clk, load, and data, and output q. The module implements Rule 90 as described, creating a 512-cell system that advances by one time step each clock cycle. The load input is used to load the initial state of the system with data[511:0]. The boundaries are assumed to be zero.
+
+The logic inside the always block triggers on the positive edge of the clock. If the load input is asserted, the module loads the data into the state of the system. Otherwise, it updates the state of each cell based on Rule 90 logic by XORing the values of its neighboring cells.
+
+This implementation creates a 512-cell system governed by the Rule 90 cellular automaton.

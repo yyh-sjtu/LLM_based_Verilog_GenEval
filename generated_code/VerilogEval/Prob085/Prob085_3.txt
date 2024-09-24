@@ -1,0 +1,43 @@
+Certainly! Below is a Verilog implementation of the `TopModule` as you described. This module implements a 4-bit right shift register with asynchronous reset, load, and enable functionality.
+
+```verilog
+module TopModule (
+    input       clk,      // Clock input
+    input       areset,   // Asynchronous reset
+    input       load,     // Load control
+    input       ena,      // Enable control
+    input [3:0] data,     // 4-bit input data
+    output reg [3:0] q     // 4-bit output (shift register contents)
+);
+
+// Asynchronous reset
+always @(posedge clk or posedge areset) begin
+    if (areset) begin
+        // Reset q to zero
+        q <= 4'b0000;
+    end else begin
+        // If load is asserted, load the data
+        if (load) begin
+            q <= data;
+        end
+        // If enable is asserted and load is not asserted, perform right shift
+        else if (ena) begin
+            q <= {1'b0, q[3:1]}; // Right shift: MSB (q[3]) moves out, LSB (q[0]) becomes 0
+        end
+    end
+end
+
+endmodule
+```
+
+### Explanation:
+
+1. **Asynchronous Reset (`areset`)**: The shift register is cleared when the `areset` signal is high, setting all bits of `q` to zero.
+
+2. **Loading (`load`)**: If `load` is asserted during a clock cycle (after the `areset` check), `data` is loaded into `q`, which takes priority over shifting.
+
+3. **Enable (`ena`)**: If `ena` is asserted and `load` is not, the register performs a right shift where the least significant bit (`q[0]`) is discarded, and the new most significant bit (`q[3]`) is set to zero.
+
+4. **Clock Triggering**: The register is updated on the positive edge of `clk`.
+
+This implementation meets all requirements specified in your request and provides proper functionality for a 4-bit right shift register.

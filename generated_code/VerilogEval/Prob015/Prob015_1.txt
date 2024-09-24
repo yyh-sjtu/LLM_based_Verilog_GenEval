@@ -1,0 +1,18 @@
+Here is an RTL design implementation in Verilog for the TopModule module:
+
+```verilog
+module TopModule(
+    input [15:0] in,
+    output reg [7:0] out_lo,
+    output reg [7:0] out_hi
+);
+
+always @(*) begin
+    out_lo = in[7:0];
+    out_hi = in[15:8];
+end
+
+endmodule
+```
+
+In this implementation, the input `in` is a 16-bit bus that is split into two separate 8-bit buses `out_lo` and `out_hi` which represent the lower and upper bytes of the input respectively. The output values are assigned based on the input bus slicing operations. This combinational logic implementation will provide the desired functionality of splitting the input 16-bit half-word into lower and upper bytes.

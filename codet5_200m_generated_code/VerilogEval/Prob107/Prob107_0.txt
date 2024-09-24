@@ -1,0 +1,30 @@
+module TopModule (
+    input clk,
+    input reset,
+    input in,
+    output out
+);
+    parameter [0:0] INIT = 1'b0;
+    wire [4:0] c;
+    assign c = in? INIT[1] : INIT[0];
+    reg [3:0] s0;
+    reg [3:0] s1;
+    always @(posedge clk) begin
+        if(reset) begin
+            s0 <= INIT;
+            s1 <= INIT;
+        end else begin
+            case (s0)
+                INIT: begin
+                    s0 <= INIT;
+                    s1 <= INIT;
+                end
+                INIT: begin
+                    s0 <= INIT;
+                    s1 <= INIT;
+                end
+                endcase
+        end
+    end
+    assign out = s0;
+endmodule

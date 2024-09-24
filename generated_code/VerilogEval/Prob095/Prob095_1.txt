@@ -1,0 +1,43 @@
+Certainly! Below is an example Verilog implementation for the `TopModule`, which behaves as specified. It generates a `shift_ena` signal that is high for exactly 4 clock cycles when reset is active high.
+
+```verilog
+module TopModule (
+    input  clk,
+    input  reset,
+    output reg shift_ena
+);
+
+    // State declaration
+    reg [2:0] count;  // To count the number of cycles (3 bits for counting 0 to 7)
+
+    always @(posedge clk) begin
+        // Synchronous reset logic
+        if (reset) begin
+            count <= 0;    // Reset the counter
+            shift_ena <= 1; // Enable shift for the first cycle
+        end else begin
+            // Check if we have counted to 4 cycles
+            if (count < 4) begin
+                shift_ena <= 1; // Keep shift_ena high
+                count <= count + 1; // Increment the counter
+            end else begin
+                shift_ena <= 0; // Disable shift_ena after 4 cycles
+            end
+        end
+    end
+
+endmodule
+```
+
+### Explanation:
+1. **Inputs and Outputs**: The module has three ports: `clk`, `reset`, and `shift_ena`.
+2. **State Variable**: A 3-bit counter `count` is used to keep track of how many clock cycles `shift_ena` has been asserted.
+3. **Always Block**: The `always` block is triggered on the positive edge of the `clk`.
+   - If the `reset` is asserted (high), the counter is reset to `0` and `shift_ena` is set high.
+   - If the `reset` is not active, the counter is checked:
+     - If `count` is less than `4`, `shift_ena` remains high, and the counter increments.
+     - When `count` reaches `4`, `shift_ena` is set to low, effectively disabling it until the next reset.
+
+### Note:
+- Make sure to test this module with a testbench to verify its functionality and confirm that it provides the expected output under various conditions.
+- If you need further enhancements or additional features, feel free to ask!

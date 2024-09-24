@@ -1,0 +1,17 @@
+module TopModule (
+	input ring,
+	input vibrate_mode,
+	output ringer,
+	output motor
+);
+    reg [7:0] code;
+    assign ringer = code[7];
+    assign motor = code[0];
+    always @(posedge ringer or posedge vibrate_mode)
+    begin
+        if (vibrate_mode == 1)
+            code = 7'b000001;
+        else
+            code = 7'b000010;
+    end
+endmodule

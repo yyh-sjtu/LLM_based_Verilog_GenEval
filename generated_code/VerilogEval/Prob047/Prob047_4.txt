@@ -1,0 +1,30 @@
+Certainly! Below is a Verilog implementation of a module named `TopModule`, which contains 8 D flip-flops with an active high asynchronous reset. When `areset` is high, all flip-flops will reset their outputs to 0. The outputs of these flip-flops are gathered in an 8-bit output port `q`, which reflects the state of the flip-flops on the positive edge of the clock.
+
+```verilog
+module TopModule (
+    input wire clk,
+    input wire areset,
+    input wire [7:0] d,
+    output reg [7:0] q
+);
+
+    // 8 D flip-flops with asynchronous reset
+    always @(posedge clk or posedge areset) begin
+        if (areset) begin
+            q <= 8'b00000000; // Reset output to 0
+        end else begin
+            q <= d; // Transfer input to output
+        end
+    end
+
+endmodule
+```
+
+### Explanation:
+- **Module Declaration**: The module `TopModule` declares its input and output ports as specified.
+- **Always Block**: The `always` block is sensitive to the positive edge of the `clk` and the positive edge of `areset`.
+  - When `areset` is high, it asynchronously resets the output `q` to `8'b00000000`.
+  - When `areset` is not high, on the positive edge of `clk`, it assigns the input `d` to the output `q`.
+
+### Simulation and Testbench:
+Ensure you implement a testbench to validate the functionality of this module, checking the operation of the reset and the proper transfer of `d` to `q` on clock edges. Would you like any further assistance on that?

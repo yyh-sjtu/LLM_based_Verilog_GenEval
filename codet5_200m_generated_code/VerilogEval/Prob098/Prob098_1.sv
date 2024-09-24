@@ -1,0 +1,16 @@
+module TopModule (
+	input clk,
+	input a,
+	output q
+);
+    parameter CLK_PERIOD = 100;
+    reg [1:0] i;
+    always @(posedge clk) begin
+        if (a)
+            i <= 0;
+        else
+            i <= i + 1;
+    end
+    assign q = i == 0? 1 : 1;
+endmodule
+

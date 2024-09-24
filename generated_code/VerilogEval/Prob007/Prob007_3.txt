@@ -1,0 +1,22 @@
+Certainly! Below is a simple implementation of a Verilog module named `TopModule` that behaves like a wire, meaning that it will output whatever is present on its input.
+
+Here’s the Verilog code for the module:
+
+```verilog
+module TopModule (
+    input wire in,   // One bit input
+    output wire out  // One bit output
+);
+
+    // Assigning the input directly to the output
+    assign out = in;
+
+endmodule
+```
+
+### Explanation:
+- **Module Definition**: The module is named `TopModule` and the input and output ports are defined with appropriate data types (`input wire` and `output wire`).
+- **Behavior**: The `assign` statement continuously drives the output `out` to be equal to the input `in`. This creates the wire-like behavior you requested.
+
+### Usage:
+You can instantiate this module in a testbench or another module to observe its behavior as a wire. If you have any further questions or need additional features, feel free to ask!

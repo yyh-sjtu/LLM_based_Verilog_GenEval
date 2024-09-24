@@ -1,0 +1,15 @@
+As a professional RTL designer, I would implement the TopModule as follows:
+
+```verilog
+module TopModule (
+    input x,
+    input y,
+    output z
+);
+
+assign z = (x ^ y) & x;
+
+endmodule
+```
+
+This Verilog code defines a module named TopModule with input ports x and y, and an output port z. The boolean function z = (x^y) & x is implemented using the assign statement, which calculates the XOR between x and y, and then takes the AND operation with x to produce the output z.

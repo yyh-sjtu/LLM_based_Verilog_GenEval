@@ -1,0 +1,23 @@
+As a professional RTL designer, I would implement the TopModule according to the given requirements. Here is the Verilog code for the module:
+
+```verilog
+module TopModule (
+    input     [2:0] vec,
+    output reg [2:0] outv,
+    output reg       o2,
+    output reg       o1,
+    output reg       o0
+);
+
+assign o0 = vec[0];
+assign o1 = vec[1];
+assign o2 = vec[2];
+
+always @* begin
+    outv = vec;
+end
+
+endmodule
+```
+
+In this implementation, the input `vec` is a 3-bit vector, and the output `outv` also consists of 3 bits. The module splits the input vector into three separate 1-bit outputs `o0`, `o1`, and `o2`, which are connected to the positions 0, 1, and 2 of the input vector respectively. The output `outv` is simply assigned the value of the input vector `vec`. This design ensures that the module functions as per the provided interface requirements.

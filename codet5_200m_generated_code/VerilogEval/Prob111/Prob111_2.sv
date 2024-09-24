@@ -1,0 +1,21 @@
+module TopModule (
+    input clk,
+    input reset,
+    input j,
+    input k,
+    output out
+);
+    reg [2:0] s1;
+    reg [2:0] s2;
+    assign out = s1[2];
+    always @(posedge clk) begin
+        if(reset) begin
+            s1 <= 2'b00;
+            s2 <= 2'b00;
+        end else begin
+            s1 <= j;
+            s2 <= k;
+        end
+    end
+endmodule
+

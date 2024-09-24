@@ -1,0 +1,76 @@
+module TopModule (
+	input clk,
+	input areset,
+	input bump_left,
+	input bump_right,
+	input ground,
+	input dig,
+	output walk_left,
+	output walk_right,
+	output aaah,
+	output digging
+);
+    parameter ST_START = 0;
+    parameter ST_PASSED = 1;
+    parameter ST_WAIT_X = 2;
+    parameter ST_WAIT_Y = 3;
+    parameter ST_PASSED = 4;
+    reg [5:0] state;
+    reg [5:0] num_states;
+    always @(posedge clk) begin
+        if (areset) begin
+            num_states <= ST_START;
+            state <= ST_PASSED;
+        end
+        else begin
+            case (state)
+                ST_START: begin
+                    num_states <= ST_PASSED;
+                    num_states <= ST_WAIT_X;
+                    num_states <= ST_WAIT_Y;
+                end
+                ST_PASSED: begin
+                    num_states <= ST_WAIT_X;
+                    num_states <= ST_PASSED;
+                end
+                ST_PASSED: begin
+                    num_states <= ST_PASSED;
+                    num_states <= ST_PASSED;
+                end
+                ST_WAIT_X: begin
+                    num_states <= ST_PASSED;
+                end
+                ST_WAIT_Y: begin
+                    num_states <= ST_PASSED;
+                end
+            default: begin
+                    num_states <= ST_START;
+            end
+            endcase
+        end
+    end
+    always @(negedge clk) begin
+        if (bump_left) begin
+            if (bump_right) begin
+                state <= ST_PASSED;
+                num_states <= ST_PASSED;
+            end
+            else begin
+                num_states <= ST_PASSED;
+            end
+        end
+        else begin
+            if (dig) begin
+                num_states <= ST_PASSED;
+                num_states <= ST_WAIT_X;
+            end
+            else begin
+                num_states <= ST_WAIT_Y;
+            end
+        end
+    end
+    assign walk_left = (num_states == ST_PASSED);
+    assign walk_right = (num_states == ST_PASSED);
+    assign digging = (num_states == ST_PASSED);
+endmodule
+

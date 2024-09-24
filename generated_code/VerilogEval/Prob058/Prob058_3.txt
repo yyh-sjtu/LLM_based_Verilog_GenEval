@@ -1,0 +1,41 @@
+Certainly! Below is the Verilog code for the `TopModule` that implements the specified interface and functionality, specifically creating an XOR gate in three different ways.
+
+```verilog
+module TopModule (
+    input  clk,
+    input  a,
+    input  b,
+    output out_assign,
+    output out_always_comb,
+    output reg out_always_ff
+);
+
+// Assign statement for XOR operation
+assign out_assign = a ^ b;
+
+// Combinational always block for XOR operation
+always @(*) begin
+    out_always_comb = a ^ b;
+end
+
+// Clocked always block for XOR operation with flip-flop
+always @(posedge clk) begin
+    out_always_ff <= a ^ b;
+end
+
+endmodule
+```
+
+### Explanation:
+1. **Input Ports**:
+   - `clk`: This is the clock signal for triggering the flip-flop.
+   - `a` and `b`: These are the input signals to the XOR operation.
+
+2. **Output Ports**:
+   - `out_assign`: The output from the assign statement, which directly computes `a ^ b`.
+   - `out_always_comb`: The output from the combinational always block, also computing `a ^ b`.
+   - `out_always_ff`: The output from the clocked always block, which computes `a ^ b` on the positive edge of the clock and stores it in a flip-flop, thus creating a delay.
+
+### Important Notes:
+- The `out_always_ff` is declared as `reg` because it is driven by a clocked always block.
+- The other two outputs utilize continuous assignment and combinational logic, which do not require a `reg` type.

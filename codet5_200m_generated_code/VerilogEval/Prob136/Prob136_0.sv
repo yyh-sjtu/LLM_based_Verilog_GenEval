@@ -1,0 +1,51 @@
+module TopModule (
+	input clk,
+	input reset,
+	input w,
+	output z
+);
+    parameter A = 0, B = 1, C = 2, D = 3, E = 4, F = 5;
+    wire [7:0] codes = {7{1'b0}};
+    parameter A_C = 3;
+    parameter B_C = 4;
+    parameter C_D = 5;
+    parameter D_D = 6;
+    parameter E_D = 7;
+    parameter E_F = 8;
+    parameter F_C = 9;
+    parameter F_D = 10;
+    parameter E_E = 11;
+    parameter F_E = 12;
+    parameter F_F = 13;
+    parameter F_E = 20;
+    parameter F_F = 21;
+    reg [7:0] codes;
+    always @(posedge clk or posedge reset)
+        if (reset) begin
+            codes <= 0;
+            codes <= 0;
+        end else if (w) begin
+            codes <= codes + 1;
+        end
+    always @(posedge clk or posedge reset)
+        if (reset) begin
+            codes <= 0;
+        end else if (w) begin
+            codes <= codes + 1;
+        end else begin
+            codes <= codes;
+        end
+    always @(posedge clk or posedge reset)
+        if (reset) begin
+            codes <= 0;
+        end else begin
+            codes <= codes + 1;
+        end
+    always @(posedge clk or posedge reset)
+        if (reset) begin
+            codes <= 0;
+        end else begin
+            codes <= codes + 1;
+        end
+endmodule
+

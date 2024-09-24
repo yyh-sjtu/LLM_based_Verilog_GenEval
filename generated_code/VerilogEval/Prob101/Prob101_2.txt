@@ -1,0 +1,51 @@
+Based on the provided waveform data for inputs `a`, `b`, `c`, and `d`, we need to analyze the output `q` to determine the logic that drives it. The following points summarize the observed behavior of the output `q` relative to inputs `a`, `b`, `c`, and `d`:
+
+1. **Outputs for `a = 0`:**
+   - When `a` is `0`, the output `q` depends mainly on `c` and `d`.
+   - Specifically:
+     - `d = 0`, `c = 0`: `q = 0`
+     - `d = 1`, `c = 0`: `q = 0`
+     - `d = 0`, `c = 1`: `q = 1`
+     - `d = 1`, `c = 1`: `q = 1`
+     - When `b` is `1` and regardless of `c` and `d`, `q = 1`.
+
+2. **Outputs for `a = 1`:**
+   - When `a` is `1`, the output is influenced primarily by the values of `b`.
+   - Specifically:
+     - If `b = 0`, regardless of `c` and `d`, `q = 0`.
+     - If `b = 1`, regardless of `c` and `d`, `q = 1`.
+
+**Formulating the Logic:**
+With these observations, we can derive a logic function for `q`:
+ 
+1. If `a = 0`: `q = (c AND d) OR (1 AND b) → q = c & d | b`
+2. If `a = 1`: `q = b`
+
+Expressing these in a single equation, we can write:
+```verilog
+q = (a == 0) ? (b | (c & d)) : b;
+```
+
+**Implementation in Verilog:**
+
+Here is how you can implement the `TopModule` in Verilog:
+
+```verilog
+module TopModule (
+    input  wire a,
+    input  wire b,
+    input  wire c,
+    input  wire d,
+    output wire q
+);
+    assign q = (a == 0) ? (b | (c & d)) : b;
+
+endmodule
+```
+
+### Explanation:
+- The `assign` statement computes `q` based on the state of `a`.
+- If `a` is `0`, it checks the combination of `b`, `c`, and `d` to determine `q`.
+- If `a` is `1`, `q` takes the value of `b`.
+
+This implementation effectively reflects the behavior observed in the simulation waveforms.

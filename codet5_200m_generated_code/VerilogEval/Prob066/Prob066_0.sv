@@ -1,0 +1,20 @@
+module TopModule (
+	input clk,
+	input reset,
+	input [31:0] in,
+	output [31:0] out
+);
+    parameter WIDTH = 1;
+    parameter BITS = 1;
+    localparam WIDTH_BITS = WIDTH_BITS-1;
+    reg [WIDTH_BITS-1:0] a;
+    assign out = a[WIDTH_BITS-1:WIDTH_BITS];
+    always @(posedge clk or posedge reset)
+    begin
+        if (reset)
+            a <= 0;
+        else
+            a <= a + 1'b1;
+    end
+endmodule
+

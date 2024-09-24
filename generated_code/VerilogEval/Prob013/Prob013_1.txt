@@ -1,0 +1,23 @@
+Certainly! Below is the Verilog code for a module named `TopModule` that implements a 2-input NOR gate. The module has two input ports (`in1` and `in2`) and one output port (`out`).
+
+```verilog
+module TopModule (
+    input wire in1,
+    input wire in2,
+    output wire out
+);
+
+// Implementing the NOR gate functionality
+assign out = ~(in1 | in2); // out is the NOR of in1 and in2
+
+endmodule
+```
+
+### Explanation:
+- **Module Declaration**: The module is declared with the name `TopModule` and specifies the input and output ports.
+- **Input Ports**: `in1` and `in2` are declared as `input wire`, which means they are one-bit wide input signals.
+- **Output Port**: `out` is declared as `output wire`, which means it is a one-bit wide output signal.
+- **NOR Gate Logic**: The output `out` is assigned to the negation of the logical OR of `in1` and `in2`, fulfilling the requirement of a NOR gate.
+
+### Simulation and Testing
+To ensure proper functionality, you may want to create a testbench to simulate this module. Would you like assistance with that?

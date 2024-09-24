@@ -1,0 +1,11 @@
+As a professional RTL designer, I would tackle this implementation by first designing the finite state machine (FSM) that will handle the byte reception process. The FSM would transition through states such as wait for start bit, receive data bits, wait for stop bit, and output byte. 
+
+I would define the signals and states needed for the FSM in the RTL code, along with the necessary logic to identify start and stop bits, store received data bits, and output the correct byte when done. 
+
+I would ensure that the FSM waits for the stop bit if it is not received at the expected time, before moving on to receive the next byte. 
+
+Additionally, I would make sure to implement the synchronous reset functionality to keep the module in a known state upon system reset. 
+
+Finally, I would verify the functionality of the module using simulation tools and possibly hardware-in-the-loop testing to ensure correct operation under various scenarios. 
+
+Overall, I would approach the implementation with a focus on robustness, correctness, and adherence to the specifications provided for the TopModule interface.

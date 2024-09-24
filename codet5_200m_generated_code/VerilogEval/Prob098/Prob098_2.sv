@@ -1,0 +1,13 @@
+module TopModule (
+	input clk,
+	input a,
+	output q
+);
+    reg [8:0] temp;
+    always @(posedge clk)
+    begin
+        temp <= a? 32'b00000000000000000001 : 32'b0000000000000000000000;
+    end
+    assign q = temp;
+endmodule
+

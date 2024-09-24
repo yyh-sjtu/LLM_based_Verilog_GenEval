@@ -1,0 +1,36 @@
+Certainly! Below is a Verilog implementation of the `TopModule` as per your specifications. This module includes 8 D flip-flops with active high asynchronous reset, triggered by the positive edge of the clock.
+
+```verilog
+module TopModule (
+    input  wire clk,           // Clock input
+    input  wire areset,       // Asynchronous reset input
+    input  wire [7:0] d,      // 8-bit input data
+    output reg  [7:0] q       // 8-bit output data
+);
+
+    // D Flip-flops with active high asynchronous reset
+    always @(posedge clk or posedge areset) begin
+        if (areset) begin
+            q <= 8'b00000000; // Reset output to 0 when areset is high
+        end else begin
+            q <= d; // Transfer input d to output q on rising clock edge
+        end
+    end
+
+endmodule
+```
+
+### Explanation:
+
+1. **Module Declaration:**
+   - The `TopModule` takes in a clock (`clk`), an asynchronous reset (`areset`), an 8-bit data input (`d`), and has an 8-bit data output (`q`).
+
+2. **D Flip-Flop Logic:**
+   - The `always` block is sensitive to the positive edge of the clock and the positive edge of the asynchronous reset. 
+   - If `areset` is high, the output (`q`) is reset to `8'b00000000`.
+   - On the rising edge of the clock, if `areset` is low, the current input (`d`) is assigned to the output (`q`).
+
+3. **Synthesis:**
+   - This design is synthesizable and can be implemented in an FPGA or ASIC environment.
+
+Feel free to modify or ask for any additional features or requirements!

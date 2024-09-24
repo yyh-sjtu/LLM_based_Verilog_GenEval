@@ -1,0 +1,26 @@
+Sure! Below is an implementation of the `TopModule` that represents a D latch using Verilog with an `always` block. In this implementation, `d` is the data input, `ena` is the enable signal, and `q` is the output of the latch.
+
+```verilog
+module TopModule (
+    input wire d,    // Data input
+    input wire ena,  // Enable signal
+    output reg q     // Output
+);
+
+// Always block triggered by changes in 'd' or 'ena'
+always @(*) begin
+    if (ena) begin
+        q = d; // When enabled, output follows the input
+    end 
+    // If ena is low, q retains its value (i.e., latch behavior)
+end
+
+endmodule
+```
+
+### Explanation:
+1. **Module Declaration**: The module `TopModule` is defined with the required input and output ports.
+2. **Always Block**: We use an `always @(*)` block to create combinatorial logic. This block gets triggered whenever there's a change in `d` or `ena`.
+3. **Enable Logic**: If `ena` is high (1), the output `q` takes the value from `d`. If `ena` is low (0), the output `q` holds its previous value, effectively implementing the latch behavior.
+
+Make sure to simulate and test the functionality in a suitable environment to verify that the latch works as intended!

@@ -1,0 +1,55 @@
+Sure! Below is the implementation of a simple synchronous RAM module in Verilog, according to your specifications. This code includes the essential functionality for reading from and writing to the RAM based on the input signals.
+
+```verilog
+// This is a RAM module
+module ram #( 
+    parameter ADDR_WIDTH = 6, // Number of address bits
+    parameter DATA_WIDTH = 8  // Number of data bits
+) (
+    input [DATA_WIDTH-1:0] data,        // Input data
+    input [ADDR_WIDTH-1:0] addr,        // Address input
+    input we,                           // Write enable
+    input clk,                          // Clock signal
+    output reg [DATA_WIDTH-1:0] q       // Output data
+);
+
+    // Declare the RAM memory array
+    reg [DATA_WIDTH-1:0] ram[2**ADDR_WIDTH-1:0]; 
+
+    // Synchronous read and write
+    always @(posedge clk) begin
+        if (we) begin
+            // Write data to the specified address
+            ram[addr] <= data;
+        end
+        // Read data from the specified address
+        q <= ram[addr];
+    end
+
+endmodule
+```
+
+### Explanation:
+
+1. **Parameters**: 
+   - `ADDR_WIDTH`: The number of bits for the address lines; it determines the size of the RAM.
+   - `DATA_WIDTH`: The number of bits for each data word stored in the RAM.
+
+2. **Inputs**:
+   - `data`: The data to be written into the RAM.
+   - `addr`: The address at which to write/read the data.
+   - `we`: A write enable signal that indicates if data should be written (when high).
+   - `clk`: The clock signal that synchronizes the operations.
+
+3. **Output**:
+   - `q`: The data read from the RAM.
+
+4. **Memory Declaration**: 
+   - `ram` is a 2D array that acts as the memory, where each entry can hold a `DATA_WIDTH`-bit wide value.
+
+5. **Behavior**:
+   - On every rising edge of the clock (`posedge clk`):
+     - If `we` (write enable) is high, the `data` input is written to the `ram` at position `addr`.
+     - Regardless of the write enable signal, the data at address `addr` is read from the memory and assigned to `q`.
+
+This simple RAM module handles reading and writing in a synchronous manner, making it suitable for many applications in digital design. Adjust the parameters as needed for your specific use case or design constraints!

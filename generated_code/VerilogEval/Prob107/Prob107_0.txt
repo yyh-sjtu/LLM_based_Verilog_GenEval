@@ -1,0 +1,51 @@
+To implement the described Moore state machine in a module named TopModule, we can create the following Verilog code:
+
+```verilog
+module TopModule (
+    input clk,
+    input reset,
+    input in,
+    output reg out
+);
+
+// Define state enum
+typedef enum logic [1:0] {
+    B,
+    A
+} state_type;
+
+// Define state register and initialize to B
+reg [1:0] state_reg = B;
+
+// State machine logic
+always @(posedge clk or posedge reset)
+begin
+    if (reset) begin
+        state_reg <= B;
+    end else begin
+        case(state_reg)
+            B: begin
+                out <= 1;
+                if (in) begin
+                    state_reg <= B;
+                end else begin
+                    state_reg <= A;
+                end
+            end
+            A: begin
+                out <= 0;
+                if (in) begin
+                    state_reg <= A;
+                end else begin
+                    state_reg <= B;
+                end
+            end
+            default: state_reg <= B;
+        endcase
+    end
+end
+
+endmodule
+```
+
+This Verilog code defines a module named TopModule with the specified input and output ports. It also defines a state machine with two states, B and A, as described in the problem statement. The module includes a state register to keep track of the current state, and the output signal is updated based on the current state and input. The state transitions are determined by the input signal 'in'. The module also includes a synchronous reset logic to ensure the state machine starts in state B when a reset signal is asserted.

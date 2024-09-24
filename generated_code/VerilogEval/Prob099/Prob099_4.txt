@@ -1,0 +1,34 @@
+To implement the TopModule with the provided state machine and one-hot encoding, we can derive the logic equations for Y2 and Y4 as follows:
+
+```
+always @(*) begin
+    case(y)
+        6'b000001: begin // State A
+            Y2 = w;
+            Y4 = 1'b0;
+        end
+        6'b000010: begin // State B
+            Y2 = 1'b0;
+            Y4 = 1'b1;
+        end
+        6'b000100: begin // State C
+            Y2 = w;
+            Y4 = 1'b0;
+        end
+        6'b001000: begin // State D
+            Y2 = 1'b0;
+            Y4 = 1'b1;
+        end
+        6'b010000: begin // State E
+            Y2 = w;
+            Y4 = 1'b1;
+        end
+        6'b100000: begin // State F
+            Y2 = w;
+            Y4 = 1'b0;
+        end
+    endcase
+end
+```
+
+This logic implements the next-state signals Y2 and Y4 based on the current state stored in the input signal y. The provided state machine transitions are followed according to the one-hot encoding provided. This code should be implemented within the TopModule verilog module along with the input and output ports specified.

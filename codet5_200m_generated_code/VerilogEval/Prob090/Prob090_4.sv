@@ -1,0 +1,9 @@
+module TopModule (
+	input a,
+	input b,
+	output q
+);
+    always @(a or b)
+        q <= a;
+endmodule
+

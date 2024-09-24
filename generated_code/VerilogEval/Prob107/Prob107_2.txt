@@ -1,0 +1,79 @@
+Sure! Below is an implementation of the `TopModule` you described, using Verilog. This module implements a Moore state machine with the specified states, input, and output behavior.
+
+### Verilog Code
+
+```verilog
+module TopModule(
+    input  wire clk,    // Clock input
+    input  wire reset,  // Active-high synchronous reset
+    input  wire in,     // Input signal
+    output reg  out     // Output signal
+);
+
+// State definition
+typedef enum logic [1:0] {
+    B, // State B
+    A  // State A
+} state_t;
+
+// State registers
+state_t current_state, next_state;
+
+// Sequential logic for state transitions
+always_ff @(posedge clk) begin
+    if (reset) begin
+        current_state <= B; // Reset to state B
+    end else begin
+        current_state <= next_state; // Transition to the next state
+    end
+end
+
+// Combinational logic for output and next state logic
+always_comb begin
+    // Default values
+    out = 1'b0; // Default output
+    next_state = current_state; // Default next state is staying in current state
+    
+    case (current_state)
+        B: begin
+            out = 1'b1; // Output for state B
+            if (in) begin
+                next_state = B; // Stay in B if in=1
+            end else begin
+                next_state = A; // Transition to A if in=0
+            end
+        end
+        
+        A: begin
+            out = 1'b0; // Output for state A
+            if (in) begin
+                next_state = A; // Stay in A if in=1
+            end else begin
+                next_state = B; // Transition to B if in=0
+            end
+        end
+        
+        default: begin
+            next_state = B; // Default to state B for safety
+        end
+    endcase
+end
+
+endmodule
+```
+
+### Explanation of the Code:
+1. **State Definitions**: The state machine uses an enumerated type `state_t` to define two states, `A` and `B`.
+  
+2. **Sequential Logic**: The `always_ff` block is triggered on the rising edge of the clock. During the reset, the state is set to `B`. Otherwise, it transitions to the next state determined by the combinational logic.
+
+3. **Combinational Logic**: The `always_comb` block defines the behavior of the state machine.
+   - In state `B`, the output is set to `1`. If `in` is `1`, it stays in state `B`; if `in` is `0`, it transitions to state `A`.
+   - In state `A`, the output is set to `0`. If `in` is `1`, it stays in state `A`; if `in` is `0`, it transitions back to state `B`.
+
+4. **Default Cases**: A default case is included for safety to ensure the state machine resets to `B` if it enters an undefined state.
+
+### Simulation and Testing
+Be sure to create a testbench for simulating the behavior of this state machine to ensure it meets the required specifications.
+
+If you have any specific features or changes you'd like to discuss further, feel free to ask!

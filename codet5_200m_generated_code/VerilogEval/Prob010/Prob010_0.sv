@@ -1,0 +1,8 @@
+module TopModule (
+	input x,
+	input y,
+	output z
+);
+    parameter WIDTH = 8;
+endmodule
+

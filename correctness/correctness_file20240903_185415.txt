@@ -1,0 +1,19 @@
+Evaluation results of VGen:
+intermediate6: 100.0% correct
+intermediate2: 100.0% correct
+advanced1: 100.0% correct
+intermediate1: 100.0% correct
+basic1: 100.0% correct
+advanced5: 100.0% correct
+intermediate7: 100.0% correct
+advanced3: 100.0% correct
+advanced4: 100.0% correct
+intermediate4: 100.0% correct
+advanced2: 100.0% correct
+basic2: 100.0% correct
+intermediate3: 100.0% correct
+basic4: 100.0% correct
+intermediate5: 100.0% correct
+intermediate8: 100.0% correct
+basic3: 100.0% correct
+--------------------

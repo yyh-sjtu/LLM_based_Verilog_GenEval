@@ -1,0 +1,33 @@
+Sure! Below is a simple Verilog description of the `TopModule` that meets your specified requirements. The module takes a 3-bit input vector and outputs the same vector as a 3-bit output. Additionally, it splits the input vector into three separate 1-bit outputs.
+
+```verilog
+module TopModule (
+    input  wire [2:0] vec,   // 3-bit input vector
+    output wire [2:0] outv,  // 3-bit output vector
+    output wire o2,          // Output for vec[2]
+    output wire o1,          // Output for vec[1]
+    output wire o0           // Output for vec[0]
+);
+
+    // Assign the 3-bit output directly from the input vector
+    assign outv = vec;
+
+    // Split the 3-bit input vector into individual 1-bit outputs
+    assign o0 = vec[0]; // LSB
+    assign o1 = vec[1];
+    assign o2 = vec[2]; // MSB
+
+endmodule
+```
+
+### Explanation:
+1. **Input and Output Declaration:**
+   - The input `vec` is declared as a 3-bit wide wire.
+   - The output `outv` is also declared as a 3-bit wide wire.
+   - The outputs `o2`, `o1`, and `o0` are declared as individual 1-bit wide wires corresponding to the individual bits of the input vector.
+
+2. **Output Assignments:**
+   - `assign outv = vec;` directly connects the output vector to the input vector, producing the same 3-bit output.
+   - The individual outputs `o0`, `o1`, and `o2` are assigned the corresponding bits of the input vector. Here, `o0` gets the least significant bit (LSB), `o1` gets the middle bit, and `o2` gets the most significant bit (MSB).
+
+This module can be synthesized in hardware and should function as intended based on your specifications. If you have any more requirements or modifications, feel free to ask!

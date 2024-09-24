@@ -1,0 +1,95 @@
+Certainly! To implement the `TopModule` for the provided finite-state machine (FSM) with one-hot encoding, we will derive the state transition and output logic based on the transitions specified.
+
+### State Definition
+
+The states are defined as follows using one-hot encoding:
+- `A` (000001)
+- `B` (000010)
+- `C` (000100)
+- `D` (001000)
+- `E` (010000)
+- `F` (100000)
+
+### State Transition Logic
+
+Reviewing the transition rules for each state, you can derive the next state based on the current state and inputs `w`:
+
+1. **State A (000001)**:
+   - On input `1` -> go to B (000010)
+   - On input `0` -> stay in A (000001)
+
+2. **State B (000010)**:
+   - On input `1` -> go to C (000100)
+   - On input `0` -> go to D (001000)
+
+3. **State C (000100)**:
+   - On input `1` -> go to E (010000)
+   - On input `0` -> go to D (001000)
+
+4. **State D (001000)**:
+   - On input `1` -> go to F (100000)
+   - On input `0` -> go to A (000001)
+
+5. **State E (010000)**:
+   - On input `1` -> stay in E (010000)
+   - On input `0` -> go to D (001000)
+
+6. **State F (100000)**:
+   - On input `1` -> go to C (000100)
+   - On input `0` -> go to D (001000)
+
+### Output Logic
+
+You need to derive the outputs `Y1` and `Y3` based on the current state. We can see from the state definitions:
+- `Y1` (output of state flip-flop y[1]) is active when the FSM is in state B (000010) or C (000100).
+- `Y3` (output of state flip-flop y[3]) is active when the FSM is in state D (001000) or F (100000).
+
+### Implementation
+
+Using this analysis, we can write the RTL code for `TopModule` in Verilog:
+
+```verilog
+module TopModule (
+    input  [5:0] y,
+    input        w,
+    output       Y1,
+    output       Y3
+);
+
+// Condition for Y1 to be high (active) when in states B (y[1]) or C (y[2])
+assign Y1 = y[1] | y[2]; // B or C
+
+// Condition for Y3 to be high (active) when in states D (y[3]) or F (y[5])
+assign Y3 = y[3] | y[5]; // D or F
+
+// Next state logic for one-hot encoding
+always @(*) begin
+    case (y)
+        6'b000001: begin // State A
+            next_state = (w) ? 6'b000010 : 6'b000001; // B or A
+        end
+        6'b000010: begin // State B
+            next_state = (w) ? 6'b000100 : 6'b001000; // C or D
+        end
+        6'b000100: begin // State C
+            next_state = (w) ? 6'b010000 : 6'b001000; // E or D
+        end
+        6'b001000: begin // State D
+            next_state = (w) ? 6'b100000 : 6'b000001; // F or A
+        end
+        6'b010000: begin // State E
+            next_state = (w) ? 6'b010000 : 6'b001000; // E or D
+        end
+        6'b100000: begin // State F
+            next_state = (w) ? 6'b000100 : 6'b001000; // C or D
+        end
+        default: next_state = 6'b000001; // Reset to state A
+    endcase
+end
+
+endmodule
+```
+
+### Summary
+
+This Verilog module implements the required finite-state machine with specified state transition and output conditions based on the one-hot encoding provided. The outputs `Y1` and `Y3` reflect the active states specified in the requirements. Ensure to complete the state transition logic with appropriate flip-flops in a larger design for state register functionality.

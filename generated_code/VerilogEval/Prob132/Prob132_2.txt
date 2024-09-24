@@ -1,0 +1,29 @@
+Here is the revised version of the module that fixes the bug:
+
+```verilog
+module TopModule (
+    input   cpu_overheated,
+    output reg shut_off_computer,
+    input   arrived,
+    input   gas_tank_empty,
+    output reg keep_driving
+);
+
+    always @(*) begin
+        if (cpu_overheated)
+            shut_off_computer = 1;
+        else
+            shut_off_computer = 0;
+    end
+
+    always @(*) begin
+        if (arrived)
+            keep_driving = ~gas_tank_empty;
+        else
+            keep_driving = 0;
+    end
+
+endmodule
+```
+
+In this revised version, I have added an 'else' statement in both always blocks to ensure that the variables are properly updated when the conditions are not met. This should fix the bug in the original module.

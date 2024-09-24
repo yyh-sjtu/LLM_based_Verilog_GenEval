@@ -1,0 +1,58 @@
+Certainly! Below is a Verilog implementation of a 64-bit arithmetic shift register with synchronous load functionality, capable of shifting both left and right based on the `amount` input.
+
+```verilog
+module advshift (
+    input clk,
+    input load,
+    input ena,
+    input [1:0] amount,
+    input [63:0] data,
+    output reg [63:0] q
+);
+
+always @(posedge clk) begin
+    if (load) begin
+        // Load the data when load signal is high
+        q <= data;
+    end else if (ena) begin
+        // Perform shifting based on the amount
+        case (amount)
+            2'b00: q <= q << 1;   // Shift left by 1 bit
+            2'b01: q <= q << 8;   // Shift left by 8 bits
+            2'b10: q <= q >> 1;   // Shift right by 1 bit (arithmetic right shift)
+            2'b11: q <= q >> 8;   // Shift right by 8 bits (arithmetic right shift)
+            default: q <= q;      // No operation (optional case)
+        endcase
+    end
+end
+
+endmodule
+```
+
+### Explanation:
+
+1. **Module Definition**:
+    - The module named `advshift` takes several inputs: 
+        - `clk` for the clock signal.
+        - `load` which, when high, loads the data into the shift register.
+        - `ena` enables the shifting operation.
+        - `amount` determines how many bits to shift and in what direction.
+        - `data` is the input data to be loaded into the register.
+    - The output `q` is a 64-bit register that holds the current value of the shift register.
+
+2. **Always Block**:
+    - The `always @(posedge clk)` block triggers on the rising edge of the clock.
+    - If `load` is high, the data is loaded directly into `q`.
+    - If `ena` is high (and `load` is low), the shifting operation is performed based on the value of `amount` using a case statement.
+
+3. **Shifting Logic**:
+    - Using bitwise shift operators:
+        - For `2'b00`, it performs a left shift by 1.
+        - For `2'b01`, it performs a left shift by 8.
+        - For `2'b10`, it performs an arithmetic right shift by 1.
+        - For `2'b11`, it performs an arithmetic right shift by 8.
+
+4. **Default Case**:
+    - An optional default case is included, which simply retains the current value of `q` if none of the specified conditions are met.
+
+This design follows synchronous logic principles and utilizes arithmetic shifting appropriate for handling unsigned binary values. Make sure to synthesize and test it in your target hardware environment!

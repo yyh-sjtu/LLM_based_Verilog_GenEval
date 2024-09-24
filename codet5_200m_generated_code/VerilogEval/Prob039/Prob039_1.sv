@@ -1,0 +1,12 @@
+module TopModule (
+	input a,
+	input b,
+	input sel_b1,
+	input sel_b2,
+	output out_assign,
+	output out_always
+);
+    assign out_always = (sel_b1)? b : 1'bz;
+    assign out_assign = a? b : 1'bz;
+endmodule
+

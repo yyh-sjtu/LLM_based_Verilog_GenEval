@@ -1,0 +1,49 @@
+Certainly! Below is an implementation of a Verilog module named `TopModule`. This module implements a 10-bit counter that counts from 0 to 999, with a synchronous reset.
+
+### Verilog Code for TopModule
+
+```verilog
+module TopModule (
+    input  wire clk,       // Clock input
+    input  wire reset,     // Synchronous reset input
+    output reg  [9:0] q    // 10-bit output for the counter
+);
+
+    // Counter parameter
+    parameter MAX_COUNT = 10'd999;
+
+    // Always block for synchronous logic
+    always @(posedge clk) begin
+        if (reset) begin
+            // Reset the counter to 0
+            q <= 10'b0;
+        end else begin
+            // Increment the counter unless it has reached the maximum
+            if (q < MAX_COUNT) begin
+                q <= q + 1'b1;
+            end else begin
+                q <= 10'b0; // Reset to 0 if it exceeds 999
+            end
+        end
+    end
+
+endmodule
+```
+
+### Explanation:
+
+1. **Module Declaration**: The module `TopModule` has an input clock `clk`, a synchronous reset `reset`, and a 10-bit output `q`.
+
+2. **Parameter MAX_COUNT**: Defines a constant `MAX_COUNT` which holds the maximum value for the counter (999 in this case).
+
+3. **Always Block**: 
+   - Triggered on the positive edge of `clk`.
+   - If `reset` is high, the counter `q` is reset to 0.
+   - If `reset` is not active and the counter `q` is less than `MAX_COUNT`, it increments `q`. 
+   - If `q` equals `MAX_COUNT`, it resets `q` back to 0 on the next clock cycle.
+
+4. **Synchronous Reset Behavior**: The reset is active high and synchronous, meaning that it takes effect on the clock edge.
+
+### Notes:
+- The counter can hold values from 0 to 999, fitting within the 10-bit constraint (as 10 bits can represent values from 0 to 1023).
+- Make sure to use this module in a simulation environment or on an FPGA to observe its functionality.

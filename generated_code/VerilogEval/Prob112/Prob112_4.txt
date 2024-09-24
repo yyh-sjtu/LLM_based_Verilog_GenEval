@@ -1,0 +1,40 @@
+Certainly! Below is a SystemVerilog implementation for a 4-bit priority encoder module named `TopModule`. The module takes a 4-bit input and produces a 2-bit output representing the position of the highest priority input bit (the first high bit). If none of the input bits are high, the output will be zero.
+
+Here is the implementation:
+
+```systemverilog
+module TopModule (
+    input logic [3:0] in, // 4-bit input
+    output logic [1:0] pos // 2-bit output
+);
+
+    always_comb begin
+        // Default output if no bits are high
+        pos = 2'b00;
+
+        // Check the input bits starting from the highest priority
+        if (in[3]) begin
+            pos = 2'b11; // Bit 3 is first (highest)
+        end else if (in[2]) begin
+            pos = 2'b10; // Bit 2 is first
+        end else if (in[1]) begin
+            pos = 2'b01; // Bit 1 is first
+        end else if (in[0]) begin
+            pos = 2'b00; // Bit 0 is first
+        end
+        // If all bits are low, pos remains 2'b00 (no action needed)
+    end
+
+endmodule
+```
+
+### Explanation:
+1. **Module Declaration**: The module `TopModule` defines two ports: a 4-bit input `in` and a 2-bit output `pos`.
+
+2. **Combinational Logic**: The `always_comb` block is used to describe combinational logic:
+   - The output `pos` is initialized to `2'b00`, which is the default when none of the input bits are high.
+   - The logic checks the bits in decreasing order of priority (from bit 3 to bit 0). When it finds the first bit that is high, it sets `pos` to the corresponding binary value.
+
+3. **Output**: The output `pos` provides the position of the first high bit, fulfilling the requirements of a priority encoder. If all bits are low, `pos` remains at `2'b00`, indicating that there is no active input.
+
+This implementation efficiently encodes the priority of the input bits in a straightforward manner. You can simulate or synthesize this module in an RTL design environment to verify its functionality.

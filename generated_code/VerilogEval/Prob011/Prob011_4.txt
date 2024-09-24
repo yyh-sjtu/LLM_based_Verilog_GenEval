@@ -1,0 +1,15 @@
+Sure, here is the Verilog code for the TopModule implementing a NOR gate:
+
+```verilog
+module TopModule(
+    input a,
+    input b,
+    output out
+);
+
+assign out = ~(a | b);
+
+endmodule
+```
+
+This module takes in two inputs, a and b, and outputs the result of a NOR operation on them, which is the logical negation of the OR operation between a and b.

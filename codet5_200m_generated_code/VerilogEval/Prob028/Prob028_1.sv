@@ -1,0 +1,8 @@
+module TopModule (
+	input d,
+	input ena,
+	output q
+);
+    assign q = d;
+endmodule
+

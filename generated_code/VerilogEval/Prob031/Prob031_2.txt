@@ -1,0 +1,17 @@
+Sure, here is an example implementation of the TopModule with a D flip-flop:
+
+```verilog
+module TopModule(
+    input clk,
+    input d,
+    output reg q
+);
+
+always @(posedge clk) begin
+    q <= d;
+end
+
+endmodule
+```
+
+This module implements a D flip-flop where the output q takes on the value of the input d on the positive edge of the clock signal. Let me know if you have any other requirements or questions.

@@ -1,0 +1,32 @@
+Sure! Below is a Verilog implementation of the `TopModule`. This module includes an AND gate that operates using both an `assign` statement and a combinational `always` block.
+
+```verilog
+module TopModule (
+    input  wire a,
+    input  wire b,
+    output wire out_assign,
+    output reg  out_alwaysblock
+);
+
+// Continuous assignment using assign statement for AND operation
+assign out_assign = a & b;
+
+// Combinational logic using always block for AND operation
+always @(*) begin
+    out_alwaysblock = a & b;
+end
+
+endmodule
+```
+
+### Explanation
+1. **Module Declaration**: The module is named `TopModule` and has two input ports (`a` and `b`) of type `wire`, as well as two output ports (`out_assign` of type `wire` and `out_alwaysblock` of type `reg`).
+
+2. **Assign Statement**: 
+   - `assign out_assign = a & b;` continuously assigns the result of the AND operation between `a` and `b` to `out_assign`.
+
+3. **Always Block**: 
+   - The `always @(*)` block is sensitive to any changes in the inputs `a` and `b`, ensuring that `out_alwaysblock` is updated accordingly whenever there is a change in either input.
+   - Inside the always block, `out_alwaysblock = a & b;` performs the same AND operation.
+
+This design succinctly illustrates how to implement the same functionality using two different methods in Verilog.

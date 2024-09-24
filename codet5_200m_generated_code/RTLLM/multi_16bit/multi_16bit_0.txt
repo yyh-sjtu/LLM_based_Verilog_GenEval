@@ -1,0 +1,50 @@
+module multi_16bit (
+    input clk,
+    input rst_n,
+    input start,
+    input [15:0] ain,
+    input [15:0] bin,
+    output [31:0] yout,
+    output done
+);
+    reg [15:0] ain_reg;
+    reg [15:0] bin_reg;
+    reg [31:0] yout_reg;
+    reg done_reg;
+    always @(posedge clk or negedge rst_n) begin
+        if (!rst_n) begin
+            yout_reg <= 0;
+            done_reg <= 0;
+        end else begin
+            if (start) begin
+                done_reg <= 1;
+                ain_reg <= ain;
+                bin_reg <= bin;
+            end
+        end
+    end
+    always @(posedge clk or negedge rst_n) begin
+        if (!rst_n) begin
+            yout_reg <= 0;
+            done_reg <= 0;
+        end else begin
+            if (start) begin
+                done_reg <= 0;
+                ain_reg <= ain;
+                bin_reg <= bin;
+            end
+        end
+    end
+    always @(posedge clk or negedge rst_n) begin
+        if (!rst_n) begin
+            yout_reg <= 0;
+            done_reg <= 0;
+        end else begin
+            if (start) begin
+                done_reg <= 1;
+                ain_reg <= ain;
+                bin_reg <= bin;
+            end
+        end
+    end
+endmodule

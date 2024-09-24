@@ -1,0 +1,14 @@
+Here is an example of how the TopModule module can be implemented in RTL (Verilog) code:
+
+```verilog
+module TopModule (
+    input in,
+    output out
+);
+
+assign out = in;
+
+endmodule
+```
+
+This simple module assigns the value of the input port 'in' to the output port 'out' combinationaly.

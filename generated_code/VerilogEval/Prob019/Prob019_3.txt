@@ -1,0 +1,23 @@
+Certainly! In digital design, a bubble at the input of an AND gate indicates that the signal is inverted before it reaches the gate. Given this information, we need to implement a module in Verilog called `TopModule` that takes two one-bit inputs, `in1` and `in2`, where `in2` is inverted before being fed into the AND gate with `in1`. The result will be output through the `out` port.
+
+Here’s a simple Verilog implementation of the requested module:
+
+```verilog
+module TopModule (
+    input wire in1,  // One-bit input
+    input wire in2,  // One-bit input
+    output wire out  // One-bit output
+);
+
+    // Declare the output as the AND result of in1 and the inverted in2
+    assign out = in1 & ~in2;  // AND gate with inverted second input
+
+endmodule
+```
+
+### Explanation:
+- The module starts with a port declaration specifying `in1`, `in2`, and `out`.
+- The output `out` is calculated using a continuous assignment statement (`assign`).
+- The expression `in1 & ~in2` means `in1` is ANDed with the negated (inverted) value of `in2`.
+
+This design performs exactly as specified: it takes the two inputs, inverts `in2`, and feeds the result into an AND gate along with `in1`, producing the output `out`.

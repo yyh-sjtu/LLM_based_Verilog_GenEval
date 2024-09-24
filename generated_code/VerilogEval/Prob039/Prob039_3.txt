@@ -1,0 +1,25 @@
+Sure, here is the implementation of the TopModule with the specified interface:
+
+```verilog
+module TopModule(
+    input a,
+    input b,
+    input sel_b1,
+    input sel_b2,
+    output out_assign,
+    output out_always
+);
+
+assign out_assign = (sel_b1 & sel_b2) ? b : a;
+
+always @(*) begin
+    if (sel_b1 & sel_b2)
+        out_always = b;
+    else
+        out_always = a;
+end
+
+endmodule
+```
+
+This module implements a 2-to-1 mux that selects between inputs a and b based on the values of sel_b1 and sel_b2. The `out_assign` output is assigned the value of b when both sel_b1 and sel_b2 are true, otherwise, it is assigned the value of a. Similarly, the `out_always` output is determined using a procedural if statement inside the always block.

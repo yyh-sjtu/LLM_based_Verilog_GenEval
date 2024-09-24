@@ -1,0 +1,18 @@
+Below is the RTL code implementing the TopModule as described:
+
+```verilog
+module TopModule (
+    input [15:0] in,
+    output reg [7:0] out_lo,
+    output reg [7:0] out_hi
+);
+
+always @* begin
+    out_lo = in[7:0];
+    out_hi = in[15:8];
+end
+
+endmodule
+```
+
+This Verilog module takes a 16-bit input 'in' and splits it into the lower byte 'out_lo' (bits 7:0) and the upper byte 'out_hi' (bits 15:8) using combinational logic. The 'out_lo' and 'out_hi' outputs are assigned the corresponding bits from the input 'in'.

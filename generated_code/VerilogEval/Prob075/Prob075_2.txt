@@ -1,0 +1,61 @@
+Certainly! Below is an implementation of the `TopModule` in Verilog that meets the specified requirements for a two-bit saturating counter:
+
+```verilog
+module TopModule (
+    input  clk,
+    input  areset,    // Asynchronous reset
+    input  train_valid,
+    input  train_taken,
+    output reg [1:0] state  // 2-bit output for the counter
+);
+
+    // Define states for the counter
+    parameter S0 = 2'b00;  // 0
+    parameter S1 = 2'b01;  // 1 (weakly not-taken)
+    parameter S2 = 2'b10;  // 2
+    parameter S3 = 2'b11;  // 3 (maximum)
+
+    // Asynchronous reset and counter logic
+    always @(posedge clk or posedge areset) begin
+        if (areset) begin
+            state <= S1;  // Reset to weakly not-taken (2'b01)
+        end else if (train_valid) begin
+            if (train_taken) begin
+                // Increment
+                if (state < S3) begin
+                    state <= state + 1;
+                end
+            end else begin
+                // Decrement
+                if (state > S0) begin
+                    state <= state - 1;
+                end
+            end
+        end
+    end
+
+endmodule
+```
+
+### Explanation:
+
+1. **Inputs and Outputs**:
+   - The module has four inputs: `clk`, `areset`, `train_valid`, and `train_taken`, with the output `state` being a 2-bit register.
+   
+2. **State Definitions**:
+   - Four parameters (`S0`, `S1`, `S2`, `S3`) represent the counter states (0 to 3).
+
+3. **Asynchronous Reset**:
+   - The `always` block is triggered on the rising edge of `clk` or the rising edge of `areset`.
+   - If `areset` is high, the counter resets to `S1` (2'b01).
+
+4. **Counter Logic**:
+   - If `train_valid` is high:
+     - It checks if `train_taken` is high. If yes, it increments the counter but limits the maximum value to `S3`.
+     - If `train_taken` is low, it decrements the counter but limits the minimum value to `S0`.
+   - If `train_valid` is low, the counter remains unchanged.
+
+5. **Saturation Behavior**:
+   - The increment and decrement logic are designed to ensure the counter saturates at 3 (maximum) and 0 (minimum).
+
+You can simulate this design to verify that it behaves as required!

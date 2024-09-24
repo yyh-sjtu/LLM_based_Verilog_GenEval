@@ -1,0 +1,12 @@
+module TopModule (
+	input [7:0] in,
+	output [7:0] out
+);
+    parameter WIDTH = 8;
+    reg [7:0] out;
+    always @ (in)
+    begin
+        out[WIDTH-1:0] <= in[WIDTH-2:0];
+    end
+endmodule
+

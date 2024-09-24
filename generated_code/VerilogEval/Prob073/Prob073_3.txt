@@ -1,0 +1,57 @@
+Certainly! Below is a Verilog implementation of the `TopModule`. This module has 16 D flip-flops that are controlled by the `byteena` inputs for selecting which bytes of the `d` input to write to. The output `q` will reflect the current values stored in the flip-flops.
+
+```verilog
+module TopModule (
+    input clk,
+    input resetn,
+    input [1:0] byteena,
+    input [15:0] d,
+    output reg [15:0] q
+);
+
+// 16 D flip-flops
+reg [15:0] dff;
+
+always @(posedge clk) begin
+    if (!resetn) begin
+        // Synchronous active-low reset
+        dff <= 16'b0;
+    end else begin
+        // Update flip-flops based on byteena
+        if (byteena[0]) begin // Write to lower byte (D[7:0])
+            dff[7:0] <= d[7:0];
+        end
+        if (byteena[1]) begin // Write to upper byte (D[15:8])
+            dff[15:8] <= d[15:8];
+        end
+    end
+end
+
+// Assign internal register to output
+always @(*) begin
+    q = dff;
+end
+
+endmodule
+```
+
+### Explanation:
+1. **Inputs and Outputs**:
+   - `clk`: Clock signal for synchronization.
+   - `resetn`: Active-low synchronous reset signal.
+   - `byteena`: A 2-bit signal used to determine which bytes of the input data should be written to the flip-flops.
+   - `d`: 16-bit input data that will be stored in the flip-flops.
+   - `q`: A 16-bit output that holds the current values of the flip-flops.
+
+2. **Registers**:
+   - `dff`: A 16-bit register that holds the state of the D flip-flops.
+
+3. **Sequential Logic**:
+   - The `always @(posedge clk)` block describes the behavior on the rising edge of the clock.
+   - It checks if `resetn` is low, and if so, it resets all the bits of `dff` to 0.
+   - Depending on the `byteena` signals, it updates the appropriate byte of `dff` with the corresponding bytes from `d`.
+
+4. **Combinatorial Logic**:
+   - The second `always @(*)` block continuously assigns the value of `dff` to the output `q`. This ensures `q` always reflects the current state of the flip-flops.
+
+This design captures the functionality as described, implementing a simple byte-enabled write mechanism to a register bank using D flip-flops.

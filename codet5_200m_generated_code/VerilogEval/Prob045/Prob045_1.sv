@@ -1,0 +1,23 @@
+module TopModule (
+	input clk,
+	input [7:0] in,
+	input [7:0] anyedge
+);
+    reg [7:0] code;
+    always @ (posedge clk)
+    begin
+        code <= in;
+    end
+    always @ (*)
+    begin
+        code[0] <= anyedge;
+        code[1] <= in[1];
+        code[2] <= in[2];
+        code[3] <= in[3];
+        code[4] <= in[4];
+        code[5] <= in[5];
+        code[6] <= in[6];
+        code[7] <= in[7];
+    end
+endmodule
+

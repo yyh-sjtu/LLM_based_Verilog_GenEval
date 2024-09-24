@@ -1,0 +1,132 @@
+
+module fsm(
+    input wire IN,
+    input wire CLK,
+    input wire RST,
+    output reg MATCH
+);
+
+// Define FSM states
+typedef enum logic [3:0] {
+    S0,
+    S1,
+    S2,
+    S3,
+    S4,
+    S5,
+    S6,
+    S7,
+    S8
+} state_t;
+
+// Define state register
+reg [3:0] state, next_state;
+
+// Define output register
+reg [3:0] input_history;
+
+// Define match condition flags
+reg match_flag_1, match_flag_2;
+reg [3:0] match_index;
+
+// State transition logic
+always @(*) begin
+    case(state)
+        S0: begin
+            if(IN == 1)
+                next_state = S1;
+            else
+                next_state = S0;
+        end
+        S1: begin
+            if(IN == 0)
+                next_state = S2;
+            else
+                next_state = S0;
+        end
+        S2: begin
+            if(IN == 0)
+                next_state = S3;
+            else
+                next_state = S0;
+        end
+        S3: begin
+            if(IN == 1)
+                next_state = S4;
+            else
+                next_state = S0;
+        end
+        S4: begin
+            if(IN == 1)
+                next_state = S5;
+            else
+                next_state = S0;
+        end
+        S5: begin
+            if(IN == 0)
+                next_state = S6;
+            else
+                next_state = S0;
+        end
+        S6: begin
+            if(IN == 0)
+                next_state = S7;
+            else
+                next_state = S0;
+        end
+        S7: begin
+            if(IN == 1)
+                next_state = S8;
+            else
+                next_state = S0;
+        end
+        S8: begin
+            if(IN == 1)
+                next_state = S5;
+            else
+                next_state = S0;
+        end
+        default: next_state = S0;
+    endcase
+end
+
+// State register update
+always @(posedge CLK or posedge RST) begin
+    if(RST)
+        state <= S0;
+    else
+        state <= next_state;
+end
+
+// Output logic
+always @(state or IN) begin
+    case(state)
+        S4, S8: begin
+            match_flag_1 = 1;
+            match_index = input_history;
+        end
+        S5: begin
+            match_flag_2 = 1;
+            match_index = input_history;
+        end
+        default: begin
+            match_flag_1 = 0;
+            match_flag_2 = 0;
+        end
+    endcase
+    
+    if(match_flag_1 && (match_index == input_history || match_index == input_history - 4))
+        MATCH = 1;
+    else if(match_flag_2 && (match_index == input_history || match_index == input_history - 4 || match_index == input_history - 8))
+        MATCH = 1;
+    else
+        MATCH = 0;
+end
+
+// Input history update
+always @(posedge CLK) begin
+    if(state != S0)
+        input_history <= input_history + 1;
+end
+
+endmodule

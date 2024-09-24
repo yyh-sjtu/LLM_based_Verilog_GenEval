@@ -1,0 +1,58 @@
+Here is a simple implementation of the `TopModule` in Verilog that satisfies the specifications you provided. This module controls the heater, air conditioner, and fan based on the different inputs.
+
+```verilog
+module TopModule (
+    input wire mode,        // 0 for cooling mode, 1 for heating mode
+    input wire too_cold,   // 1 if it's too cold
+    input wire too_hot,    // 1 if it's too hot
+    input wire fan_on,     // 1 if user wants the fan on
+    output reg heater,     // 1 to turn on the heater
+    output reg aircon,     // 1 to turn on the air conditioner
+    output reg fan         // 1 to turn on the fan
+);
+
+    always @(*) begin
+        // Default outputs
+        heater = 0;
+        aircon = 0;
+        fan = 0;
+
+        // Manage fan request
+        if (fan_on) begin
+            fan = 1; // Turn on fan if requested by user
+        end else if (mode) begin
+            // Heating mode
+            if (too_cold) begin
+                heater = 1; // Turn on heater if it's too cold
+                fan = 1;    // Turn on fan to circulate air
+            end
+        end else begin
+            // Cooling mode
+            if (too_hot) begin
+                aircon = 1; // Turn on air conditioner if it's too hot
+                fan = 1;    // Turn on fan to circulate air
+            end
+        end
+    end
+
+endmodule
+```
+
+### Explanation:
+1. **Inputs:**
+   - `mode`: Determines if the module is in heating mode (`mode = 1`) or cooling mode (`mode = 0`).
+   - `too_cold`: Indicates if the temperature is below the threshold (1 if so).
+   - `too_hot`: Indicates if the temperature is above the threshold (1 if so).
+   - `fan_on`: A user command to turn the fan on regardless of the heating/cooling conditions.
+
+2. **Outputs:**
+   - `heater`: Turns on the heater when necessary.
+   - `aircon`: Turns on the air conditioner when necessary.
+   - `fan`: Activates the fan to circulate air when the heater or air conditioner is on, or if the user requests the fan.
+
+3. **Behavior:**
+   - The `fan` is turned on if the user requests it (`fan_on == 1`).
+   - In heating mode, the heater is turned on if it is too cold, and the fan is activated to circulate the air.
+   - In cooling mode, the air conditioner is turned on if it is too hot, with the fan also being activated.
+
+This structure should effectively implement the desired thermostat functionality according to the provided specifications.

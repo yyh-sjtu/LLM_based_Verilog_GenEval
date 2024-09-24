@@ -1,0 +1,93 @@
+Certainly! Let's implement the ABRO FSM (Finite State Machine) as you described. This FSM has four states and reacts to the inputs `a` and `b`, outputting `1` whenever both have been received, regardless of the order. 
+
+Here's the complete Verilog implementation:
+
+```verilog
+module abro(
+    input clk,
+    input reset,
+    input a,
+    input b,
+    output reg z
+);
+
+// State definitions
+parameter IDLE = 2'b00,
+          SA   = 2'b01,
+          SB   = 2'b10,
+          SAB  = 2'b11;
+
+// State registers
+reg [1:0] cur_state, next_state;
+
+// State transition logic
+always @(*) begin
+    case (cur_state)
+        IDLE: begin
+            if (a) 
+                next_state = SA;
+            else if (b)
+                next_state = SB;
+            else 
+                next_state = IDLE;
+        end
+        SA: begin
+            if (b) 
+                next_state = SAB; // Transition to SAB if b is received
+            else 
+                next_state = SA; // Stay in SA if only a is high
+        end
+        SB: begin
+            if (a) 
+                next_state = SAB; // Transition to SAB if a is received
+            else 
+                next_state = SB; // Stay in SB if only b is high
+        end
+        SAB: begin
+            // Once in SAB, we stay here until reset
+            next_state = SAB;
+        end
+        default: next_state = IDLE; // Default case
+    endcase
+end
+
+// Output logic
+always @(*) begin
+    if (cur_state == SAB) 
+        z = 1;    // Output high when in SAB state
+    else 
+        z = 0;    // Output low otherwise
+end
+
+// State update logic
+always @(posedge clk or posedge reset) begin
+    if (reset) 
+        cur_state <= IDLE; // Reset to IDLE state
+    else 
+        cur_state <= next_state; // Update current state to next state
+end
+
+endmodule
+```
+
+### Explanation of the code:
+
+1. **State Definitions**: Each state is defined using a parameter for clarity.
+   - `IDLE`: Initial state; no inputs received.
+   - `SA`: State indicating that input `a` has been received.
+   - `SB`: State indicating that input `b` has been received.
+   - `SAB`: State indicating that both inputs have been received, either simultaneously or non-simultaneously.
+
+2. **State Transition Logic**: 
+   - The `always @(*)` block defines how the state transitions occur based on the current state and inputs. 
+   - The FSM moves to `SA` when `a` is received, `SB` when `b` is received, and it transitions to `SAB` when it detects that both `a` and `b` have been received.
+
+3. **Output Logic**: 
+   - The output `z` is high (`1`) only when the FSM is in the `SAB` state.
+
+4. **State Update Logic**: 
+   - The `always @(posedge clk or posedge reset)` block updates the current state on the rising edge of the clock or resets it if a reset signal is received.
+
+### Notes:
+- This design assumes that the inputs can change asynchronously around the clock edge; smoother operation might require debouncing or synchronisation depending on the actual signal nature you’re working with.
+- The FSM is synchronous and will only check the input at the clock's rising edge, making it suitable for digital design.

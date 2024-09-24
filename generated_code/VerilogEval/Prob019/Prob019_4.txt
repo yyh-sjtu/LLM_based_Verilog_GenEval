@@ -1,0 +1,18 @@
+Here is the Verilog implementation of the TopModule:
+
+```verilog
+module TopModule(
+    input in1,
+    input in2,
+    output out
+);
+
+    wire n_in2; // inverted input in2
+
+    assign n_in2 = ~in2;
+    assign out = in1 & n_in2;
+
+endmodule
+```
+
+This module defines an AND gate with one of the inputs inverted, as specified in the circuit description. The output of the AND gate is connected to the 'out' output port. Feel free to let me know if you need any further modifications or assistance.

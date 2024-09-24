@@ -1,0 +1,32 @@
+As a professional RTL designer, I would first start by creating a Verilog module for the TopModule as described. Here is a possible implementation for the module:
+
+```verilog
+module TopModule (
+    input clk,
+    input shift_ena,
+    input count_ena,
+    input data,
+    output reg [3:0] q
+);
+
+reg [3:0] shift_reg;
+
+always @ (posedge clk) begin
+    if (shift_ena) begin
+        shift_reg <= {data, shift_reg[3:1]};
+    end
+    if (count_ena) begin
+        shift_reg <= shift_reg - 1;
+    end
+end
+
+assign q = shift_reg;
+
+endmodule
+```
+
+In this implementation, I have created a 4-bit shift register `shift_reg` which is updated based on the `shift_ena` and `count_ena` inputs. When `shift_ena` is high, the `data` input is shifted into the most significant bit of the `shift_reg`. When `count_ena` is high, the value in `shift_reg` is decremented by 1.
+
+This Verilog code implements the desired functionality of a 4-bit shift register that acts as a down counter based on the control inputs. The sequential logic is triggered on the positive edge of the clock signal as specified.
+
+As a professional RTL designer, I would also simulate and synthesize this RTL code to ensure its correctness and functionality before integrating it into the larger system design.

@@ -1,0 +1,106 @@
+To design the `TopModule` that implements the specified finite state machine (FSM) for receiving serial data, we need to define the states, transitions, and logic that will process the incoming serial data based on the specified protocol: start bit, 8 data bits, and a stop bit.
+
+### State Definitions
+- **IDLE**: Waiting for a start bit (logic 0).
+- **RECEIVE**: Collecting the 8 data bits.
+- **CHECK_STOP**: Verifying the stop bit (logic 1).
+
+### Module Implementation
+Below is the Verilog code for the `TopModule`:
+
+```verilog
+module TopModule (
+    input clk,
+    input reset,
+    input in,
+    output reg [7:0] out_byte,
+    output reg done
+);
+
+    // State Encoding
+    typedef enum reg [1:0] {
+        IDLE       = 2'b00,
+        RECEIVE    = 2'b01,
+        CHECK_STOP = 2'b10
+    } state_t;
+
+    state_t current_state, next_state;
+    reg [2:0] bit_count; // Count received bits (0 to 7)
+
+    // State transition
+    always @(posedge clk or posedge reset) begin
+        if (reset) begin
+            current_state <= IDLE;
+            bit_count <= 0;
+            out_byte <= 0;
+            done <= 0;
+        end else begin
+            current_state <= next_state;
+            if (current_state == RECEIVE) begin
+                if (bit_count < 7) begin
+                    bit_count <= bit_count + 1;
+                end
+            end else if (next_state == IDLE) begin
+                bit_count <= 0; // Reset bit count when entering IDLE
+            end
+            // Reset done signal each clock cycle unless it is getting asserted
+            if (next_state == CHECK_STOP) begin
+                done <= 0;
+            end
+        end
+    end
+
+    // Next state logic
+    always @(*) begin
+        // Default values
+        next_state = current_state;
+        done = 0;
+
+        case (current_state)
+            IDLE: begin
+                if (in == 0) begin // Looking for start bit (0)
+                    next_state = RECEIVE;
+                end
+            end
+            
+            RECEIVE: begin
+                if (bit_count == 7) begin // Received all 8 bits
+                    next_state = CHECK_STOP;
+                end
+                // Parallel load incoming bits into out_byte
+                out_byte[bit_count] = in; // Collect bits
+            end
+            
+            CHECK_STOP: begin
+                if (in == 1) begin // Check for stop bit (1)
+                    done = 1; // Assert done signal
+                    next_state = IDLE; // Go back to waiting for start bit
+                end else begin
+                    // If the stop bit is not received, stay in this state
+                    next_state = CHECK_STOP;
+                end
+            end
+            
+            default: begin
+                next_state = IDLE; // Safe state
+            end
+        endcase
+    end
+
+endmodule
+```
+
+### Explanation of the Code
+1. **States and Registers**: 
+   - We define an enumerated type for the states of the FSM (`IDLE`, `RECEIVE`, `CHECK_STOP`).
+   - `bit_count` keeps track of how many data bits have been received so far.
+   - `out_byte` holds the 8-bit data to be output, and `done` indicates when a complete byte has been received.
+
+2. **State Transition Logic**:
+   - The state machine begins in the `IDLE` state. When a start bit is detected (when `in` is `0`), the FSM transitions to the `RECEIVE` state to collect data bits.
+   - In the `RECEIVE` state, the bits are collected into `out_byte`, and the state transitions to `CHECK_STOP` once all 8 bits are received.
+   - The `CHECK_STOP` state verifies whether the next bit is the stop bit (`1`). If it is, the `done` signal is asserted, and the state returns to `IDLE` for the next byte.
+
+3. **Reset Logic**: The FSM responds to an active-high synchronous reset, clearing the current state and outputs upon assertion.
+
+By running this module in simulation with a serial input, it will successfully parse and identify the bytes according to the specified serial communication protocol.

@@ -1,0 +1,38 @@
+Certainly! Based on the truth table provided, we can derive the output function \( f \) in terms of the inputs \( x3, x2, \) and \( x1 \). 
+
+From the truth table, the function \( f \) is `1` for the following input combinations:
+- \( x3 = 0, x2 = 0, x1 = 0 \) (000)
+- \( x3 = 0, x2 = 0, x1 = 1 \) (001)
+- \( x3 = 0, x2 = 1, x1 = 1 \) (011)
+- \( x3 = 1, x2 = 1, x1 = 0 \) (110)
+
+From these combinations, we can construct the logic expression for \( f \) as follows:
+
+\[
+f = \overline{x3} \cdot \overline{x2} \cdot \overline{x1} + \overline{x3} \cdot \overline{x2} \cdot x1 + \overline{x3} \cdot x2 \cdot x1 + x3 \cdot x2 \cdot \overline{x1}
+\]
+
+This can be implemented in Verilog as follows:
+
+```verilog
+module truthtable(
+    input x3,
+    input x2,
+    input x1,
+    output f
+);
+
+    assign f = (~x3 & ~x2 & ~x1) |         // 000
+               (~x3 & ~x2 & x1) |          // 001
+               (~x3 & x2 & x1) |           // 011
+               (x3 & x2 & ~x1);             // 110
+
+endmodule
+```
+
+### Explanation:
+1. **Inputs**: The module has three inputs: `x3`, `x2`, and `x1`.
+2. **Output**: The output `f` is defined by a combinatory logic expression based on the given truth table.
+3. **Logic Operations**: The `assign` statement uses bitwise negation (`~`), conjunction (`&`), and disjunction (`|`) to express the desired output.
+
+You can use this module in a larger design, or simulate it to verify its correctness against the provided truth table.

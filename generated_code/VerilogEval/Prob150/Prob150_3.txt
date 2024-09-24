@@ -1,0 +1,17 @@
+To implement the next-state logic equations and output logic equations for the given Moore state machine, we can analyze the state diagram provided and derive the necessary equations. Here are the equations for the required signals:
+
+```verilog
+// Next-State Logic Equations
+assign B3_next = (state == 10'b1100000000) ? 1'b1 : 1'b0;
+assign S_next = ((state == 10'b0000000001) && (d == 1'b0)) ? 1'b1 : 1'b0;
+assign S1_next = ((state == 10'b0000000010) && (d == 1'b0)) ? 1'b1 : 1'b0;
+assign Count_next = ((state == 10'b1000000000) && (counting == 1'b1) && (done_counting == 1'b0)) ? 1'b1 : 1'b0;
+assign Wait_next = ((state == 10'b1000000000) && (counting == 1'b1) && (done_counting == 1'b1)) ? 1'b1 : 1'b0;
+
+// Output Logic Equations
+assign done = ((state == 10'b1000000000) && (counting == 1'b1) && (done_counting == 1'b1) && (ack == 1'b1)) ? 1'b1 : 1'b0;
+assign counting = (state == 10'b1000000000) ? 1'b1 : 1'b0;
+assign shift_ena = ((state == 10'b0000000010) || (state == 10'b1000000000) || (state == 10'b1100000000)) ? 1'b1 : 1'b0;
+```
+
+These equations should be implemented in your RTL code for the TopModule as described in the interface specified. Remember to replace the placeholders (e.g., `state`, `d`, `done_counting`, `ack`, etc.) with the actual signals used in your design. Also, ensure that proper flip-flops are used to store the current state and propagate the next state accordingly.

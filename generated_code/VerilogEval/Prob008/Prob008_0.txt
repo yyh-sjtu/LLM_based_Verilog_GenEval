@@ -1,0 +1,14 @@
+Sure, here is the RTL code for the TopModule:
+
+```verilog
+module TopModule (
+    input in,
+    output out
+);
+
+assign out = in;
+
+endmodule
+```
+
+This module will assign the value of the input port 'in' to the output port 'out' combinationaly. Let me know if you need any further modifications.

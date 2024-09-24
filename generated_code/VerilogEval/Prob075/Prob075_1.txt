@@ -1,0 +1,64 @@
+Certainly! Below is a Verilog implementation of the `TopModule` which behaves as specified. It implements a two-bit saturating counter that increments and decrements based on the `train_valid` and `train_taken` signals. It also handles an asynchronous reset which initializes the counter to `2'b01`.
+
+```verilog
+module TopModule (
+    input wire clk,
+    input wire areset,
+    input wire train_valid,
+    input wire train_taken,
+    output reg [1:0] state
+);
+
+// State declaration
+initial begin
+    state = 2'b01; // Initialize to weakly not-taken
+end
+
+always @(posedge clk or posedge areset) begin
+    if (areset) begin
+        state <= 2'b01; // Reset the counter to weakly not-taken
+    end else if (train_valid) begin
+        if (train_taken) begin
+            // Increment state, saturate at 3
+            if (state < 2'b11) begin
+                state <= state + 1;
+            end
+        end else begin
+            // Decrement state, saturate at 0
+            if (state > 2'b00) begin
+                state <= state - 1;
+            end
+        end
+    end
+    // Otherwise, state remains unchanged
+end
+
+endmodule
+```
+
+### Explanation of the Code:
+
+1. **Inputs and Outputs**: 
+   - `clk`: The clock signal.
+   - `areset`: Asynchronous reset.
+   - `train_valid`: Control signal for valid training.
+   - `train_taken`: Indicates whether the training should increment or decrement the counter.
+   - `state`: A 2-bit output representing the current counter value.
+
+2. **Initial State**: 
+   - The counter is initialized to `2'b01`, which represents a weakly not-taken state.
+
+3. **Always Block**:
+   - The block triggers on the positive edge of the clock or on the positive edge of `areset`.
+   - If `areset` is high, the state is reset to `2'b01`.
+   - If `train_valid` is asserted, then the counter either increments or decrements based on the value of `train_taken`:
+     - If `train_taken` is high, the counter increments but saturates at `3` (i.e., `2'b11`).
+     - If `train_taken` is low, the counter decrements but does not go below `0` (i.e., `2'b00`).
+
+4. **Saturation Logic**: 
+   - The increments and decrements are controlled using comparisons to ensure that the counter remains within the range `[0, 3]`.
+
+5. **State Holding**: 
+   - If `train_valid` is `0`, the counter retains its value, as required.
+
+This design meets the specifications you provided for the saturating counter behavior.

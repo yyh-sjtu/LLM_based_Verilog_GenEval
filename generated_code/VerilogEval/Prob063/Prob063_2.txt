@@ -1,0 +1,48 @@
+Certainly! Below is the Verilog code for the `TopModule` that implements a 4-bit shift register with down counting functionality, based on your specified interface. The module utilizes shift operation when `shift_ena` is asserted, and decrements the register when `count_ena` is asserted:
+
+```verilog
+module TopModule (
+    input  clk,
+    input  shift_ena,
+    input  count_ena,
+    input  data,
+    output reg [3:0] q
+);
+    
+    // Initialize q to zero
+    initial begin
+        q = 4'b0000;
+    end
+
+    always @(posedge clk) begin
+        if (shift_ena) begin
+            // Shift in the new data MSB first
+            q <= {data, q[3:1]};
+        end else if (count_ena) begin
+            // Down count
+            q <= q - 1'b1;
+        end
+        // If both are enabled, behavior is unspecified
+    end
+endmodule
+```
+
+### Explanation:
+
+1. **Inputs and Outputs**:
+   - `clk`: Clock signal, triggering the register updates on the positive edge.
+   - `shift_ena`: When high, shifts in a new bit (`data`).
+   - `count_ena`: When high, decrements the current value of the register.
+   - `data`: The bit to be shifted in.
+   - `q`: The 4-bit output register that stores the current state.
+
+2. **Initialization**:
+   - The register `q` is initialized to zero at the start using an `initial` block.
+
+3. **Always Block**:
+   - The sequential logic is implemented in the `always @(posedge clk)` block, which executes every clock cycle.
+   - If `shift_ena` is high, it shifts in the `data` bit into the most significant position, while retaining the remaining bits.
+   - If `count_ena` is high, it decrements the value of `q`.
+   - The behavior when both `shift_ena` and `count_ena` are high is unspecified per your specifications.
+
+This module will correctly implement the desired functionality of both shifting in data and decrementing the count, depending on which control signal is asserted.

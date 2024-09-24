@@ -1,0 +1,26 @@
+Certainly! Below is the implementation of a D flip-flop in Verilog as a module named `TopModule`. This module has three input ports: `clk`, `d`, and `q`. The output `q` reflects the value of `d` at the rising edge of `clk`.
+
+### Verilog Implementation
+
+```verilog
+module TopModule (
+    input clk,  // Clock input
+    input d,    // Data input
+    output reg q // Output
+);
+
+    // On the rising edge of the clock, assign the value of d to q
+    always @(posedge clk) begin
+        q <= d;
+    end
+
+endmodule
+```
+
+### Explanation:
+- **Module Definition**: The module is defined with the name `TopModule` and includes an input port `clk`, an input port `d`, and an output port `q` which is declared as `reg` because it will hold the state of the flip-flop.
+- **Always Block**: The flip-flop behavior is implemented using an always block that is triggered on the positive edge of the `clk` signal.
+- **Non-blocking Assignment**: The `<=` operator is used for the assignment of `d` to `q`, making it a non-blocking assignment which is suitable for sequential logic.
+
+### Usage:
+This module can be instantiated in a larger design, and you can connect the `d` input to the desired data signal and `clk` input to your clock signal. The output `q` will hold the value of `d` on each rising edge of `clk`.

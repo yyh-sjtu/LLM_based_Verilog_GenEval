@@ -1,0 +1,10 @@
+module TopModule (
+	input a,
+	input b,
+	input c,
+	input d,
+	output out
+);
+    assign out = a? 1'b1 : 1'bz;
+endmodule
+

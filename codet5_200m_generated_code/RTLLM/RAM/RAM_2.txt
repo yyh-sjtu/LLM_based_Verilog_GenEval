@@ -1,0 +1,26 @@
+module RAM (
+	input clk,
+	input rst_n,
+	input write_en,
+	input [2:0] write_addr,
+	input [5:0] write_data,
+	input read_en,
+	input [2:0] read_addr,
+	output reg [5:0] read_data
+);
+    reg [5:0] ram [0:8];
+    always @(posedge clk or negedge rst_n)
+    begin
+        if (~rst_n)
+            ram[write_addr] <= 0;
+        else if (write_en)
+            ram[write_addr] <= write_data;
+    end
+    always @(posedge clk or negedge rst_n)
+    begin
+        if (~rst_n)
+            read_data <= 0;
+        else if (read_en)
+            read_data <= ram[read_addr];
+    end
+endmodule

@@ -1,0 +1,41 @@
+
+module adder_8bit (
+    input [7:0] a,
+    input [7:0] b,
+    input cin,
+    output reg [7:0] sum,
+    output reg cout
+);
+
+reg c;
+reg [7:0] carry;
+
+// First full adder
+full_adder fa0(a[0], b[0], cin, sum[0], carry[0]);
+
+// Remaining full adders
+genvar i;
+generate
+  for(i = 1; i < 8; i=i+1) begin : adder_loop
+    full_adder fa(a[i], b[i], carry[i-1], sum[i], carry[i]);
+  end
+endgenerate
+
+assign cout = carry[7];
+
+endmodule
+
+module full_adder (
+    input a,
+    input b,
+    input cin,
+    output reg sum,
+    output reg carry
+);
+
+always @(*) begin
+    sum = a ^ b ^ cin;
+    carry = (a & b) | (a & cin) | (b & cin);
+end
+
+endmodule

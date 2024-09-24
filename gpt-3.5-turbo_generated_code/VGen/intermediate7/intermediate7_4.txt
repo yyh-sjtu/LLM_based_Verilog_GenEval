@@ -1,0 +1,8 @@
+
+always @(*) begin
+  for (i = 0; i < len_table; i=i+1)
+    Out32[i] = In32[In32table[i]];
+end
+endmodule
+
+This module takes a 32-bit input `In32` and uses a predefined permutation table `In32table` to rearrange the bits and assigns the rearranged output to `Out32`. The permutation table specifies the order in which the bits of `In32` should be rearranged to get the output. The output `Out32` will be the input `In32` after the permutation specified by the table.

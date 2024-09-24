@@ -1,0 +1,32 @@
+Evaluation results of RTLLM
+
+fsm: 0.0% correct
+right_shifter: 80.0% correct
+multi_16bit: 20.0% correct
+alu: 0.0% correct
+synchronizer: 100.0% correct
+adder_32bit: 0.0% correct
+radix2_div: 0.0% correct
+traffic_light: 0.0% correct
+calendar: 0.0% correct
+adder_16bit: 20.0% correct
+multi_pipe_4bit: 0.0% correct
+width_8to16: 60.0% correct
+div_16bit: 0.0% correct
+counter_12: 100.0% correct
+adder_8bit: 20.0% correct
+RAM: 0.0% correct
+serial2parallel: 0.0% correct
+JC_counter: 0.0% correct
+asyn_fifo: 0.0% correct
+accu: 0.0% correct
+multi_booth_8bit: 80.0% correct
+multi_pipe_8bit: 0.0% correct
+pulse_detect: 0.0% correct
+signal_generator: 0.0% correct
+parallel2serial: 0.0% correct
+freq_div: 20.0% correct
+edge_detect: 100.0% correct
+adder_pipe_64bit: 0.0% correct
+pe: 100.0% correct
+--------------------

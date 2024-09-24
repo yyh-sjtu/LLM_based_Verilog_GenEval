@@ -1,0 +1,12 @@
+module TopModule (
+    input [254:0] in,
+    output [7:0] out
+);
+    reg [7:0] out_r;
+    initial
+    begin
+        out_r <= 8'h0;
+    end
+    assign out = out_r[7:0];
+endmodule
+

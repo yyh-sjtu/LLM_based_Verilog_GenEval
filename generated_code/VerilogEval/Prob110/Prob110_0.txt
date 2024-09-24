@@ -1,0 +1,74 @@
+Certainly! Below is a Verilog implementation of the specified `TopModule`, which is a Moore state machine with the required states, inputs, and outputs.
+
+### Verilog Code
+
+```verilog
+module TopModule (
+    input clk,
+    input areset,
+    input j,
+    input k,
+    output reg out
+);
+
+    // State encoding
+    typedef enum reg [1:0] {
+        OFF = 2'b00,
+        ON  = 2'b01
+    } state_t;
+    
+    state_t current_state, next_state;
+    
+    // Sequential logic for state transition
+    always @(posedge clk or posedge areset) begin
+        if (areset) begin
+            current_state <= OFF; // Reset to OFF state
+        end else begin
+            current_state <= next_state; // Transition to next state
+        end
+    end
+
+    // Combinatorial logic for next state and output logic
+    always @(*) begin
+        case (current_state)
+            OFF: begin
+                out = 1'b0; // Output is 0 in OFF state
+                if (j == 1'b1) begin
+                    next_state = ON; // Transition to ON state if j=1
+                end else begin
+                    next_state = OFF; // Stay in OFF state if j=0
+                end
+            end
+            
+            ON: begin
+                out = 1'b1; // Output is 1 in ON state
+                if (k == 1'b1) begin
+                    next_state = OFF; // Transition to OFF state if k=1
+                end else begin
+                    next_state = ON; // Stay in ON state if k=0
+                end
+            end
+            
+            default: begin
+                out = 1'b0; // Default output (should not be reached)
+                next_state = OFF; // Default next state
+            end
+        endcase
+    end
+
+endmodule
+```
+
+### Explanation
+
+1. **State Definition**: The states of the machine are represented using an enumerated type `state_t`, where `OFF` and `ON` are defined.
+
+2. **Sequential Logic**: The state transition occurs on the positive edge of the clock or during a reset. If the `areset` (asynchronous reset) signal is high, the state resets to `OFF`.
+
+3. **Combinatorial Logic**: The `always @(*)` block defines the behavior of the state machine:
+   - If in the `OFF` state and `j` is high (`1`), it transitions to the `ON` state; otherwise, it remains in `OFF`.
+   - If in the `ON` state and `k` is high (`1`), it transitions to the `OFF` state; otherwise, it remains in `ON`.
+
+4. **Output Logic**: The output `out` is determined by the current state: `0` when in `OFF` and `1` when in `ON`.
+
+This code implements the specified Moore state machine behavior. You can simulate it using testbenches to validate its functionality.

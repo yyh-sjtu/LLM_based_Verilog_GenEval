@@ -1,0 +1,21 @@
+Here is the Verilog code for the TopModule implementing a 2-to-1 multiplexer:
+
+```verilog
+module TopModule (
+    input a,
+    input b,
+    input sel,
+    output reg out
+);
+
+always @(*) begin
+    if (sel == 0)
+        out = a;
+    else
+        out = b;
+end
+
+endmodule
+```
+
+This code defines a module named TopModule with the specified input and output ports. Inside the module, there is a combinational logic block that implements the behavior of a 2-to-1 multiplexer based on the value of the sel input. If sel is 0, the output out is set to the input a, and if sel is 1, the output out is set to the input b.

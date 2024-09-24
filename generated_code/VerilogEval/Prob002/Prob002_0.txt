@@ -1,0 +1,13 @@
+Sure, here is the Verilog code for the TopModule module that drives 0 on the output port:
+
+```verilog
+module TopModule(
+    output reg out
+);
+
+always @* begin
+    out = 1'b0;
+end
+
+endmodule
+```

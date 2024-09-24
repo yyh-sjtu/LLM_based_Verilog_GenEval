@@ -1,0 +1,15 @@
+Here is the RTL code for the TopModule that reverses the byte order of a 32-bit vector:
+
+```verilog
+module TopModule(
+    input [31:0] in,
+    output [31:0] out
+);
+
+    // Reversing the byte order of the input vector
+    assign out = {in[7:0], in[15:8], in[23:16], in[31:24]};
+
+endmodule
+```
+
+In this Verilog code, the input vector is 32 bits wide and is named "in". The output vector is also 32 bits wide and is named "out". By assigning the output vector with the concatenation of the input vector's bytes in reversed order, we achieve the desired functionality of reversing the byte order of a 32-bit vector.

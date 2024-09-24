@@ -1,0 +1,20 @@
+module TopModule (
+	input clk,
+	input reset,
+	output [31:0] q
+);
+    reg [31:0] lfsr;
+    initial
+    begin
+        lfsr = 32'h1;
+    end
+    always @(posedge clk or posedge reset)
+    begin
+        if(reset)
+            lfsr <= 32'h1;
+        else
+            lfsr <= lfsr >> 1;
+    end
+    assign q = lfsr;
+endmodule
+

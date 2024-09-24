@@ -1,0 +1,16 @@
+module TopModule (
+    input clk,
+    input load,
+    input [511:0] data,
+    output [511:0] q
+);
+    reg [53:0] sum;
+    wire [53:0] sum_in;
+    assign sum_in = data ^ sum_in[53:0];
+    always @ (posedge clk)
+    begin
+        sum <= sum_in;
+    end
+    assign q = sum;
+endmodule
+

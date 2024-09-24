@@ -1,0 +1,15 @@
+module top_level (
+	input x,
+	input y,
+	output z
+);
+    A A0 (
+        .y(y),
+        .z(z)
+    );
+    B B1 (
+        .y(y),
+        .z(z)
+    );
+endmodule
+

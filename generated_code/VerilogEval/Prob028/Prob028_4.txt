@@ -1,0 +1,19 @@
+Here is an example Verilog code for the implementation of the D latch module named TopModule:
+
+```verilog
+module TopModule(
+    input d,
+    input ena,
+    output reg q
+);
+
+always @(posedge ena)
+begin
+    if (ena)
+        q <= d;
+end
+
+endmodule
+```
+
+In this code snippet, a D latch is implemented using an always block sensitive to the positive edge of the enable signal 'ena'. When 'ena' is high, the input signal 'd' is latched onto the output 'q'. The output 'q' is declared as a reg type to store the latched value.

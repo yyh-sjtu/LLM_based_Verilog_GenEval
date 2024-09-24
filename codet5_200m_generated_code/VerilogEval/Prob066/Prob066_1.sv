@@ -1,0 +1,24 @@
+module TopModule (
+	input clk,
+	input reset,
+	input [31:0] in,
+	output [31:0] out
+);
+    reg [31:0] out_reg;
+    always @(posedge clk or posedge reset) begin
+        if (reset) begin
+            out_reg <= 0;
+        end
+        else begin
+            case (out_reg)
+                0 : out_reg <= in;
+                1 : out_reg <= ~in;
+                2 : out_reg <= in;
+                3 : out_reg <= in;
+                default : out_reg <= 0;
+            endcase
+        end
+    end
+    assign out = out_reg;
+endmodule
+

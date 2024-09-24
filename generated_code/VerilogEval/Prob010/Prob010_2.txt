@@ -1,0 +1,39 @@
+Certainly! Below is an RTL (Register Transfer Level) design of the `TopModule` which implements the boolean function \( z = (x \oplus y) \& x \). 
+
+Here's how the Verilog code for the module would look:
+
+```verilog
+module TopModule (
+    input wire x,
+    input wire y,
+    output wire z
+);
+
+// Internal signal to hold the XOR result
+wire xor_result;
+
+// Calculate the XOR of x and y
+assign xor_result = x ^ y;
+
+// Calculate the AND of xor_result and x to get z
+assign z = xor_result & x;
+
+endmodule
+```
+
+### Explanation:
+1. **Inputs and Outputs**:
+   - The module takes two 1-bit inputs `x` and `y`.
+   - It produces a 1-bit output `z`.
+
+2. **Internal Signal**:
+   - `xor_result`: An intermediate wire to store the value of \( x \oplus y \).
+
+3. **Logic Implementation**:
+   - The first `assign` statement computes the XOR of `x` and `y` and stores it in `xor_result`.
+   - The second `assign` statement computes the AND operation between `xor_result` and `x` to produce the final output `z`.
+
+### Functionality:
+- The output `z` will only be high (logic 1) when `x` is high, and either `x` and `y` are different (x is high and y is low), following the provided boolean expression.
+
+This design is synthesizable and should work correctly for the given requirements in any standard digital design environment.

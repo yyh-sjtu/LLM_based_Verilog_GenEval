@@ -1,0 +1,55 @@
+To implement the `TopModule` as described in your prompt, I'll outline the Verilog code for the module, including the necessary features like the counter, loading mechanism, and terminal count indicator (`tc`).
+
+Here's the Verilog RTL design:
+
+```verilog
+module TopModule (
+    input clk,
+    input load,
+    input [9:0] data,
+    output reg tc
+);
+
+    reg [9:0] counter; // Internal 10-bit counter
+
+    always @(posedge clk) begin
+        if (load) begin
+            // Load the counter with new data when 'load' is asserted
+            counter <= data;
+            tc <= 1'b0; // Reset terminal count since counting starts over
+        end else if (counter > 0) begin
+            // Decrement the counter when 'load' is not asserted
+            counter <= counter - 1;
+            tc <= 1'b0; // 'tc' is low while counting down
+        end
+        
+        // Assert 'tc' when counter reaches 0
+        if (counter == 0) begin
+            tc <= 1'b1; // Terminal count asserted
+        end
+    end
+
+endmodule
+```
+
+### Explanation of the Code:
+1. **Inputs and Outputs**:
+   - `clk`: The clock signal driving the synchronous logic.
+   - `load`: A control signal that signals when to load the new counter value.
+   - `data`: A 10-bit input representing the number of cycles to count down (only valid when `load` is high).
+   - `tc`: A signal that indicates when the counter has reached 0.
+
+2. **Register Declaration**:
+   - `reg [9:0] counter;`: A 10-bit register that holds the countdown value.
+
+3. **Always Block**:
+   - The `always` block is triggered on the positive edge of the clock.
+   - If `load` is high, the counter is loaded with the value of `data`, and the `tc` signal is reset to 0, indicating the counter is starting fresh.
+   - If `load` is low and the counter is greater than 0, the counter decrements by 1, and the `tc` signal is kept low.
+   - When the counter reaches 0, the `tc` signal is asserted high (indicating terminal count), meaning the timer has elapsed.
+
+### Behavior:
+- The timer begins counting down from the value specified in `data` whenever the `load` signal is high.
+- The `tc` output accurately reflects the state of the counter, being asserted when the counter is zero and remaining so until a new value is loaded.
+
+This design is a simple and effective way to implement a countdown timer using a 10-bit register with the specified behavior. You can further enhance the design depending on specific requirements, such as incorporating reset functionalities or integrating with other components.

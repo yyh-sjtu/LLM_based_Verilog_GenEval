@@ -1,0 +1,46 @@
+Here is the RTL code for the TopModule implementing the Moore state machine as described:
+
+```verilog
+module TopModule (
+    input clk,
+    input reset,
+    input in,
+    output reg out
+);
+
+typedef enum logic [1:0] {A, B, C, D} state_t;
+reg [1:0] state, next_state;
+
+always_ff @(posedge clk or posedge reset) begin
+    if (reset) begin
+        state <= A;
+    end else begin
+        state <= next_state;
+    end
+end
+
+always_comb begin
+    case (state)
+        A: begin
+            next_state = (in) ? B : A;
+            out = 0;
+        end
+        B: begin
+            next_state = (in) ? B : C;
+            out = 0;
+        end
+        C: begin
+            next_state = (in) ? D : A;
+            out = 0;
+        end
+        D: begin
+            next_state = (in) ? B : C;
+            out = 1;
+        end
+    endcase
+end
+
+endmodule
+```
+
+This Verilog code defines the TopModule with the provided interface and implements a Moore state machine with the specified state transition table. The state machine is synchronized to the positive edge of the clock and includes a synchronous active high reset that sets the FSM to state A. The output `out` is updated based on the current state and input conditions.

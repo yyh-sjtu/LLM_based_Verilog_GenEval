@@ -1,0 +1,27 @@
+To implement a dual-edge triggered flip-flop in an FPGA without using dual-edge sensitive logic, we can create a circuit that effectively emulates the behavior of a dual-edge triggered flip-flop using two separate flip-flops in series.
+
+Here is a possible implementation of the TopModule module in Verilog:
+
+```verilog
+module TopModule (
+    input clk,
+    input d,
+    output reg q
+);
+
+reg q_int;
+
+always @(posedge clk) begin
+    q_int <= d; // First flip-flop triggered on positive edge
+end
+
+always @(negedge clk) begin
+    q <= q_int; // Second flip-flop triggered on negative edge, output updated
+end
+
+endmodule
+```
+
+In this implementation, the input signal d is latched into the first flip-flop on the positive edge of the clock signal. Then, the output signal q_int from the first flip-flop is latched into the second flip-flop on the negative edge of the clock signal, effectively emulating the behavior of a dual-edge triggered flip-flop.
+
+This circuit design ensures that changes to the input signal d are captured on both the rising and falling edges of the clock signal, allowing for dual-edge triggering behavior without the need for specialized dual-edge triggered flip-flops.

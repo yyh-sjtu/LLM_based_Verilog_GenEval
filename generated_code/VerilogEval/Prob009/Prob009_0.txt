@@ -1,0 +1,39 @@
+Sure! Below is an example of how you can implement a "TopModule" that counts the number of '1's in a 3-bit input vector. The module will have a 3-bit input named `in` and a 2-bit output named `out`. The output will represent the population count of the input bits.
+
+Here’s the RTL code in Verilog for the described module:
+
+```verilog
+module TopModule (
+    input  [2:0] in,  // 3-bit input
+    output [1:0] out  // 2-bit output
+);
+
+    // Intermediate signal to hold population count
+    wire [1:0] count;
+
+    // Implementing the population count logic
+    assign count = 
+        (in[0] + in[1] + in[2]); // Count of 1's in the input
+    
+    assign out = count;
+
+endmodule
+```
+
+### Explanation:
+- **Input/Output Declaration**:
+  - The input `in` is declared as a 3-bit vector (`[2:0]`).
+  - The output `out` is a 2-bit vector (`[1:0]`), which can represent values from 0 to 3 for the population count of the 3-bit input.
+
+- **Population Count Logic**:
+  - The population count is calculated directly using the `+` operator on the input bits. 
+  - Each bit in the input contributes to the count if it's `1`.
+
+### Functionality:
+This implementation will correctly provide the following outputs:
+- When `in = 3'b000` → `out = 2'b00` (0 ones)
+- When `in = 3'b001`, `3'b010`, or `3'b100` → `out = 2'b01` (1 one)
+- When `in = 3'b011`, `3'b101`, or `3'b110` → `out = 2'b10` (2 ones)
+- When `in = 3'b111` → `out = 2'b11` (3 ones)
+
+This is a simple and effective way to implement a population count for a 3-bit input vector. If you have any specific requirements or variations you'd like to explore, please let me know!

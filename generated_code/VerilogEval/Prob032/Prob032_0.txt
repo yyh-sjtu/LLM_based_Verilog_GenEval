@@ -1,0 +1,31 @@
+Certainly! Below is an RTL implementation of the `TopModule` in Verilog. This module takes a 3-bit input vector and outputs the same vector as a 3-bit output while also driving three separate 1-bit outputs corresponding to the individual bits of the input vector.
+
+```verilog
+module TopModule (
+    input  wire [2:0] vec,  // 3-bit input vector
+    output wire [2:0] outv, // 3-bit output vector
+    output wire o2,         // Output for bit 2 (vec[2])
+    output wire o1,         // Output for bit 1 (vec[1])
+    output wire o0          // Output for bit 0 (vec[0])
+);
+
+    // Assign the output vector to the input vector
+    assign outv = vec;
+    
+    // Drive the individual outputs from the input vector
+    assign o2 = vec[2]; // Output for bit 2
+    assign o1 = vec[1]; // Output for bit 1
+    assign o0 = vec[0]; // Output for bit 0
+
+endmodule
+```
+
+### Explanation:
+- The `TopModule` has a 3-bit input `vec`.
+- The 3-bit output `outv` is assigned the value of `vec`, effectively duplicating the input.
+- The individual outputs `o2`, `o1`, and `o0` correspond to the bits of the input `vec`. Each is driven by a specific bit of the input vector:
+  - `o2` gets the 3rd bit (`vec[2]`)
+  - `o1` gets the 2nd bit (`vec[1]`)
+  - `o0` gets the 1st bit (`vec[0]`)
+
+This implementation is simple and direct, fulfilling the requirements specified in your request.

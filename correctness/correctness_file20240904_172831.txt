@@ -1,0 +1,20 @@
+Model name: gpt-3.5-turbo
+Evaluation results of VGen:
+advanced1: 80.0% correct
+advanced2: 40.0% correct
+advanced3: 40.0% correct
+advanced4: 40.0% correct
+advanced5: 0.0% correct
+basic1: 100.0% correct
+basic2: 40.0% correct
+basic3: 20.0% correct
+basic4: 60.0% correct
+intermediate1: 100.0% correct
+intermediate2: 100.0% correct
+intermediate3: 0.0% correct
+intermediate4: 20.0% correct
+intermediate5: 60.0% correct
+intermediate6: 0.0% correct
+intermediate7: 60.0% correct
+intermediate8: 60.0% correct
+--------------------

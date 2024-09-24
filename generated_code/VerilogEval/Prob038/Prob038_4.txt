@@ -1,0 +1,28 @@
+Here is the Verilog code for the TopModule:
+
+```verilog
+module TopModule (
+    input clk,
+    input reset,
+    output reg [3:0] q
+);
+
+always @(posedge clk)
+begin
+    if (reset) begin
+        q <= 4'b0000;
+    end
+    else begin
+        if (q == 4'b1111) begin
+            q <= 4'b0000;
+        end
+        else begin
+            q <= q + 1;
+        end
+    end
+end
+
+endmodule
+```
+
+This code implements a synchronous 4-bit binary counter that counts from 0 to 15 with a period of 16. The counter is reset to 0 when the reset input is high. The sequential logic is triggered on the positive edge of the clock signal.

@@ -1,0 +1,16 @@
+module TopModule (
+	input clk,
+	input a,
+	output q
+);
+    reg [7:0] q;
+    initial
+    begin
+        $monitor("%b", a, q);
+    end
+    always @(posedge clk)
+    begin
+        if (a)
+            q <= 1;
+    end
+endmodule

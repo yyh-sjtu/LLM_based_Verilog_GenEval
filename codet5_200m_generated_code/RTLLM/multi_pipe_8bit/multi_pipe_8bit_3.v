@@ -1,0 +1,30 @@
+module multi_pipe_8bit (
+	input clk,
+	input rst_n,
+	input mul_en_in,
+	input [7:0] mul_a,
+	input [7:0] mul_b,
+	output mul_en_out,
+	output [15:0] mul_out
+);
+    reg [7:0] multi_a_reg;
+    reg [7:0] multi_b_reg;
+    reg [15:0] multi_out_reg;
+    always @(posedge clk or negedge rst_n)
+    begin
+        if(!rst_n)
+            multi_a_reg <= 8'h00;
+        else
+            multi_a_reg <= {multi_a_reg[7:0], mul_a};
+    end
+    always @(posedge clk or negedge rst_n)
+    begin
+        if(!rst_n)
+            multi_b_reg <= 8'h00;
+        else
+            multi_b_reg <= {multi_b_reg[7:0], mul_b};
+    end
+    assign mul_en_out = multi_a_reg[15];
+    assign mul_out = multi_b_reg[15];
+endmodule
+

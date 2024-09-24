@@ -1,0 +1,97 @@
+Certainly! Below is a Verilog implementation of the `TopModule`. It represents a finite state machine (FSM) as specified. The states are encoded as binary values and the module includes separate always blocks for state table logic and state flip-flops. 
+
+Here's how the FSM is structured according to your specifications:
+
+### State Encoding
+- State A: 2'b00
+- State B: 2'b01
+- State C: 2'b10
+- State D: 2'b11
+- State E: 3'b100
+- State F: 3'b101
+
+### Verilog Code
+```verilog
+module TopModule (
+    input wire clk,
+    input wire reset,
+    input wire w,
+    output reg z
+);
+    // State Encoding
+    reg [2:0] current_state, next_state;
+
+    // State Definitions
+    localparam A = 3'b000;
+    localparam B = 3'b001;
+    localparam C = 3'b010;
+    localparam D = 3'b011;
+    localparam E = 3'b100;
+    localparam F = 3'b101;
+
+    // Next State Logic
+    always @(*) begin
+        case (current_state)
+            A: begin
+                if (w) next_state = B;
+                else next_state = A;
+            end
+            B: begin
+                if (w) next_state = C;
+                else next_state = D;
+            end
+            C: begin
+                if (w) next_state = E;
+                else next_state = D;
+            end
+            D: begin
+                if (w) next_state = F;
+                else next_state = A;
+            end
+            E: begin
+                if (w) next_state = E;
+                else next_state = D;
+            end
+            F: begin
+                if (w) next_state = C;
+                else next_state = D;
+            end
+            default: next_state = A; // Safe default
+        endcase
+    end
+
+    // State Flip-Flops
+    always @(posedge clk or posedge reset) begin
+        if (reset) begin
+            current_state <= A; // Reset to state A
+        end else begin
+            current_state <= next_state; // Transition to next state
+        end
+    end
+
+    // Output Logic
+    always @(*) begin
+        case (current_state)
+            A: z = 0;
+            B: z = 0;
+            C: z = 0;
+            D: z = 0;
+            E: z = 1;
+            F: z = 1;
+            default: z = 0; // Safe default
+        endcase
+    end
+
+endmodule
+```
+
+### Explanation:
+1. **State Encoding**: The states are defined using local parameters that use 3 bits to accommodate all states.
+  
+2. **Next State Logic (always @(*))**: A combinational block that determines the next state based on the current state and input `w`.
+
+3. **State Flip-Flops (always @(posedge clk or posedge reset))**: A sequential block that updates the `current_state` on the positive edge of the clock or resets it to state `A` if the reset is high.
+
+4. **Output Logic (always @(*))**: This block determines the output `z` based on the current state according to the provided state machine behavior.
+
+This code provides a clear and concise implementation of the specified state machine.

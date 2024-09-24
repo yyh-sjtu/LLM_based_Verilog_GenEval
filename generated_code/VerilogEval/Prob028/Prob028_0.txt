@@ -1,0 +1,19 @@
+Sure, here is the RTL code for the TopModule implementing a D latch:
+
+```verilog
+module TopModule (
+    input d,
+    input ena,
+    output reg q
+);
+
+always @ (posedge ena) begin
+    if (ena) begin
+        q <= d;
+    end
+end
+
+endmodule
+```
+
+This code defines a module named TopModule with input port `d`, input port `ena`, and output port `q`. Inside the module, an always block is used to implement the behavior of a D latch, where the output `q` is updated with the input `d` on the positive edge of the enable signal `ena`.

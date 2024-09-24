@@ -1,0 +1,38 @@
+Certainly! Below is a simple implementation of the `TopModule`, which serves as a 4-bit binary counter. The counter counts from 0 to 15 in a cyclic manner. It resets to 0 when the `reset` signal is high.
+
+Here's the Verilog code for the module:
+
+```verilog
+module TopModule (
+    input  clk,        // Clock input
+    input  reset,      // Reset input (active high)
+    output reg [3:0] q // Output 4-bit counter
+);
+
+// Always block triggered on the positive edge of the clock
+always @(posedge clk) begin
+    if (reset) begin
+        // Reset counter to 0 on active high reset
+        q <= 4'b0000; 
+    end else begin
+        // Increment the counter, wrap around at 16
+        q <= (q + 1) & 4'b1111; // & 4'b1111 ensures the counter wraps around to 0 after 15
+    end
+end
+
+endmodule
+```
+
+### Explanation:
+1. **Module Declaration**: The module is declared with the name `TopModule`, and it has three ports: `clk`, `reset`, and `q`.
+2. **Input and Output**: The `q` output is a 4-bit register (`reg [3:0]`). This stores the current count.
+3. **Always Block**: The `always` block is triggered on the positive edge of the `clk` signal.
+4. **Reset Logic**: Inside the always block, we check if `reset` is high. If it is, we assign `0` to `q`, effectively resetting the counter.
+5. **Counter Logic**: If the reset is not active, we increment `q` by 1. The `& 4'b1111` operation ensures that the counter wraps from `15` back to `0` after incrementing.
+
+### Behavior:
+- The counter increments on every clock tick unless reset.
+- The counter's value wraps around after reaching `15`, returning to `0`.
+- The synchronous reset allows for reset behavior to occur in sync with the clock edges.
+
+This design can be simulated in a Verilog simulation environment to verify its operation.

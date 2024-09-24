@@ -1,0 +1,76 @@
+Certainly! Below is a Verilog implementation for the `TopModule`, which includes a 4-digit BCD counter. The counter increments the ones place (q[3:0]) on every clock cycle, and the enable signals (ena) for the tens, hundreds, and thousands digits are generated based on the conditions of the lower digits.
+
+### Verilog Code
+
+```verilog
+module TopModule(
+    input  wire        clk,
+    input  wire        reset,
+    output reg  [3:0]  ena,    // Enable for the higher 3 BCD digits
+    output reg [15:0]   q       // BCD counter output (4 digits)
+);
+
+    // BCD counter with 4 decimal digits
+    always @(posedge clk or posedge reset) begin
+        if (reset) begin
+            // Reset all digits
+            q <= 16'b0;
+            ena <= 4'b0;
+        end else begin
+            // Check for overflow and increment the BCD digits
+            if (q[3:0] == 4'b1001) begin
+                q[3:0] <= 4'b0000;             // Reset ones digit
+                ena[0] <= 1'b1;                 // Enable the tens digit increment
+
+                // Increment tens digit
+                if (q[7:4] == 4'b1001) begin
+                    q[7:4] <= 4'b0000;         // Reset tens digit
+                    ena[1] <= 1'b1;             // Enable the hundreds digit increment
+
+                    // Increment hundreds digit
+                    if (q[11:8] == 4'b1001) begin
+                        q[11:8] <= 4'b0000;    // Reset hundreds digit
+                        ena[2] <= 1'b1;         // Enable the thousands digit increment
+
+                        // Increment thousands digit
+                        if (q[15:12] == 4'b1001) begin
+                            q[15:12] <= 4'b0000; // Reset thousands digit
+                            ena[3] <= 1'b0;      // Do not enable increment for thousands
+                        end else begin
+                            q[15:12] <= q[15:12] + 1'b1; // Increment thousands digit
+                            ena[3] <= 1'b0;      // No need to enable for thousands after increment
+                        end
+                    end else begin
+                        q[11:8] <= q[11:8] + 1'b1; // Increment hundreds digit
+                        ena[2] <= 1'b0;             // No need to enable for hundreds after increment
+                    end
+                end else begin
+                    q[7:4] <= q[7:4] + 1'b1;       // Increment tens digit
+                    ena[1] <= 1'b0;                 // No need to enable for tens after increment
+                end
+            end else begin
+                q[3:0] <= q[3:0] + 1'b1;           // Increment ones digit
+                ena[0] <= 1'b0;                     // No need to enable for ones after increment
+            end
+        end
+    end
+endmodule
+```
+
+### Explanation
+1. **Inputs and Outputs**:
+   - `clk`: the clock signal.
+   - `reset`: the active-high reset signal.
+   - `ena`: a 4-bit signal indicating when to enable the higher digits for increment.
+   - `q`: a 16-bit output representing the BCD value of the counter.
+
+2. **Behavior**:
+   - On the rising edge of `clk`:
+     - If `reset` is high, all counter values (`q`) and the enable signals (`ena`) are reset to zero.
+     - The counter checks the current value of the least significant digit (ones) first.
+     - If it reaches `1001` (9 in decimal), it resets to `0000` and triggers the enable bit for the tens digit.
+     - The same logic applies to the tens, hundreds, and thousands digits accordingly, with the previous digit's overflow determining if the next higher digit should increment.
+
+3. **Synchronous Logic**: The design uses synchronous logic for both counting and resetting, ensuring behavior is predictable based on the rising edge of the clock.
+
+This implementation effectively manages the BCD count within the specified constraints.

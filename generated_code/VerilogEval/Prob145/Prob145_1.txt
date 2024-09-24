@@ -1,0 +1,45 @@
+To implement the TopModule module based on the provided simulation waveforms, we can create a D flip-flop with asynchronous reset for the output q and a combinational logic block for the output p. Here is the Verilog code for the TopModule:
+
+```verilog
+module TopModule (
+    input wire clock,
+    input wire a,
+    output reg p,
+    output reg q
+);
+
+reg q_next;
+
+always @(posedge clock or negedge a) begin
+    if (~a) begin
+        q <= 0;
+    end else begin
+        q <= q_next;
+    end
+end
+
+always @* begin
+    case({a, q})
+        2'b00: begin
+            p = 0;
+            q_next = q;
+        end
+        2'b01: begin
+            p = 0;
+            q_next = 0;
+        end
+        2'b10: begin
+            p = 1;
+            q_next = 1;
+        end
+        2'b11: begin
+            p = 0;
+            q_next = 0;
+        end
+    endcase
+end
+
+endmodule
+```
+
+This code describes the desired behavior based on the provided waveforms. The output p is determined based on the values of input a and the current value of output q. The flip-flop updates the output q on the negative edge of input a, and it resets q to 0 when a is low. The combinational logic block updates the output p based on the input values. You can simulate this code to verify that it matches the specified waveforms.

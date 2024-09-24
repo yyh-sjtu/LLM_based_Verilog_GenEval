@@ -1,0 +1,37 @@
+Sure! Below is an example of how you can implement the `TopModule` with the specified interface in Verilog. The module includes eight D flip-flops with active high synchronous reset.
+
+```verilog
+module TopModule (
+    input  wire clk,
+    input  wire reset,
+    input  wire [7:0] d,
+    output reg [7:0] q
+);
+    
+    // D flip-flop for each bit (0-7)
+    always @(posedge clk) begin
+        if (reset) begin
+            q <= 8'b00000000;  // Set output q to zero on reset
+        end else begin
+            q <= d;            // On positive clk edge, assign input d to output q
+        end
+    end
+    
+endmodule
+```
+
+### Explanation:
+
+1. **Module Declaration**: The `TopModule` has inputs for `clk`, `reset`, and an 8-bit `d`. It outputs an 8-bit `q`.
+
+2. **Always Block**: The `always @(posedge clk)` block indicates that the logic inside it will execute on the rising edge of the `clk` signal.
+
+3. **Reset Condition**: Inside the always block, the first condition checks for `reset`. If it is high, it sets `q` to `8'b00000000`, effectively zeroing the output.
+
+4. **Data Assignment**: If `reset` is low, on each positive edge of `clk`, `q` is assigned the value of `d`.
+
+### Simulation and Testing:
+
+To validate this design, you may want to simulate it with a testbench that applies various `clk`, `reset`, and `d` inputs to ensure correct behavior.
+
+Feel free to ask if you need a testbench example or further modifications!

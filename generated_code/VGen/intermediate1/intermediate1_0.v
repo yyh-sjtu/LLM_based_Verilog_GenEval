@@ -1,0 +1,11 @@
+module
+module half_adder(
+    input a, b,    // Inputs a and b
+    output sum, c   // Output sum and carry out
+);
+
+    assign sum = a ^ b;  // XOR operation for sum
+    assign c = a & b;    // AND operation for carry out
+
+endmodule
+

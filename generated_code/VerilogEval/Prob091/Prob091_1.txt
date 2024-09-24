@@ -1,0 +1,69 @@
+To implement the `TopModule` according to the given specifications and finite-state machine (FSM) behavior, we will proceed through the following steps:
+
+1. **FSM State Transition Logic**: We need to define the next state logic based on the current state and input signals.
+
+2. **Output Logic**: We need to specify how `Y1` and `Y3` are derived based on the current state.
+
+Let's start by defining the states based on the given one-hot representation:
+
+- \( A = y[0] \)
+- \( B = y[1] \)
+- \( C = y[2] \)
+- \( D = y[3] \)
+- \( E = y[4] \)
+- \( F = y[5] \)
+
+Next, let's examine the transitions based on the inputs:
+
+### State Transition Logic
+
+| Current State | Input `w` | Next State          |
+|---------------|-----------|---------------------|
+| A (000001)    | 1         | B (000010)          |
+| A (000001)    | 0         | A (000001)          |
+| B (000010)    | 1         | C (000100)          |
+| B (000010)    | 0         | D (001000)          |
+| C (000100)    | 1         | E (010000)          |
+| C (000100)    | 0         | D (001000)          |
+| D (001000)    | 1         | F (100000)          |
+| D (001000)    | 0         | A (000001)          |
+| E (010000)    | 1         | E (010000)          |
+| E (010000)    | 0         | D (001000)          |
+| F (100000)    | 1         | C (000100)          |
+| F (100000)    | 0         | D (001000)          |
+
+### Output Logic:
+- `Y1` is the input of the state flip-flop for `y[1]` (which represents state B).
+- `Y3` is the input of the state flip-flop for `y[3]` (which represents state D).
+
+From the analysis above:
+- `Y1` should be `1` when the current state is `A` or `B` and input `w` is `1`, leading next state to `B` or staying at `B`.
+- `Y3` is asserted when the FSM is in state `D` or when transitioning to it from `A` or `C`. 
+
+The RTL implementation using a Verilog-like syntax is as follows:
+
+```verilog
+module TopModule (
+    input [5:0] y, // Current state in one-hot encoding
+    input w,       // Input signal
+    output Y1,     // Output signal for state flip-flop y[1]
+    output Y3      // Output signal for state flip-flop y[3]
+);
+
+    // Output logic for Y1
+    assign Y1 = (y[0] & w) | (y[1]); // Y1 is asserted if the FSM is in state A or B when w is 1
+
+    // Output logic for Y3
+    assign Y3 = (y[3]) || (y[0] & w) || (y[2] & ~w); // Y3 is asserted if the FSM is in state D or can transition to D
+
+endmodule
+```
+
+### Explanation of the Code:
+1. **Inputs and Outputs**: The module takes a 6-bit input `y` indicating the current state and a 1-bit input `w`. The outputs `Y1` and `Y3` represent the next state flip-flop inputs for `y[1]` and `y[3]`, respectively.
+
+2. **Y1 Logic**: This output is true if the FSM is in state `A` (`y[0]`) while `w` is high, or if it is currently in state `B` (`y[1]`).
+
+3. **Y3 Logic**: This output is true if the FSM is in state `D` (`y[3]`), or can transition to `D` from states `A` or `C` (based on the input `w`).
+
+This implementation succinctly captures the FSM's behavior based on the given design specifications.

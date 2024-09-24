@@ -1,0 +1,18 @@
+// Verilog code for half adder
+
+module half_adder (
+  input a, 
+  input b,
+  output sum,
+  output cout
+);
+
+assign sum = a ^ b;
+assign cout = a & b;
+
+endmodule
+
+// Explanation:
+// The XOR gate calculates the sum of the inputs a and b.
+// The AND gate calculates the carry out, which is only true when both inputs a and b are 1.
+// This module implements a basic half adder circuit.

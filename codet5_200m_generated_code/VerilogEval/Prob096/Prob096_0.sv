@@ -1,0 +1,32 @@
+module TopModule (
+	input clk,
+	input reset,
+	input data,
+	output start_shifting
+);
+reg [9:0] code;
+always @(posedge clk)
+    if(reset) begin
+        code <= 10'b0;
+    end
+    else begin
+        case(code)
+            10'b0: begin
+                if(data) begin
+                    code <= 9'b0100;
+                end
+                else begin
+                    code <= 9'b0101;
+                end
+            end
+        endcase
+    end
+always @(posedge clk)
+    if(reset) begin
+        start_shifting <= 1'b1;
+    end
+    else begin
+        start_shifting <= 1'b0;
+    end
+endmodule
+

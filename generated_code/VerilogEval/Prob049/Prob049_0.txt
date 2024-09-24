@@ -1,0 +1,24 @@
+Sure, here is a Verilog code implementation of the TopModule with the specified interface:
+
+```verilog
+module TopModule (
+  input clk,
+  input ar,
+  input d,
+  output reg q
+);
+
+  always @(posedge clk or negedge ar)
+  begin
+    if (ar == 0) // Asynchronous reset
+      q <= 1'b0;
+    else
+      q <= d;
+  end
+
+endmodule
+```
+
+This code defines a D flip flop with a positive edge-triggered clock input "clk" and an asynchronous reset input "ar". The flip flop's output "q" is assigned the input value "d" on the positive clock edge unless the asynchronous reset is active (ar == 0), in which case the output is forced to logic 0.
+
+Let me know if you need any further modifications or details.

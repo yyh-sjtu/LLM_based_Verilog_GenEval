@@ -1,0 +1,102 @@
+Here’s an implementation of the `TopModule` based on your specifications. This Verilog module represents a finite state machine (FSM) with a given state transition table and output logic. The states are represented as 3 bits, and the output `Y0` is derived from the next state as specified.
+
+### Verilog Code for `TopModule`
+
+```verilog
+module TopModule (
+    input wire x,
+    input wire [2:0] y,
+    output reg Y0,
+    output reg z
+);
+
+    // Declare the next state variable
+    reg [2:0] next_state;
+
+    // Combinatorial logic for next state and output
+    always @(*) begin
+        // Default values
+        next_state = y; // Hold the current state by default
+        z = 0;          // Default output for z
+        Y0 = next_state[0]; // Y0 is the least significant bit of the next state
+        
+        case (y)
+            3'b000: begin
+                if (x) begin
+                    next_state = 3'b001; // y = 000, x = 1 -> next state = 001
+                end else begin
+                    next_state = 3'b000; // y = 000, x = 0 -> next state = 000
+                end
+                z = 0; // Output z remains 0
+            end
+            
+            3'b001: begin
+                if (x) begin
+                    next_state = 3'b100; // y = 001, x = 1 -> next state = 100
+                end else begin
+                    next_state = 3'b001; // y = 001, x = 0 -> next state = 001
+                end
+                z = 0; // Output z remains 0
+            end
+            
+            3'b010: begin
+                if (x) begin
+                    next_state = 3'b001; // y = 010, x = 1 -> next state = 001
+                end else begin
+                    next_state = 3'b010; // y = 010, x = 0 -> next state = 010
+                end
+                z = 0; // Output z remains 0
+            end
+            
+            3'b011: begin
+                if (x) begin
+                    next_state = 3'b010; // y = 011, x = 1 -> next state = 010
+                end else begin
+                    next_state = 3'b001; // y = 011, x = 0 -> next state = 001
+                end
+                z = 1; // Output z set to 1
+            end
+            
+            3'b100: begin
+                if (x) begin
+                    next_state = 3'b100; // y = 100, x = 1 -> next state = 100
+                end else begin
+                    next_state = 3'b011; // y = 100, x = 0 -> next state = 011
+                end
+                z = 1; // Output z set to 1
+            end
+            
+            default: begin
+                next_state = 3'b000; // default state
+                z = 0; // output z set to default
+            end
+        endcase
+    end
+
+    // Sequential logic to hold the state
+    always @(posedge clk) begin
+        y <= next_state;
+    end
+
+endmodule
+```
+
+### Explanation of the Code
+
+1. **Module Declaration**: The module `TopModule` has inputs `x` (1 bit) and `y` (3 bits). It outputs `Y0` (1 bit) and `z` (1 bit).
+
+2. **State Handling**: A `next_state` variable holds the next state computed from the present state `y` based on the value of `x`.
+
+3. **Combinatorial Logic**: The `always @(*)` block calculates the next state and output `z` based on the current state `y` and input `x` using a case statement that corresponds to your state transition table.
+
+4. **Sequential Logic**: An `always @(posedge clk)` block is suggested for the sequential part. Note that the clock (`clk`) should actually be included in the module since this is typically needed for state machines to update states.
+
+5. **Output Assignment**: The output `Y0` is assigned the least significant bit of `next_state`.
+
+### Notes
+
+- Remember to include the clock signal in the module inputs and declare its behavior for a complete implementation.
+- The default state handling should ensure the FSM is robust to unexpected states.
+- This implementation assumes positive-edge-triggered behavior.
+
+Feel free to modify and test the code based on your environment or simulator setup!

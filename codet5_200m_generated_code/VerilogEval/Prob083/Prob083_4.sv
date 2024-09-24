@@ -1,0 +1,12 @@
+module TopModule (
+	input x,
+	input y,
+	output z
+);
+    reg [31:0] z_tmp;
+    initial
+    begin
+        z_tmp = 32'h00000000;
+    end
+endmodule
+

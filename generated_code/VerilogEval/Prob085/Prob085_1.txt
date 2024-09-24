@@ -1,0 +1,55 @@
+Certainly! Below is a Verilog implementation of the `TopModule` as specified. This module consists of a 4-bit right shift register that supports asynchronous reset, load, and enable functionalities. 
+
+Here's the Verilog code:
+
+```verilog
+module TopModule (
+    input  wire clk,
+    input  wire areset,
+    input  wire load,
+    input  wire ena,
+    input  wire [3:0] data,
+    output reg  [3:0] q
+);
+
+    always @(posedge clk or posedge areset) begin
+        if (areset) begin
+            // Asynchronous reset
+            q <= 4'b0000;
+        end else if (load) begin
+            // Load data into the shift register
+            q <= data;
+        end else if (ena) begin
+            // Shift right logic
+            q <= {1'b0, q[3:1]};
+        end
+        // If neither load nor ena are asserted, q retains its value
+    end
+
+endmodule
+```
+
+### Explanation:
+1. **Input/Output Ports:**
+   - `clk`: Clock signal for the synchronous operations.
+   - `areset`: Asynchronous reset signal; when asserted, it resets the register.
+   - `load`: Signal to load new data into the register.
+   - `ena`: Signal to enable shifting of the register.
+   - `data`: 4-bit input data for loading into the register.
+   - `q`: 4-bit output representing the current state of the shift register.
+
+2. **Reset Logic:**
+   - The `areset` signal is checked first due to its asynchronous nature. If it is asserted, the register `q` is reset to `4'b0000`.
+
+3. **Load Logic:**
+   - If the `load` signal is asserted and `areset` is not, the data input is loaded into the register `q`.
+
+4. **Shift Logic:**
+   - If `ena` is asserted—after checking the `load` condition—then the register shifts right. The most significant bit (`q[3]`) is replaced with `0`, and the remaining bits shift right.
+
+5. **Retain Value Logic:**
+   - If neither `load` nor `ena` is asserted, the output `q` retains its previous value.
+
+### Notes:
+- The order of conditions in the `always` block is crucial—`areset` is checked first, followed by `load` to ensure that loading takes priority over shifting when both are high.
+- Make sure to test the module thoroughly using a testbench to validate behavior under various conditions (resetting, loading, shifting, and combinations thereof).

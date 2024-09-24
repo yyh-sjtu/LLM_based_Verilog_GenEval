@@ -1,0 +1,22 @@
+module multi_pipe_8bit (
+	input clk,
+	input rst_n,
+	input mul_en_in,
+	input [7:0] mul_a,
+	input [7:0] mul_b,
+	output mul_en_out,
+	output [15:0] mul_out
+);
+    reg [15:0] mul_out_reg;
+    always @(posedge clk or negedge rst_n)
+    begin
+        if(!rst_n)
+            mul_out_reg <= 16'h0;
+        else
+            if(mul_en_in)
+                mul_out_reg <= mul_a * mul_b;
+    end
+    assign mul_en_out = (mul_out_reg == 16'h0);
+    assign mul_out = (mul_out_reg == 16'h0);
+endmodule
+

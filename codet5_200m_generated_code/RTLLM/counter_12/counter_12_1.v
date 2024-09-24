@@ -1,0 +1,15 @@
+module counter_12 (
+    input rst_n,
+    input clk,
+    input valid_count,
+    output [3:0] out
+);
+    reg [3:0] count;
+    always @(posedge clk or negedge rst_n)
+        if (!rst_n)
+            count <= 4'b0000;
+        else if (valid_count)
+            count <= count + 1;
+    assign out = count;
+endmodule
+

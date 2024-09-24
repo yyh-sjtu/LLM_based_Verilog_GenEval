@@ -1,0 +1,60 @@
+Here is the RTL code for the TopModule implementing the Moore state machine as described:
+
+```verilog
+module TopModule (
+    input clk,
+    input areset,
+    input j,
+    input k,
+    output reg out
+);
+
+// Define states
+parameter OFF = 0;
+parameter ON = 1;
+
+// Define state register
+reg [1:0] state, next_state;
+
+// Moore state machine logic
+always @ (posedge clk or posedge areset)
+begin
+    if (areset)
+        state <= OFF;
+    else
+        state <= next_state;
+end
+
+always @ (*)
+begin
+    case (state)
+        OFF: begin
+            if (j)
+                next_state = ON;
+            else
+                next_state = OFF;
+        end
+        ON: begin
+            if (k)
+                next_state = OFF;
+            else
+                next_state = ON;
+        end
+        default: next_state = state;
+    endcase
+end
+
+// Output logic
+always @ (*)
+begin
+    case (state)
+        OFF: out = 0;
+        ON: out = 1;
+        default: out = 0;
+    endcase
+end
+
+endmodule
+```
+
+This code implements the TopModule with clock, asynchronous reset, two inputs (j and k), and one output (out) following the Moore state machine described. The state transitions are based on the input signals j and k, and the output is determined by the current state. The module should toggle between the OFF and ON states based on the input conditions as specified.

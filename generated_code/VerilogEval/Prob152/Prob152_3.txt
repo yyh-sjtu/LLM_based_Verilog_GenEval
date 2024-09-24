@@ -1,0 +1,117 @@
+To implement the `TopModule` as specified, we can create a Moore state machine in SystemVerilog. The system will have states to represent the Lemming's different behaviors, including walking left, walking right, falling, and digging. 
+
+Here's a basic code structure for the `TopModule`:
+
+```verilog
+module TopModule (
+    input  clk,
+    input  areset,
+    input  bump_left,
+    input  bump_right,
+    input  ground,
+    input  dig,
+    output reg walk_left,
+    output reg walk_right,
+    output reg aaah,
+    output reg digging
+);
+
+    // Define states
+    typedef enum logic [1:0] {
+        STATE_WALK_LEFT,
+        STATE_WALK_RIGHT,
+        STATE_FALL,
+        STATE_DIGGING
+    } state_t;
+
+    // State registers
+    state_t current_state, next_state;
+
+    // Combinational logic: Determine next state
+    always_comb begin
+        // Default values
+        next_state = current_state;
+        walk_left = 0;
+        walk_right = 0;
+        aaah = 0;
+        digging = 0;
+
+        case (current_state)
+            STATE_WALK_LEFT: begin
+                walk_left = 1;
+                if (!ground) begin
+                    next_state = STATE_FALL;
+                    aaah = 1;  // Lemming says "aaah!"
+                end else if (dig) begin
+                    next_state = STATE_DIGGING;
+                    digging = 1; // Start digging
+                end else if (bump_right) begin
+                    next_state = STATE_WALK_RIGHT;
+                end
+            end
+
+            STATE_WALK_RIGHT: begin
+                walk_right = 1;
+                if (!ground) begin
+                    next_state = STATE_FALL;
+                    aaah = 1;  // Lemming says "aaah!"
+                end else if (dig) begin
+                    next_state = STATE_DIGGING;
+                    digging = 1; // Start digging
+                end else if (bump_left) begin
+                    next_state = STATE_WALK_LEFT;
+                end
+            end
+
+            STATE_FALL: begin
+                aaah = 1; // Lemming is falling
+                if (ground) begin
+                    // When the ground appears, resume walking in the last direction
+                    if (current_state == STATE_WALK_LEFT) begin
+                        next_state = STATE_WALK_LEFT;
+                    end else if (current_state == STATE_WALK_RIGHT) begin
+                        next_state = STATE_WALK_RIGHT;
+                    end
+                end
+                // Digging and bump events do not affect falling state
+            end
+
+            STATE_DIGGING: begin
+                digging = 1; // Lemming is digging
+                if (!ground) begin
+                    next_state = STATE_FALL;
+                    aaah = 1; // Lemming starts falling
+                end
+                // Bump and ground conditions do not change the state immediately while digging
+            end
+        endcase
+    end
+
+    // Sequential logic: Update state on clock
+    always_ff @(posedge clk or posedge areset) begin
+        if (areset) begin
+            current_state <= STATE_WALK_LEFT; // Reset to walking left
+        end else begin
+            current_state <= next_state; // Update to the next state
+        end
+    end
+
+endmodule
+```
+
+### Explanation:
+
+1. **State Definitions**: We define a 2-bit enumerated type `state_t` with four states: `STATE_WALK_LEFT`, `STATE_WALK_RIGHT`, `STATE_FALL`, and `STATE_DIGGING` to manage the behavior of the Lemming.
+
+2. **Combinational Logic (`always_comb`)**: This block determines the next state based on the current state and the inputs:
+   - If in `STATE_WALK_LEFT`, the Lemming will walk left and track bump actions, ground detection, and digging commands.
+   - Similar logic applies for `STATE_WALK_RIGHT`.
+   - In `STATE_FALL`, the Lemming will just fall and wait for the ground to reappear.
+   - In `STATE_DIGGING`, the Lemming will dig until it reaches no ground, then it transitions to falling.
+
+3. **Sequential Logic (`always_ff`)**: This block updates the current state on the rising edge of the clock or resets it asynchronously.
+
+### Important Notes:
+- The priority of actions is handled naturally by the structure of the state transitions.
+- The default values for outputs ensure that when in a state, only the relevant signals are asserted.
+- Ensure proper synthesis and testing in an FPGA or simulation environment to validate functionality.

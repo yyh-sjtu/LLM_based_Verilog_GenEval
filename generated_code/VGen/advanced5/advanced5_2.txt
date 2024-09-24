@@ -1,0 +1,33 @@
+// Declare the state register
+always @(posedge clk or posedge reset) begin
+    if(reset) 
+        cur_state <= IDLE;
+    else
+        cur_state <= next_state;
+end
+
+// Define the next state logic
+always @(*) begin
+    case(cur_state)
+        IDLE: begin
+            if(a & b) next_state = SAB;
+            else if(a) next_state = SA;
+            else if(b) next_state = SB;
+            else next_state = IDLE;
+        end
+        SA: begin
+            if(b) next_state = SAB;
+            else next_state = SA;
+        end
+        SB: begin
+            if(a) next_state = SAB;
+            else next_state = SB;
+        end
+        SAB: next_state = SAB;
+    endcase
+end
+
+// Define the output logic
+assign z = (cur_state == SAB);
+
+endmodule

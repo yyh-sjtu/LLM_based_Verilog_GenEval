@@ -1,0 +1,35 @@
+Certainly! Below is a Verilog implementation of a `TopModule` that represents a 32-bit Galois LFSR with the specified taps and synchronous reset behavior.
+
+```verilog
+module TopModule (
+    input  clk,
+    input  reset,
+    output reg [31:0] q
+);
+
+    // Define the feedback logic for the Galois LFSR
+    always @(posedge clk) begin
+        if (reset) begin
+            // On reset, set output to 32'h1
+            q <= 32'h1;
+        end else begin
+            // Shift left and apply the feedback based on the tap positions
+            q[31:1] <= q[30:0]; // Shift left
+            q[0] <= q[31] ^ q[21] ^ q[1] ^ q[0]; // Feedback from taps at positions 32, 22, 2, and 1
+        end
+    end
+endmodule
+```
+
+### Explanation:
+1. **Module Declaration**: The `TopModule` has three ports: `clk` (clock), `reset` (active high reset), and `q` (32-bit output).
+
+2. **Synchronous Reset**: The LFSR resets to `32'h1` when `reset` is high. This operation occurs in the same always block triggered on the positive edge of the clock.
+
+3. **LFSR Logic**: In each clock cycle, if not resetting, the LFSR shifts left, and the new least significant bit (LSB) is computed from the feedback logic:
+   - Taps are utilized at position 32 (most significant bit), 22, 2, and 1 for XOR feedback computation.
+   - The new value of `q[0]` is computed using `q[31]`, `q[21]`, `q[1]`, and the current `q[0]`.
+
+4. **Non-blocking Assignment**: The use of non-blocking assignment (`<=`) in an always block ensures that the sequential logic behaves correctly with respect to the clock.
+
+This implementation meets the requirement for a synchronous reset and follows the properties of a Galois LFSR as specified.

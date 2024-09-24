@@ -1,0 +1,62 @@
+Sure, I can help you with that! Below is an implementation of the `TopModule` described in your request. This module uses a 32-bit shift register to keep track of the branch history for the predictions and mispredictions.
+
+```verilog
+module TopModule (
+    input  wire clk,
+    input  wire areset,
+    input  wire predict_valid,
+    input  wire predict_taken,
+    input  wire train_mispredicted,
+    input  wire train_taken,
+    input  wire [31:0] train_history,
+    output reg  [31:0] predict_history
+);
+
+    // Shift register representing the 32 bits of history
+    reg [31:0] history_reg;
+
+    // Asynchronous reset and update logic
+    always @(posedge clk or posedge areset) begin
+        if (areset) begin
+            // On reset, clear the history register
+            history_reg <= 32'b0;
+        end else begin
+            if (train_mispredicted) begin
+                // If a misprediction occurs, load the history register
+                history_reg <= {train_taken, train_history[31:1]}; 
+            end else if (predict_valid) begin
+                // Shift in the new prediction
+                history_reg <= {predict_taken, history_reg[31:1]};
+            end
+            // Note: if neither prediction nor misprediction occurs,
+            // the history_reg retains its current state.
+        end
+    end
+
+    // Continuous assignment to output
+    always @(*) begin
+        predict_history = history_reg;
+    end
+
+endmodule
+```
+
+### Explanation:
+
+1. **Input and Output Ports**: The module takes in various inputs and outputs the 32-bit `predict_history`.
+  
+2. **Shift Register**: 
+   - A 32-bit register called `history_reg` is declared to hold the history state.
+   - The most recent branch direction is tracked in the least significant bit (LSB) of this register.
+  
+3. **Reset Logic**:
+   - The `areset` input is handled asynchronously. When it is high, the `history_reg` is set to zero.
+
+4. **Branch Prediction Logic**:
+   - If `train_mispredicted` is high, the module updates the history register with new data. The new data is formed by concatenating `train_taken` (the actual direction of the branch) with the previous history (except for the oldest bit).
+   - If `predict_valid` is high, and if it's not a misprediction, the history is updated by shifting in `predict_taken`. 
+
+5. **Output Assignment**:
+   - The output `predict_history` is continuously assigned the value of `history_reg`.
+
+This implementation respects the requirements you've specified and operates correctly under the given conditions.

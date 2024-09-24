@@ -1,0 +1,69 @@
+To implement the `TopModule` with the specified finite state machine (FSM) using Verilog, we will describe the next-state logic for the state variable `y`. The output `Y1` will be the second bit of the state variable `y`, corresponding to state transitions based on input `w`.
+
+Here's how the state transitions work according to the provided state machine:
+
+- Each state is represented as follows:
+  - A: `000` (0)
+  - B: `001` (1)
+  - C: `010` (2)
+  - D: `011` (3)
+  - E: `100` (4)
+  - F: `101` (5)
+
+From the state diagram given, we can summarize the transitions based on `w` as follows:
+
+```
+Current State (y) | Input (w) | Next State (y)
+------------------------------------------------
+     000 (A)      |     0     |     001 (B)
+     000 (A)      |     1     |     000 (A)
+     001 (B)      |     0     |     010 (C)
+     001 (B)      |     1     |     011 (D)
+     010 (C)      |     0     |     100 (E)
+     010 (C)      |     1     |     011 (D)
+     011 (D)      |     0     |     101 (F)
+     011 (D)      |     1     |     000 (A)
+     100 (E)      |     0     |     100 (E)
+     100 (E)      |     1     |     011 (D)
+     101 (F)      |     0     |     010 (C)
+     101 (F)      |     1     |     011 (D)
+```
+
+Next, we'll create the Verilog code to define the `TopModule`. We'll assume that you have already set up a clock and reset for your flip-flops, but for this task, we'll only focus on next-state logic and the output logic.
+
+Here’s the Verilog code:
+
+```verilog
+module TopModule (
+    input  [2:0] y,  // 3-bit state
+    input  w,        // input bit
+    output Y1        // output bit
+);
+
+// Next-state logic for y[1] (the second bit of the state)
+reg next_y1;
+
+always @(*) begin
+    case (y)
+        3'b000: next_y1 = 1'b0;  // State A
+        3'b001: next_y1 = w ? 1'b1 : 1'b0; // State B
+        3'b010: next_y1 = w ? 1'b1 : 1'b0; // State C
+        3'b011: next_y1 = w ? 1'b1 : 1'b0; // State D
+        3'b100: next_y1 = w ? 1'b1 : 1'b0; // State E
+        3'b101: next_y1 = w ? 1'b1 : 1'b0; // State F
+        default: next_y1 = 1'b0;  // Default case
+    endcase
+end
+
+assign Y1 = next_y1; // Connect the next_y1 to output Y1
+
+endmodule
+```
+
+### Explanation:
+1. **Input/Output Declaration**: The module has 3-bit input `y` and 1-bit input `w`, with output `Y1`.
+2. **Next-State Logic**: Inside the `always` block, the next state logic for `y[1]` is implemented using a `case` statement based on the current state `y`. We determine the next value of `y[1]` (which is `next_y1`) based on the current state and the input `w`.
+3. **Output Assignment**: Finally, `Y1` is assigned the next value of `y[1]`.
+
+### Note:
+- The FSM's transition logic might require a clocked process to actually implement the state transitions in a full design, typically involving flip-flops. This implementation provides only the combinational logic for the next state evaluation based on `y` and `w`. You would typically use this logic in conjunction with flip-flops in your full design.
