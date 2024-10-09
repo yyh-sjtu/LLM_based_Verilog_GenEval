@@ -17,7 +17,7 @@ def verilog_extractor(text):
         end = text.find("\n```", begin)
         
     if not "module" in verilog:
-        pattern = r'module\s+[^\(]+\(.*?\);.*?endmodule'
+        pattern = r'module\s+[^\(\s]+\s*(?:#\s*\(.*\)){0,1}\s*\(.*?\);.*?endmodule'
         verilog_code_extracted = re.findall(pattern, text, re.DOTALL)
         for module in verilog_code_extracted:
             verilog += (module + '\n\n')
@@ -27,50 +27,79 @@ def verilog_extractor(text):
 if __name__ == "__main__":
     text = """
 ```
-module radix2_div (
-    input wire clk,
-    input wire rst,
-    input wire sign,
-    input wire [7:0] dividend,
-    input wire [7:0] divisor,
-    input wire opn_valid,
-    output wire res_valid,
-    output wire [15:0] result
+Below is an instruction that describes a task, paired with an input that provides further context. 
+Write a response that appropriately completes the request.
+
+
+### Instruction:
+Based on the prompt, output the verilog code.
+
+### Input:
+Please act as a professional verilog designer.
+
+Implement a module of perpetual calendar. The starting value of Secs, Mins, and Hours are all 0. Both Secs and Mins loop continuously from 0 to 59. When Secs=59, Min increases by 1 at the next cycle, and when Min=59 && Secs=59, Hours increases by 1 at the next cycle. Hours is counted from the 0-23 cycle.
+
+Module name:  
+    calendar  
+                 
+Input ports:
+    CLK: Clock input
+    RST: Active high reset signal
+
+Output ports:
+    Hours: 6-bit output representing the current hours
+    Mins: 6-bit output representing the current minutes
+    Secs: 6-bit output representing the current seconds
+
+Implementation:
+module()
+The calendar module uses three always blocks to update the values of seconds, minutes, and hours based on the clock signal and reset signal.
+The first always block triggers on the positive edge of the clock signal (posedge CLK) or the positive edge of the reset signal (posedge RST). It checks if the reset signal is active (RST) and sets the seconds value (Secs) to 0. If the seconds value is 59, it wraps around and sets the seconds value to 0. Otherwise, it increments the seconds value by 1.
+The second always block also triggers on the positive edge of the clock signal or the positive edge of the reset signal. It handles the minutes value (Mins). If the reset signal is active, it sets the minutes value to 0. If both the minutes and seconds values are 59, it wraps around and sets the minutes value to 0. If the seconds value is 59, it increments the minutes value by 1. Otherwise, it keeps the minutes value unchanged.
+The third always block triggers on the positive edge of the clock signal or the positive edge of the reset signal. It handles the hours value (Hours). If the reset signal is active, it sets the hours value to 0. If the hours, minutes, and seconds values are all at their maximum (23, 59, and 59 respectively), it wraps around and sets the hours value to 0. If the minutes and seconds values are both 59, it increments the hours value by 1. Otherwise, it keeps the hours value unchanged.
+
+Give me the complete code.
+
+
+### Response:`timescale 1ns/1ns
+module    calendar    (
+    CLK,
+    RST,
+    Hours,
+    Mins,
+    Secs
 );
-
-    reg [8:0] SR;
-    reg [8:0] NEG_DIVISOR;
-    reg [3:0] cnt;
-    reg [3:0] start_cnt;
-
-    always @(posedge clk) begin
-        if (rst) begin
-            SR <= 9'b0;
-            NEG_DIVISOR <= 9'b0;
-            cnt <= 4'b0;
-            start_cnt <= 4'b0;
-            res_valid <= 1'b0;
-        end else if (opn_valid && !res_valid) begin
-            SR <= {1'b0, sign ? -dividend : dividend, 1'b0};
-            NEG_DIVISOR <= {1'b0, -divisor, 1'b0};
-            cnt <= 4'b1;
-            start_cnt <= 4'b1;
-        end else if (start_cnt) begin
-            if (cnt == 4'b1000) begin
-                cnt <= 4'b0;
-                start_cnt <= 4'b0;
-                res_valid <= 1'b1;
-                result <= {SR[8:1], SR[0]};
-            end else begin
-                cnt <= cnt + 1;
-                SR <= SR - {1'b0, NEG_DIVISOR[8:1]} + (SR[8] ? 1'b1 : 1'b0);
-                SR <= {SR[8:1], SR[0]};
-            end
-        end else begin
-            res_valid <= 1'b0;
-        end
-    end
-
+#(para
+)
+    input    CLK;
+    input    RST;
+    output    [5:0]    Hours;
+    output    [5:0]    Mins;
+    output    [5:0]    Secs;
+    reg        [5:0]    Secs;
+    reg        [5:0]    Mins;
+    reg        [5:0]    Hours;
+    always@(posedge CLK)
+        if(RST)
+            Secs <= 6'b0;
+        else if(Secs == 6'b59)
+            Secs <= 6'b0;
+        else
+            Secs <= Secs + 1'b1;
+    always@(posedge CLK)
+        if(RST)
+            Mins <= 6'b0;
+        else if(Mins == 6'b59)
+            Mins <= 6'b0;
+        else if(Secs == 6'b59)
+            Mins <= Mins + 1'b1;
+    always@(posedge CLK)
+        if(RST)
+            Hours <= 6'b0;
+        else if(Hours == 6'b23)
+            Hours <= 6'b0;
+        else if(Mins == 6'b59)
+            Hours <= Hours + 1'b1;
 endmodule
 ```
     """

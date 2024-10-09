@@ -1,6 +1,6 @@
 from tqdm import tqdm
 import torch
-from transformers import AutoModelForSeq2SeqLM, AutoTokenizer, AutoModel
+from transformers import AutoModelForSeq2SeqLM, AutoTokenizer, AutoModel, AutoModelForCausalLM
 from human_eval.data import write_jsonl
 import json
 
@@ -9,7 +9,7 @@ os.environ["TOKENIZERS_PARALLELISM"] = "false"
 
 ### GLOBAL SETTINGS
 # os.environ["CUDA_VISIBLE_DEVICES"] = '4'
-device = torch.device("cuda:1" if torch.cuda.is_available() else "cpu")
+device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
 # print(f"device: {device}")
 
 DESCRIPTION_INSTRUCTION = """Below is an instruction that describes a task, paired with an input that provides further context. 
@@ -28,12 +28,12 @@ class codet5():
                  instruction = 'generation',
                  model ='/data1/yliu22/lcm/rtl/github_run/saved_models/instruct_codet5p_220m_bimodal_all_8_21_3/final_checkpoint',
                  tokenizer='Salesforce/codet5p-220m-bimodal',
-                 temperature=0.8,
+                 temperature=0.1,
                  N=5,
                  max_len=2048,
                  decoding_style='sampling',
                  num_seqs_per_iter=1,
-                 num_beams=4
+                 num_beams=5
                  ) -> None:
         self.instruction = instruction
         self.model_path = model
@@ -47,17 +47,37 @@ class codet5():
 
 
 
-        self.tokenizer = AutoTokenizer.from_pretrained(self.tokenizer)
-        if '220m' in self.model_path:
+        self.tokenizer = AutoTokenizer.from_pretrained(self.tokenizer, trust_remote_code=True)
+        if '220m' in self.model_path  and 'codet5' in self.model_path:
             self.model = AutoModel.from_pretrained(self.model_path, trust_remote_code=True)
-        if '6b' in self.model_path:
+        if '6b' in self.model_path  and 'codet5' in self.model_path:
             self.model = AutoModelForSeq2SeqLM.from_pretrained(self.model_path, 
                                                         torch_dtype=torch.float16, 
                                                         trust_remote_code=True,
                                                         low_cpu_mem_usage=True)
+        if '220m' in self.model_path and 'codet5' in self.model_path:
+            self.model = AutoModel.from_pretrained(self.model_path, trust_remote_code=True)
+        if '6b' in self.model_path and 'codet5' in self.model_path:
+            self.model = AutoModelForSeq2SeqLM.from_pretrained(self.model_path, 
+                                                        torch_dtype=torch.bfloat16, 
+                                                        trust_remote_code=True,
+                                                        low_cpu_mem_usage=True)
+        if "codegen" in self.model_path:
+
+            self.model = AutoModelForCausalLM.from_pretrained(self.model_path, trust_remote_code=True, torch_dtype=torch.bfloat16)
+            self.tokenizer.pad_token = self.tokenizer.eos_token
+            self.tokenizer.pad_token_id = self.tokenizer.eos_token_id
+        
+        if "deepseek" in self.model_path:
+            self.model = AutoModelForCausalLM.from_pretrained(self.model_path, trust_remote_code=True, torch_dtype=torch.bfloat16)
+    
+        
         self.model.eval()
         self.model.to(device)
-        self.prompt_to_decoder = True if any([size in self.model_path for size in ['2b', '6b', '16b']]) else False
+        if 'codet5' in self.model_path:
+            self.prompt_to_decoder  = True if any([size in self.model_path for size in ['2b', '6b', '16b']]) else False
+        else:
+            self.prompt_to_decoder = False
 
     def completion_create(self, prompt):
 
@@ -112,7 +132,7 @@ class codet5():
                                                     # max_new_tokens=2048,
                                                     top_p=0.95)
                         
-            if gen_tokens is not None:
+            if gen_tokens is not None or "codegen" in self.model_path or "deepseek" in self.model_path:
                 if self.prompt_to_decoder:
                     gen_tokens = gen_tokens[:, encoding_decoder['input_ids'].shape[-1] + 1:]
                 gen_seqs = self.tokenizer.batch_decode(gen_tokens, skip_special_tokens=True)

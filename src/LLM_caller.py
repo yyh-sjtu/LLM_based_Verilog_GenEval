@@ -8,7 +8,7 @@ Author: Yunhao Zhou
 import openai
 import local_model
 
-local_model_list = ["local_model"]
+local_model_list = ["codet5_200m","local_model"]
 
 def llm_call(prompt, args):
     model_name = args.model_name
@@ -69,8 +69,8 @@ def llm_call(prompt, args):
         try:
             answer = local_model_instance.completion_create(prompt)
         except Exception as e:
-            print("Error occurs when calling local model")
-            print(e)
+            print("Error occurs when calling local model",e)
+            answer=""
     else:
         raise ValueError("Invalid model name")
 
