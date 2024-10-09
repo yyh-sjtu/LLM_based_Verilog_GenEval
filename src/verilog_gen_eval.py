@@ -220,7 +220,7 @@ def test_on_benchmark(args):
                 
         if not args.gen_only:
             print(f"Start evaluating Verilog code for {benchmark}")
-            append_file(f"Model name: {args.model_name}\n", args.correctness_file)
+            append_file(f"Model name: {args.model_name} model path: {args.model_path}\n", args.correctness_file)
             append_file(f"Evaluation results of {benchmark}:\n", args.correctness_file)
             if not os.path.exists(os.path.join( generated_code_dir, benchmark)):
                 print(f"Please generate the Verilog code of benchmard {benchmark} first!")

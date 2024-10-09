@@ -8,7 +8,7 @@ Author: Yunhao Zhou
 import openai
 import local_model
 
-local_model_list = ["codet5_200m"]
+local_model_list = ["local_model"]
 
 def llm_call(prompt, args):
     model_name = args.model_name

@@ -28,5 +28,5 @@ MODEL_PATH='/data1/yliu22/lcm/rtl/github_run/saved_models/instruct_codet5p_220m_
 
 python src/verilog_gen_eval.py \
 --benchmark all \
---model_name codet5_200m \
+--model_name local_model \
 --model_path $MODEL_PATH
