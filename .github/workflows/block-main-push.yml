@@ -1,0 +1,20 @@
+name: Block Direct Push to Master
+
+on:
+  push:
+    branches:
+      - master
+
+jobs:
+  prevent-push:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Check if actor is allowed to push
+        run: |
+          if [[ "$GITHUB_ACTOR" == "yyh-sjtu" ]]; then
+            echo "You are allowed to push to main."
+            exit 0
+          else
+            echo "Direct pushes to main are not allowed. Please use a pull request." >&2
+            exit 1
+          fi
