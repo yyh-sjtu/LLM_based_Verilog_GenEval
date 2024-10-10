@@ -1,9 +1,0 @@
-module fsm (
-    input IN,
-    input CLK,
-    input RST,
-    output MATCH
-);
-    assign MATCH = 1'b1;
-endmodule
-

@@ -1,5 +1,0 @@
-module P_box (
-    input wire [31:0] In32,
-    output reg [31:0] Out32
-);
-The module `P_box` implements a permutation operation on a 32-bit input vector, generating a 32-bit output vector based on the permutation algorithm.

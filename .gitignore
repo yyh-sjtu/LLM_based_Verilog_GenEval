@@ -1,2 +1,9 @@
 wave.vcd
 my_test
+temp_output/
+correctness/
+
+.vscode/
+
+**/__pycache__/
+
