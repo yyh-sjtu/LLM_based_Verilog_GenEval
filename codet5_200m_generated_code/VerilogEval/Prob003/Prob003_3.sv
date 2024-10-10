@@ -1,5 +1,0 @@
-module TopModule (
-	output one
-);
-endmodule
-

@@ -1,9 +1,0 @@
-module TopModule (
-    input clk,
-    input d,
-    input q
-);
-    reg [1:0] q;
-    always @(posedge clk)
-        q <= d;
-endmodule

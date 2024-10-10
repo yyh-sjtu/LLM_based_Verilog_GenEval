@@ -1,8 +1,0 @@
-module adder_32bit (
-	input [32:1] A,
-	input [32:1] B,
-	output [32:1] S,
-	output C32
-);
-    CLACLA I0 (A[0], B[0], S[0], C32);
-endmodule
