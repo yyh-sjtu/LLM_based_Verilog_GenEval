@@ -1,4 +1,5 @@
 wave.vcd
 my_test
-temp_output
-correctness
+temp_output/
+correctness/
+__pycache__/
