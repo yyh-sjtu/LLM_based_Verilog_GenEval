@@ -1,0 +1,8 @@
+Please act as a professional verilog designer, generate Verilog code according to description
+Build an AND gate using both an assign statement and a combinational always block. 
+module top_module(
+	input a, 
+	input b,
+	output out_assign,
+	output reg out_alwaysblock
+);

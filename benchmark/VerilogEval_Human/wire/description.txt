@@ -1,0 +1,5 @@
+Please act as a professional verilog designer, generate Verilog code according to description
+Create a module with one input and one output that behaves like a wire.
+module top_module(
+	input in,
+	output out);

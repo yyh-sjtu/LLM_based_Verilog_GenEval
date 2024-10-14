@@ -1,0 +1,6 @@
+Please act as a professional verilog designer, generate Verilog code according to description
+Implement the boolean function z = (x^y) & x.
+module top_module(
+	input x,
+	input y,
+	output z);

@@ -26,13 +26,19 @@ file_patterns = {
     "VGen": {"prompt_pattern": "prompt*", 
                 "testbench_pattern": "tb_*"},
     "VerilogEval": {"prompt_pattern": "*prompt.txt", 
-                    "testbench_pattern": "*test.sv"}
+                    "testbench_pattern": "*test.sv"},
+    "VerilogEval_Human": {"prompt_pattern": "description.txt", 
+                            "testbench_pattern": "testbench.sv"},
+    "VerilogEval_Machine": {"prompt_pattern": "description.txt", 
+                            "testbench_pattern": "testbench.sv"}
 }
 
 top_instruction = {
     "RTLLM": "",
     "VGen": "Please act as a professional verilog designer. \n Implement the following module.\n",
-    "VerilogEval": "Please act as a professional RTL designer.\n"
+    "VerilogEval": "Please act as a professional RTL designer.\n",
+    "VerilogEval_Human": "",
+    "VerilogEval_Machine": ""
 }
 
 def get_args():
@@ -101,7 +107,9 @@ def complement_module_name(text, design_dir, benchmark):
     ref_pattern = {
         "RTLLM": "verified*",
         "VGen": "answer*",
-        "VerilogEval": "*ref.sv"
+        "VerilogEval": "*ref.sv",
+        "VerilogEval_Human": "ref.v",
+        "VerilogEval_Machine": "ref.v"
     }
 
     ref_path1 = glob(os.path.join(design_dir, ref_pattern[benchmark]))

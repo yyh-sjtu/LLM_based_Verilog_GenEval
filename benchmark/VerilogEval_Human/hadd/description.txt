@@ -1,0 +1,8 @@
+Please act as a professional verilog designer, generate Verilog code according to description
+Create a half adder. A half adder adds two bits (with no carry-in) and produces a sum and carry-out.
+module top_module (
+	input a,
+	input b,
+	output sum,
+	output cout
+);

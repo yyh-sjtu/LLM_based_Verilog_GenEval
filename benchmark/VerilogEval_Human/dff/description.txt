@@ -1,0 +1,6 @@
+Please act as a professional verilog designer, generate Verilog code according to description
+Create a single D flip-flop.
+module top_module(
+	input clk,
+	input d,
+	output reg q);
