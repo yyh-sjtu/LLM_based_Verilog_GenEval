@@ -1,0 +1,33 @@
+Sure, here's the implementation of the TopModule module in VHDL:
+
+```vhdl
+library IEEE;
+use IEEE.STD_LOGIC_1164.ALL;
+
+entity TopModule is
+    Port ( a : in  STD_LOGIC;
+           b : in  STD_LOGIC;
+           sel_b1 : in  STD_LOGIC;
+           sel_b2 : in  STD_LOGIC;
+           out_assign : out  STD_LOGIC;
+           out_always : out  STD_LOGIC);
+end TopModule;
+
+architecture Behavioral of TopModule is
+begin
+    -- Using assign statements
+    out_assign <= (sel_b1 and sel_b2) when (b = '1') else a;
+
+    -- Using a procedural if statement
+    process(a, b, sel_b1, sel_b2)
+    begin
+        if sel_b1 = '1' and sel_b2 = '1' then
+            out_always <= b;
+        else
+            out_always <= a;
+        end if;
+    end process;
+end Behavioral;
+```
+
+This module implements a 2-to-1 multiplexer (mux) that chooses between input signals `a` and `b`. If both `sel_b1` and `sel_b2` are true (logic high), the output `out_assign` and `out_always` will be equal to `b`. Otherwise, the output will be equal to `a`. The mux is implemented using both assign statements (`out_assign`) and a procedural if statement (`out_always`).

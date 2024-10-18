@@ -1,0 +1,24 @@
+Here's the RTL design implementation of the TopModule module that compares two 2-bit inputs A and B and produces an output z based on their equality:
+
+```verilog
+module TopModule (
+  input [1:0] A,
+  input [1:0] B,
+  output z
+  );
+
+  // Create an intermediate wire to store the equality result
+  wire is_equal;
+
+  // Compare the two input vectors A and B using the "==" operator
+  assign is_equal = (A == B);
+
+  // Assign the output z based on the equality result (1 if A == B, otherwise 0)
+  assign z = is_equal ? 1'b1 : 1'b0;
+
+endmodule
+```
+
+In this implementation, two 2-bit input ports A and B are compared using the "==" operator, and the result is stored in the wire is_equal. Finally, the output port z is assigned the value based on the equality result (1 if A == B, otherwise 0).
+
+Please let me know if you need any further assistance!

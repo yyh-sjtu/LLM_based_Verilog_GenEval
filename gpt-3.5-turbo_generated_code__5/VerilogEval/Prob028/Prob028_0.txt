@@ -1,0 +1,20 @@
+Sure, here's an example implementation of the TopModule in RTL:
+
+```verilog
+module TopModule (
+  input  d,
+  input  ena,
+  output q
+);
+
+  reg q;
+
+  always @(posedge ena) begin
+    if (ena)
+      q <= d;
+  end
+
+endmodule
+```
+
+In this implementation, the `TopModule` is declared with one input `d`, one input `ena`, and one output `q`. Inside the `always` block, the `q` output is updated on the positive edge of the `ena` input. If `ena` is high, the `q` output is updated with the value of `d`. This behavior effectively implements a D latch.

@@ -1,0 +1,46 @@
+Sure, here's a RTL design implementation for the TopModule:
+
+```verilog
+module TopModule (
+  input  wire clk,
+  input  wire reset,
+  input  wire [31:0] in,
+  output wire [31:0] out
+);
+
+  reg [31:0] register;
+  reg [31:0] next_register;
+
+  always @(posedge clk or posedge reset) begin
+    if (reset) begin
+      register <= 32'b0;
+    end else begin
+      register <= next_register;
+    end
+  end
+
+  always @(*) begin
+    next_register = register;
+    for (integer i = 0; i < 32; i = i + 1) begin
+      if (in[i] && ~register[i]) begin
+        next_register[i] = 1;
+      end else if (~in[i] && register[i]) begin
+        next_register[i] = 0;
+      end
+    end
+  end
+  
+  assign out = register;
+
+endmodule
+```
+
+This implementation uses two registers: `register` and `next_register`. `register` holds the current state of the module and `next_register` holds the next state. 
+
+During each clock cycle, the input vector `in` is examined. If a bit changes from 1 to 0, the corresponding bit in `next_register` is set to 1 to capture the change. If a bit remains the same or changes from 0 to 1, the corresponding bit in `next_register` remains the same.
+
+The `register` is updated on the positive edge of the clock or when a reset signal is active. When reset is active, all the bits in `register` are set to 0. Otherwise, `register` is updated with `next_register`.
+
+The output `out` is assigned the value of `register`, which represents the captured signal changes.
+
+Please let me know if you have any further questions!

@@ -1,0 +1,74 @@
+module fsm(
+    input wire IN,
+    input wire CLK,
+    input wire RST,
+    output reg MATCH
+);
+
+// FSM states
+typedef enum logic [2:0] {
+    IDLE,
+    STATE1,
+    STATE2,
+    STATE3,
+    STATE4
+} fsm_state;
+
+// Registers
+reg [2:0] current_state, next_state;
+
+// Always block for state transition and output logic
+always @(posedge CLK, posedge RST) begin
+    if (RST) begin
+        current_state <= IDLE;
+        MATCH <= 0;
+    end else begin
+        current_state <= next_state;
+        MATCH <= (current_state == STATE4);
+    end
+end
+
+// Always block for next state logic
+always @(*) begin
+    case (current_state)
+        IDLE: begin
+            if (IN) begin
+                next_state = STATE1;
+            end else begin
+                next_state = IDLE;
+            end
+        end
+        STATE1: begin
+            if (!IN) begin
+                next_state = STATE2;
+            end else begin
+                next_state = IDLE;
+            end
+        end
+        STATE2: begin
+            if (!IN) begin
+                next_state = STATE3;
+            end else begin
+                next_state = IDLE;
+            end
+        end
+        STATE3: begin
+            if (IN) begin
+                next_state = STATE4;
+            end else begin
+                next_state = IDLE;
+            end
+        end
+        STATE4: begin
+            if (IN) begin
+                next_state = STATE4;
+            end else begin
+                next_state = IDLE;
+            end
+        end
+        default: next_state = IDLE;
+    endcase
+end
+
+endmodule
+

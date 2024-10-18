@@ -1,0 +1,43 @@
+module top_module (
+	input clk,
+	input areset,
+	input x,
+	output z
+);
+
+// Define states
+reg [1:0] state;
+parameter A = 2'b00;
+parameter B = 2'b01;
+
+// Define outputs
+reg output_z;
+
+// Synchronous always block for state transition
+always @(posedge clk or posedge areset) begin
+	if (areset) begin
+		state <= A;
+		output_z <= 0;
+	end
+	else begin
+		case (state)
+			A: begin
+				if (x) begin
+					state <= B;
+					output_z <= 1;
+				end
+			end
+			B: begin
+				if (x) begin
+					output_z <= 0;
+				end
+			end
+		endcase
+	end
+end
+
+// Assign output
+assign z = output_z;
+
+endmodule
+

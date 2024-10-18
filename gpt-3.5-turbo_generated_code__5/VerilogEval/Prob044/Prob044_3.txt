@@ -1,0 +1,23 @@
+As an AI language model, I can provide you with an example solution in Verilog for the RTL design of the TopModule you described:
+
+```verilog
+module TopModule(
+  input [2:0] a,
+  input [2:0] b,
+  output reg [2:0] out_or_bitwise,
+  output reg out_or_logical,
+  output reg [5:0] out_not
+);
+
+  always @* begin
+    out_or_bitwise = a | b;
+    out_or_logical = |a | |b; // Using bitwise-NOT and logical-OR operators
+    out_not = {~b, ~a}; // Inverted values of 'b' in the upper half and 'a' in the lower half
+  end
+
+endmodule
+```
+
+In this code, I have used a combinational `always` block to compute the required operations based on the input values 'a' and 'b'. The `out_or_bitwise` port performs bitwise-OR operation on vectors 'a' and 'b'. The `out_or_logical` port calculates the logical-OR operation using bitwise-NOT operator (`|`) on 'a' and 'b'. Lastly, the `out_not` port concatenates the inverted values (`~`) of 'b' in the upper half (`[5:3]`) and 'a' in the lower half (`[2:0]`) of the output vector.
+
+Note: This solution assumes the usage of IEEE standard logic for bitwise and logical operations. Make sure to adjust the syntax according to your RTL design flow and simulation tool.

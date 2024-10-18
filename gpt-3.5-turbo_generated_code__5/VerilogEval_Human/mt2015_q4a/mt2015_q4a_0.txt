@@ -1,0 +1,7 @@
+
+
+    assign z = (x ^ y) & x;
+    
+endmodule 
+
+This Verilog code implements the boolean function z = (x^y) & x, where x, y, and z are input and output signals of the module "top_module". The XOR operation is performed between x and y, and then the result is ANDed with x to obtain z.

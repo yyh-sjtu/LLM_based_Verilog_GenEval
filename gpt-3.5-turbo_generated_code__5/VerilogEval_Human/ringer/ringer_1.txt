@@ -1,0 +1,4 @@
+
+	assign ringer = (~vibrate_mode) & ring;
+	assign motor = vibrate_mode & ring;
+endmodule

@@ -1,0 +1,43 @@
+Here's the complete code for the serial to parallel conversion circuit in Verilog:
+
+```verilog
+module serial2parallel (
+  input wire clk,
+  input wire rst_n,
+  input wire din_serial,
+  input wire din_valid,
+  output reg [7:0] dout_parallel,
+  output reg dout_valid
+);
+
+  reg [3:0] cnt;
+
+  always @(posedge clk or negedge rst_n) begin
+    if (~rst_n) begin
+      cnt <= 0;
+      dout_valid <= 0;
+      dout_parallel <= 0;
+    end else begin
+      if (din_valid) begin
+        cnt <= cnt + 1;
+        dout_parallel <= {din_serial, dout_parallel[7:1]};
+        dout_valid <= (cnt == 7);
+        if (cnt == 7) begin
+          cnt <= 0;
+        end
+      end
+    end
+  end
+
+endmodule
+```
+
+In the code, we define the module `serial2parallel` with all the specified input and output ports. Inside the module, we declare a 4-bit counter `cnt` to keep track of the number of serial input data bits received.
+
+Inside the `always` block, we trigger the actions on the positive edge of the clock (`posedge clk`) and negative edge of the reset signal (`negedge rst_n`). When the reset signal is asserted (`~rst_n`), the counter is reset to 0, and the `dout_valid` signal and `dout_parallel` output are set to 0.
+
+If the `din_valid` signal is high, indicating the input data is valid, we increment the counter `cnt` by 1. The `dout_parallel` output is updated by shifting the existing bits to the right by one position and placing the current `din_serial` input in the most significant bit position.
+
+When the counter reaches 7, indicating that all 8 serial data bits have been received, `dout_valid` is set to 1, indicating that the parallel output data is valid. Additionally, the counter is reset back to 0 to start counting for the next 8 bits of input data.
+
+Note: This code assumes that the reset signal is active-low (`rst_n`) and synchronous (`rst_n` synchronized with the clock signal).

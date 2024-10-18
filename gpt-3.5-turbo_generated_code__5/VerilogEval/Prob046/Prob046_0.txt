@@ -1,0 +1,25 @@
+Here's an implementation of the TopModule module in Verilog:
+
+```verilog
+module TopModule(
+  input clk,
+  input reset,
+  input [7:0] d,
+  output reg [7:0] q
+);
+
+  // Create an internal signal to hold the reset value
+  reg [7:0] reset_value = 8'h34;
+
+  // Create 8 D flip-flops with synchronous reset
+  always @(negedge clk) begin
+    if (reset)
+      q <= reset_value;
+    else
+      q <= d;
+  end
+
+endmodule
+```
+
+In this implementation, the `TopModule` module includes an internal signal `reset_value` which holds the reset value of 0x34. It then uses an `always` block triggered by the negative edge of `clk` to update the value of `q`. If `reset` is active, the value of `q` is set to `reset_value`, otherwise it is set to the value of `d`.

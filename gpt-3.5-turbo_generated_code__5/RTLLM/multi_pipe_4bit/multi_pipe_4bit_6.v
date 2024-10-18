@@ -1,0 +1,55 @@
+module multi_pipe_4bit (
+    input wire clk,
+    input wire rst_n,
+    input wire [3:0] mul_a,
+    input wire [3:0] mul_b,
+    output reg [7:0] mul_out
+);
+
+parameter size = 4;
+
+reg [7:0] partial_products [0:size-1];
+reg [7:0] intermediate_sum;
+
+// Extension of input signals
+always @(*) begin
+    reg [7:0] extended_mul_a;
+    reg [7:0] extended_mul_b;
+
+    extended_mul_a = {size{mul_a[size-1]}} , mul_a;
+    extended_mul_b = {size{mul_b[size-1]}} , mul_b;
+
+    // Multiplication operation
+    generate
+        genvar i;
+        for (i = 0; i < size; i = i + 1) begin
+            always @(*) begin
+                partial_products[i] = (extended_mul_b[i]) ? (extended_mul_a << i) : 8'b0;
+            end
+        end
+    endgenerate
+
+    // Add of partial products
+    always @(posedge clk or negedge rst_n) begin
+        if (~rst_n) begin
+            intermediate_sum <= 8'b0;
+        end else begin
+            intermediate_sum <= partial_products[0];
+            for (i = 1; i < size; i = i + 1) begin
+                intermediate_sum <= intermediate_sum + partial_products[i];
+            end
+        end
+    end
+
+    // Final product calculation
+    always @(posedge clk or negedge rst_n) begin
+        if (~rst_n) begin
+            mul_out <= 8'b0;
+        end else begin
+            mul_out <= intermediate_sum;
+        end
+    end
+end
+
+endmodule
+

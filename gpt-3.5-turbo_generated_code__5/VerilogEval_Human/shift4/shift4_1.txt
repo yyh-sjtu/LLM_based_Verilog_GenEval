@@ -1,0 +1,44 @@
+// Define the shift register module
+module shift_register(
+    input clk,
+    input areset,
+    input load,
+    input ena,
+    input [3:0] data,
+    output reg [3:0] q
+);
+
+// Internal signals
+reg [3:0] q_temp;
+
+always @(posedge clk or posedge areset) begin
+    if (areset) begin
+        q <= 4'b0000;
+    end else begin
+        if (load) begin
+            q <= data;
+        end else if (ena) begin
+            q_temp[3] <= 1'b0;
+            q_temp[2:0] <= q[3:1];
+            q <= q_temp;
+        end else begin
+            q_temp[3] <= q[3];
+            q_temp[2:0] <= q[3:1];
+            q <= q_temp;
+        end
+    end
+end
+
+endmodule
+
+// Instantiate the shift register module
+shift_register sr(
+    .clk(clk),
+    .areset(areset),
+    .load(load),
+    .ena(ena),
+    .data(data),
+    .q(q)
+);
+
+endmodule

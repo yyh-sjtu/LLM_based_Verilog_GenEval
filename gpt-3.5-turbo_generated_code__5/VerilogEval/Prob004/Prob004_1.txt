@@ -1,0 +1,31 @@
+Sure! Here's an example implementation of the TopModule in VHDL:
+
+```vhdl
+entity TopModule is
+    port (
+        in : in std_logic_vector(31 downto 0);
+        out : out std_logic_vector(31 downto 0)
+    );
+end entity TopModule;
+
+architecture rtl of TopModule is
+begin
+    process(in)
+    begin
+        out <= in(24 downto 31) & in(16 downto 23) & in(8 downto 15) & in(0 downto 7);
+    end process;
+end architecture rtl;
+```
+
+And here's an example implementation of the TopModule in Verilog:
+
+```verilog
+module TopModule (
+    input wire [31:0] in,
+    output wire [31:0] out
+);
+    assign out = {in[24:31], in[16:23], in[8:15], in[0:7]};
+endmodule
+```
+
+These implementations reverse the byte order of the 32-bit vector `in` and assign the result to the output vector `out`. Each byte (8 bits) of the input vector is reversed and concatenated to form the output vector.

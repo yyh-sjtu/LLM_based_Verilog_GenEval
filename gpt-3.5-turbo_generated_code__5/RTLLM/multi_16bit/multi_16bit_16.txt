@@ -1,0 +1,81 @@
+Here is the complete code for the implementation of a 16-bit unsigned multiplier in Verilog:
+
+```verilog
+module multi_16bit(
+  input clk,
+  input rst_n,
+  input start,
+  input [15:0] ain,
+  input [15:0] bin,
+  output reg [31:0] yout,
+  output reg done
+);
+
+  reg [3:0] i;  // Shift count register
+  reg [15:0] areg, breg;  // Multiplicand and Multiplier registers
+  reg [31:0] yout_r;  // Product register
+  reg done_r;  // Multiplication completion flag
+
+  always @(posedge clk, negedge rst_n) begin
+    if (~rst_n) begin
+      i <= 4'b0;
+      areg <= 16'b0;
+      breg <= 16'b0;
+      yout_r <= 32'b0;
+    end else begin
+      if (start && (i < 4'b10000)) begin
+        i <= i + 1;
+      end else if (!start) begin
+        i <= 4'b0;
+      end
+    end
+  end
+
+  always @(posedge clk, negedge rst_n) begin
+    if (~rst_n) begin
+      done_r <= 1'b0;
+    end else begin
+      if (i == 4'b10000) begin
+        done_r <= 1'b1;
+      end else if (i == 4'b10001) begin
+        done_r <= 1'b0;
+      end
+    end
+  end
+
+  always @(posedge clk, negedge rst_n) begin
+    if (~rst_n) begin
+      yout <= 32'b0;
+    end else begin
+      if (start) begin
+        // Assign multiplicand and multiplier values
+        if (i == 4'b0) begin
+          areg <= ain;
+          breg <= bin;
+        end
+        
+        // Shift and accumulate operation
+        if ((i > 4'b0) && (i < 4'b10001)) begin
+          if (areg[i-1]) begin
+            yout_r <= yout_r + (breg << (i-1));
+          end
+        end
+      end
+      
+      // Assign product output
+      yout <= yout_r;
+    end
+  end
+
+  assign done = done_r;
+
+endmodule
+```
+
+In this code, we have used a shift count register `i` to control the shifting and accumulation operations. The multiplicand `ain`, multiplier `bin`, and product output `yout` are all 16 bits wide, while the shift count `i` and completion flag `done` are single bits wide. The module operates on the rising edge of the clock `clk` and the falling edge of the reset `rst_n`. The `start` signal triggers the multiplication operation.
+
+The code uses three separate always blocks to handle the shift count, multiplication completion flag, and shift-and-accumulate operations. The shift count register is updated based on the reset condition, start signal, and when `i` is less than 16. The multiplication completion flag is updated when `i` reaches 16 (indicating the end of the multiplication). The shift-and-accumulate operation is executed based on the reset condition and the start signal. The product output is assigned the value of the product register at the end.
+
+The `done` output is assigned the value of the completion flag, indicating the completion of the multiplication operation.
+
+Please note that this code assumes that you have set up the appropriate testbench and connection to your design. The code provided is for the design of the multiplier module itself.

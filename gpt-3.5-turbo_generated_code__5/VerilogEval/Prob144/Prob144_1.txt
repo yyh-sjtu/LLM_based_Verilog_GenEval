@@ -1,0 +1,73 @@
+Sure, I can help you with that. Here's an implementation of the TopModule in VHDL:
+
+```vhdl
+library ieee;
+use ieee.std_logic_1164.all;
+use ieee.numeric_std.all;
+
+entity TopModule is
+    port (
+        clk   : in  std_logic;
+        load  : in  std_logic;
+        data  : in  std_logic_vector(255 downto 0);
+        q     : out std_logic_vector(255 downto 0)
+    );
+end entity TopModule;
+
+architecture rtl of TopModule is
+    signal q_reg : std_logic_vector(255 downto 0);
+    signal q_next : std_logic_vector(255 downto 0);
+    
+    component NeighbourCounter is
+        port (
+            clk  : in  std_logic;
+            q    : in  std_logic_vector(255 downto 0);
+            count: out std_logic_vector(255 downto 0)
+        );
+    end component NeighbourCounter;
+    
+begin
+    -- Neighbour Counter instantiation
+    NeighbourCount: NeighbourCounter
+        port map (
+            clk   => clk,
+            q     => q_reg,
+            count => q_next
+        );
+        
+    -- Register for game state
+    process (clk)
+    begin
+        if rising_edge(clk) then
+            if load = '1' then
+                q_reg <= data;
+            else
+                q_reg <= q_next;
+            end if;
+        end if;
+    end process;
+    
+    -- Output
+    q <= q_reg;
+
+end architecture rtl;
+```
+
+This implementation uses a separate component, `NeighbourCounter`, to count the number of neighbors for each cell. The `NeighbourCounter` component should be implemented separately, and its interface should be as follows:
+
+```vhdl
+entity NeighbourCounter is
+    port (
+        clk   : in  std_logic;
+        q     : in  std_logic_vector(255 downto 0);
+        count : out std_logic_vector(255 downto 0)
+    );
+end entity NeighbourCounter;
+
+architecture rtl of NeighbourCounter is
+begin
+    -- Implementation of NeighbourCounter goes here
+end architecture rtl;
+```
+
+Please note that the implementation of the `NeighbourCounter` is not provided as it depends on the specific design preferences and methodology. You can implement it using standard combinational logic or using more advanced techniques like using RAMs for neighbor storage and parallel processing.

@@ -1,0 +1,15 @@
+As a professional RTL designer, I would implement the TopModule module in Verilog as follows:
+
+```verilog
+module TopModule(
+    input a,
+    input b,
+    output out
+);
+
+    assign out = ~(a | b);
+
+endmodule
+```
+
+In this implementation, I have used the `assign` statement to assign the output `out` the logical NOR operation of inputs `a` and `b`. The tilde (~) symbol represents negation or logical NOT operation in Verilog.

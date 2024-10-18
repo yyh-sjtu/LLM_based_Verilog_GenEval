@@ -1,0 +1,30 @@
+Sure! Here's the implementation of the TopModule in RTL:
+
+```verilog
+module TopModule (
+  input  [2:0] sel,
+  input  [3:0] data0,
+  input  [3:0] data1,
+  input  [3:0] data2,
+  input  [3:0] data3,
+  input  [3:0] data4,
+  input  [3:0] data5,
+  output [3:0] out
+);
+
+  assign out = (sel == 3'b000) ? data0 :
+               (sel == 3'b001) ? data1 :
+               (sel == 3'b010) ? data2 :
+               (sel == 3'b011) ? data3 :
+               (sel == 3'b100) ? data4 :
+               (sel == 3'b101) ? data5 :
+               4'b0000;
+
+endmodule
+```
+
+In this code, I've defined a module named TopModule with the specified interface. The `sel` input is a 3-bit bus, and the `data` inputs and `out` output are 4-bit buses.
+
+Inside the module, I've used an assign statement to define the logic for the multiplexer. Based on the value of `sel`, the corresponding `data` input is selected using a conditional operator. If `sel` is between 0 and 5, the corresponding data input is selected; otherwise, a 4-bit zero value is output.
+
+Let me know if you need any further assistance!

@@ -1,0 +1,23 @@
+module top_module(
+    input clk,
+    input [7:0] in,
+    output reg [7:0] anyedge
+);
+
+reg [7:0] previous_in; // Stores the previous value of 'in'
+
+always @(posedge clk) begin
+    previous_in <= in; // Update the previous value of 'in' at every clock cycle
+    
+    anyedge <= 0; // Initialize 'anyedge' to 0 at every clock cycle
+    
+    // Check each bit of 'in' and compare it with the corresponding bit in 'previous_in'
+    // Set the corresponding bit in 'anyedge' to 1 if there is a transition from 0 to 1
+    for (integer i = 0; i < 8; i = i + 1) begin
+        if ((in[i] == 1) && (previous_in[i] == 0))
+            anyedge[i] <= 1;
+    end
+end
+
+endmodule
+

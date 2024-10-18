@@ -1,0 +1,28 @@
+Sure, here's the complete Verilog code for the 64-bit Johnson counter (torsional ring counter):
+
+```verilog
+module JC_counter(
+    input clk,      // Clock signal
+    input rst_n,    // Active-low reset signal
+    output reg [63:0] Q   // 64-bit counter register
+);
+
+// Reset condition
+always @(posedge clk or negedge rst_n)
+begin
+    if (~rst_n) // Reset condition
+        Q <= 64'd0;
+    else
+    begin
+        // Counter logic
+        if (Q[0] == 1'b0) // If LSB is 0, increment
+            Q <= {Q[63:1], 1'b1};
+        else // If LSB is 1, decrement
+            Q <= {Q[63:1], 1'b0};
+    end
+end
+
+endmodule
+```
+
+This code defines the module `JC_counter` with input ports `clk` and `rst_n`, and output port `Q` representing the 64-bit counter register. The counter value is updated on every rising edge of the clock signal or falling edge of the reset signal. When the reset signal is low, the counter is set to 0. Otherwise, the counter value is updated based on the Johnson counter logic.

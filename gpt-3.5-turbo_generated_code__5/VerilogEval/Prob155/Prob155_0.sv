@@ -1,0 +1,122 @@
+
+module TopModule (
+    input clk,
+    input areset,
+    input bump_left,
+    input bump_right,
+    input ground,
+    input dig,
+    output reg walk_left,
+    output reg walk_right,
+    output reg aaah,
+    output reg digging
+);
+
+// Define states
+typedef enum logic [2:0] {
+    WALK_LEFT_STATE,
+    WALK_RIGHT_STATE,
+    FALLING_STATE,
+    DIGGING_STATE,
+    SPLATTER_STATE
+} state_type;
+
+// Define signals
+reg [2:0] state;
+reg [4:0] fall_counter;
+
+// State machine
+always @(posedge clk or posedge areset) begin
+    if (areset) begin
+        state <= WALK_LEFT_STATE;
+        walk_left <= 1;
+        walk_right <= 0;
+        aaah <= 0;
+        digging <= 0;
+        fall_counter <= 0;
+    end else begin
+        case(state)
+            WALK_LEFT_STATE: begin
+                if (bump_left) begin
+                    state <= WALK_RIGHT_STATE;
+                    walk_left <= 0;
+                    walk_right <= 1;
+                end else if (ground) begin
+                    walk_left <= 1;
+                    walk_right <= 0;
+                end else if (!ground) begin
+                    state <= FALLING_STATE;
+                    aaah <= 1;
+                end else if (dig) begin
+                    state <= DIGGING_STATE;
+                    digging <= 1;
+                end else begin
+                    walk_left <= 1;
+                    walk_right <= 0;
+                end
+            end
+            WALK_RIGHT_STATE: begin
+                if (bump_right) begin
+                    state <= WALK_LEFT_STATE;
+                    walk_left <= 1;
+                    walk_right <= 0;
+                end else if (ground) begin
+                    walk_left <= 0;
+                    walk_right <= 1;
+                end else if (!ground) begin
+                    state <= FALLING_STATE;
+                    aaah <= 1;
+                end else if (dig) begin
+                    state <= DIGGING_STATE;
+                    digging <= 1;
+                end else begin
+                    walk_left <= 0;
+                    walk_right <= 1;
+                end
+            end
+            FALLING_STATE: begin
+                if (ground) begin
+                    if (fall_counter > 20) begin
+                        state <= SPLATTER_STATE;
+                        walk_left <= 0;
+                        walk_right <= 0;
+                        aaah <= 0;
+                        digging <= 0;
+                    end else begin
+                        state <= WALK_LEFT_STATE;
+                        walk_left <= 1;
+                        walk_right <= 0;
+                        aaah <= 0;
+                        digging <= 0;
+                    end
+                end else begin
+                    fall_counter <= fall_counter + 1;
+                end
+            end
+            DIGGING_STATE: begin
+                if (ground) begin
+                    state <= WALK_LEFT_STATE;
+                    walk_left <= 1;
+                    walk_right <= 0;
+                    digging <= 0;
+                    if (!fall_counter) begin
+                        aaah <= 0;
+                    end
+                end else if (dig) begin
+                    state <= DIGGING_STATE;
+                end else begin
+                    state <= FALLING_STATE;
+                    digging <= 0;
+                end
+            end
+            SPLATTER_STATE: begin
+                walk_left <= 0;
+                walk_right <= 0;
+                aaah <= 0;
+                digging <= 0;
+            end
+        endcase
+    end
+end
+
+endmodule

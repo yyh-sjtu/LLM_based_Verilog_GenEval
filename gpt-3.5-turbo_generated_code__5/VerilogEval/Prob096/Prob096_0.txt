@@ -1,0 +1,59 @@
+Sure! Here's an RTL design for the TopModule:
+
+```verilog
+module TopModule (
+    input  wire    clk,
+    input  wire    reset,
+    input  wire    data,
+    output wire    start_shifting
+);
+    reg [3:0] state;
+
+    // State definitions
+    parameter IDLE      = 2'b00;
+    parameter SEARCHING = 2'b01;
+    parameter FOUND     = 2'b10;
+
+    always @(posedge clk) begin
+        if (reset) begin
+            state <= IDLE;
+        end else begin
+            case (state)
+                IDLE: begin
+                    if (data) begin
+                        state <= SEARCHING;
+                    end
+                end
+                SEARCHING: begin
+                    if (data == 1) begin
+                        state <= FOUND;
+                    end else if (data == 0) begin
+                        state <= IDLE;
+                    end
+                end
+                FOUND: begin
+                    state <= FOUND;
+                end
+                default: begin
+                    state <= IDLE;
+                end
+            endcase
+        end
+    end
+
+    assign start_shifting = (state == FOUND);
+
+endmodule
+```
+
+In this design, a 2-bit `state` variable is used to track the current state of the finite-state machine. The `state` can be one of three states: `IDLE`, `SEARCHING`, or `FOUND`. 
+
+At the positive edge of the clock, if the `reset` signal is high, the state is set to `IDLE`. Otherwise, based on the current state, the next state is determined. 
+
+In the `IDLE` state, if the `data` input is high, the state transitions to `SEARCHING`. Otherwise, it remains in the `IDLE` state.
+
+In the `SEARCHING` state, if the `data` input is high, it transitions to the `FOUND` state. If the `data` input is low, it transitions back to the `IDLE` state.
+
+In the `FOUND` state, the state remains the same until reset.
+
+Finally, the `start_shifting` output is set to high only when the state is `FOUND`.

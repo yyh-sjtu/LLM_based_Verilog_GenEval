@@ -1,0 +1,23 @@
+Sure, here's an example implementation of the TopModule in Verilog HDL:
+
+```verilog
+module TopModule (
+  input clk,
+  input d,
+  input r,
+  output reg q
+);
+
+  always @(posedge clk) begin
+    if (r == 1'b1) // Synchronous reset
+      q <= 1'b0;
+    else
+      q <= d;
+  end
+
+endmodule
+```
+
+In this implementation, the `always @(posedge clk)` block is triggered on the positive edge of the clock signal. When the synchronous reset signal `r` is active high (1), the output signal `q` is reset to 0. Otherwise, the value of the input signal `d` is assigned to the output signal `q` on each positive clock edge.
+
+Note that the output `q` is declared as a `reg` type as it needs to retain its value over time.

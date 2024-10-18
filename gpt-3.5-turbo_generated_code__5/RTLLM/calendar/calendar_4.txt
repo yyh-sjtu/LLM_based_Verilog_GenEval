@@ -1,0 +1,46 @@
+Here is the complete code for the perpetual calendar module in Verilog:
+
+```verilog
+module calendar(
+  input CLK,
+  input RST,
+  output reg [5:0] Hours,
+  output reg [5:0] Mins,
+  output reg [5:0] Secs
+);
+
+  always @(posedge CLK or posedge RST) begin
+    if(RST)
+      Secs <= 0;
+    else if(Secs == 59)
+      Secs <= 0;
+    else
+      Secs <= Secs + 1;
+  end
+
+  always @(posedge CLK or posedge RST) begin
+    if(RST)
+      Mins <= 0;
+    else if(Secs == 59 && Mins == 59)
+      Mins <= 0;
+    else if(Secs == 59)
+      Mins <= Mins + 1;
+  end
+
+  always @(posedge CLK or posedge RST) begin
+    if(RST)
+      Hours <= 0;
+    else if(Secs == 59 && Mins == 59 && Hours == 23)
+      Hours <= 0;
+    else if(Mins == 59 && Secs == 59)
+      Hours <= Hours + 1;
+  end
+
+endmodule
+```
+
+This code defines a `calendar` module that takes in a clock signal (`CLK`) and a reset signal (`RST`). It has three output ports `Hours`, `Mins`, and `Secs` representing the current hours, minutes, and seconds respectively.
+
+The code uses three separate always blocks, each triggered on the positive edge of the clock signal or the reset signal. In each always block, the values of `Secs`, `Mins`, and `Hours` are updated based on the conditions specified in the problem statement.
+
+Note that the output ports `Hours`, `Mins`, and `Secs` are defined as reg types to store their respective values.

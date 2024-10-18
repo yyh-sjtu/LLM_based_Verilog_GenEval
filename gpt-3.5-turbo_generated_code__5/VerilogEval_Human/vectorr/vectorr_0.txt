@@ -1,0 +1,16 @@
+
+
+  // Define an 8-bit input vector
+  reg [7:0] temp;
+
+  always @(*) begin
+    // Reverse the bit ordering of the input vector
+    for (int i = 0; i < 8; i = i + 1) begin
+      temp[i] = in[7-i];
+    end
+  end
+
+  // Output the reversed input vector
+  assign out = temp;
+
+endmodule

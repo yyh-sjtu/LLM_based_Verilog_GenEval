@@ -1,0 +1,69 @@
+Sure, here's an implementation of the TopModule in RTL:
+
+```verilog
+module TopModule(
+  input x,
+  input [2:0] y,
+  output Y0,
+  output z
+);
+
+  reg [2:0] next_state;
+  wire [2:0] present_state;
+
+  assign present_state = y;
+
+  always @(present_state or x) begin
+    case(present_state)
+      3'b000: begin
+                if(x == 1'b0)
+                  next_state = 3'b001;
+                else
+                  next_state = 3'b000;
+              end
+
+      3'b001: begin
+                if(x == 1'b0)
+                  next_state = 3'b100;
+                else
+                  next_state = 3'b001;
+              end
+
+      3'b010: begin
+                if(x == 1'b0)
+                  next_state = 3'b001;
+                else
+                  next_state = 3'b010;
+              end
+
+      3'b011: begin
+                if(x == 1'b0)
+                  next_state = 3'b010;
+                else
+                  next_state = 3'b001;
+              end
+
+      3'b100: begin
+                if(x == 1'b0)
+                  next_state = 3'b100;
+                else
+                  next_state = 3'b011;
+              end
+
+      default: next_state = 3'b000;
+    endcase
+  end
+
+  assign Y0 = next_state[0];
+  assign z = (next_state == 3'b011) || (next_state == 3'b100);
+
+endmodule
+```
+
+In this implementation, the present state `y` is stored in a wire `present_state`, and the next state `Y` is stored in a register `next_state`.
+
+The always block is sensitive to changes in `present_state` and `x`. Inside the always block, a case statement is used to determine the next state based on the present state and the value of `x`.
+
+The values of `Y0` and `z` are determined based on the next state. `Y0` is simply the LSB (bit 0) of `next_state`, and `z` is true if `next_state` is equal to `3'b011` or `3'b100`.
+
+Let me know if you have any questions or need further assistance!

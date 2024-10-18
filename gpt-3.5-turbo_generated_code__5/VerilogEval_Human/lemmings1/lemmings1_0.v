@@ -1,0 +1,61 @@
+
+module top_module (
+	input clk,
+	input areset,
+	input bump_left,
+	input bump_right,
+	output reg walk_left,
+	output reg walk_right
+);
+
+// Define states
+parameter WALK_LEFT = 2'b00;
+parameter WALK_RIGHT = 2'b01;
+reg [1:0] state, next_state;
+
+// Moore state machine logic
+always @(posedge clk or posedge areset) begin
+	if (areset) begin
+		state <= WALK_LEFT;
+	end else begin
+		state <= next_state;
+	end
+end
+
+// State transition and output logic
+always @* begin
+	case(state)
+		WALK_LEFT: begin
+			if (bump_left) begin
+				next_state = WALK_RIGHT;
+				walk_left = 0;
+				walk_right = 1;
+			end else if (bump_right) begin
+				next_state = WALK_LEFT;
+				walk_left = 1;
+				walk_right = 0;
+			end else begin
+				next_state = WALK_LEFT;
+				walk_left = 1;
+				walk_right = 0;
+			end
+		end
+		WALK_RIGHT: begin
+			if (bump_left) begin
+				next_state = WALK_RIGHT;
+				walk_left = 0;
+				walk_right = 1;
+			end else if (bump_right) begin
+				next_state = WALK_LEFT;
+				walk_left = 1;
+				walk_right = 0;
+			end else begin
+				next_state = WALK_RIGHT;
+				walk_left = 0;
+				walk_right = 1;
+			end
+		end
+	endcase
+end
+
+endmodule

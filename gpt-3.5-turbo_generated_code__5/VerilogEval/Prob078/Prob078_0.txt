@@ -1,0 +1,32 @@
+As a professional RTL designer, I would implement the requested TopModule using the following approach:
+
+```verilog
+module TopModule (
+  input  wire clk,
+  input  wire d,
+  output reg  q
+);
+
+// Internal flip-flop signals
+reg q_ff1;
+reg q_ff2;
+
+always @(posedge clk) begin
+  q_ff1 <= d;
+end
+
+always @(negedge clk) begin
+  q_ff2 <= q_ff1;
+  q <= q_ff2;
+end
+
+endmodule
+```
+
+Explanation:
+- Two internal flip-flop registers, q_ff1 and q_ff2, are used to mimic the dual-edge triggered behavior.
+- On the rising edge of the clock (posedge clk), the input value d is captured into q_ff1.
+- On the falling edge of the clock (negedge clk), the value from the previous rising edge is assigned to q_ff2.
+- Finally, q is assigned to the value of q_ff2, which represents the previous sampled input value.
+
+This implementation will functionally behave like a dual-edge triggered flip-flop, providing synchronous sampling of the input d on both the rising and falling edges of the clock.

@@ -1,0 +1,83 @@
+module top_module (
+	input clk,
+	input x,
+	output z
+);
+  reg d_flip_flop1;
+  reg d_flip_flop2;
+  reg d_flip_flop3;
+  
+  wire xor_in1;
+  wire and_in1;
+  wire or_in1;
+  
+  wire xor_in2;
+  wire and_in2;
+  wire or_in2;
+  
+  wire xor_out;
+  wire and_out;
+  wire or_out;
+  
+  assign xor_in1 = x;
+  assign and_in1 = x;
+  assign or_in1 = x;
+  
+  assign xor_in2 = d_flip_flop1;
+  assign and_in2 = ~d_flip_flop2;
+  assign or_in2 = ~d_flip_flop3;
+  
+  xor_gate xor1(.a(xor_in1), .b(xor_in2), .z(xor_out));
+  and_gate and1(.a(and_in1), .b(and_in2), .z(and_out));
+  or_gate or1(.a(or_in1), .b(or_in2), .z(or_out));
+  
+  d_flip_flop d1(.clk(clk), .d(xor_out), .q(d_flip_flop1));
+  d_flip_flop d2(.clk(clk), .d(and_out), .q(d_flip_flop2));
+  d_flip_flop d3(.clk(clk), .d(or_out), .q(d_flip_flop3));
+  
+  xnor_gate xnor1(.a(d_flip_flop1), .b(d_flip_flop2), .c(d_flip_flop3), .z(z));
+endmodule
+
+module xor_gate (
+  input a,
+  input b,
+  output z
+);
+  assign z = a ^ b;
+endmodule
+
+module and_gate (
+  input a,
+  input b,
+  output z
+);
+  assign z = a & b;
+endmodule
+
+module or_gate (
+  input a,
+  input b,
+  output z
+);
+  assign z = a | b;
+endmodule
+
+module d_flip_flop (
+  input clk,
+  input d,
+  output reg q
+);
+  always @(posedge clk) begin
+    q <= d;
+  end
+endmodule
+
+module xnor_gate (
+  input a,
+  input b,
+  input c,
+  output z
+);
+  assign z = ~(a ^ b ^ c);
+endmodule
+

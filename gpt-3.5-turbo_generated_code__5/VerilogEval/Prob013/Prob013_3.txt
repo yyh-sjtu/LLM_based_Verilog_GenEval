@@ -1,0 +1,18 @@
+Sure! Here's an example of a RTL design for the TopModule implementing a 2-input NOR gate in the Verilog hardware description language (HDL):
+
+```verilog
+module TopModule(
+  input in1,
+  input in2,
+  output out
+);
+
+  // 2-input NOR gate implementation
+  assign out = ~(in1 | in2);
+
+endmodule
+```
+
+In this design, the input `in1` and `in2` are connected to a bitwise OR (`|`) operator, which forms a logical OR between `in1` and `in2`. The `~` operator then negates the result, effectively creating a 2-input NOR gate. The output `out` is assigned the value of the inverted result.
+
+This code can be synthesized and implemented in a hardware simulator or FPGA to create a physical realization of the 2-input NOR gate.

@@ -1,0 +1,24 @@
+As a professional RTL designer, I would implement the requested module as follows:
+
+```verilog
+module TopModule (
+  input a,
+  input b,
+  output sum,
+  output cout
+);
+
+  assign sum = a ^ b; // XOR operation for sum
+  assign cout = a & b; // AND operation for carry-out
+
+endmodule
+```
+
+Explanation:
+- The module is defined as "TopModule" with the requested input and output ports.
+- The "assign" keyword is used to specify continuous assignments to the output ports.
+- The sum output is calculated using the XOR operation between inputs a and b.
+- The carry-out output is calculated using the AND operation between inputs a and b.
+- The module implementation is complete.
+
+Please let me know if you need any further assistance.

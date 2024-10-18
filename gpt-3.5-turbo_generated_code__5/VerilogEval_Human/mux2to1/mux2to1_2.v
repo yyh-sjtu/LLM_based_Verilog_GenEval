@@ -1,0 +1,27 @@
+module one_bit_mux (
+	input a,
+	input b,
+	input sel,
+	output out
+);
+
+	assign out = (sel == 0) ? a : b;
+
+endmodule
+
+module top_module (
+	input a,
+	input b,
+	input sel,
+	output out
+);
+
+	one_bit_mux mux_inst (
+		.a(a),
+		.b(b),
+		.sel(sel),
+		.out(out)
+	);
+
+endmodule
+

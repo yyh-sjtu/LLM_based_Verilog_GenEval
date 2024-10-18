@@ -1,0 +1,27 @@
+Sure! Here's the Verilog code for the "TopModule" implementation:
+
+```verilog
+module TopModule(
+    input c,
+    input d,
+    output [3:0] mux_in
+);
+
+wire ab0, ab1;
+assign ab0 = 1'b0;  // ab = 00
+assign ab1 = 1'b1;  // ab = 01
+
+// Implementing the K-map using muxes
+assign mux_in[0] = (c & d & ab0) | (~d & ab1);
+assign mux_in[1] = (c & ~d & ab0) | (~c & ~d & ab1);
+assign mux_in[2] = (c & ~d) | (~c & ab0) | (c & d & ab1);
+assign mux_in[3] = (~c & d & ab0) | (c & d) | (c & ~d & ab1);
+
+endmodule
+```
+
+In this implementation, we use two wires `ab0` and `ab1` to represent the multiplexer selector inputs `a` and `b` respectively. We assign `ab0` to be 0 (00) and `ab1` to be 1 (01) as mentioned in the problem description.
+
+Then, we use four muxes to implement the K-map. Each mux input is a combination of the inputs `c` and `d`, as well as the respective `ab` value. The outputs of the muxes are assigned to the `mux_in` output ports.
+
+Note: This code assumes that the 2-to-1 mux module is already defined separately.

@@ -1,0 +1,15 @@
+Sure! Here's an RTL implementation of the TopModule module:
+
+```verilog
+module TopModule (
+  input [255:0] in,
+  input [7:0] sel,
+  output out
+);
+
+  assign out = in[sel];
+
+endmodule
+```
+
+In this implementation, the `in` input port is a 256-bit vector that represents the 256 inputs of the multiplexer. Each bit of the `in` vector corresponds to one input of the multiplexer. The `sel` input port is an 8-bit vector that selects one of the 256 inputs based on its value. The selected input is then assigned to the `out` output port.

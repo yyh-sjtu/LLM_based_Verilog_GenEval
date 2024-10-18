@@ -1,0 +1,51 @@
+Here is the Verilog code for the TopModule implementing the Mealy finite-state machine for the 2's complementer using one-hot encoding:
+
+```verilog
+module TopModule (
+    input clk,
+    input areset,
+    input x,
+    output reg z
+);
+
+// State encoding
+parameter A = 1'b1;
+parameter B = 1'b0;
+
+// State register
+reg state, next_state;
+
+// Output logic
+always @ (state, x)
+begin
+    case(state)
+        A: if (x) z = 1'b1;
+           else z = 1'b0;
+        B: if (x) z = 1'b0;
+           else z = 1'b1;
+    endcase
+end
+
+// State transition logic
+always @ (posedge clk or posedge areset)
+begin
+    if (areset)
+        state <= A;
+    else
+        state <= next_state;
+end
+
+always @ (*)
+begin
+    case(state)
+        A: if (x) next_state = B;
+           else next_state = A;
+        B: if (x) next_state = B;
+           else next_state = B;
+    endcase
+end
+
+endmodule
+```
+
+This Verilog code defines the TopModule with the required interface and implements the desired Mealy finite-state machine for the 2's complementer. The module uses one-hot encoding for state representation and the output `z` is updated based on the current state and input `x`. The state transitions are controlled by the clock signal and asynchronous active-high reset signal `areset`, where the module resets into state A.

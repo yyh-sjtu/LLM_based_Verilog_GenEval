@@ -1,0 +1,76 @@
+module traffic_light(
+    input wire rst_n, // Reset signal (active low)
+    input wire clk, // Clock signal
+    input wire pass_request, // Request signal for allowing vehicles to pass
+    output reg [7:0] clock, // 8-bit output representing the count value of the internal counter
+    output reg red, // Output signal representing the state of the red traffic light
+    output reg yellow, // Output signal representing the state of the yellow traffic light
+    output reg green // Output signal representing the state of the green traffic light
+);
+
+// Parameters
+parameter idle = 2'b00;
+parameter s1_red = 2'b01;
+parameter s2_yellow = 2'b10;
+parameter s3_green = 2'b11;
+
+// Registers and Wires
+reg [7:0] cnt; // Internal counter
+reg [1:0] state; // Current state of the traffic light controller
+reg p_red, p_yellow, p_green; // Next values for the red, yellow, and green signals
+
+// State transition logic
+always @(posedge clk or negedge rst_n)
+begin
+    if (!rst_n)
+        state <= idle;
+    else
+    begin
+        case(state)
+            idle: state <= s1_red;
+            s1_red: state <= (cnt == 3) ? s3_green : s1_red;
+            s2_yellow: state <= (cnt == 3) ? s1_red : s2_yellow;
+            s3_green: state <= (cnt == 3) ? s2_yellow : s3_green;        
+        endcase
+    end
+end
+
+// Counting logic
+always @(posedge clk or negedge rst_n)
+begin
+    if (!rst_n)
+        cnt <= 10; // Initial counter value
+    else
+    begin
+        case({pass_request, green, p_green, yellow, p_yellow, red, p_red})
+            7'b0_1_x_xx_x_xx: cnt <= 60; // Green signal inactive and previous green signal was active
+            7'b0_0_x_xx_x_xx: cnt <= 5; // Yellow signal inactive and previous yellow signal was active
+            7'b0_0_x_xx_x_xx: cnt <= 10; // Red signal inactive and previous red signal was active
+            7'b1_x_x_xx_x_xx: cnt <= 10; // Pass request active and green signal active
+            default: cnt <= (cnt != 0) ? cnt - 1 : cnt;
+        endcase
+    end
+end
+
+// Assign internal counter value to output clock
+assign clock = cnt;
+
+// Output signals
+always @(posedge clk or negedge rst_n)
+begin
+    if (!rst_n)
+    begin
+        red <= 0;
+        yellow <= 0;
+        green <= 0;
+    end
+    else
+    begin
+        red <= p_red;
+        yellow <= p_yellow;
+        green <= p_green;
+    end
+end
+
+endmodule
+

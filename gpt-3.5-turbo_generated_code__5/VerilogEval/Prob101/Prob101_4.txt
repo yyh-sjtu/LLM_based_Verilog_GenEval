@@ -1,0 +1,45 @@
+As a professional RTL designer, I will now implement the TopModule with the provided interface and simulation waveforms. 
+
+```verilog
+module TopModule(
+  input a,
+  input b,
+  input c,
+  input d,
+  output reg q
+);
+
+always @(*) begin
+  case ({a, b, c, d})
+    4'b0000: q = 1'b0;
+    4'b0001: q = 1'b0;
+    4'b0010: q = 1'b1;
+    4'b0011: q = 1'b1;
+    4'b0100: q = 1'b1;
+    4'b0101: q = 1'b1;
+    4'b0110: q = 1'b0;
+    4'b0111: q = 1'b0;
+    4'b1000: q = 1'b1;
+    4'b1001: q = 1'b0;
+    4'b1010: q = 1'b1;
+    4'b1011: q = 1'b1;
+    4'b1100: q = 1'b1;
+    4'b1101: q = 1'b1;
+    4'b1110: q = 1'b0;
+    4'b1111: q = 1'b1;
+    default: q = 1'b0;
+  endcase
+end
+
+endmodule
+```
+
+This implementation uses a combinational logic block with a case statement to assign a value to the output port `q` based on the input values `a`, `b`, `c`, and `d`. According to the given simulation waveforms, the output `q` behaves as follows:
+
+- When `a`, `b`, `c`, and `d` are all zeros, `q` is 0.
+- When `a`, `b`, and `d` are zero and `c` is one, `q` is 1.
+- When `b` is one and all other inputs are zeros, `q` is 1.
+- When `a`, `c`, and `d` are all ones and `b` is zero, `q` is 1.
+- Otherwise, `q` is 0.
+
+Please let me know if you need any further assistance.

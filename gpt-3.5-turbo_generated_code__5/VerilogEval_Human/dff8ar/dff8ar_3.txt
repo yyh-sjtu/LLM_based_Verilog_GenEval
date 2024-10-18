@@ -1,0 +1,50 @@
+module d_ff (
+  input clk,
+  input d,
+  input areset,
+  output reg q
+);
+
+  always @(posedge clk or posedge areset) begin
+    if (areset)
+      q <= 0;
+    else
+      q <= d;
+  end
+
+endmodule
+
+module top_module (
+  input clk,
+  input [7:0] d,
+  input areset,
+  output reg [7:0] q
+);
+
+  reg [7:0] q_ff[7:0];
+
+  generate
+    genvar i;
+    for (i = 0; i < 8; i = i + 1) begin
+      d_ff dff_instance (
+        .clk(clk),
+        .d(d[i]),
+        .areset(areset),
+        .q(q_ff[i])
+      );
+    end
+  endgenerate
+
+  always @(posedge clk) begin
+    if (!areset)
+      q <= q_ff;
+  end
+
+endmodule
+The code above defines a D flip-flop module "d_ff" and a top-level module "top_module" which uses 8 instances of the D flip-flop to create a synchronous reset design.
+
+The D flip-flop module "d_ff" has inputs for clk, d (data), and areset (asynchronous reset). The output q represents the value stored in the flip-flop. Inside the always block, the flip-flop is triggered on the positive edge of clk, and if areset is active high, the output q is reset to 0; otherwise, the output q is assigned the value of d.
+
+The top-level module "top_module" has inputs for clk, d (an 8-bit bus), and areset, and an output q (an 8-bit bus). It declares an array of 8 output registers q_ff, which are connected to the D flip-flop instances using a generate loop. Inside the always block, q is assigned the value of q_ff, but this only happens if areset is not active high, ensuring synchronous reset behavior.
+
+Note that the implementation assumes that the D flip-flop module "d_ff" is already defined and available in the design.

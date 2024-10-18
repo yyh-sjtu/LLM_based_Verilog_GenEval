@@ -1,0 +1,43 @@
+Here is the complete code for the edge_detect module in Verilog:
+
+```verilog
+module edge_detect (
+  input clk,
+  input rst_n,
+  input a,
+  output reg rise,
+  output reg down
+);
+
+  reg prev_a;
+  
+  always @(posedge clk or negedge rst_n) begin
+    if (~rst_n) begin
+      rise <= 0;
+      down <= 0;
+      prev_a <= 0;
+    end else begin
+      if (a && ~prev_a) begin // Rising edge detection
+        rise <= 1;
+        down <= 0;
+      end else if (~a && prev_a) begin // Falling edge detection
+        rise <= 0;
+        down <= 1;
+      end else begin
+        rise <= 0;
+        down <= 0;
+      end
+      prev_a <= a;
+    end
+  end
+
+endmodule
+```
+
+In this code, we have a synchronous always block that triggers on the positive edge of the clock signal `clk` and the negative edge of the reset signal `rst_n`. Inside the always block, we check if reset is active (`~rst_n`) and if so, we set both the `rise` and `down` signals to 0 and initialize the `prev_a` register to 0.
+
+If reset is not active, we check if a rising edge is detected (`a && ~prev_a`). If so, we set `rise` to 1 and `down` to 0. Similarly, we check if a falling edge is detected (`~a && prev_a`). If so, we set `rise` to 0 and `down` to 1. If neither a rising nor falling edge is detected, both `rise` and `down` are set to 0.
+
+Finally, we update the `prev_a` register with the current value of input signal `a` for the next clock cycle.
+
+Note that `rise` and `down` are declared as `reg` data types which can be used as output registers.

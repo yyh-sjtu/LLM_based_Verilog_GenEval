@@ -1,0 +1,29 @@
+module xor_gate (
+	input a,
+	input b,
+	output xor_out
+);
+	assign xor_out = a ^ b;
+endmodule
+
+module d_flip_flop (
+	input clk,
+	input d,
+	output reg q
+);
+	always @(posedge clk)
+	begin
+		q <= d;
+	end
+endmodule
+
+module top_module (
+	input clk,
+	input in,
+	output out
+);
+	logic xor_out;
+	d_flip_flop flip_flop (.clk(clk), .d(xor_out), .q(out));
+	xor_gate xor_gate_inst (.a(in), .b(out), .xor_out(xor_out));
+endmodule
+

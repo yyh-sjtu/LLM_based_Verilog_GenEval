@@ -1,0 +1,22 @@
+
+	// Define internal signals
+	wire not_a, not_b, not_c, not_d;
+	wire w1, w2, w3, w4, w5, w6;
+
+	// Invert inputs
+	assign not_a = ~a;
+	assign not_b = ~b;
+	assign not_c = ~c;
+	assign not_d = ~d;
+
+	// Implement the Karnaugh map logic
+	assign w1 = not_a & b & not_c & d;
+	assign w2 = not_a & not_b & not_c & d;
+	assign w3 = a & not_b & c & d;
+	assign w4 = not_a & not_b & c & not_d;
+	assign w5 = not_a & b & c & d;
+	assign w6 = a & b & not_c & not_d;
+
+	// Output logic
+	assign out = w1 | w2 | w3 | w4 | w5 | w6;
+endmodule

@@ -1,0 +1,17 @@
+As a professional RTL designer, I will implement the TopModule based on the provided simulation waveforms.
+
+```verilog
+module TopModule(
+    input  a,
+    input  b,
+    input  c,
+    input  d,
+    output q
+);
+
+    assign q = (~a & ~b & ~c) | (~a & b & ~c) | (~a & b & c) | (a & ~b & d) | (a & b & d);
+
+endmodule
+```
+
+The module implements a combinational circuit that produces output `q` based on the input signals `a`, `b`, `c`, and `d` according to the provided simulation waveforms.

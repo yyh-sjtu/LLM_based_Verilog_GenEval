@@ -1,0 +1,24 @@
+Based on the provided simulation waveforms, the module TopModule can be implemented as follows in RTL:
+
+```verilog
+module TopModule (
+  input clk,
+  input a,
+  output reg [2:0] q
+);
+
+  always @(posedge clk) begin
+    if (a) begin
+      case(q)
+        0: q <= 4;
+        4: q <= 5;
+        5: q <= 6;
+        default: q <= 4;
+      endcase
+    end
+  end
+
+endmodule
+```
+
+This module implements a sequential circuit that updates the output `q` based on the input `a` and the current value of `q` on each positive edge of the clock (`clk`). The state transitions are determined by the values of `a` and `q` as shown in the simulation waveforms.

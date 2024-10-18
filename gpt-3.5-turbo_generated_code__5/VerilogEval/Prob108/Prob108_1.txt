@@ -1,0 +1,33 @@
+As a professional RTL designer, I will start by creating the TopModule in Verilog. The module will have the specified interface with input ports for clk, load, and data (512 bits) and an output port q (512 bits).
+
+Here is the Verilog code for implementing Rule 90:
+
+```verilog
+module TopModule (
+    input clk,
+    input load,
+    input [511:0] data,
+    output reg [511:0] q
+);
+
+reg [511:0] next_q;
+
+always @(posedge clk) begin
+    if (load) begin
+        q <= data;
+    end else begin
+        next_q[0] = q[1] ^ q[0] ^ 0; // Boundary condition for q[0]
+        next_q[511] = q[510] ^ q[511] ^ 0; // Boundary condition for q[511]
+        for (int i = 1; i < 511; i = i + 1) begin
+            next_q[i] = q[i-1] ^ q[i] ^ q[i+1];
+        end
+        q <= next_q;
+    end
+end
+
+endmodule
+```
+
+In this code, I have created a next_q variable to store the next state of the cells. Depending on the load input, the module either loads the initial state from data or advances the cell states based on Rule 90. The boundary conditions are explicitly handled to ensure that cells at the edges behave correctly.
+
+This implementation will create a 512-cell system where the state of each cell is updated according to Rule 90 every clock cycle.

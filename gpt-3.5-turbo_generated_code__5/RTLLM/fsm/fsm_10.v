@@ -1,0 +1,55 @@
+module fsm (
+    input IN,
+    input CLK,
+    input RST,
+    output reg MATCH
+);
+
+reg [4:0] state;
+
+parameter IDLE = 4'b0000;
+parameter S1 = 4'b0001;
+parameter S2 = 4'b0010;
+parameter S3 = 4'b0011;
+parameter S4 = 4'b0100;
+parameter S5 = 4'b0101;
+
+always @ (posedge CLK or posedge RST)
+begin
+    if (RST) begin
+        state <= IDLE;
+        MATCH <= 0;
+    end
+    else begin
+        case (state)
+            IDLE: begin
+                if (IN) state <= S1;
+                else state <= IDLE;
+            end
+            S1: begin
+                if (!IN) state <= S2;
+                else state <= IDLE;
+            end
+            S2: begin
+                if (!IN) state <= S3;
+                else state <= IDLE;
+            end
+            S3: begin
+                if (IN) state <= S4;
+                else state <= IDLE;
+            end
+            S4: begin
+                if (IN) state <= S5;
+                else state <= IDLE;
+            end
+            S5: begin
+                if (!IN) state <= IDLE;
+                else state <= S5;
+                MATCH <= 1;
+            end
+        endcase
+    end
+end
+
+endmodule
+

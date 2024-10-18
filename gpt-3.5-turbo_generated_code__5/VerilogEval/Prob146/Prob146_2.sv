@@ -1,0 +1,74 @@
+
+module TopModule (
+  input  clk,
+  input  in,
+  input  reset,
+  output [7:0] out_byte,
+  output done
+);
+
+  // Define states for the FSM
+  typedef enum logic [2:0] {
+    IDLE,
+    START_BIT,
+    DATA_BITS,
+    STOP_BIT
+  } state_t;
+
+  reg [7:0] byte;           // Buffer for received data byte
+  reg [2:0] state;          // Current state of the FSM
+  reg [2:0] next_state;     // Next state of the FSM
+  reg done_reg;             // Register for done signal
+
+  // Sequential logic
+  always @(posedge clk) begin
+    if (reset) begin
+      byte <= 8'b0;
+      state <= IDLE;
+      next_state <= IDLE;
+      done_reg <= 1'b0;
+    end else begin
+      byte <= (state == DATA_BITS) ? {byte[6:0], in} : byte;
+      state <= next_state;
+      done_reg <= (state == STOP_BIT) ? 1'b1 : 1'b0;
+    end
+  end
+
+  // Combinational logic
+  always @(*) begin
+    case (state)
+      IDLE: begin
+        if (in == 1'b0)
+          next_state = START_BIT;
+        else
+          next_state = IDLE;
+      end
+
+      START_BIT: begin
+        if (in == 1'b0)
+          next_state = DATA_BITS;
+        else
+          next_state = IDLE;
+      end
+
+      DATA_BITS: begin
+        if (in == 1'b0)
+          next_state = DATA_BITS;
+        else
+          next_state = STOP_BIT;
+      end
+
+      STOP_BIT: begin
+        if (in == 1'b1)
+          next_state = IDLE;
+        else
+          next_state = STOP_BIT;
+      end
+    endcase
+  end
+
+  // Output assignments
+  assign out_byte = byte;
+  assign done = done_reg;
+
+endmodule

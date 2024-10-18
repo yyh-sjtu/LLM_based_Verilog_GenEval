@@ -1,0 +1,30 @@
+Based on the given simulation waveforms, we can observe that the output 'q' is 1 if and only if either 'a' or 'b' are high and 'c' and 'd' are low. 
+
+To implement the TopModule, we need to define the behavior of the circuit using RTL (Register Transfer Level) design.
+
+Here's an example implementation of the TopModule in VHDL:
+
+```vhdl
+entity TopModule is
+    port (
+        a, b, c, d: in std_logic;
+        q: out std_logic
+    );
+end TopModule;
+
+architecture rtl of TopModule is
+begin
+    process(a, b, c, d)
+    begin
+        if (a = '1' or b = '1') and c = '0' and d = '0' then
+            q <= '1';
+        else
+            q <= '0';
+        end if;
+    end process;
+end rtl;
+```
+
+In this implementation, we define a process that triggers whenever there is a change in any of the inputs (a, b, c, d). Inside the process, we check the condition using if-else statements. If the condition is true, we assign '1' to the output 'q', otherwise '0'.
+
+This RTL design represents a combinational circuit that satisfies the given simulation waveforms.

@@ -1,0 +1,30 @@
+module top_module(
+    input clk,
+    input load,
+    input ena,
+    input [1:0] amount,
+    input [63:0] data,
+    output reg [63:0] q
+);
+
+always @(posedge clk) begin
+    if (load) // Load the shift register
+        q <= data;
+    else if (ena) begin
+        case(amount)
+            2'b00: // Shift left by 1 bit
+                q <= {q[62:0], q[63]};
+            2'b01: // Shift left by 8 bits
+                q <= {q[55:0], q[63:56]};
+            2'b10: // Shift right by 1 bit (arithmetic right shift)
+                q <= {q[0], q[63:1]};
+            2'b11: // Shift right by 8 bits (arithmetic right shift)
+                q <= {q[7:0], q[63:8]};
+            default: // Do nothing
+                q <= q;
+        endcase
+    end
+end
+
+endmodule
+

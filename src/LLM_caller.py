@@ -6,7 +6,7 @@ Author: Yunhao Zhou
 
 # from openai import OpenAI
 import openai
-import local_model
+# import local_model
 
 local_model_list = ["codet5_200m","local_model"]
 

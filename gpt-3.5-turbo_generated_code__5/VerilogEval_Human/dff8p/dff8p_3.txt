@@ -1,0 +1,47 @@
+module dff_reset (
+    input wire clk,
+    input wire reset,
+    input wire [7:0] d,
+    output reg [7:0] q
+);
+
+    always @(negedge clk or posedge reset) begin
+        if (reset) begin
+            q <= 8'h34;
+        end else begin
+            q <= d;
+        end
+    end
+
+endmodule
+
+module top_module(
+    input wire clk,
+    input wire [7:0] d,
+    input wire reset,
+    output reg [7:0] q
+);
+
+    reg [7:0] q_reg1;
+    reg [7:0] q_reg2;
+    reg [7:0] q_reg3;
+    reg [7:0] q_reg4;
+    reg [7:0] q_reg5;
+    reg [7:0] q_reg6;
+    reg [7:0] q_reg7;
+    reg [7:0] q_reg8;
+
+    dff_reset dff1(.clk(clk), .reset(reset), .d(d), .q(q_reg1));
+    dff_reset dff2(.clk(clk), .reset(reset), .d(q_reg1), .q(q_reg2));
+    dff_reset dff3(.clk(clk), .reset(reset), .d(q_reg2), .q(q_reg3));
+    dff_reset dff4(.clk(clk), .reset(reset), .d(q_reg3), .q(q_reg4));
+    dff_reset dff5(.clk(clk), .reset(reset), .d(q_reg4), .q(q_reg5));
+    dff_reset dff6(.clk(clk), .reset(reset), .d(q_reg5), .q(q_reg6));
+    dff_reset dff7(.clk(clk), .reset(reset), .d(q_reg6), .q(q_reg7));
+    dff_reset dff8(.clk(clk), .reset(reset), .d(q_reg7), .q(q_reg8));
+
+    always @(negedge clk) begin
+        q <= q_reg8;
+    end
+
+endmodule

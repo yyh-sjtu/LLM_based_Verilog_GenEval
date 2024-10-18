@@ -16,7 +16,7 @@ def evaluate(benchmark, design_file, testbench, temp_outputfile):
             return True if 'pass' in result else False
         elif benchmark == "VGen":
             return True if 'pass' in result else False
-        elif benchmark == "VerilogEval":
+        elif "VerilogEval" in benchmark:
             return True if 'has no mismatches' in result else False
         else:
             print("unknown_benchmark")
@@ -28,6 +28,9 @@ def evaluate(benchmark, design_file, testbench, temp_outputfile):
         if benchmark == "VerilogEval":
             ref_file = glob(os.path.join(os.path.dirname(testbench), "*ref.sv"))[0]
             cmd = f"iverilog -g2005-sv -o {temp_outputfile} {testbench} {ref_file} {design_file} && vvp {temp_outputfile}"
+        elif benchmark == "VerilogEval_Human" or benchmark == "VerilogEval_Machine":
+            ref_file = glob(os.path.join(os.path.dirname(testbench), "ref.v"))[0]
+            cmd = f"iverilog -g2005-sv -o {temp_outputfile} {testbench} {design_file} && vvp {temp_outputfile}"
         else:
             cmd = f"iverilog -o {temp_outputfile} {testbench} {design_file} && vvp {temp_outputfile}"
             

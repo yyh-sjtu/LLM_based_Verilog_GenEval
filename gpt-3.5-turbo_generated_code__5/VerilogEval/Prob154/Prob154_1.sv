@@ -1,0 +1,44 @@
+
+module TopModule(
+  input  wire clk,
+  input  wire reset,
+  input  wire [7:0] in,
+  output wire [23:0] out_bytes,
+  output wire done
+);
+
+  reg [1:0] state;
+  reg [23:0] out_bytes_reg;
+
+  always @(posedge clk or posedge reset) begin
+    if (reset) begin
+      state <= 2'b00;
+      out_bytes_reg <= 24'b0;
+    end else begin
+      case (state)
+        2'b00: begin
+          if (in[3]) begin
+            state <= 2'b01;
+            out_bytes_reg <= {in[7:0], in[7:0], in[7:0]};
+          end
+        end
+        2'b01: begin
+          state <= 2'b10;
+          out_bytes_reg <= {out_bytes_reg[15:0], in[7:0]};
+        end
+        2'b10: begin
+          state <= 2'b11;
+          out_bytes_reg <= {out_bytes_reg[7:0], in[7:0]};
+        end
+        2'b11: begin
+          state <= 2'b00;
+          out_bytes_reg <= {out_bytes_reg[15:8], in[7:0]};
+        end
+      endcase
+    end
+  end
+
+  assign out_bytes = out_bytes_reg;
+  assign done = (state == 2'b11);
+
+endmodule

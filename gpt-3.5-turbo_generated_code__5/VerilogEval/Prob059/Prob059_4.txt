@@ -1,0 +1,22 @@
+Here is the RTL code implementation for the TopModule with the specified interface:
+
+```verilog
+module TopModule (
+    input a,
+    input b,
+    input c,
+    output reg w,
+    output reg x,
+    output reg y,
+    output reg z
+);
+
+assign w = a;
+assign x = b;
+assign y = b;
+assign z = c;
+
+endmodule
+```
+
+This implementation creates a module named TopModule with input ports a, b, and c, and output ports w, x, y, and z. The behavior of the module is such that input signals a, b, and c are directly connected to output signals w, x, y, and z, respectively. This effectively makes the module behave like wires connecting the specified signals.

@@ -1,0 +1,18 @@
+As a professional RTL designer, I can help you implement the TopModule with the requested interface. Here's the code for the module:
+
+```
+module TopModule(
+  input x3,
+  input x2,
+  input x1,
+  output f
+);
+  
+  assign f = ~(x3 & x1) | (x2 & x1);
+  
+endmodule
+```
+
+In this module, I have used logical operators to implement the combinational circuit based on the given truth table. The output 'f' is calculated using the logical AND (&) and OR (|) operators with appropriate negation (~) as per the specified conditions.
+
+Please note that this code assumes you are using a hardware description language (HDL) like Verilog. Let me know if you have any further questions or if there's anything else I can assist you with.

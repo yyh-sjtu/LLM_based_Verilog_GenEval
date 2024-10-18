@@ -1,0 +1,22 @@
+Sure, here is the RTL code for the TopModule implementing a 2-1 multiplexer:
+
+```verilog
+module TopModule(
+    input [99:0] a,
+    input [99:0] b,
+    input sel,
+    output reg [99:0] out
+);
+
+always @(*) begin
+    if(sel == 1'b0) begin
+        out = a;
+    end else begin
+        out = b;
+    end
+end
+
+endmodule
+```
+
+This module takes in two 100-bit input signals, a and b, along with a single select signal sel. Based on the value of sel (0 or 1), it selects either a or b as the output signal of the same size (100 bits).

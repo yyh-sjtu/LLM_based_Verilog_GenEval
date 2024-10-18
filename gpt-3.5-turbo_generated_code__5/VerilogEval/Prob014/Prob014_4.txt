@@ -1,0 +1,18 @@
+Here is a Verilog code implementation of the TopModule:
+
+```verilog
+module TopModule(
+    input a,
+    input b,
+    output reg out
+);
+
+always @(a, b)
+begin
+    out = a & b;
+end
+
+endmodule
+```
+
+This code defines a module named TopModule with input ports 'a' and 'b' and output port 'out'. Inside the 'always' block, the output 'out' is assigned the result of the AND operation between inputs 'a' and 'b'. This implementation effectively creates a 2-input AND gate.

@@ -1,0 +1,115 @@
+module asyn_fifo (
+  input wclk,
+  input rclk,
+  input wrstn,
+  input rrstn,
+  input winc,
+  input rinc,
+  input [WIDTH-1:0] wdata,
+  output reg wfull,
+  output reg rempty,
+  output reg [WIDTH-1:0] rdata
+);
+  
+  parameter WIDTH = 8;
+  parameter DEPTH = 16;
+  
+  reg [$clog2(DEPTH)-1:0] waddr_bin;
+  reg [$clog2(DEPTH)-1:0] raddr_bin;
+  reg [$clog2(DEPTH)-1:0] wptr;
+  reg [$clog2(DEPTH)-1:0] rptr;
+  reg [$clog2(DEPTH)-1:0] wptr_buff;
+  reg [$clog2(DEPTH)-1:0] rptr_buff;
+  reg [WIDTH-1:0] RAM_MEM [DEPTH-1:0];
+  wire wen;
+  wire ren;
+  
+  // Dual-port RAM module instantiation
+  dual_port_RAM RAM_inst (
+    .wclk(wclk),
+    .wenc(wen),
+    .waddr(waddr_bin),
+    .wdata(wdata),
+    .rclk(rclk),
+    .renc(ren),
+    .raddr(raddr_bin),
+    .rdata(rdata)
+  );
+  
+  // Write pointer increment and synchronization
+  always @(posedge wclk or negedge wrstn) begin
+    if (~wrstn) begin
+      waddr_bin <= 0;
+      wptr <= 0;
+      wptr_buff <= 0;
+    end else if (winc) begin
+      waddr_bin <= waddr_bin + 1;
+      wptr <= waddr_bin ^ (waddr_bin >> 1);
+      wptr_buff <= wptr;
+    end
+  end
+  
+  // Read pointer increment and synchronization
+  always @(posedge rclk or negedge rrstn) begin
+    if (~rrstn) begin
+      raddr_bin <= 0;
+      rptr <= 0;
+      rptr_buff <= 0;
+    end else if (rinc) begin
+      raddr_bin <= raddr_bin + 1;
+      rptr <= raddr_bin ^ (raddr_bin >> 1);
+      rptr_buff <= rptr;
+    end
+  end
+  
+  // Full and empty condition checks
+  always @(*) begin
+    if (wptr == rptr_buff) begin
+      rempty = 1;
+    end else begin
+      rempty = 0;
+    end
+    
+    if ((wptr == ~({1'b0, rptr_buff[$clog2(DEPTH)-2:0]})) && (wptr != rptr_buff)) begin
+      wfull = 1;
+    end else begin
+      wfull = 0;
+    end
+  end
+  
+  // Connect input and output signals to RAM module
+  assign wen = (~wfull) ? 1'b1 : 1'b0;
+  assign ren = (~rempty) ? 1'b1 : 1'b0;
+
+endmodule
+
+module dual_port_RAM (
+  input wclk,
+  input wenc,
+  input [$clog2(DEPTH)-1:0] waddr,
+  input [WIDTH-1:0] wdata,
+  input rclk,
+  input renc,
+  input [$clog2(DEPTH)-1:0] raddr,
+  output reg [WIDTH-1:0] rdata
+);
+  
+  parameter WIDTH = 8;
+  parameter DEPTH = 16;
+  
+  reg [WIDTH-1:0] RAM_MEM [DEPTH-1:0];
+  
+  always @(posedge wclk) begin
+    if (wenc) begin
+      RAM_MEM[waddr] <= wdata;
+    end
+  end
+  
+  always @(posedge rclk) begin
+    if (renc) begin
+      rdata <= RAM_MEM[raddr];
+    end
+  end
+
+endmodule
+

@@ -1,0 +1,15 @@
+As a professional RTL designer, I would implement the TopModule with the requested interface as follows:
+
+```verilog
+module TopModule(
+  input  wire a,
+  input  wire b,
+  output wire out
+);
+
+  assign out = a & b;
+
+endmodule
+```
+
+In this implementation, the module `TopModule` takes two input signals `a` and `b` and has one output signal `out`. The output `out` is assigned the result of the logical AND operation `a & b`.

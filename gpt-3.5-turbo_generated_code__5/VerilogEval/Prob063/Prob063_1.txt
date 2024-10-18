@@ -1,0 +1,30 @@
+Sure, here's the implementation of the TopModule in Verilog:
+
+```verilog
+module TopModule (
+  input clk,
+  input shift_ena,
+  input count_ena,
+  input data,
+  output reg [3:0] q
+);
+
+always @(posedge clk) begin
+  if (shift_ena)
+    q <= {q[2:0], data};
+  else if (count_ena)
+    q <= q - 1;
+end
+
+endmodule
+```
+
+In this implementation, we use an `always` block with a sensitivity list on the positive edge of the `clk`. Inside the `always` block, we check the values of `shift_ena` and `count_ena` to determine the desired behavior.
+
+If `shift_ena` is 1, we shift the contents of `q` left by one bit and assign the most significant bit as the input `data`. This is achieved by concatenating `q[2:0]` with `data` and assigning it back to `q`.
+
+If `count_ena` is 1, we decrement the value in `q` by 1 and assign the result back to `q`.
+
+Note that `q` is declared as a 4-bit output and as a register. This allows it to retain its value between sequential clock cycles.
+
+I hope this helps! Let me know if you have any further questions.

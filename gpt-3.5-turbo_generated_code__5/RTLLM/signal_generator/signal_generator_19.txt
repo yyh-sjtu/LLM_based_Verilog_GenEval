@@ -1,0 +1,54 @@
+Here is the complete code for the Triangle Wave signal generator module in Verilog:
+
+```verilog
+module signal_generator(
+  input clk,
+  input rst_n,
+  output reg [4:0] wave
+);
+  
+reg [1:0] state;
+
+always @(posedge clk or negedge rst_n)
+begin
+  if (~rst_n)
+  begin
+    state <= 2'b0;
+    wave <= 5'b0;
+  end
+  else
+  begin
+    case (state)
+      2'b00: begin
+        if (wave == 5'b11111)
+          state <= 2'b01;
+        else
+          wave <= wave + 1;
+      end
+      2'b01: begin
+        if (wave == 5'b00000)
+          state <= 2'b00;
+        else
+          wave <= wave - 1;
+      end
+      default: state <= 2'b0;
+    endcase
+  end
+end
+
+endmodule
+```
+
+In this code, the `signal_generator` module takes in the `clk` and `rst_n` input signals and outputs the `wave` 5-bit waveform signal.
+
+Inside the `always` block, there is a synchronous reset behavior implemented using an `if-else` statement. When `rst_n` is low (indicating a reset), the `state` register is cleared to 0 and the `wave` register is cleared to 0 as well.
+
+When `rst_n` is high (indicating reset is inactive), the waveform generation logic is implemented using a `case` statement based on the `state` register. The `state` register represents the current state of the waveform generation.
+
+If the `state` is 0, the `wave` register is incremented by 1. If the `wave` reaches its maximum value (31 or 5'b11111), the `state` is transitioned to 1.
+
+If the `state` is 1, the `wave` register is decremented by 1. If the `wave` reaches its minimum value (0 or 5'b00000), the `state` is transitioned back to 0.
+
+The `default` case in the `case` statement sets the `state` to 0, ensuring that if any unexpected value is assigned to `state`, it will be reset to the default state.
+
+Overall, this implementation generates a triangular waveform that cycles between 0 and 31, with each increment or decrement being of length 1.

@@ -1,0 +1,25 @@
+As an AI language model, I can provide you with a verilog code that implements a module named "TopModule" that reverses the byte order of a 32-bit vector. Here's the code for your RTL design implementation:
+
+```verilog
+module TopModule (
+  input [31:0] in,
+  output [31:0] out
+);
+  
+  reg [7:0] byte0, byte1, byte2, byte3;
+  
+  // Split the input vector into individual bytes
+  assign byte0 = in[7:0];
+  assign byte1 = in[15:8];
+  assign byte2 = in[23:16];
+  assign byte3 = in[31:24];
+  
+  // Reverse the order of the bytes
+  assign out = {byte3, byte2, byte1, byte0};
+  
+endmodule
+```
+
+In this code, the input `in` is a 32-bit vector, and the output `out` is also a 32-bit vector. Four registers (`byte0`, `byte1`, `byte2`, `byte3`) are used to store the individual bytes of the input vector. The `assign` statements split the input vector into four bytes. Finally, the `assign` statement for the output assigns the bytes in reverse order to the output vector.
+
+Please note that it's best practice to encapsulate the functionality within a module. If you want to use this module in another design, you can instantiate it and connect it to other modules or signals as required.

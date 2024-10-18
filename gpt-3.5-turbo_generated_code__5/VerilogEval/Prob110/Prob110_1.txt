@@ -1,0 +1,73 @@
+Sure! Below is the implementation of the TopModule in VHDL code:
+
+```vhdl
+library ieee;
+use ieee.std_logic_1164.all;
+use ieee.std_logic_unsigned.all;
+
+entity TopModule is
+    port (
+        clk    : in  std_logic;
+        areset : in  std_logic;
+        j      : in  std_logic;
+        k      : in  std_logic;
+        out    : out std_logic
+    );
+end entity;
+
+architecture Behavioral of TopModule is
+    type StateType is (OFF, ON);
+    signal currentState, nextState : StateType;
+
+begin
+    process(clk, areset)
+    begin
+        if areset = '1' then
+            currentState <= OFF;
+        elsif rising_edge(clk) then
+            currentState <= nextState;
+        end if;
+    end process;
+
+    process(currentState, j, k)
+    begin
+        case currentState is
+            when OFF =>
+                if j = '0' then
+                    nextState <= OFF;
+                elsif j = '1' then
+                    nextState <= ON;
+                end if;
+
+            when ON =>
+                if k = '0' then
+                    nextState <= ON;
+                elsif k = '1' then
+                    nextState <= OFF;
+                end if;
+
+            when others =>
+                nextState <= OFF;
+        end case;
+    end process;
+
+    process(currentState)
+    begin
+        case currentState is
+            when OFF =>
+                out <= '0';
+
+            when ON =>
+                out <= '1';
+
+            when others =>
+                out <= '0';
+        end case;
+    end process;
+
+end architecture;
+```
+
+This implementation of the TopModule module is a VHDL description of a Moore state machine that meets the requirements described in the question. It uses two processes - one for state transition and one for output assignment. The initial state is OFF, and the module has active-high asynchronous reset. The output "out" is assigned based on the current state.
+
+Let me know if you need any further assistance!

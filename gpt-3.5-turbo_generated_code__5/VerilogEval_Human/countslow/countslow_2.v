@@ -1,0 +1,34 @@
+module decade_counter(
+  input clk,
+  input slowena,
+  input reset,
+  output reg [3:0] q);
+
+  always @(posedge clk or posedge reset) begin
+    if (reset) begin
+      q <= 4'b0000; // Reset the counter to 0
+    end else if (slowena) begin
+      if (q == 4'b1001) begin
+        q <= 4'b0000; // When counting reaches 9, reset to 0
+      end else begin
+        q <= q + 1; // Increment the counter
+      end
+    end
+  end
+endmodule
+
+module top_module(
+  input clk,
+  input slowena,
+  input reset,
+  output reg [3:0] q);
+
+  decade_counter my_counter(
+    .clk(clk),
+    .slowena(slowena),
+    .reset(reset),
+    .q(q)
+  );
+
+endmodule
+

@@ -1,0 +1,16 @@
+// Declare internal counter variable
+reg [9:0] counter;
+
+// Declare terminal count signal
+wire tc;
+assign tc = (counter == 0);
+
+// Clock edge detection
+always @(posedge clk) begin
+  if (load) 
+    counter <= data;
+  else if (counter > 0)
+    counter <= counter - 1;
+end
+
+endmodule

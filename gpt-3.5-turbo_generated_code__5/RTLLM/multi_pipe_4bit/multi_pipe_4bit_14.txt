@@ -1,0 +1,34 @@
+module multi_pipe_4bit (
+    input wire clk,
+    input wire rst_n,
+    input wire [3:0] mul_a,
+    input wire [3:0] mul_b,
+    output reg [7:0] mul_out
+);
+
+parameter size = 4;
+
+reg [7:0] sum_reg1;
+reg [7:0] sum_reg2;
+
+always @(posedge clk or negedge rst_n) begin
+    if (~rst_n) begin
+        sum_reg1 <= 8'b0;
+        sum_reg2 <= 8'b0;
+    end
+    else begin
+        sum_reg1 <= sum_reg1 + ({{size{mul_b[0]}}}&mul_a) << 0;
+        sum_reg2 <= sum_reg2 + ({{size{mul_b[1]}}}&mul_a) << 1;
+    end
+end
+
+always @(posedge clk or negedge rst_n) begin
+    if (~rst_n) begin
+        mul_out <= 8'b0;
+    end
+    else begin
+        mul_out <= sum_reg1 + (sum_reg2 << 4);
+    end
+end
+
+endmodule

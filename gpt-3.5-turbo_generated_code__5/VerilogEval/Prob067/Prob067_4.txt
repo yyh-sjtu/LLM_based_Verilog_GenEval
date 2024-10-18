@@ -1,0 +1,31 @@
+Sure, here is the RTL code for the TopModule implementing the decade counter:
+
+```verilog
+module TopModule (
+  input  clk,
+  input  reset,
+  input  slowena,
+  output reg [3:0] q
+);
+
+  reg [3:0] count;
+
+  always @(posedge clk) begin
+    if (reset)
+      count <= 0;
+    else if (slowena)
+      count <= count + 1;
+  end
+
+  assign q = count;
+
+endmodule
+```
+
+In this code, we declare the inputs `clk`, `reset`, and `slowena`, and the output `q`. We use a 4-bit register `count` to store the current count value.
+
+Inside the always block, we use the positive edge of the clock (`@(posedge clk)`) to trigger the counting behavior. If `reset` is high, we set `count` to 0. Otherwise, if `slowena` is high, we increment `count` by 1.
+
+At the end, we assign the value of `count` to the output `q`.
+
+Please let me know if you need any further assistance!

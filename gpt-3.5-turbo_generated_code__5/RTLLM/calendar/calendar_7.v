@@ -1,0 +1,40 @@
+
+module calendar(
+    input CLK,
+    input RST,
+    output reg [5:0] Hours,
+    output reg [5:0] Mins,
+    output reg [5:0] Secs
+);
+
+always @ (posedge CLK or posedge RST)
+begin
+    if (RST)
+        Secs <= 6'b000000;
+    else if (Secs == 6'b111011) // 59 in binary
+        Secs <= 6'b000000;
+    else
+        Secs <= Secs + 1;
+end
+
+always @ (posedge CLK or posedge RST)
+begin
+    if (RST)
+        Mins <= 6'b000000;
+    else if ((Secs == 6'b111011) && (Mins == 6'b111011)) // both seconds and minutes are 59 in binary
+        Mins <= 6'b000000;
+    else if (Secs == 6'b111011) // seconds is 59 in binary
+        Mins <= Mins + 1;
+end
+
+always @ (posedge CLK or posedge RST)
+begin
+    if (RST)
+        Hours <= 6'b000000;
+    else if ((Secs == 6'b111011) && (Mins == 6'b111011) && (Hours == 6'b10111)) // hours, minutes, and seconds are at their maximum
+        Hours <= 6'b000000;
+    else if ((Mins == 6'b111011) && (Secs == 6'b111011)) // minutes and seconds are 59 in binary
+        Hours <= Hours + 1;
+end
+
+endmodule

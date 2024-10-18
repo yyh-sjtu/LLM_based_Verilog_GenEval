@@ -1,0 +1,47 @@
+// define a temporary signal to hold the value of q
+reg [3:0] temp_q;
+
+always @* begin
+	// use a case statement to determine the value of q based on the inputs
+	case ({a,b,c,d,e})
+		// when {a,b,c,d,e} is {4'b0000, 4'b0000}, the value of q is 'b0000
+		4'b0000_0000: temp_q = 4'b0000;
+		// when {a,b,c,d,e} is {4'b0001, 4'b0001}, the value of q is 'b0001
+		4'b0001_0001: temp_q = 4'b0001;
+		// when {a,b,c,d,e} is {4'b0010, 4'b0010}, the value of q is 'b0010
+		4'b0010_0010: temp_q = 4'b0010;
+		// when {a,b,c,d,e} is {4'b0011, 4'b0011}, the value of q is 'b0011
+		4'b0011_0011: temp_q = 4'b0011;
+		// when {a,b,c,d,e} is {4'b0100, 4'b0100}, the value of q is 'b0100
+		4'b0100_0100: temp_q = 4'b0100;
+		// when {a,b,c,d,e} is {4'b0101, 4'b0101}, the value of q is 'b0101
+		4'b0101_0101: temp_q = 4'b0101;
+		// when {a,b,c,d,e} is {4'b0110, 4'b0110}, the value of q is 'b0110
+		4'b0110_0110: temp_q = 4'b0110;
+		// when {a,b,c,d,e} is {4'b0111, 4'b0111}, the value of q is 'b0111
+		4'b0111_0111: temp_q = 4'b0111;
+		// when {a,b,c,d,e} is {4'b1000, 4'b1000}, the value of q is 'b1000
+		4'b1000_1000: temp_q = 4'b1000;
+		// when {a,b,c,d,e} is {4'b1001, 4'b1001}, the value of q is 'b1001
+		4'b1001_1001: temp_q = 4'b1001;
+		// when {a,b,c,d,e} is {4'b1010, 4'b1010}, the value of q is 'b1010
+		4'b1010_1010: temp_q = 4'b1010;
+		// when {a,b,c,d,e} is {4'b1011, 4'b1011}, the value of q is 'b1011
+		4'b1011_1011: temp_q = 4'b1011;
+		// when {a,b,c,d,e} is {4'b1100, 4'b1100}, the value of q is 'b1100
+		4'b1100_1100: temp_q = 4'b1100;
+		// when {a,b,c,d,e} is {4'b1101, 4'b1101}, the value of q is 'b1101
+		4'b1101_1101: temp_q = 4'b1101;
+		// when {a,b,c,d,e} is {4'b1110, 4'b1110}, the value of q is 'b1110
+		4'b1110_1110: temp_q = 4'b1110;
+		// when {a,b,c,d,e} is {4'b1111, 4'b1111}, the value of q is 'b1111
+		4'b1111_1111: temp_q = 4'b1111;
+		// for all other combinations of input values, the value of q is 'b0000
+		default: temp_q = 4'b0000;
+	endcase
+end
+
+// assign the value of temp_q to q
+assign q = temp_q;
+
+endmodule

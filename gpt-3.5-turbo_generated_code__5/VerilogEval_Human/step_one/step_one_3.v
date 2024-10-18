@@ -1,0 +1,11 @@
+module top_module(
+    output reg one
+  );
+  
+  // Assign the output to always drive 1
+  always @(*) begin
+    one = 1;
+  end
+  
+endmodule
+

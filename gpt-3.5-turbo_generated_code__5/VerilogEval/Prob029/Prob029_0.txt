@@ -1,0 +1,20 @@
+Sure! Here's an RTL design implementation for the module named TopModule:
+
+```verilog
+module TopModule (
+  input in1,
+  input in2,
+  input in3,
+  output out
+);
+  wire xnor_out;
+  
+  // Two-input XNOR gate
+  assign xnor_out = ~(in1 ^ in2);
+  
+  // Two-input XOR gate
+  assign out = xnor_out ^ in3;
+endmodule
+```
+
+In this implementation, the module `TopModule` contains input ports `in1`, `in2`, and `in3`, and an output port `out`. The circuit consists of a two-input XNOR gate connected to `in1` and `in2`, with its output connected to the input of a two-input XOR gate. The second input of the XOR gate is connected to `in3`. Finally, the output of the XOR gate is assigned to `out`.

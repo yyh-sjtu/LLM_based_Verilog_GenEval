@@ -1,0 +1,26 @@
+module top_module(
+	input clk,
+	input reset,
+	output reg [3:0] q);
+
+	// State register to hold the current count value
+	reg [3:0] count;
+
+	// Always block to increment the count on positive clock edge
+	always @(posedge clk) begin
+		if (reset) begin
+			count <= 4'b0000;
+		end else begin
+			if (count == 4'b1111) begin
+				count <= 4'b0000;
+			end else begin
+				count <= count + 1;
+			end
+		end
+	end
+
+	// Assigning the value of count to the output q
+	assign q = count;
+
+endmodule
+

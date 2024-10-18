@@ -1,0 +1,43 @@
+Here is the complete code for the requested module (accu) in Verilog:
+
+```verilog
+module accu (
+    input clk,
+    input rst_n,
+    input [7:0] data_in,
+    input valid_in,
+    output reg valid_out,
+    output reg [9:0] data_out
+);
+
+reg [7:0] data_accumulated = 0;
+reg [3:0] counter = 0;
+
+always @(posedge clk or negedge rst_n) begin
+    if (~rst_n) begin
+        valid_out <= 0;
+        data_out <= 0;
+        data_accumulated <= 0;
+        counter <= 0;
+    end else if (valid_in) begin
+        data_accumulated <= data_accumulated + data_in;
+        counter <= counter + 1;
+        if (counter == 3) begin
+            data_out <= data_accumulated;
+            valid_out <= 1;
+            counter <= 0;
+            data_accumulated <= 0;
+        end else begin
+            valid_out <= 0;
+        end
+    end else begin
+        valid_out <= 0;
+    end
+end
+
+endmodule
+```
+
+In this code, a register `data_accumulated` is used to store the accumulated sum of four input values. Another register `counter` is used to keep track of the number of valid inputs received so far. The `valid_out` signal is initialized to 0 and will be set to 1 for one cycle when four valid inputs have been received and the accumulated sum is output on `data_out`. The accumulated sum is reset to 0 after outputting the result.
+
+Please note that this code assumes a positive edge-triggered clock (`posedge clk`) and an active low reset signal (`rst_n`). You may need to modify these signals based on your specific design requirements.

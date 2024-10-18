@@ -1,0 +1,16 @@
+module top_module (
+	input clk,
+	input a,
+	output reg q
+);
+
+always @(posedge clk) begin
+	if (a & ~q) begin
+		q <= 1;
+	end else if (~a & q) begin
+		q <= 0;
+	end
+end
+
+endmodule
+

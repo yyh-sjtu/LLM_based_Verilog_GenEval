@@ -1,0 +1,38 @@
+Sure! Here's the RTL coding for the TopModule module:
+
+```
+module TopModule (
+  input clk,
+  input resetn,
+  input [1:0] byteena,
+  input [15:0] d,
+  output reg [15:0] q
+);
+
+  reg [15:0] q_reg;
+
+  always @(posedge clk or negedge resetn) begin
+    if (!resetn) begin
+      q_reg <= 16'b0;
+    end else begin
+      if (byteena[1]) // Upper byte write enable
+        q_reg[15:8] <= d[15:8];
+      if (byteena[0]) // Lower byte write enable
+        q_reg[7:0] <= d[7:0];
+    end
+  end
+
+  assign q = q_reg;
+
+endmodule
+```
+
+In this code, the `TopModule` module implements a combinational logic that controls the writing operation of 16 D flip-flops based on the input byteena signals.
+
+The `byteena` input is a 2-bit signal that determines which bytes of the 16-bit input `d` should be written to the flip-flops in each clock cycle. If `byteena[1]` is high, it means the upper byte of `d` (bits 15 to 8) should be written to the output `q`, and if `byteena[0]` is high, it means the lower byte of `d` (bits 7 to 0) should be written to `q`. If both `byteena[1]` and `byteena[0]` are low, no write operation will be performed.
+
+The `resetn` input is an active-low synchronous reset signal. When it goes low, all flip-flops are reset to 0. When `resetn` is high, the positive edge of the `clk` input triggers the writing operation.
+
+The `q` output is a 16-bit signal that represents the values stored in the flip-flops after the writing operation. In each clock cycle, only the specified bytes of `d` will be written to `q`, while the other bytes will retain their previous values.
+
+Please let me know if you need any further assistance!

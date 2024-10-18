@@ -1,0 +1,15 @@
+Here is the RTL code implementing the TopModule module:
+
+```verilog
+module TopModule (
+    input [1:0] A,
+    input [1:0] B,
+    output z
+);
+
+assign z = (A == B) ? 1'b1 : 1'b0;
+
+endmodule
+```
+
+This code compares the 2-bit inputs A and B using the equality operator (==) and assigns the output z to be 1 if they are equal, and 0 otherwise.

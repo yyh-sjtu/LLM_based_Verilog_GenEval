@@ -1,0 +1,11 @@
+As a professional RTL designer, I will start by designing the finite state machine (FSM) that will search for message boundaries in the input byte stream. This FSM will be triggered by the clock signal and will use the reset signal to initialize its state machine.
+
+Next, I will design the datapath module that will output the 24-bit message whenever a full packet has been received. This module will store the received bytes and concatenate them to form the 24-bit message. The out_bytes signal will be valid whenever the done signal is asserted.
+
+I will follow the given algorithm to discard bytes until I see a byte with in[3]=1. Once this byte is received, I will assume it is the start of a message and signal the receipt of a message once all 3 bytes have been received.
+
+I will ensure that all sequential logic is triggered on the positive edge of the clock signal to maintain synchronous operation.
+
+After implementing and verifying the functionality of the TopModule, I will simulate the design using the example waveform provided to ensure that the module operates as expected in all scenarios.
+
+If you have any specific requirements or constraints for the design, please let me know so that I can incorporate them during the implementation process.

@@ -1,0 +1,41 @@
+As a professional RTL designer, I will now provide a Verilog implementation of the TopModule based on the given requirements:
+
+```verilog
+module TopModule(
+  input  clk,
+  input  reset,
+  input  x,
+  output z
+);
+  reg [2:0] y, next_state;
+  reg output_z;
+
+  always @(posedge clk) begin
+    if (reset) begin
+      y <= 3'b000;
+      output_z <= 1'b0;
+    end
+    else begin
+      y <= next_state;
+      output_z <= (y == 3'b011 || y == 3'b100) ? 1'b1 : 1'b0;
+    end
+  end
+
+  always @(y or x) begin
+    case(y)
+      3'b000: next_state = x ? 3'b001 : 3'b000;
+      3'b001: next_state = x ? 3'b100 : 3'b001;
+      3'b010: next_state = x ? 3'b001 : 3'b010;
+      3'b011: next_state = x ? 3'b010 : 3'b001;
+      3'b100: next_state = x ? 3'b100 : 3'b011;
+    endcase
+  end
+    
+  assign z = output_z;
+    
+endmodule
+```
+
+In this implementation, `y` represents the current state of the finite-state machine, `next_state` is the state to transition to, and `output_z` is the value of the output port `z`. The `always @(posedge clk)` block is triggered on the positive edge of the clock and handles the state transitions and output generation. The `always @(y or x)` block generates the next state based on the present state and the input `x` using a case statement. Finally, the `assign z = output_z` statement assigns the value of `output_z` to the output port `z`.
+
+Please let me know if you have any further questions or if there are any additional requirements.

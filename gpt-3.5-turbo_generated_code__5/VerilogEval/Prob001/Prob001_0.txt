@@ -1,0 +1,17 @@
+As an RTL designer, I can help you implement the requested TopModule with the desired functionality. Here's an example Verilog code for the TopModule:
+
+```verilog
+module TopModule(
+  output reg zero
+);
+
+always @(*) begin
+  zero = 0;
+end
+
+endmodule
+```
+
+In this implementation, a single output port named `zero` is declared as a register (`reg`) and assigned a constant value of 0 using an `always` block. This ensures that the output of the module is always LOW.
+
+Note: It's worth mentioning that the implementation assumes that you have already taken care of the necessary module instantiations, connections, and testbench for the complete design.

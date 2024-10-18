@@ -1,0 +1,54 @@
+Here is the complete code for the 64-bit ripple carry adder with pipeline stages:
+
+```
+module adder_pipe_64bit (
+  input clk,
+  input rst_n,
+  input i_en,
+  input [63:0] adda,
+  input [63:0] addb,
+  output reg [64:0] result,
+  output reg o_en
+);
+
+reg [63:0] a_reg1, b_reg1, a_reg2, b_reg2;
+reg [64:0] sum1, sum2, sum3;
+
+always @(posedge clk or negedge rst_n) begin
+  if (~rst_n) begin
+    a_reg1 <= 0;
+    b_reg1 <= 0;
+    a_reg2 <= 0;
+    b_reg2 <= 0;
+    sum1 <= 0;
+    sum2 <= 0;
+    sum3 <= 0;
+    o_en <= 0;
+  end else begin
+    if (i_en) begin
+      a_reg1 <= adda;
+      b_reg1 <= addb;
+      a_reg2 <= a_reg1;
+      b_reg2 <= b_reg1;
+      sum1 <= a_reg1 + b_reg1;
+      sum2 <= a_reg2 + b_reg2;
+      sum3 <= sum1 + sum2;
+    end
+    o_en <= i_en;
+  end
+end
+
+assign result = sum3;
+
+endmodule
+```
+
+In this code, the `adder_pipe_64bit` module has inputs `clk`, `rst_n`, `i_en`, `adda`, and `addb`. The `result` output provides the 65-bit sum of `adda` and `addb`, and `o_en` represents the output enable signal.
+
+The `always` block is triggered on the positive edge of the clock `clk` or negative edge of the reset `rst_n`. Inside the `always` block, there is a conditional statement to handle the reset. When `rst_n` is low, all registers and signals are set to their initial values. Otherwise, the addition operation is performed when `i_en` is high.
+
+Four registers (`a_reg1`, `b_reg1`, `a_reg2`, `b_reg2`) hold the input operands and their values are updated based on the enable signal. The sum values for each pipeline stage are calculated and stored in `sum1`, `sum2`, and `sum3`.
+
+The `output reg` directive is used to declare the registers `result` and `o_en` for output. The `assign` statement assigns `sum3` to `result`.
+
+Please note that this code assumes that the `adda` and `addb` operands are synchronous with the clock. If they are asynchronous, additional synchronizers will be required to avoid metastability issues.

@@ -1,0 +1,24 @@
+Here is a RTL code implementing the TopModule with the specified interface:
+
+```verilog
+module TopModule(
+    input [2:0] vec,
+    output reg [2:0] outv,
+    output reg o2,
+    output reg o1,
+    output reg o0
+);
+
+always @(*) begin
+    outv = vec;
+    o2 = vec[2];
+    o1 = vec[1];
+    o0 = vec[0];
+end
+
+endmodule
+```
+
+In this code, the TopModule takes a 3-bit input vector 'vec' and assigns it to 'outv'. It then splits the input vector into individual bits and assigns them to the outputs 'o2', 'o1', and 'o0'. 'o2' corresponds to the MSB of 'vec', 'o1' corresponds to the middle bit, and 'o0' corresponds to the LSB.
+
+This RTL code implements the specified interface for the TopModule.

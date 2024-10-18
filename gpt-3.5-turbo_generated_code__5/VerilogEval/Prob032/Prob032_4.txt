@@ -1,0 +1,18 @@
+Sure! Here's a Verilog RTL implementation of the TopModule:
+
+```
+module TopModule (
+  input [2:0] vec,
+  output [2:0] outv,
+  output o2,
+  output o1,
+  output o0
+);
+
+  assign {o2, o1, o0} = vec;
+  assign outv = vec;
+
+endmodule
+```
+
+In this implementation, the module `TopModule` takes a 3-bit input `vec` and outputs the same vector `outv`. Additionally, it splits the input vector into three separate 1-bit outputs `o2`, `o1`, and `o0` using the concatenation `{o2, o1, o0} = vec`.

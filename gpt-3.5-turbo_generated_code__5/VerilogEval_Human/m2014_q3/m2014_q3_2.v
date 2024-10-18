@@ -1,0 +1,21 @@
+module top_module (
+	input [4:1] x,
+	output logic f
+);
+
+always_comb begin
+	case(x)
+		4'b0000: f = 1; // 00
+		4'b0001: f = 0; // 01
+		4'b0011: f = 0; // 11
+		4'b0010: f = 0; // 10
+		4'b0110: f = 1; // 60
+		4'b0111: f = 0; // 61
+		4'b1111: f = 1; // 71
+		4'b1110: f = 1; // 70
+		default: f = 1; // d
+	endcase
+end
+
+endmodule
+

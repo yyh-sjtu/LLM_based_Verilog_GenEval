@@ -1,0 +1,17 @@
+Sure! Here's an example implementation of the TopModule in Verilog:
+
+```verilog
+module TopModule (
+  input x,
+  input y,
+  output z
+);
+  
+  assign z = (x ^ y) & x;
+  
+endmodule
+```
+
+In this implementation, we declare the module named TopModule with the specified input and output ports. The `assign` statement is used to assign the boolean expression `(x ^ y) & x` to the output port `z`. The `^` operator performs the bitwise XOR operation, and the `&` operator performs the bitwise AND operation.
+
+Please let me know if you have any further questions or if there's anything else I can assist you with!

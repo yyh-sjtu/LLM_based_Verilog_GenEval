@@ -1,0 +1,17 @@
+Sure, here is the RTL implementation of the TopModule:
+
+```verilog
+module TopModule (
+  input ring,
+  input vibrate_mode,
+  output ringer,
+  output motor
+);
+
+  assign ringer = ~vibrate_mode & ring; // Turn on the ringer if not in vibrate mode and there is an incoming call
+  assign motor = vibrate_mode & ring; // Turn on the motor if in vibrate mode and there is an incoming call
+
+endmodule
+```
+
+In this implementation, the `ring` input indicates an incoming call. If `vibrate_mode` is high (1), the `motor` output is set to 1 to turn on the vibration motor. If `vibrate_mode` is low (0), the `ringer` output is set to 1 to turn on the ringer. The `&` operator is used for bitwise AND operation, and the `~` operator is used for bitwise negation.

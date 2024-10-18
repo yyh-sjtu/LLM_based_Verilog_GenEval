@@ -1,0 +1,11 @@
+
+module TopModule (
+    input [15:0] in,
+    output [7:0] out_lo,
+    output [7:0] out_hi
+);
+
+assign out_lo = in[7:0];
+assign out_hi = in[15:8];
+
+endmodule

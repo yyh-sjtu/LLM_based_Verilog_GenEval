@@ -1,0 +1,3 @@
+
+	assign q = (a & ~b) | (~a & b);
+endmodule

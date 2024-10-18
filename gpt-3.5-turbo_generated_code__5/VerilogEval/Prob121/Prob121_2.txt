@@ -1,0 +1,68 @@
+As a professional RTL designer, I would start by defining the state transitions and output logic based on the state-assigned table provided. 
+
+```verilog
+module TopModule (
+    input clk,
+    input reset,
+    input x,
+    output reg z
+);
+
+reg [2:0] state, next_state;
+
+always @ (posedge clk) begin
+    if (reset) begin
+        state <= 3'b000;
+    end else begin
+        state <= next_state;
+    end
+end
+
+always @* begin
+    case (state)
+        3'b000: begin
+            if (x == 0)
+                next_state = 3'b000;
+            else
+                next_state = 3'b001;
+            z = 1'b0;
+        end
+        3'b001: begin
+            if (x == 0)
+                next_state = 3'b001;
+            else
+                next_state = 3'b100;
+            z = 1'b0;
+        end
+        3'b010: begin
+            if (x == 0)
+                next_state = 3'b010;
+            else
+                next_state = 3'b001;
+            z = 1'b0;
+        end
+        3'b011: begin
+            if (x == 0)
+                next_state = 3'b001;
+            else
+                next_state = 3'b010;
+            z = 1'b1;
+        end
+        3'b100: begin
+            if (x == 0)
+                next_state = 3'b011;
+            else
+                next_state = 3'b100;
+            z = 1'b1;
+        end
+        default: begin
+            next_state = 3'b000;
+            z = 1'b0;
+        end
+    endcase
+end
+
+endmodule
+```
+
+This Verilog code defines the TopModule module with the specified input and output ports, synchronized to the positive edge of the clock. The module implements the finite-state machine with the given state transitions and output values based on the provided state-assigned table. The reset input is used to reset the FSM to state 000.

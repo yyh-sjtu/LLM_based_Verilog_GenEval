@@ -1,0 +1,18 @@
+module top_module (
+    input a, 
+    input b,
+    input c,
+    input d,
+    output out
+);
+
+    wire w1, w2, w3;
+
+    and gate1 (w1, a, b);
+    and gate2 (w2, a, c);
+    and gate3 (w3, b, c);
+    or gate4 (w4, w1, w2, w3);
+    or gate5 (out, w4, d);
+
+endmodule
+

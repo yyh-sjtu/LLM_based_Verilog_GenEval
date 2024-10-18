@@ -1,0 +1,28 @@
+Sure, here's an implementation of the TopModule in Verilog:
+
+```verilog
+module TopModule(
+  input  clk,
+  input  reset,
+  output [3:0] q
+);
+
+  reg [3:0] count;
+
+  always @(posedge clk) begin
+    if (reset)
+      count <= 0;
+    else if (count == 15)
+      count <= 0;
+    else
+      count <= count + 1;
+  end
+
+  assign q = count;
+
+endmodule
+```
+
+In this implementation, we use a 4-bit register `count` to hold the value of the counter. On the positive edge of the clock (`posedge clk`), we check if the reset signal is active high (`reset`). If it is, we reset the counter to 0. Otherwise, if the counter is at its maximum value of 15, we also reset it to 0. Otherwise, we increment the counter by 1.
+
+Finally, we assign the value of `count` to the output port `q`, which is a 4-bit vector representing the binary value of the counter.

@@ -1,0 +1,15 @@
+Certainly! Here's an RTL design for the TopModule implementing an XNOR gate:
+
+```verilog
+module TopModule (
+    input  wire a,
+    input  wire b,
+    output wire out
+);
+    assign out = ~(a ^ b);
+endmodule
+```
+
+In this design, the `a` and `b` inputs are XOR-ed using the `^` operator. The result is then inverted using the `~` operator to get the XNOR output, which is assigned to the `out` output.
+
+Note that the `wire` keyword is used to declare the input and output ports.

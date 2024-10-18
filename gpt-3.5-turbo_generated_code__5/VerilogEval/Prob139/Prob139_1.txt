@@ -1,0 +1,73 @@
+As a professional RTL designer, I will start by describing the finite state machine (FSM) that meets the requirements mentioned in the problem statement. The FSM will have four states - A, B, C, and D.
+
+State A: This is the beginning state, which the FSM stays in as long as the reset input is asserted (resetn = 0).
+
+State B: After the reset signal is de-asserted (resetn = 1), the FSM transitions to state B on the next positive edge of the clock (clk). In this state, the output f is set to 1 for one clock cycle.
+
+State C: After state B, the FSM transitions to state C and starts monitoring the x input. It waits for the x input to produce the values 1, 0, 1 in three successive clock cycles. Once this condition is met, the FSM transitions to state D.
+
+State D: In this state, the FSM maintains the output g = 1 permanently and starts monitoring the y input. If the y input becomes 1 within at most two clock cycles, the FSM stays in state D, maintaining g = 1 permanently. However, if the y input does not become 1 within two clock cycles, the FSM transitions back to state A and sets g = 0 permanently (until reset).
+
+Based on this description, I will now provide the RTL code for the TopModule module:
+
+```verilog
+module TopModule (
+  input clk,
+  input resetn,
+  input x,
+  input y,
+  output reg f,
+  output reg g
+);
+
+  // FSM states
+  localparam A = 2'b00;
+  localparam B = 2'b01;
+  localparam C = 2'b10;
+  localparam D = 2'b11;
+
+  reg [1:0] state;
+  reg [2:0] x_history;
+
+  always @(posedge clk) begin
+    if (!resetn) begin
+      state <= A;
+      f <= 0;
+      g <= 0;
+      x_history <= 3'b000;
+    end else begin
+      case (state)
+        A:
+          if (resetn)
+            state <= B;
+        B:
+          begin
+            f <= 1;
+            state <= C;
+          end
+        C:
+          begin
+            x_history <= {x_history[1:0], x};
+            if (x_history == 3'b101)
+              state <= D;
+          end
+        D:
+          begin
+            if (y == 1)
+              state <= D;
+            else if (y == 0)
+              begin
+                state <= A;
+                g <= 0;
+              end
+          end
+      endcase
+    end
+  end
+
+endmodule
+```
+
+Please note that the given RTL code is written in Verilog, assuming a positive-edge triggered flip flop. Change the module declaration according to your target hardware description language (HDL) if needed.
+
+Let me know if you have any further questions or need any additional information.

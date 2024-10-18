@@ -1,0 +1,18 @@
+module right_shifter (
+    input clk,
+    input d,
+    output reg [7:0] q
+);
+
+    // Initialize q register to 0
+    initial begin
+        q = 8'b0;
+    end
+    
+    // Right shift operation on each rising edge of the clock
+    always @(posedge clk) begin
+        q <= {d, q[7:1]}; // Shift q to the right by 1 bit and insert d at the most significant position
+    end
+    
+endmodule
+

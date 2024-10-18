@@ -1,0 +1,27 @@
+Sure! Here's the implementation of the TopModule in RTL (Register-Transfer Level) code:
+
+```verilog
+module TopModule(
+  input in1,
+  input in2,
+  input in3,
+  output out
+);
+  
+  // Instantiate XNOR gate
+  wire xnor_out;
+  assign xnor_out = in1 ^ in2;
+  
+  // Instantiate XOR gate
+  wire xor_out;
+  assign xor_out = xnor_out ^ in3;
+  
+  // Output
+  assign out = xor_out;
+
+endmodule
+```
+
+In this implementation, the module TopModule receives three inputs: `in1`, `in2`, and `in3`, and has one output port named `out`. The input ports `in1`, `in2`, and `in3` are one-bit each. 
+
+The XNOR gate takes `in1` and `in2` as inputs and produces `xnor_out` as the output. The XOR gate takes `xnor_out` and `in3` as inputs and produces `xor_out` as the output. Finally, the output port `out` is assigned to the value of `xor_out`.

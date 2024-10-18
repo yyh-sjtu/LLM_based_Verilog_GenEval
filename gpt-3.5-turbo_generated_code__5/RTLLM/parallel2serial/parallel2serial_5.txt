@@ -1,0 +1,47 @@
+Here is the complete code for the parallel-to-serial conversion module in Verilog:
+
+```verilog
+module parallel2serial (
+  input wire clk,
+  input wire rst_n,
+  input wire [3:0] d,
+  output wire valid_out,
+  output wire dout
+);
+
+  reg [2:0] cnt;
+  reg [3:0] data;
+
+  always @(posedge clk or negedge rst_n) begin
+    if (~rst_n) begin
+      cnt <= 0;
+      data <= 0;
+      valid_out <= 0;
+      dout <= 0;
+    end
+    
+    else begin
+      if (cnt == 3) begin
+        data <= d;
+        cnt <= 0;
+        valid_out <= 1;
+        dout <= data[3];
+      end
+      
+      else begin
+        cnt <= cnt + 1;
+        valid_out <= 0;
+        data <= {data[2:0], d[3]};
+        dout <= data[3];
+      end
+    end
+  end
+
+endmodule
+```
+
+In this code, we define a 3-bit counter (`cnt`) and a 4-bit register (`data`). On each clock cycle, we check if `cnt` is equal to 3. If so, it means we have reached the last bit of the parallel input, and we update the `data` register with the new value of `d`, reset `cnt` to 0, and set `valid_out` to 1. The most significant bit of `data` is assigned to `dout`.
+
+If `cnt` is not equal to 3, we increment `cnt` by 1, set `valid_out` to 0, and shift the `data` register one bit to the left, with `d[3]` (the most significant bit of `d`) being shifted to the least significant bit of `data`. Again, the most significant bit of `data` is assigned to `dout`.
+
+The module also handles reset functionality. When `rst_n` goes low, the counters and registers are reset to their initial values.

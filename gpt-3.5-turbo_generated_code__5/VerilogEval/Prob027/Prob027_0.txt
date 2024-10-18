@@ -1,0 +1,19 @@
+As a professional RTL designer, I would design the TopModule module in Verilog as follows:
+
+```verilog
+module TopModule (
+    input a,
+    input b,
+    input cin,
+    output reg cout,
+    output reg sum
+);
+
+always @ (*) begin
+    {cout, sum} = a + b + cin;
+end
+
+endmodule
+```
+
+In this Verilog code, the `always` block continuously monitors the input signals `a`, `b`, and `cin`, and calculates the sum and carry-out based on the full adder logic. The resulting values are assigned to the output signals `cout` and `sum`. This implementation follows the desired interface and functionality of a full adder module named TopModule.

@@ -1,0 +1,63 @@
+As a professional RTL designer, I would implement the TopModule using Verilog as follows:
+
+```verilog
+module TopModule(
+  input in,
+  input [1:0] state,
+  output reg [1:0] next_state,
+  output reg out
+);
+
+  always @(*) begin
+    case(state)
+      2'b00: begin
+        if(in == 1'b0) begin
+          next_state = 2'b00; // A
+          out = 1'b0;
+        end else begin
+          next_state = 2'b01; // B
+          out = 1'b0;
+        end
+      end
+
+      2'b01: begin
+        if(in == 1'b0) begin
+          next_state = 2'b10; // C
+          out = 1'b0;
+        end else begin
+          next_state = 2'b01; // B
+          out = 1'b0;
+        end
+      end
+
+      2'b10: begin
+        if(in == 1'b0) begin
+          next_state = 2'b00; // A
+          out = 1'b0;
+        end else begin
+          next_state = 2'b11; // D
+          out = 1'b0;
+        end
+      end
+
+      2'b11: begin
+        if(in == 1'b0) begin
+          next_state = 2'b10; // C
+          out = 1'b1;
+        end else begin
+          next_state = 2'b01; // B
+          out = 1'b0;
+        end
+      end
+
+      default: begin
+        next_state = 2'b00; // A
+        out = 1'b0;
+      end
+    endcase
+  end
+
+endmodule
+```
+
+This Verilog module implements the state transition logic and output logic for the given Moore state machine. It takes in the current state (state) and input (in), and computes the next_state and output (out) based on the state transition table provided. The state and output are defined using 2-bit and 1-bit reg types respectively. The combinational logic is implemented using a case statement with conditions for each state and input combination.

@@ -1,0 +1,34 @@
+module adder_8bit (
+    input [7:0] a,
+    input [7:0] b,
+    input Cin,
+    output [7:0] sum,
+    output Co
+);
+
+    assign {Co, sum} = a + b + Cin;
+
+endmodule
+
+module adder_16bit (
+    input [15:0] a,
+    input [15:0] b,
+    input Cin,
+    output [15:0] y,
+    output Co
+);
+
+    wire [7:0] c1_out;
+    wire [7:0] c2_out;
+    wire [7:0] c3_out;
+    wire [7:0] c4_out;
+
+    adder_8bit u1 (.a(a[7:0]), .b(b[7:0]), .Cin(Cin), .sum(y[7:0]), .Co(c1_out[7]));
+    adder_8bit u2 (.a(a[7:0]), .b(b[7:0]), .Cin(c1_out[7]), .sum(y[15:8]), .Co(c2_out[7]));
+    adder_8bit u3 (.a(a[7:0]), .b(b[7:0]), .Cin(c2_out[7]), .sum(y[7:0]), .Co(c3_out[7]));
+    adder_8bit u4 (.a(a[7:0]), .b(b[7:0]), .Cin(c3_out[7]), .sum(y[15:8]), .Co(c4_out[7]));
+
+    assign Co = c4_out[7];
+
+endmodule
+

@@ -1,0 +1,22 @@
+Sure! Here's an implementation of the TopModule that implements a half adder:
+
+```verilog
+module TopModule (
+  input a,
+  input b,
+  output sum,
+  output cout
+);
+
+  // Use XOR gate for sum
+  assign sum = a ^ b;
+
+  // Use AND gate for carry-out
+  assign cout = a & b;
+  
+endmodule
+```
+
+In this implementation, we use the XOR (`^`) gate to calculate the sum output, which is the result of adding `a` and `b` without considering any carry-in. The carry-out (`cout`) is calculated using the AND (`&`) gate, as it will be high if both `a` and `b` are high, indicating a carry-out.
+
+Let me know if you need any further assistance!

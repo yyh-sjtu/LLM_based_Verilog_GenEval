@@ -1,0 +1,28 @@
+Sure! Here's the code for the RTL design of the TopModule:
+```verilog
+module TopModule (
+  input [2:0] a,
+  input [2:0] b,
+  output reg [2:0] out_or_bitwise,
+  output reg out_or_logical,
+  output reg [5:0] out_not
+);
+  
+  always @* begin
+    out_or_bitwise = a | b;
+    out_or_logical = a || b;
+    out_not[5:3] = ~b;
+    out_not[2:0] = ~a;
+  end
+  
+endmodule
+```
+In this design, we declare a module named "TopModule" with the specified inputs and outputs. Inside the module, we define an "always" block with a sensitivity list of "*", which means it will be executed whenever any of the inputs change.
+
+Inside the "always" block, we assign the value of the bitwise-OR of "a" and "b" to the "out_or_bitwise" output. We assign the logical-OR of "a" and "b" to the "out_or_logical" output.
+
+To assign the inverse (NOT) of "b" in the upper half of "out_not" and the inverse of "a" in the lower half, we use bit slicing. We assign the inverse of "b" to bits [5:3] of "out_not" and the inverse of "a" to bits [2:0] of "out_not".
+
+Note that we use "reg" datatype for the output ports because we are assigning values to them inside the "always" block.
+
+That's it! This RTL design implements the specified TopModule with the desired functionality.

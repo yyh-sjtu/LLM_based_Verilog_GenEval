@@ -1,0 +1,47 @@
+Sure, here is an example implementation of the TopModule in Verilog:
+
+```verilog
+module TopModule(
+  input  clk,
+  input  reset,
+  input  [7:0] d,
+  output reg [7:0] q
+);
+
+  // D flip-flops declaration
+  reg [7:0] q_tmp;
+  reg [7:0] q_next;
+  
+  always @(posedge clk) begin
+    if (reset) begin
+      q_tmp <= 8'b0; // Reset the temporary output
+    end else begin
+      q_tmp <= q_next; // Update the temporary output
+    end
+  end
+  
+  always @(posedge clk) begin
+    if (reset) begin
+      q_next <= 8'b0; // Reset the next output
+    end else begin
+      q_next <= d; // Update the next output with input d
+    end
+  end
+
+  // Output assignment
+  always @(posedge clk) begin
+    q <= q_tmp; // Assign the output from the temporary output
+  end
+
+endmodule
+```
+
+This implementation uses two separate always blocks to update the temporary and next outputs. The temporary output `q_tmp` is used to hold the output value during a reset, while the next output `q_next` is updated on the positive edge of the clock.
+
+In the first always block, the `q_tmp` is updated with the value of `q_next` only when there is no reset. This ensures that the temporary output doesn't change during a reset.
+
+In the second always block, the `q_next` is updated with the input value `d` on the positive edge of the clock, again only when there is no reset.
+
+Finally, in the third always block, the value of `q_tmp` is assigned to the output `q` on the positive edge of the clock. This ensures that the output is stable and only changes on the rising edge of the clock.
+
+Note: This is just one possible implementation of the TopModule. The specific implementation may depend on the target technology, design requirements, and constraints.

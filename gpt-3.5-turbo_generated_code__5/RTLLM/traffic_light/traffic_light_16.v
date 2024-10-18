@@ -1,0 +1,78 @@
+module traffic_light(
+    input rst_n, // Reset signal (active low)
+    input clk,   // Clock signal
+    input pass_request, // Request signal for allowing vehicles to pass
+    output reg [7:0] clock, // 8-bit output representing the count value of the internal counter
+    output reg red, // Output signal representing the state of the red traffic light
+    output reg yellow, // Output signal representing the state of the yellow traffic light
+    output reg green // Output signal representing the state of the green traffic light
+);
+
+parameter idle = 2'b00;
+parameter s1_red = 2'b01;
+parameter s2_yellow = 2'b10;
+parameter s3_green = 2'b11;
+
+reg [7:0] cnt; // Internal counter for timing purposes
+reg [1:0] state; // Current state of the traffic light controller
+reg p_red, p_yellow, p_green; // Next values for the red, yellow, and green signals
+
+always @(posedge clk or negedge rst_n) begin
+    if (!rst_n) begin // Reset condition
+        cnt <= 10;
+        state <= s1_red;
+    end else begin
+        case (state)
+            idle: begin
+                red <= 0;
+                yellow <= 0;
+                green <= 0;
+                state <= s1_red;
+            end
+            s1_red: begin
+                red <= 1;
+                if (cnt == 0) begin
+                    state <= s3_green;
+                    cnt <= 60;
+                end else begin
+                    cnt <= cnt - 1;
+                end
+            end
+            s2_yellow: begin
+                yellow <= 1;
+                if (cnt == 0) begin
+                    state <= s1_red;
+                    cnt <= 5;
+                end else begin
+                    cnt <= cnt - 1;
+                end
+            end
+            s3_green: begin
+                green <= 1;
+                if (cnt == 0) begin
+                    state <= s2_yellow;
+                    cnt <= 10;
+                end else begin
+                    cnt <= cnt - 1;
+                end
+            end
+        endcase
+    end
+end
+
+always @(posedge clk or negedge rst_n) begin
+    if (!rst_n) begin
+        p_red <= 0;
+        p_yellow <= 0;
+        p_green <= 0;
+    end else begin
+        p_red <= red;
+        p_yellow <= yellow;
+        p_green <= green;
+    end
+end
+
+assign clock = cnt;
+
+endmodule
+

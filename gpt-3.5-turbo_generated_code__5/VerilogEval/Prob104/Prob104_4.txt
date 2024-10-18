@@ -1,0 +1,41 @@
+Here is the Verilog implementation of the TopModule with the desired interface and instantiation of the full_module submodule:
+
+```verilog
+module TopModule (
+    input clk,
+    input L,
+    input q_in,
+    input r_in,
+    output Q
+);
+
+reg [2:0] r;
+reg Q;
+
+full_module full_inst1 (
+    .r({r_in, r_in}),
+    .L(L),
+    .clk(clk),
+    .q(r)
+);
+
+full_module full_inst2 (
+    .r({r_in, r_in}),
+    .L(L),
+    .clk(clk),
+    .q(r)
+);
+
+full_module full_inst3 (
+    .r({r_in, r_in}),
+    .L(L),
+    .clk(clk),
+    .q(r)
+);
+
+assign Q = r[2];
+
+endmodule
+```
+
+In this design, the TopModule instantiates three instances of the full_module submodule and connects them appropriately to achieve the desired functionality. The Q output is connected to the most significant bit of the `r` register in each full_module instance.

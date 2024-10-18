@@ -1,0 +1,26 @@
+Sure! Here's a Verilog code for implementing the given description:
+
+```verilog
+module top_module(
+  input clk,
+  input [7:0] in,
+  output reg [7:0] anyedge
+);
+
+  reg [7:0] prev_in; // Store previous input value
+
+  always @(posedge clk) begin
+    prev_in <= in; // Store current input value
+
+    for (integer i = 0; i < 8; i = i + 1) begin
+      if (in[i] && !prev_in[i]) // Detect rising edge
+        anyedge[i] <= 1'b1; // Set output bit in the next cycle
+      else
+        anyedge[i] <= 1'b0; // Reset output bit
+    end
+  end
+
+endmodule
+```
+
+In this code, we have an 8-bit input `in`, and an 8-bit output `anyedge`. The `prev_in` register is used to store the previous input value. On each rising edge of the clock signal `clk`, a for loop is used to iterate through each bit of the input vector. If a rising edge is detected in any bit (in[i] is high and prev_in[i] is low), the corresponding bit in the `anyedge` output is set to high in the next cycle. Otherwise, the output bit is reset to low.

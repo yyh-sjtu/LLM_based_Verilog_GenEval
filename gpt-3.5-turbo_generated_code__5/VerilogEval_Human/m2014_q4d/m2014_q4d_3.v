@@ -1,0 +1,27 @@
+module XOR (
+	input a,
+	input b,
+	output logic y
+);
+	assign y = a ^ b;
+endmodule
+
+module DFF (
+	input clk,
+	input d,
+	output logic q
+);
+	always @(posedge clk)
+		q <= d;
+endmodule
+
+module top_module (
+	input clk,
+	input in,
+	output logic out
+);
+	logic xor_output;
+	XOR xor1 (.a(in), .b(out), .y(xor_output));
+	DFF dff1 (.clk(clk), .d(xor_output), .q(out));
+endmodule
+

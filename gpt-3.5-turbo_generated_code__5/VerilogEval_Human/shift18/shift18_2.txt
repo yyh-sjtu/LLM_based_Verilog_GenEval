@@ -1,0 +1,20 @@
+// Define a 64-bit shift register
+reg [63:0] shift_reg;
+
+always @(posedge clk) begin
+	if (load) begin
+		shift_reg <= data;
+	else if (ena) begin
+		case (amount)
+			2'b00: shift_reg <= {shift_reg[62:0], shift_reg[63]}; // Shift left by 1 bit
+			2'b01: shift_reg <= {shift_reg[55:0], shift_reg[63:56]}; // Shift left by 8 bits
+			2'b10: shift_reg <= {shift_reg[63], shift_reg[63:1]}; // Shift right by 1 bit (arithmetic right shift)
+			2'b11: shift_reg <= {shift_reg[7:0], shift_reg[63:8]}; // Shift right by 8 bits (arithmetic right shift)
+		endcase
+	end
+end
+
+// Output the contents of the shift register
+assign q = shift_reg;
+
+endmodule

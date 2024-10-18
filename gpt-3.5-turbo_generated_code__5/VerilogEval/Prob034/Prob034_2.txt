@@ -1,0 +1,20 @@
+Sure, here is the RTL design for the TopModule as per your requirements:
+
+```verilog
+module TopModule (
+    input clk,
+    input [7:0] d,
+    output reg [7:0] q
+);
+
+reg [7:0] d_reg;
+
+always @(posedge clk) begin
+    d_reg <= d;
+    q <= d_reg;
+end
+
+endmodule
+```
+
+This design includes 8 D flip-flops triggered by the positive edge of the clock signal. The input `d` is stored in the `d_reg` register on the rising edge of the clock, and then output on `q`. Let me know if you need any further modifications or have any other requirements.

@@ -1,0 +1,16 @@
+As a professional RTL designer, I would create the Verilog code for the TopModule as follows:
+
+```verilog
+module TopModule (
+    input [7:0] in,
+    output parity
+);
+
+assign parity = in[0] ^ in[1] ^ in[2] ^ in[3] ^ in[4] ^ in[5] ^ in[6] ^ in[7];
+
+endmodule
+```
+
+This Verilog module implements the desired functionality of computing the parity bit for an 8-bit byte using even parity. The XOR operation is used to calculate the parity bit based on the input data bits. The resulting parity bit is output through the `parity` port.
+
+I would then simulate and synthesize this RTL design to verify its functionality and ensure it meets the required specifications.

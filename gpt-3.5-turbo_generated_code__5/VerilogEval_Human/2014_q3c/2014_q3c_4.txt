@@ -1,0 +1,44 @@
+// Use a state register to store the present state
+reg [2:0] state;
+
+always @(posedge clk) begin
+	// Determine the next state based on the present state and input
+	case ({y, x})
+		// If y[2:0] and x are 000, set the next state to 000 if x=0 or 001 if x=1
+		3'b000_0: state <= 3'b000;
+		3'b000_1: state <= 3'b001;
+		
+		// If y[2:0] and x are 001, set the next state to 001 if x=0 or 100 if x=1
+		3'b001_0: state <= 3'b001;
+		3'b001_1: state <= 3'b100;
+		
+		// If y[2:0] and x are 010, set the next state to 010 if x=0 or 001 if x=1
+		3'b010_0: state <= 3'b010;
+		3'b010_1: state <= 3'b001;
+		
+		// If y[2:0] and x are 011, set the next state to 001 if x=0 or 010 if x=1
+		3'b011_0: state <= 3'b001;
+		3'b011_1: state <= 3'b010;
+		
+		// If y[2:0] and x are 100, set the next state to 011 if x=0 or 100 if x=1
+		3'b100_0: state <= 3'b011;
+		3'b100_1: state <= 3'b100;
+	endcase
+end
+
+always @(state) begin
+	// Extract the individual state bits
+	reg [2:0] y_next = state[2:0];
+	
+	// Determine the output z based on the present state
+	case (state)
+		// If the present state is 000, 010, or 011, set z to 0
+		3'b000, 3'b010, 3'b011: z = 0;
+		
+		// If the present state is 001 or 100, set z to 1
+		3'b001, 3'b100: z = 1;
+	endcase
+	
+	// Determine the Y0 output based on the next state
+	Y0 = y_next[0];
+end

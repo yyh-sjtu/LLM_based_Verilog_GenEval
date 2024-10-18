@@ -1,0 +1,31 @@
+To implement the TopModule, we need to analyze the given simulation waveforms and derive the logic that achieves the desired functionality. Based on the waveforms, it appears that the module is a D-type flip-flop with asynchronous clear functionality.
+
+Here is the Verilog RTL code for the TopModule:
+
+```verilog
+module TopModule (
+  input  clk,
+  input  a,
+  output q
+);
+
+  reg q_reg;
+  
+  always @(posedge clk) begin
+    if (a)
+      q_reg <= 1'b1;
+    else
+      q_reg <= 1'b0;
+  end
+  
+  assign q = q_reg;
+
+endmodule
+```
+
+In this code:
+- `q_reg` is a register that holds the current value of the output `q`.
+- On every positive edge of the clock `clk`, the value of `a` is checked. If `a` is 1, the register `q_reg` is set to 1, otherwise, it is set to 0.
+- The value of `q_reg` is assigned to the output `q`.
+
+Please note that for more complex circuits and designs, additional considerations might be necessary, such as reset functionality, clock gating, optimization techniques, etc. However, based on the given specifications and the provided waveforms, the above code should meet the requirements.

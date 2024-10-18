@@ -1,0 +1,33 @@
+module decade_counter (
+  input clk,
+  input reset,
+  output reg [3:0] q
+);
+
+  always @(posedge clk or posedge reset) begin
+    if (reset) begin
+      q <= 0;
+    end else begin
+      if (q == 9) begin
+        q <= 0;
+      end else begin
+        q <= q + 1;
+      end
+    end
+  end
+  
+endmodule
+
+module top_module (
+  input clk,
+  input reset,
+  output reg [3:0] q
+);
+  
+  decade_counter counter(
+    .clk(clk),
+    .reset(reset),
+    .q(q)
+  );
+  
+endmodule

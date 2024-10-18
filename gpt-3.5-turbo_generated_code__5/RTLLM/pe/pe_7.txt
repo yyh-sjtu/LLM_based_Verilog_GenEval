@@ -1,0 +1,22 @@
+Here's the complete code for the Multiplying Accumulator in Verilog:
+
+```verilog
+module pe (
+  input clk,
+  input rst,
+  input [31:0] a,
+  input [31:0] b,
+  output reg [31:0] c
+);
+
+  always @(posedge clk or posedge rst) begin
+    if (rst) // Reset condition
+      c <= 0;
+    else // Accumulate the result
+      c <= c + (a * b);
+  end
+
+endmodule
+```
+
+This code defines a module called "pe" which takes in a clock signal (`clk`), a reset signal (`rst`), two 32-bit input operands (`a` and `b`), and outputs a 32-bit accumulation result (`c`). Inside the `always` block, the module checks for the positive edge of the clock signal or the reset signal. If the reset signal is high, the register `c` is set to 0. If the reset signal is low, the module computes the product of input operands `a` and `b` and accumulates it into the register `c`.

@@ -1,0 +1,13 @@
+module top_module (
+    input a,
+    input b,
+    input c,
+    input d,
+    output q
+);
+
+    // Implementing the logical expression based on the given waveforms
+    assign q = !(a & !b & !c) | (b & c & !d);
+
+endmodule
+

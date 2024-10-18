@@ -1,0 +1,54 @@
+
+module top_module (
+	input clk,
+	input [7:0] in,
+	input reset,
+	output done
+);
+
+typedef enum {IDLE, BYTE1, BYTE2, BYTE3} state_type;
+reg [1:0] state, next_state;
+
+always @(posedge clk) begin
+	if (reset) begin
+		state <= IDLE;
+	end else begin
+		state <= next_state;
+	end
+end
+
+always @(*) begin
+	next_state = state;
+	done = 0;
+	case (state)
+		IDLE: begin
+			if (in[3] == 1) begin
+				next_state = BYTE1;
+			end
+		end
+		BYTE1: begin
+			if (in[3] == 0) begin
+				next_state = IDLE;
+			end else begin
+				next_state = BYTE2;
+			end
+		end
+		BYTE2: begin
+			if (in[3] == 0) begin
+				next_state = IDLE;
+			end else begin
+				next_state = BYTE3;
+			end
+		end
+		BYTE3: begin
+			if (in[3] == 0) begin
+				next_state = IDLE;
+			end else begin
+				next_state = IDLE;
+				done = 1;
+			end
+		end
+	endcase
+end
+
+endmodule

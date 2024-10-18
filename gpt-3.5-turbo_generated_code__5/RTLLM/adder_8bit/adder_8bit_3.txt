@@ -1,0 +1,31 @@
+Here is the Verilog code for the 8-bit adder module:
+
+```verilog
+module adder_8bit (
+  input [7:0] a,
+  input [7:0] b,
+  input cin,
+  output reg [7:0] sum,
+  output reg cout
+);
+
+reg [7:0] c; // Carry output from previous bit
+
+// First bit
+full_adder fa0 (a[0], b[0], cin, sum[0], c[0]);
+
+// Intermediate bits
+genvar i;
+generate
+for (i = 1; i < 8; i = i + 1) begin : adder_gen
+  full_adder fa (a[i], b[i], c[i-1], sum[i], c[i]);
+end
+endgenerate
+
+// Last bit
+assign cout = c[7];
+
+endmodule
+```
+
+In this code, a full_adder module is assumed to be available and is used to perform the addition operation at each bit level. The carry-out from each bit is used as the carry-in for the next bit. Finally, the carry-out from the last bit is assigned to the `cout` output port, and the sum of the addition is assigned to the `sum` output port.

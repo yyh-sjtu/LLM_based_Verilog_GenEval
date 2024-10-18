@@ -1,0 +1,63 @@
+
+module radix2_div (
+    input wire clk,
+    input wire rst,
+    input wire sign,
+    input wire [7:0] dividend,
+    input wire [7:0] divisor,
+    input wire opn_valid,
+    output wire res_valid,
+    output wire [15:0] result
+);
+
+// Internal signals and registers
+reg [7:0] SR;
+reg [7:0] NEG_DIVISOR;
+reg [7:0] cnt;
+reg [7:0] start_cnt;
+reg start;
+
+// Logic for initializing and resetting the module
+always @(posedge clk or posedge rst) begin
+    if (rst) begin
+        start <= 0;
+        SR <= 0;
+        NEG_DIVISOR <= 0;
+        cnt <= 0;
+        start_cnt <= 0;
+        res_valid <= 0;
+        result <= 0;
+    end else begin
+        if (opn_valid && !res_valid) begin
+            start <= 1;
+            SR <= {1'b0, abs(dividend)};
+            NEG_DIVISOR <= sign ? -abs(divisor) : abs(divisor);
+            cnt <= 1;
+            start_cnt <= 1;
+        end else begin
+            start <= 0;
+        end
+    end
+end
+
+// Logic for performing the division process
+always @(posedge clk) begin
+    if (start_cnt) begin
+        if (cnt == 8) begin
+            cnt <= 0;
+            start_cnt <= 0;
+            res_valid <= 1;
+            result <= {SR[7], SR[6:0], SR[7:0]};
+        end else begin
+            cnt <= cnt + 1;
+            SR <= SR << 1;
+            if (SR[7:0] >= NEG_DIVISOR[7:0]) begin
+                SR <= {SR[6:0], 1'b1};
+            end else begin
+                SR <= {SR[6:0], 1'b0};
+            end
+        end
+    end
+end
+
+endmodule

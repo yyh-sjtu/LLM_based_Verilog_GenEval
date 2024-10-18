@@ -1,0 +1,11 @@
+reg prev_a;
+
+always @(posedge clk) begin
+    if (a == 1 && prev_a == 0)
+        q <= 1;
+    else if (a == 0 && prev_a == 1)
+        q <= 0;
+    prev_a <= a;
+end
+
+endmodule

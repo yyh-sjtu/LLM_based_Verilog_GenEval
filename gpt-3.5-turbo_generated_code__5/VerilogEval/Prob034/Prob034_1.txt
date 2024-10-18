@@ -1,0 +1,26 @@
+Sure, here's the implementation of the "TopModule" with the specified interface in Verilog:
+
+```verilog
+module TopModule (
+    input  wire   clk,
+    input  wire [7:0] d,
+    output wire [7:0] q
+);
+
+    reg [7:0] q_reg;
+    reg [7:0] d_reg;
+
+    always @(posedge clk) begin
+        q_reg <= d_reg;
+    end
+
+    always @(posedge clk) begin
+        d_reg <= d;
+    end
+
+    assign q = q_reg;
+
+endmodule
+```
+
+In this implementation, there are two 8-bit registers: `q_reg` and `d_reg`. The `d_reg` register is updated with the input `d` on the positive edge of the clock `clk`. Meanwhile, the `q_reg` register is updated with the value of `d_reg` on the positive edge of the clock `clk`, effectively creating a delay of one clock cycle between input `d` and output `q`. The `q` output is assigned the value of `q_reg`.

@@ -1,0 +1,34 @@
+// Define states
+parameter B = 2'b00;
+parameter A = 2'b01;
+
+// Define state register
+reg [1:0] state, next_state;
+
+// Define output register
+reg out_reg;
+
+always @ (posedge clk) begin
+	if (reset) begin
+		state <= B;
+		out_reg <= 1'b1;
+	end else begin
+		state <= next_state;
+		out_reg <= (state == A) ? 1'b0 : 1'b1;
+	end
+end
+
+always @ (*) begin
+	case (state)
+		B: begin
+			next_state = (in) ? B : A;
+		end
+		A: begin
+			next_state = (in) ? A : B;
+		end
+	endcase
+end
+
+assign out = out_reg;
+
+endmodule

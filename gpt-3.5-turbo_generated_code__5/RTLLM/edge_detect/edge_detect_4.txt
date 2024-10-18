@@ -1,0 +1,40 @@
+Here is the complete code for the edge_detect module implemented in Verilog:
+
+```verilog
+module edge_detect (
+    input clk,
+    input rst_n,
+    input a,
+    output rise,
+    output down
+);
+
+reg a_prev;
+reg rise_sync, down_sync;
+
+always @(posedge clk or negedge rst_n) begin
+    if (~rst_n) begin
+        a_prev <= 0;
+        rise_sync <= 0;
+        down_sync <= 0;
+    end else begin
+        a_prev <= a;
+        rise_sync <= (a && ~a_prev);
+        down_sync <= (~a && a_prev);
+    end
+end
+
+always @(posedge clk) begin
+    if (~rst_n) begin
+        rise <= 0;
+        down <= 0;
+    end else begin
+        rise <= rise_sync;
+        down <= down_sync;
+    end
+end
+
+endmodule
+```
+
+In this code, we use two registers (a_prev and rise_sync, down_sync) to synchronize the inputs and detect the rising and falling edges. The a_prev register stores the previous value of the input signal. On each positive edge of the clock, we compare the current value of the input signal with the previous value to detect the edges. The rise_sync register is set to 1 when a rising edge is detected, and the down_sync register is set to 1 when a falling edge is detected. These synchronized values are then assigned to the output signals rise and down on the next positive edge of the clock. The output signals remain set to 1 until the corresponding edge appears again. The reset signal rst_n is used to reset all the registers and output signals to their initial values when it is asserted (low).

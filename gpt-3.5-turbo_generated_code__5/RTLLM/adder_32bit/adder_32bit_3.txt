@@ -1,0 +1,51 @@
+module cla_16bit (
+  input [15:0] A,
+  input [15:0] B,
+  output [15:0] S,
+  output C
+);
+
+  // Generate and Propagate signals
+  wire [15:0] G, P;
+  assign G = A & B;
+  assign P = A ^ B;
+
+  // Generate and Propagate signals for carry lookahead
+  wire [15:0] Gp, Pp;
+  assign Gp[0] = G[0];
+  assign Pp[0] = P[0];
+  genvar i;
+  generate
+    for (i = 1; i < 16; i = i + 1) begin : gen_block
+      assign Gp[i] = Gp[i-1] | (G[i] & Pp[i-1]);
+      assign Pp[i] = P[i] | (P[i] & Pp[i-1]);
+    end
+  endgenerate
+
+  // Generate the sum and carry-out
+  wire [15:0] Gi, Pi;
+  assign Gi = Gp | (Pp & A);
+  assign Pi = Pp;
+
+  assign S = A ^ B ^ (C ? C : {16{1'bz}});
+  assign C = Gi[15] | (Pi[15] & C);
+  
+endmodule
+
+module adder_32bit (
+  input [31:0] A,
+  input [31:0] B,
+  output [31:0] S,
+  output C32
+);
+
+  wire [15:0] S0, S1, S2, C1, C2, C3;
+
+  cla_16bit c0(.A(A[15:0]), .B(B[15:0]), .S(S0), .C(C1));
+  cla_16bit c1(.A(A[31:16]), .B(B[31:16]), .S(S1), .C(C2));
+  cla_16bit c2(.A(S0), .B(S1), .S(S2), .C(C3));
+
+  assign S = {S2, S0};
+  assign C32 = C3;
+
+endmodule

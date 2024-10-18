@@ -1,0 +1,9 @@
+As a professional RTL designer, I would start by creating the TopModule in Verilog or VHDL. This module will contain all the necessary logic to implement the gshare branch predictor as specified in the interface requirements.
+
+I would define the input and output ports in the module declaration, ensuring they match the specified interface. The input ports will include clk, areset, predict_valid, predict_pc, train_valid, train_taken, train_mispredicted, train_history, and train_pc. The output ports will include predict_taken and predict_history.
+
+Next, I will implement the gshare branch predictor logic within the TopModule. This includes hashing the PC and global history into an index, accessing the pattern history table (PHT), updating the branch history register, making predictions, and training the branch predictor based on actual outcomes.
+
+I will ensure that all sequential logic is triggered on the positive edge of the clock, as specified. Additionally, I will handle cases where training and prediction requests occur simultaneously, making sure that training takes precedence over prediction and that the prediction sees the PHT state before training.
+
+Finally, I will test the functionality of the TopModule using simulation tools to verify that the gshare branch predictor is operating correctly according to the specified requirements. Any necessary debugging or optimization will be performed to ensure the module meets performance and accuracy expectations.

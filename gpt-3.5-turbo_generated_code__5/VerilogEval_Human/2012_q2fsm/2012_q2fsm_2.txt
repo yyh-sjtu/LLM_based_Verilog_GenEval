@@ -1,0 +1,50 @@
+// Define state codes
+parameter A = 3'b000;
+parameter B = 3'b001;
+parameter C = 3'b010;
+parameter D = 3'b011;
+parameter E = 3'b100;
+parameter F = 3'b101;
+
+// Declare state flip-flops
+reg [2:0] current_state;
+reg [2:0] next_state;
+
+// Assign initial state A to current_state
+always @(posedge clk, posedge reset)
+begin
+    if (reset)
+        current_state <= A;
+    else
+        current_state <= next_state;
+end
+
+// Define state table
+always @(current_state, w)
+begin
+    case (current_state)
+        A: if (w) next_state = B;
+           else next_state = A;
+        B: if (w) next_state = C;
+           else next_state = D;
+        C: if (w) next_state = E;
+           else next_state = D;
+        D: if (w) next_state = F;
+           else next_state = A;
+        E: if (w) next_state = E;
+           else next_state = D;
+        F: if (w) next_state = C;
+           else next_state = D;
+        default: next_state = A;
+    endcase
+end
+
+// Define FSM output z
+always @(current_state)
+begin
+    case (current_state)
+        E: z = 1;
+        default: z = 0;
+    endcase
+end
+endmodule

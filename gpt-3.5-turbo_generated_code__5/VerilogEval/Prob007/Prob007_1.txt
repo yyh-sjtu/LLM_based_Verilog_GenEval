@@ -1,0 +1,14 @@
+As a professional RTL designer, I will implement the TopModule as a simple wire module in Verilog. Here is the code:
+
+```verilog
+module TopModule (
+  input  wire in,
+  output wire out
+);
+  
+  assign out = in;
+  
+endmodule
+```
+
+In this implementation, the input wire `in` is directly connected to the output wire `out` through an assign statement. This ensures that `out` always maintains the same logic value as `in`. Thus, the module behaves like a wire, propagating the input signal to the output.

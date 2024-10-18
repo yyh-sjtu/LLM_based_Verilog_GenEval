@@ -1,0 +1,9 @@
+As a professional RTL designer, I would begin by designing the TopModule in Verilog to implement the gshare branch predictor as described in the interface requirements provided. I would define the input and output ports, and then create the necessary logic to implement the branch predictor functionality.
+
+I would start by creating the 128-entry table of two-bit saturating counters to store the prediction information. I would then implement the logic to compute the index based on the hashed pc and global history values. Next, I would design the logic to access the prediction table and output the predicted branch direction and history register state when a prediction request is made.
+
+For training requests, I would create the logic to update the prediction table based on the actual branch outcome and whether the branch was mispredicted. I would also ensure that training takes precedence over prediction in case both operations try to modify the branch history register simultaneously.
+
+I would pay attention to the timing requirements and ensure that all sequential logic is triggered on the positive edge of the clock. I would also consider handling reset conditions to ensure proper operation of the branch predictor module.
+
+Overall, I would carefully design and implement the TopModule to meet the functionality and timing requirements of the gshare branch predictor as specified in the interface description.

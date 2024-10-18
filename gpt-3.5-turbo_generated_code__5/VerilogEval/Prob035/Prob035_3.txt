@@ -1,0 +1,28 @@
+As an AI language model, I can guide you through implementing a module named TopModule in RTL (Register-Transfer Level) design language. Here's an example code in Verilog to implement the decade counter based on your requirements:
+
+```verilog
+module TopModule (
+  input clk,
+  input reset,
+  output reg [3:0] q
+);
+  
+  always @(posedge clk) begin
+    if (reset)
+      q <= 4'b0001; // Reset to 1
+    else if (q == 4'b1010) // Counter reaches 10
+      q <= 4'b0001; // Reset to 1
+    else
+      q <= q + 1; // Increment counter
+  end
+  
+endmodule
+```
+
+In this implementation, the `always @(posedge clk)` block triggers the sequential logic on the positive edge of the clock signal. It checks the `reset` input and sets the counter `q` accordingly.
+
+If the `reset` input is high, the counter is reset to 1 (`4'b0001`). Otherwise, if the counter reaches 10 (`4'b1010`), it wraps around to 1. Otherwise, it increments the counter by 1 (`q <= q + 1`).
+
+Please note that this is just one possible implementation. There are various ways to implement a decade counter, and the chosen method may depend on specific design constraints and specifications.
+
+Hope this helps! Let me know if you have further questions.

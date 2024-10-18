@@ -1,0 +1,28 @@
+As a professional RTL designer, I would implement the TopModule as follows in the Verilog hardware description language:
+
+```verilog
+module TopModule(
+  input a,
+  input b,
+  input c,
+  output reg out
+);
+
+  always @(*)
+  begin
+    case({c,b})
+      2'b00: out = 1'b0;
+      2'b01: out = 1'b1;
+      2'b10: out = 1'b1;
+      2'b11: out = 1'b1;
+    endcase
+  end
+
+endmodule
+```
+
+In this implementation, I have used a combinational logic block with a case statement to map the input combinations to the desired output value. The `always @(*)` construct ensures that the output is updated whenever any of the input signals (`a`, `b` or `c`) change.
+
+Please note that the `output` port `out` is defined as a registered output (`output reg out`). This is because the output value needs to be stored and updated based on the input combinations. If the output does not need to be registered, the code can be modified to use `output wire out` instead.
+
+Feel free to ask if you have any further questions or need any clarifications!

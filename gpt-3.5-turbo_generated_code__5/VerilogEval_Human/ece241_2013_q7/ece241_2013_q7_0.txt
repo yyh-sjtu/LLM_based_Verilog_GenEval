@@ -1,0 +1,15 @@
+reg Qold;
+
+always @(posedge clk) begin
+	if (j & ~k)
+		Q <= 1'b1;
+	else if (~j & k)
+		Q <= 1'b0;
+	else if (j & k)
+		Q <= ~Qold;
+	else
+		Q <= Qold;
+	
+	Qold <= Q;
+end
+endmodule

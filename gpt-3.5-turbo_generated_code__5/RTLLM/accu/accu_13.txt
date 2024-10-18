@@ -1,0 +1,42 @@
+Sure, here's the Verilog code for the module:
+
+```verilog
+module accu (
+    input clk,
+    input rst_n,
+    input [7:0] data_in,
+    input valid_in,
+    output reg valid_out,
+    output reg [9:0] data_out
+);
+
+reg [7:0] accumulator [3:0]; // Register to hold 4 input data values
+
+always @(posedge clk or negedge rst_n) begin
+    if (~rst_n) begin
+        // Reset all internal registers and signals
+        valid_out <= 0;
+        for (int i=0; i<4; i=i+1) begin
+            accumulator[i] <= 8'd0;
+        end
+    end else begin
+        // Accumulate input data and output the sum when 4 data have been accumulated
+        if (valid_in) begin
+            for (int i=0; i<3; i=i+1) begin
+                accumulator[i] <= accumulator[i+1];
+            end
+            accumulator[3] <= data_in;
+            data_out <= accumulator[0] + accumulator[1] + accumulator[2] + accumulator[3];
+            if (valid_out) begin
+                valid_out <= 0;
+            end else begin
+                valid_out <= 1;
+            end
+        end
+    end
+end
+
+endmodule
+```
+
+This Verilog module captures 8-bit input data values and accumulates them as a sum, outputting the result when 4 input data have been received. The valid_out signal is set to 1 for a single cycle when the 4-input accumulation has been completed.

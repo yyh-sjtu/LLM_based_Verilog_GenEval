@@ -1,0 +1,27 @@
+Here is the complete Verilog code for the counter design:
+
+```verilog
+module counter_12(
+    input rst_n, // Reset signal (active low)
+    input clk,   // Clock signal
+    input valid_count, // Signal to enable counting
+    output reg [3:0] out // 4-bit output representing the current count value
+);
+
+always @(posedge clk or negedge rst_n)
+begin
+    if (!rst_n) // If reset signal is active
+        out <= 4'b0000; // Reset the counter to 0
+    else if (valid_count) // If valid_count signal is active
+    begin
+        if (out == 4'd11) // If current count value is 11
+            out <= 4'b0000; // Wrap around and reset to 0
+        else
+            out <= out + 4'b0001; // Increment the count by 1
+    end
+end
+
+endmodule
+```
+
+This code defines a module named counter_12 with the specified input and output ports. The implementation uses an always block triggered by the clock signal and the reset signal to control the counter logic. If the counter is reset, it sets the output register (out) to 4'b0000. If the valid_count signal is active, it checks the current count value and increments it or resets it as necessary. If the valid_count is 0, the counter stays paused.

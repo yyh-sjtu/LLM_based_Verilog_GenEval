@@ -1,0 +1,48 @@
+```verilog
+module sequential_circuit (
+	input clk,
+	input a,
+	input b,
+	output reg q,
+	output reg state
+);
+
+reg flip_flop;
+
+// Sequential logic
+always @(posedge clk) begin
+	if (a == 1 && b == 0 && state == 0)
+		flip_flop <= 1;
+	else if (a == 0 && b == 1 && state == 1)
+		flip_flop <= 0;
+	end
+
+// Combinational logic
+always @* begin
+	if (flip_flop == 0)
+		q = 0;
+	else
+		q = 1;
+	state = flip_flop;
+end
+
+endmodule
+
+module top_module (
+	input clk,
+	input a,
+	input b,
+	output q,
+	output state
+);
+
+sequential_circuit seq_circuit (
+	.clk(clk),
+	.a(a),
+	.b(b),
+	.q(q),
+	.state(state)
+);
+
+endmodule
+```

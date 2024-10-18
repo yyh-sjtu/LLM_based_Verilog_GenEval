@@ -1,0 +1,27 @@
+Here is the Verilog code for the TopModule implementing a shift register with four D flops:
+
+```verilog
+module TopModule (
+    input clk,
+    input resetn,
+    input in,
+    output reg out
+);
+
+reg [3:0] shiftReg;
+
+always @(posedge clk or negedge resetn) begin
+    if (~resetn) begin
+        shiftReg <= 4'b0;
+    end else begin
+        // Shift the register
+        shiftReg <= {in, shiftReg[3:1]};
+    end
+end
+
+assign out = shiftReg[0];
+
+endmodule
+```
+
+In this code, we use a 4-bit shift register implemented with four D flip-flops to store the input data `in`. The output `out` is connected to the first bit of the shift register. The shift register is updated on the positive edge of the clock signal `clk`, and it is reset to all zeros when the synchronous active-low reset signal `resetn` is asserted.

@@ -1,0 +1,26 @@
+Here is the RTL code for the TopModule implementing the specified interface:
+
+```verilog
+module TopModule (
+    input clk,
+    input areset,
+    input [7:0] d,
+    output reg [7:0] q
+);
+
+reg [7:0] q_reg;
+
+always @(posedge clk or posedge areset) begin
+    if (areset) begin
+        q_reg <= 8'b0;
+    end else begin
+        q_reg <= d;
+    end
+end
+
+assign q = q_reg;
+
+endmodule
+```
+
+In this code, the TopModule module contains 8 D flip-flops with an active high asynchronous reset. The input data d is loaded into the flip-flops on the positive edge of the clock signal clk. The output q is connected to the output of the flip-flops. The output q is reset to 0 when the asynchronous reset signal areset is asserted.

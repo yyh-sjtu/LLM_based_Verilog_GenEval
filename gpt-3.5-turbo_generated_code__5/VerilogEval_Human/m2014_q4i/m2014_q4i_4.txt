@@ -1,0 +1,25 @@
+
+  // Define the top-level module with one output
+  module top_module(
+    output reg out
+  );
+    
+    // Always drive the output to 0
+    always @(*) begin
+      out = 0;
+    end
+
+  endmodule
+
+  // Instantiate the top module in the testbench
+  module top_module_tb;
+    
+    // Declare signal for output
+    reg out;
+    
+    // Instantiate the top module
+    top_module dut(
+      .out(out)
+    );
+
+  endmodule

@@ -1,0 +1,53 @@
+Sure, below is an implementation of the TopModule in RTL (Register Transfer Level) design language. Please note that this implementation assumes that the BCD counter needs to count from 0 to 9 repeatedly and the enable signals for the upper three digits are generated accordingly.
+
+```
+module TopModule (
+  input clk,
+  input reset,
+  output reg [3:0] ena,
+  output reg [15:0] q
+);
+  
+  reg [15:0] counter;
+
+  always @(posedge clk) begin
+    if (reset) begin
+      counter <= 0;
+      ena <= 4'b0000;
+    end
+    else begin
+      if (counter == 9) begin
+        counter <= 0;
+        ena <= ena + 4'b0001;
+      end
+      else begin
+        counter <= counter + 1;
+        ena <= ena;
+      end
+    end
+  end
+  
+  assign q = {counter[3:0], counter[7:4], counter[11:8], counter[15:12]};
+  
+endmodule
+```
+
+Explanation:
+
+1. The module `TopModule` takes `clk` and `reset` as inputs and `ena` and `q` as outputs.
+
+2. `ena` is a 4-bit output that indicates when each of the upper three digits (tens, hundreds, and thousands) should be incremented. The least significant bit of `ena` corresponds to the tens digit, the next bit corresponds to the hundreds digit, and the most significant bit corresponds to the thousands digit.
+
+3. `q` is a 16-bit output that represents the current value of the BCD counter. The least significant four bits (`q[3:0]`) represent the ones digit, the next four bits (`q[7:4]`) represent the tens digit, the next four bits (`q[11:8]`) represent the hundreds digit, and the most significant four bits (`q[15:12]`) represent the thousands digit.
+
+4. The counter is a 16-bit register that keeps track of the current value of the BCD counter.
+
+5. The `always @(posedge clk)` block is triggered on the positive edge of the clock.
+
+6. Inside the `always` block, we have a reset condition that sets the counter and enable signals to their initial values when `reset` is activated.
+
+7. When there is no reset, the counter is incremented by 1. When the counter reaches 9, it is reset to 0 and the enable signals `ena` are incremented accordingly.
+
+8. The `assign` statement concatenates the four digits of the counter (`counter[3:0]`, `counter[7:4]`, `counter[11:8]`, and `counter[15:12]`) to form the output `q`.
+
+This is a basic implementation of the requested 4-digit BCD counter in RTL design. Please let me know if you have any additional requirements or specifications.

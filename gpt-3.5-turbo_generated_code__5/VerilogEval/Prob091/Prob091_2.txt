@@ -1,0 +1,20 @@
+Here is the RTL implementation of the TopModule module based on the given finite-state machine:
+
+```verilog
+module TopModule(
+  input [5:0] y,
+  input w,
+  output Y1,
+  output Y3
+);
+
+  assign Y1 = y[1];
+  assign Y3 = y[3];
+
+endmodule
+```
+
+In this implementation, the input signal y is a 6-bit one-hot code representing the current state of the finite-state machine. The input signal w is not used in this module.
+The output signals Y1 and Y3 are directly connected to the corresponding bits y[1] and y[3] of the input signal y, respectively.
+
+The implementation of the state output logic is derived by inspection based on the given one-hot encoding. Since the output signals Y1 and Y3 are directly connected to specific bits of the state signal, there is no need for any combinational logic or additional state transitions. The module simply assigns the values of y[1] and y[3] to Y1 and Y3 outputs, respectively.

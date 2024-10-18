@@ -1,0 +1,17 @@
+Sure! I can help you with that. Below is an RTL code implementation of the TopModule in Verilog:
+
+```verilog
+module TopModule (
+  input [2:0] in,
+  output [1:0] out
+);
+  
+  assign out[0] = in[0] ^ in[1] ^ in[2];
+  assign out[1] = in[0] & in[1] | in[0] & in[2] | in[1] & in[2];
+  
+endmodule
+```
+
+In the above code, I have used bitwise XOR (^) and bitwise AND (&) operations to implement the population count circuit. The `out[0]` output counts the number of '1's in the input vector, while the `out[1]` output provides a carry-out signal in case the input vector has more than 2 '1's.
+
+Please let me know if you have any further questions or if there's anything else I can assist you with!

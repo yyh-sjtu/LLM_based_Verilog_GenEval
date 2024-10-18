@@ -1,0 +1,42 @@
+
+module TopModule (
+  input  clk,
+  input  areset,
+  input  x,
+  output z
+);
+
+// Define the states using a one-hot encoding
+reg A, B;
+
+// Define the output
+assign z = A ? 0 : 1;
+
+// Sequential logic
+always @(posedge clk or posedge areset) begin
+  if (areset) begin
+    // Reset to state A
+    A <= 1;
+    B <= 0;
+  end else begin
+    // State transition logic
+    case ({x, A, B})
+      // State A transition
+      3'b001:
+        if (x) begin
+          // Transition to state B
+          A <= 0;
+          B <= 1;
+        end
+      // State B transition
+      3'b100:
+        if (!x) begin
+          // Transition to state B
+          A <= 0;
+          B <= 1;
+        end
+    endcase
+  end
+end
+
+endmodule

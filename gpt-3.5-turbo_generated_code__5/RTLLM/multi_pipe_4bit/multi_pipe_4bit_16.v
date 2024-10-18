@@ -1,0 +1,57 @@
+
+module multi_pipe_4bit (
+  input clk,
+  input rst_n,
+  input [3:0] mul_a,
+  input [3:0] mul_b,
+  output [7:0] mul_out
+);
+
+  parameter size = 4;
+  
+  reg [7:0] product;
+  reg [3:0] mul_a_extended;
+  reg [3:0] mul_b_extended;
+  reg [3:0] partial_products [0:size-1];
+  reg [7:0] registers [0:size-1];
+  
+  integer i;
+  
+  always @(posedge clk or negedge rst_n) begin
+    if(~rst_n) begin
+      // Reset condition
+      product <= 8'd0;
+      mul_a_extended <= {4'b0, mul_a};
+      mul_b_extended <= {4'b0, mul_b};
+      
+      for(i=0; i<size; i=i+1) begin
+        partial_products[i] <= 4'b0;
+        registers[i] <= 8'b0;
+      end
+      
+    end else begin
+      // Add operations
+      for(i=0; i<size; i=i+1) begin
+        if(mul_b_extended[i] == 1) begin
+          partial_products[i] <= mul_a_extended << i;
+        end else begin
+          partial_products[i] <= 4'b0;
+        end
+        
+        if(i == 0) begin
+          registers[i] <= partial_products[i];
+        end else begin
+          registers[i] <= registers[i-1] + partial_products[i];
+        end
+      end
+      
+      // Final product calculation
+      if(clk) begin
+        product <= registers[size-1];
+      end
+    end
+  end
+  
+  assign mul_out = product;
+
+endmodule

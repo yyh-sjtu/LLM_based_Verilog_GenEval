@@ -1,0 +1,110 @@
+```verilog
+module div_16bit(
+    input [15:0] A,
+    input [7:0] B,
+    output reg [15:0] result,
+    output reg [15:0] odd
+);
+
+reg [15:0] a_reg;
+reg [7:0] b_reg;
+
+always @* begin
+    a_reg = A;
+    b_reg = B;
+end
+
+always @* begin
+    reg [15:0] dividend_bits;
+    reg [3:0] dividend_index;
+    reg [15:0] quotient;
+    reg [15:0] remainder;
+    reg [3:0] highest_bit_index;
+
+    dividend_bits = a_reg[dividend_index+:8];
+    quotient = quotient << 1;
+    remainder = {remainder, a_reg[dividend_index]};
+    highest_bit_index = $countones(dividend_bits);
+
+    if (dividend_bits >= b_reg)
+        quotient[0] = 1;
+    else
+        quotient[0] = 0;
+
+    if (highest_bit_index > 0)
+        dividend_index = dividend_index + highest_bit_index - 1;
+    else
+        dividend_index = 0;
+
+    if (dividend_index == 12)
+        dividend_index = 11;
+
+    if (dividend_index == 10)
+        dividend_index = 9;
+
+    if (dividend_index == 8)
+        dividend_index = 7;
+
+    if (dividend_index == 6)
+        dividend_index = 5;
+
+    if (dividend_index == 4)
+        dividend_index = 3;
+
+    if (dividend_index == 2)
+        dividend_index = 1;
+
+    if (dividend_index == 0)
+        dividend_index = 15;
+
+    if (dividend_index >= 8)
+        dividend_index = 7;
+    else
+        dividend_index = dividend_index - 1;
+
+    if (dividend_index == 12)
+        dividend_index = 11;
+
+    if (dividend_index == 10)
+        dividend_index = 9;
+
+    if (dividend_index == 8)
+        dividend_index = 7;
+
+    if (dividend_index == 6)
+        dividend_index = 5;
+
+    if (dividend_index == 4)
+        dividend_index = 3;
+
+    if (dividend_index == 2)
+        dividend_index = 1;
+
+    if (dividend_index == 0)
+        dividend_index = 15;
+
+    remainder = remainder - (b_reg << highest_bit_index);
+
+    if (remainder < 0)
+        remainder = remainder + (b_reg << highest_bit_index);
+
+    result = quotient;
+    odd = remainder;
+end
+
+endmodule
+```
+
+This code implements a 16-bit divider module named "div_16bit". It has two input ports, A and B, which are the 16-bit dividend and 8-bit divisor, respectively. It also has two output ports, result and odd, which represent the 16-bit quotient and remainder, respectively.
+
+The module uses two always blocks. The first always block is a combinational block that updates the values of registers a_reg and b_reg with the values of input ports A and B, respectively.
+
+The second always block is also a combinational block. It declares several internal registers, including dividend_bits (the higher 8 bits of the dividend), dividend_index (the index of the current set of 8 dividend bits), quotient (the current quotient value), remainder (the current remainder value), and highest_bit_index (the index of the highest bit set in dividend_bits). 
+
+Inside the second always block, the code extracts the 8 higher bits of the dividend according to the current dividend_index and checks if the dividend_bits are greater than or equal to the divisor. If so, it sets the least significant bit of the quotient to 1; otherwise, it sets it to 0. The code then updates the dividend_index based on the highest_bit_index and some conditional statements to handle wrapping around.
+
+The remainder is calculated by subtracting (b_reg shifted left by highest_bit_index) from the current remainder value. If the remainder becomes negative, it is adjusted by adding (b_reg shifted left by highest_bit_index).
+
+Finally, the result is assigned the value of the quotient, and odd is assigned the value of the remainder.
+
+Please note that this implementation assumes the dividend is a positive number. If negative dividend values are allowed, additional logic would be needed to handle sign extension and sign detection.

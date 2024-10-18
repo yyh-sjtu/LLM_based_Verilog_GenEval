@@ -1,0 +1,63 @@
+As a professional RTL designer, I would begin by designing the finite state machine (FSM) for the TopModule. 
+
+Here is an example implementation:
+
+```verilog
+module TopModule (
+    input clk,
+    input reset,
+    input [7:0] in,
+    output done
+);
+
+    reg [2:0] state;
+    reg [7:0] byte_count;
+    reg done;
+
+    always @(posedge clk) begin
+        if (reset) begin
+            state <= 3'b000;
+            byte_count <= 0;
+            done <= 0;
+        end else begin
+            case (state)
+                3'b000: begin
+                    if (in[3] == 1'b1) begin
+                        state <= 3'b001;
+                        byte_count <= 1;
+                    end
+                end
+                3'b001: begin
+                    byte_count <= byte_count + 1;
+                    if (byte_count == 2) begin
+                        state <= 3'b010;
+                        byte_count <= 0;
+                    end
+                end
+                3'b010: begin
+                    byte_count <= byte_count + 1;
+                    if (byte_count == 2) begin
+                        state <= 3'b000;
+                        byte_count <= 0;
+                        done <= 1;
+                    end
+                end
+                default: state <= 3'b000;
+            endcase
+        end
+    end
+
+endmodule
+```
+
+In this implementation, I have used a 3-bit state variable to keep track of the FSM's current state. The byte_count variable is used to count the bytes within a message. The done signal is set to 1 when a complete message is received.
+
+The FSM transitions through the following states:
+- State 000: idle state, waiting for in[3] to be 1.
+- State 001: first byte of the message received, incrementing byte_count.
+- State 010: second byte of the message received, incrementing byte_count.
+- State 000: third byte of the message received, setting done to 1.
+
+The FSM is configured to reset when the reset input is high. During reset, all internal registers are set to their initial values.
+
+Please let me know if you need any further assistance.

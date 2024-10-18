@@ -1,0 +1,18 @@
+Here is the RTL code for the TopModule as per the given specifications:
+
+```verilog
+module TopModule (
+    input in1,
+    input in2,
+    input in3,
+    output reg out
+);
+
+    always @* begin
+        out = ~(in1 ^ in2) ^ in3;
+    end
+
+endmodule
+```
+
+This code defines a module named TopModule with the specified inputs and output. Inside the module, there is a combinational logic block that implements the required circuit using XNOR and XOR gates. The output 'out' is calculated based on the inputs 'in1', 'in2' and 'in3'.

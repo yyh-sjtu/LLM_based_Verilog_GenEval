@@ -1,0 +1,46 @@
+Here is the complete code for the 8-bit Radix-4 Booth multiplier using Verilog:
+
+```verilog
+module multi_booth_8bit (
+  input wire clk,
+  input wire reset,
+  input wire [7:0] a,
+  input wire [7:0] b,
+  output wire [15:0] p,
+  output wire rdy
+);
+
+  reg [7:0] multiplicand;
+  reg [7:0] multiplier;
+  reg [3:0] ctr;
+  
+  always @(posedge clk or posedge reset) begin
+    if (reset) begin
+      multiplier <= {{8{a[7]}}, a};
+      multiplicand <= {{8{b[7]}}, b};
+      ctr <= 0;
+    end else begin
+      if (ctr < 16) begin
+        multiplicand <= multiplicand << 1;
+        if (multiplier[ctr]) begin
+          p <= p + multiplicand;
+        end
+        ctr <= ctr + 1;
+      end else begin
+        rdy <= 1;
+      end
+    end
+  end
+  
+endmodule
+```
+
+In this code, the `multi_booth_8bit` module takes in the clock signal (`clk`), reset signal (`reset`), two 8-bit inputs (`a` and `b`), and provides the 16-bit output `p` representing the product of the multiplication and the ready signal `rdy`.
+
+Inside the `always` block, the code first checks if the reset signal is high. If so, it initializes the `multiplier`, `multiplicand`, and `ctr` registers accordingly.
+
+If the reset signal is low, indicating normal operation, the code checks if the counter (`ctr`) is less than 16. If it is, it simulates the shifting operation of the Booth algorithm by left-shifting the `multiplicand` register by 1. 
+
+If the current bit of the `multiplier` register (`multiplier[ctr]`) is 1, indicating a positive Booth encoding, the `p` register accumulates the value of the `multiplicand`.
+
+The `ctr` is incremented by 1 for each clock cycle until it reaches 16, at which point the multiplication process is complete and the `rdy` signal is set to 1.

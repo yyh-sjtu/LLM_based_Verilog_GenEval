@@ -1,0 +1,26 @@
+As a professional RTL designer, I will provide you with a Verilog implementation of the TopModule according to the given specifications:
+
+```verilog
+module TopModule (
+  input  wire clk,
+  input  wire reset,
+  output wire shift_ena
+);
+
+  reg [2:0] count;
+
+  always @(posedge clk) begin
+    if (reset)
+      count <= 3'b111;
+    else if (count > 3'b000)
+      count <= count - 1;
+    else
+      count <= 3'b000;
+  end
+
+  assign shift_ena = (count > 3'b000);
+
+endmodule
+```
+
+In this implementation, the `count` register is used to keep track of the number of clock cycles since the reset signal was asserted. The `reset` input is used to reset the count to `3'b111`, which represents 4 clock cycles. After each clock cycle, the count is decremented by 1 until it reaches `3'b000`. The `shift_ena` output is high as long as the count is greater than `3'b000`, indicating that the shift register should be enabled.

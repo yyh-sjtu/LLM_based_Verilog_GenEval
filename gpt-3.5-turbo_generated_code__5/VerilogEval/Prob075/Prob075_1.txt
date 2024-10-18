@@ -1,0 +1,33 @@
+Here is the RTL implementation of the TopModule module you requested:
+
+```verilog
+module TopModule (
+  input clk,
+  input areset,
+  input train_valid,
+  input train_taken,
+  output reg [1:0] state
+);
+
+  always @(posedge clk or posedge areset) begin
+    if (areset) begin
+      state <= 2'b01; // Reset to weakly not-taken
+    end else if (train_valid) begin
+      if (train_taken && (state != 2'b11)) begin // Increment counter, saturate at 3
+        state <= state + 1;
+      end else if (!train_taken && (state != 2'b00)) begin // Decrement counter, saturate at 0
+        state <= state - 1;
+      end
+    end
+  end
+
+endmodule
+```
+
+In this implementation, the counter is represented by the two-bit register `state`. The asynchronous reset `areset` resets the counter to the weakly not-taken state (`2'b01`). The counter is updated on the positive edge of the clock (`@(posedge clk)`).
+
+When `train_valid` is asserted and `train_taken` is also asserted, the counter increments by 1, saturating at the maximum value of 3 (`2'b11`). When `train_valid` is asserted and `train_taken` is deasserted, the counter decrements by 1, saturating at the minimum value of 0 (`2'b00`). Otherwise, when not training (`train_valid` deasserted), the counter retains its current value.
+
+The final counter value is provided through the output port `state[1:0]`.
+
+Please let me know if you have any further questions!

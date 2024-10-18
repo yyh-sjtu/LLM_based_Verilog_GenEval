@@ -1,0 +1,31 @@
+As a professional RTL designer, I will now provide you with the Verilog implementation of the TopModule module based on the given interface requirements:
+
+```verilog
+module TopModule (
+    input clk,
+    input load,
+    input [1:0] ena,
+    input [99:0] data,
+    output reg [99:0] q
+);
+
+reg [99:0] reg_data;
+
+always @(posedge clk) begin
+    if (load) begin
+        reg_data <= data;
+    end else begin
+        if (ena == 2'b01) begin // Rotate right by one bit
+            reg_data <= {reg_data[0], reg_data[99:1]};
+        end else if (ena == 2'b10) begin // Rotate left by one bit
+            reg_data <= {reg_data[98:0], reg_data[99]};
+        end
+    end
+end
+
+assign q = reg_data;
+
+endmodule
+```
+
+This Verilog code implements the TopModule module with the desired functionality of a 100-bit left/right rotator based on the provided interface specifications. The module takes in the clock signal, load signal, enable signal for direction, data input, and outputs the rotated contents in the q signal.

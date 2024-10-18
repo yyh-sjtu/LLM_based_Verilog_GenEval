@@ -1,0 +1,42 @@
+Sure, here's an RTL design implementation for the TopModule with the given interface:
+
+```verilog
+module TopModule (
+  input                 clk,
+  input                 areset,
+  input                 predict_valid,
+  input                 predict_taken,
+  input                 train_mispredicted,
+  input                 train_taken,
+  input  [31:0]          train_history,
+  output [31:0]          predict_history
+);
+
+  reg  [31:0]            branch_history;
+
+  always @(posedge clk or posedge areset) begin
+    if (areset) begin
+      branch_history <= 0;
+    end else if (predict_valid) begin
+      branch_history <= {branch_history[30:0], predict_taken};
+    end else if (train_mispredicted) begin
+      branch_history <= {train_history, train_taken};
+    end
+  end
+
+  assign predict_history = branch_history;
+
+endmodule
+```
+
+In this implementation, the `branch_history` register is a 32-bit shift register that holds the branch history information. During a positive edge clock event or a positive edge asynchronous reset event, the appropriate update is made to the `branch_history` register based on the input signals.
+
+When `areset` is active (1), the `branch_history` register is reset to 0.
+
+When `predict_valid` is active (1), the `predict_taken` signal is shifted into the `branch_history` register, updating the branch history.
+
+When `train_mispredicted` is active (1), the `train_history` is concatenated with `train_taken` and loaded into the `branch_history` register.
+
+The current value of the `branch_history` register is assigned to `predict_history` output.
+
+Note: This implementation assumes proper handling of the input signals (`predict_valid`, `predict_taken`, `train_mispredicted`, `train_taken`, `train_history`) and synchronization of the `clk` and `areset` signals. The implementation also assumes that the `clk` signal is a standard positive edge clock.

@@ -1,0 +1,66 @@
+
+module TopModule (
+  input  clk,
+  input  reset,
+  input  j,
+  input  k,
+  output out
+);
+  
+  // Define state enumeration
+  typedef enum logic [1:0] {
+    OFF,
+    ON
+  } state_t;
+  
+  // Declare registers for state and output
+  reg state_t current_state, next_state;
+  reg out_reg;
+  wire out;
+  
+  // Synchronous reset logic
+  always @(posedge clk or posedge reset) begin
+    if (reset) begin
+      current_state <= OFF;
+      out_reg <= 0;
+    end else begin
+      current_state <= next_state;
+      out_reg <= out;
+    end
+  end
+  
+  // State transition and output logic
+  always @* begin
+    case (current_state)
+      OFF: begin
+        if (j) begin
+          next_state = ON;
+        end else begin
+          next_state = OFF;
+        end
+      end
+      
+      ON: begin
+        if (k) begin
+          next_state = OFF;
+        end else begin
+          next_state = ON;
+        end
+      end
+    endcase
+      
+    case (current_state)
+      OFF: begin
+        out = 0;
+      end
+      
+      ON: begin
+        out = 1;
+      end
+    endcase
+  end
+  
+  // Assign output
+  assign out = out_reg;
+  
+endmodule

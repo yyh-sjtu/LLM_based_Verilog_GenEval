@@ -1,0 +1,76 @@
+Here is the Verilog code for a finite-state machine that searches for the sequence 1101 in an input bit stream.
+
+```verilog
+module top_module(
+    input clk,
+    input reset,
+    input data,
+    output reg start_shifting
+);
+
+// Define states
+typedef enum logic [3:0] {
+    IDLE,
+    S1,
+    S2,
+    S3,
+    FOUND
+} state_t;
+
+// Declare state registers
+reg [3:0] current_state, next_state;
+
+// Start shifting flag
+reg start_shift;
+
+// Define sequence to search for
+localparam [3:0] SEQ_1101 = 4'b1101;
+
+always @(posedge clk or posedge reset) begin
+    if (reset) begin
+        current_state <= IDLE;
+        start_shift <= 0;
+    end else begin
+        current_state <= next_state;
+        start_shift <= (current_state == FOUND);
+    end
+end
+
+always @(current_state or data) begin
+    next_state = current_state;
+    case (current_state)
+        IDLE:
+            if (data == 1'b1)
+                next_state = S1;
+        S1:
+            if (data == 1'b1)
+                next_state = S2;
+            else
+                next_state = IDLE;
+        S2:
+            if (data == 1'b1)
+                next_state = S3;
+            else
+                next_state = IDLE;
+        S3:
+            if (data == 1'b0)
+                next_state = FOUND;
+            else
+                next_state = IDLE;
+        FOUND:
+            next_state = IDLE;
+    endcase
+end
+
+assign start_shifting = start_shift;
+
+endmodule
+```
+
+In this module, there are four states - IDLE, S1, S2, S3, and FOUND. The `current_state` and `next_state` registers are used to store the current and next states, respectively. 
+
+The `start_shift` register is set when the sequence 1101 is found (in the state FOUND) and is reset when the `reset` signal is active high.
+
+The `data` input is used to read the input bit stream. On every positive edge of the `clk` signal, the state machine transitions based on the current state and the value of the input data. If the reset signal is active high, the state machine resets to the IDLE state.
+
+The `start_shifting` output is assigned the value of the `start_shift` register, indicating whether the sequence was found and the shifting should start.

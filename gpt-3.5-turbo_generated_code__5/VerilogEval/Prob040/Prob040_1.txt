@@ -1,0 +1,42 @@
+Sure! Here's an example of how you can implement the TopModule in RTL (Register Transfer Level) code in Verilog:
+
+```verilog
+module TopModule (
+  input clk,
+  input reset,
+  output reg [3:0] q
+);
+
+  // Define internal signals
+  reg [3:0] next_q;
+
+  // Sequential logic
+  always @(posedge clk) begin
+    if (reset) begin
+      next_q <= 0;
+    end else begin
+      next_q <= q + 1;
+    end
+  end
+
+  // Output assignment
+  always @(posedge clk) begin
+    if (reset) begin
+      q <= 0;
+    end else begin
+      q <= next_q;
+    end
+  end
+
+endmodule
+```
+
+In this implementation, the module `TopModule` has an input `clk` for the clock signal, an input `reset` for the reset signal, and an output `q` which is a 4-bit register representing the current count value.
+
+Inside the module, we have declared an internal signal `next_q` which will hold the next count value. The `always @(posedge clk)` block is triggered on the positive edge of the clock and handles the sequential logic.
+
+If the reset signal is high, indicating a reset request, the `next_q` value is set to 0. Otherwise, the `next_q` value is set to the current count value `q` plus 1.
+
+The final `always @(posedge clk)` block is responsible for assigning the `q` register. If the reset signal is high, the `q` value is set to 0. Otherwise, it takes the value of `next_q`.
+
+This implementation ensures that the count value starts from 0, increments by 1 on each positive edge of the clock, and resets to 0 when the reset signal is active high.

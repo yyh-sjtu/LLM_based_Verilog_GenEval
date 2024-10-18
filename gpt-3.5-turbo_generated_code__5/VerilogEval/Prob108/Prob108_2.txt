@@ -1,0 +1,30 @@
+Sure, I can help you with that. Here's an RTL design for the TopModule module that implements Rule 90:
+
+```verilog
+module TopModule (
+  input clk,
+  input load,
+  input [511:0] data,
+  output reg [511:0] q
+);
+  
+  always @(posedge clk) begin
+    if (load)
+      q <= data;
+    else begin
+      q[0] = q[1] ^ q[511];
+      q[511] = q[0] ^ q[510];
+      for (int i = 1; i < 511; i = i + 1) begin
+        q[i] = q[i-1] ^ q[i+1];
+      end
+    end
+  end
+  
+endmodule
+```
+
+In this design, we have an `always` block triggered by the positive edge of the clock. Inside the block, we check if the `load` signal is high, indicating that the system should be loaded with the input `data`. If `load` is high, we simply assign the `data` to the output `q`.
+
+Otherwise, we calculate the next state of each cell based on Rule 90. We start by calculating the next state for the boundary cells `q[0]` and `q[511]`, which depend on the neighboring cells `q[1]` and `q[510]`. Then, we use a for loop to iterate over the remaining cells `q[1:510]`, calculating their next states based on the XOR of their neighboring cells `q[i-1]` and `q[i+1]`.
+
+Finally, the calculated next state is stored in the output `q`. Note that the output `q` is declared as a `reg` type and assigned within the `always` block, indicating that it is a sequential logic element that gets updated on each clock cycle.

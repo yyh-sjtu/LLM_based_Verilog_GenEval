@@ -1,0 +1,26 @@
+As a professional RTL designer, I would implement the TopModule as follows:
+
+```verilog
+module TopModule (
+  input clk,
+  input resetn,
+  input in,
+  output reg out
+);
+
+  reg [3:0] dff; // four D flops for shift register
+
+  always @(posedge clk or negedge resetn) begin
+    if (!resetn) begin
+      dff <= 4'b0; // reset the shift register
+    end else begin
+      dff <= {dff[2:0], in}; // shift in the new value
+    end
+  end
+
+  assign out = dff[3]; // output the most significant bit of shift register
+
+endmodule
+```
+
+In this implementation, I have used a 4-bit vector `dff` to represent the four D flops in the shift register. On the positive edge of the clock, the value of `dff` is shifted left, and the new input `in` is assigned to the least significant bit. If the reset signal `resetn` is asserted low, the shift register is reset to all zeros. The output `out` is connected to the most significant bit of `dff`, providing the output of the shift register.

@@ -1,0 +1,23 @@
+Sure, here's an implementation of the TopModule with a D flip flop:
+
+```verilog
+module TopModule (
+  input clk,
+  input ar,
+  input d,
+  output q
+);
+
+  reg q;
+  
+  always @(posedge clk or posedge ar)
+  begin
+    if(ar)
+      q <= 1'b0;
+    else
+      q <= d;
+  end
+endmodule
+```
+
+In this implementation, the input `clk` is used as the clock signal for the positive edge-triggered behavior. The input `ar` serves as the asynchronous reset signal, which sets the output `q` to 0 when it is active. The input `d` is the data input to the flip flop, which is transferred to the output `q` on each positive edge of the clock signal.

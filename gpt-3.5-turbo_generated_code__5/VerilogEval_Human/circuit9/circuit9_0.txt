@@ -1,0 +1,23 @@
+reg [2:0] q_ff;
+always @(posedge clk)
+begin
+	if (a)
+	begin
+		case(q_ff)
+			3'b000: q_ff <= 3'b100;
+			3'b100: q_ff <= 3'b011;
+			3'b011: q_ff <= 3'b110;
+			3'b110: q_ff <= 3'b000;
+			default: q_ff <= 3'b000;
+		endcase
+	end
+	else
+	begin
+		if (q_ff[2])
+			q_ff <= 3'b001;
+		else
+			q_ff <= q_ff;
+	end
+end
+assign q = q_ff; 
+endmodule

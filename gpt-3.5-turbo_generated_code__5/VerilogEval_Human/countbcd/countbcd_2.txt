@@ -1,0 +1,53 @@
+module top_module(
+    input clk,
+    input reset,
+    output [3:1] ena,
+    output reg [15:0] q);
+
+    reg [3:0] digit1;
+    reg [3:0] digit2;
+    reg [3:0] digit3;
+    reg [3:0] digit4;
+
+    always @(posedge clk or posedge reset) begin
+        if (reset) begin
+            digit1 <= 0;
+            digit2 <= 0;
+            digit3 <= 0;
+            digit4 <= 0;
+        end else begin
+            if (ena[3]) begin
+                if (digit1 == 9) begin
+                    digit1 <= 0;
+                    if (ena[2]) begin
+                        if (digit2 == 9) begin
+                            digit2 <= 0;
+                            if (ena[1]) begin
+                                if (digit3 == 9) begin
+                                    digit3 <= 0;
+                                    if (ena[0]) begin
+                                        if (digit4 == 9) begin
+                                            digit4 <= 0;
+                                        end else begin
+                                            digit4 <= digit4 + 1;
+                                        end
+                                    end
+                                end else begin
+                                    digit3 <= digit3 + 1;
+                                end
+                            end
+                        end else begin
+                            digit2 <= digit2 + 1;
+                        end
+                    end
+                end else begin
+                    digit1 <= digit1 + 1;
+                end
+            end
+        end
+    end
+
+    assign q = {digit4, digit3, digit2, digit1};
+    assign ena = {ena[2], ena[1], ena[0]};
+
+endmodule

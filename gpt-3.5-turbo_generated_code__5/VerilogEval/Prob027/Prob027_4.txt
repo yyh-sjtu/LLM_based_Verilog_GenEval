@@ -1,0 +1,29 @@
+Sure, here's the implementation of the TopModule in VHDL:
+
+```vhdl
+library ieee;
+use ieee.std_logic_1164.all;
+
+entity TopModule is
+    port (
+        a    : in  std_logic;
+        b    : in  std_logic;
+        cin  : in  std_logic;
+        cout : out std_logic;
+        sum  : out std_logic
+    );
+end entity TopModule;
+
+architecture rtl of TopModule is
+begin
+    process(a, b, cin)
+        variable temp_sum : std_logic;
+    begin
+        temp_sum := a xor b xor cin;
+        sum <= temp_sum;
+        cout <= (a and b) or (b and cin) or (cin and a);
+    end process;
+end architecture rtl;
+```
+
+In this implementation, the full adder logic is implemented using the VHDL `xor` and `and` operators. The `xor` operator computes the sum of the inputs (`a`, `b`, and `cin`), while the `and` operator computes the carry-out (`cout`). The `temp_sum` is a variable used to temporarily store the sum value before assigning it to the `sum` output signal. The carry-out (`cout`) is assigned directly based on the logic formula for a full adder.

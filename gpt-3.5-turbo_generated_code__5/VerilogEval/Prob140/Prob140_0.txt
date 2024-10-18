@@ -1,0 +1,136 @@
+As a professional RTL designer, I will implement the TopModule with the requested interface and functionality using a Moore-type finite state machine.
+
+First, I will define the states of the FSM. We need three states: IDLE, DISCARD, and FLAG. The state diagram will look as follows:
+
+```
+          --------------
+ in=0     |     IDLE    |
+ ------>  |(discard=0,  |
+          | flag=0, err=0)|
+          --------------
+           |           ^
+           |           | in=1
+           v           |
+          --------------
+in=1       |   DISCARD  |
+ ------->  |(discard=1, |
+          | flag=0, err=0)|
+          --------------
+           |           ^
+           |           | in=0
+           v           |
+          --------------
+in=0       |    FLAG    |
+ ------->  |(discard=0, |
+          | flag=1, err=0)|
+          --------------
+           |           ^
+           |           | in=1
+           v           |
+          --------------
+in=1       |    ERROR   |
+ --------> |(discard=0, |
+          | flag=0, err=1)|
+          --------------
+           |           ^
+           |           | reset=1
+           v           |
+          --------------
+reset=0    |     IDLE    |
+ ------>  |(discard=0,  |
+          | flag=0, err=0)|
+          --------------
+```
+
+Based on this state diagram, I will now implement the TopModule in VHDL, assuming the use of the VHDL language:
+
+```vhdl
+library ieee;
+use ieee.std_logic_1164.all;
+use ieee.numeric_std.all;
+
+entity TopModule is
+  port(
+    clk   : in  std_logic;
+    reset : in  std_logic;
+    in    : in  std_logic;
+    disc  : out std_logic;
+    flag  : out std_logic;
+    err   : out std_logic
+  );
+end entity TopModule;
+
+architecture rtl of TopModule is
+  type State is (IDLE, DISCARD, FLAG, ERROR);
+  signal current_state, next_state : State := IDLE;
+  signal discard_next, discard_out : std_logic := '0';
+  signal flag_next, flag_out       : std_logic := '0';
+  signal err_next, err_out         : std_logic := '0';
+begin
+  -- Sequential logic process
+  process(clk)
+  begin
+    if rising_edge(clk) then
+      if reset = '1' then
+        current_state <= IDLE;
+      else
+        current_state <= next_state;
+      end if;
+    end if;
+  end process;
+
+  -- Next state and output logic
+  process(current_state, reset, in)
+  begin
+    case current_state is
+      when IDLE =>
+        discard_next <= '0';
+        flag_next    <= '0';
+        err_next     <= '0';
+        if in = '1' then
+          next_state <= DISCARD;
+        else
+          next_state <= IDLE;
+        end if;
+
+      when DISCARD =>
+        discard_next <= '1';
+        flag_next    <= '0';
+        err_next     <= '0';
+        if in = '1' then
+          next_state <= ERROR;
+        else
+          next_state <= FLAG;
+        end if;
+
+      when FLAG =>
+        discard_next <= '0';
+        flag_next    <= '1';
+        err_next     <= '0';
+        if in = '1' then
+          next_state <= ERROR;
+        else
+          next_state <= IDLE;
+        end if;
+
+      when ERROR =>
+        discard_next <= '0';
+        flag_next    <= '0';
+        err_next     <= '1';
+        next_state   <= IDLE;
+    end case;
+  end process;
+
+  -- Output assignment
+  disc <= discard_out;
+  flag <= flag_out;
+  err  <= err_out;
+
+  -- Combinational logic
+  discard_out <= discard_next;
+  flag_out    <= flag_next;
+  err_out     <= err_next;
+end architecture rtl;
+```
+
+This implementation of the TopModule should successfully recognize the specified bit patterns and provide the appropriate outputs according to the given requirements.

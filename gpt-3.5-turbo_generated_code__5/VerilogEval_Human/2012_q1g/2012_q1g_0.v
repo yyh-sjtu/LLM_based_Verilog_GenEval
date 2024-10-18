@@ -1,0 +1,50 @@
+module top_module (
+	input [4:1] x,
+	output logic f
+);
+
+  // Create a 4x4 array to represent the Karnaugh map
+  logic [3:0][3:0] k_map;
+
+  // Assign values to the Karnaugh map based on the given table
+  initial begin
+    k_map[0][0] = 1'b1;
+    k_map[0][1] = 1'b0;
+    k_map[0][2] = 1'b0;
+    k_map[0][3] = 1'b1;
+  
+    k_map[1][0] = 1'b0;
+    k_map[1][1] = 1'b0;
+    k_map[1][2] = 1'b0;
+    k_map[1][3] = 1'b0;
+  
+    k_map[2][0] = 1'b1;
+    k_map[2][1] = 1'b1;
+    k_map[2][2] = 1'b1;
+    k_map[2][3] = 1'b0;
+  
+    k_map[3][0] = 1'b1;
+    k_map[3][1] = 1'b1;
+    k_map[3][2] = 1'b0;
+    k_map[3][3] = 1'b1;
+  end
+
+  // Create variables to represent each of the minterms in the Karnaugh map
+  logic m_00;
+  logic m_01;
+  logic m_11;
+  logic m_10;
+
+  // Assign values to the minterms based on the values in the Karnaugh map
+  assign m_00 = k_map[0][0];
+  assign m_01 = k_map[0][1];
+  assign m_11 = k_map[0][2];
+  assign m_10 = k_map[0][3];
+
+  // Implement the function using the minterms
+  always_comb begin
+    f = m_00 | m_01 | m_11 | m_10;
+  end
+
+endmodule
+

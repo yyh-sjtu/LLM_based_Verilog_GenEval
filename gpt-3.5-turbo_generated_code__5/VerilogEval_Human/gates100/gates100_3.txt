@@ -1,0 +1,27 @@
+module top_module (
+	input [99:0] in,
+	output out_and,
+	output out_or,
+	output out_xor
+);
+
+  // Declare internal signals
+  wire [99:0] and_op;
+  wire [99:0] or_op;
+  wire [99:0] xor_op;
+
+  // Generate 100-input AND gate
+  assign and_op = &in;
+
+  // Generate 100-input OR gate
+  assign or_op = |in;
+
+  // Generate 100-input XOR gate
+  assign xor_op = ^in;
+
+  // Assign outputs to the respective gates
+  assign out_and = and_op[0];
+  assign out_or = or_op[0];
+  assign out_xor = xor_op[0];
+
+endmodule

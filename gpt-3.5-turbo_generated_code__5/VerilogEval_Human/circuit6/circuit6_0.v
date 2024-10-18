@@ -1,0 +1,30 @@
+module top_module (
+	input [2:0] a, 
+	output reg [15:0] q
+);
+	
+	// Declare internal signals
+	reg [15:0] q_int;
+	
+	// Assign waveform values to q_int based on the simulation waveforms
+	always @(*) begin
+		case(a)
+			3'b000 : q_int = 16'd1232;
+			3'b001 : q_int = 16'daee0;
+			3'b010 : q_int = 16'd27d4;
+			3'b011 : q_int = 16'd5a0e;
+			3'b100 : q_int = 16'd2066;
+			3'b101 : q_int = 16'd64ce;
+			3'b110 : q_int = 16'dc526;
+			3'b111 : q_int = 16'd2f19;
+			default : q_int = 16'd0;
+		endcase
+	end
+	
+	// Assign q_int to q
+	always @(posedge clk) begin
+		q <= q_int;
+	end
+
+endmodule
+

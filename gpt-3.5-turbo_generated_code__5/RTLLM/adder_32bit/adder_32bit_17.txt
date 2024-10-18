@@ -1,0 +1,43 @@
+module cla_16bit (
+    input [15:0] A,
+    input [15:0] B,
+    output [15:0] S,
+    output C
+);
+
+wire [4:0] G;
+wire [4:0] P;
+wire [4:0] Gp;
+wire [4:0] C;
+
+assign G = A & B;
+assign P = A ^ B;
+assign Gp = G + P;
+assign C[0] = G[0] | (P[0] & C[0]);
+assign C[1] = G[1] | (P[1] & Gp[0]);
+assign C[2] = G[2] | (P[2] & Gp[1]);
+assign C[3] = G[3] | (P[3] & Gp[2]);
+assign C[4] = G[4] | (P[4] & Gp[3]);
+
+assign S = A ^ B ^ C;
+assign C = Gp[4];
+
+endmodule
+
+module adder_32bit (
+    input [31:0] A,
+    input [31:0] B,
+    output [31:0] S,
+    output C32
+);
+
+wire [15:0] carry_out;
+wire [31:0] sum;
+
+cla_16bit cl1 (.A(A[15:0]), .B(B[15:0]), .S(sum[15:0]), .C(carry_out[0]));
+cla_16bit cl2 (.A(A[31:16]), .B(B[31:16]), .S(sum[31:16]), .C(carry_out[1]));
+
+assign S = sum;
+assign C32 = carry_out[1];
+
+endmodule

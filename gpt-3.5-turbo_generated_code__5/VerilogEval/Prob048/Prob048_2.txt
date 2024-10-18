@@ -1,0 +1,25 @@
+As an RTL designer, I can help you implement the TopModule with the required specifications. Below is the Verilog code for the module:
+
+```verilog
+module TopModule (
+  input  clk,
+  input  d,
+  input  r,
+  output q
+);
+
+  reg q;
+
+  always @(posedge clk) begin
+    if (r == 1'b1) // Synchronous reset
+      q <= 1'b0;
+    else
+      q <= d;
+  end
+
+endmodule
+```
+
+In this code, a register `q` is declared to store the value of the flip flop output. The `always` block is triggered on the positive edge of the `clk` input. If the reset signal `r` is asserted (`r` is 1), the output `q` is set to 0. Otherwise, the value of the input `d` is transferred to the output `q` on the positive edge of the clock.
+
+Please let me know if you need any further assistance or clarification.

@@ -1,0 +1,52 @@
+Here is the complete code for the multi-bit MUX-based synchronizer in Verilog:
+
+```verilog
+module synchronizer (
+  input wire clk_a,
+  input wire clk_b,
+  input wire arstn,
+  input wire brstn,
+  input wire [3:0] data_in,
+  input wire data_en,
+  output reg [3:0] dataout
+);
+
+  reg [3:0] data_reg;
+  reg en_data_reg;
+
+  reg en_clap_one;
+  reg en_clap_two;
+
+  always @(posedge clk_a or negedge arstn) begin
+    if (~arstn) begin
+      data_reg <= 0;
+      en_data_reg <= 0;
+    end else begin
+      data_reg <= data_in;
+      en_data_reg <= data_en;
+    end
+  end
+
+  always @(posedge clk_b or negedge brstn) begin
+    if (~brstn) begin
+      en_clap_one <= 0;
+      en_clap_two <= 0;
+      dataout <= 0;
+    end else begin
+      en_clap_one <= en_data_reg;
+      en_clap_two <= en_clap_one;
+      if (en_clap_two)
+        dataout <= data_reg;
+    end
+  end
+
+endmodule
+```
+
+In this design, the module `synchronizer` takes in clock signals `clk_a` and `clk_b`, reset signals `arstn` and `brstn`, input data `data_in`, and input enable signal `data_en`. It outputs the synchronized data `dataout`.
+
+The module includes registers `data_reg` and `en_data_reg` to store the input data and enable signal, respectively. On the positive edge of `clk_a` or the falling edge of `arstn`, these registers are updated according to the reset condition or the input values.
+
+The module also includes registers `en_clap_one` and `en_clap_two` to control the selection of input data. On the positive edge of `clk_b` or the falling edge of `brstn`, these registers are updated based on `en_data_reg` and the reset condition.
+
+Finally, on the positive edge of `clk_b` or the falling edge of `brstn`, the output data `dataout` is assigned based on the value of `en_clap_two`. If `en_clap_two` is active, `dataout` is assigned the value of `data_reg`. Otherwise, `dataout` retains its previous value.

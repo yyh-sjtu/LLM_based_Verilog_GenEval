@@ -1,0 +1,26 @@
+module top_module(
+    input clk,
+    input areset,
+    input train_valid,
+    input train_taken,
+    output logic [1:0] state
+);
+  
+  logic [1:0] current_state;
+  
+  always @(posedge clk or posedge areset) begin
+    if (areset) begin
+      current_state <= 2'b01; // Reset to weakly not-taken
+    end else if (train_valid) begin
+      if (train_taken) begin
+        current_state <= (current_state == 2'b11) ? 2'b11 : current_state + 1; // Increment if not at maximum value
+      end else begin
+        current_state <= (current_state == 2'b00) ? 2'b00 : current_state - 1; // Decrement if not at minimum value
+      end
+    end
+  end
+  
+  assign state = current_state;
+  
+endmodule
+

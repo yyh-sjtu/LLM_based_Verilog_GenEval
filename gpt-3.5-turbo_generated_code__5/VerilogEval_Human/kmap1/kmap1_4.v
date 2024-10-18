@@ -1,0 +1,19 @@
+module top_module(
+	input a, 
+	input b,
+	input c,
+	output out
+);
+	
+	// Intermediate signals
+	wire w1, w2, w3, w4;
+	
+	// Gates for implementing the circuit
+	assign w1 = a & ~b;
+	assign w2 = ~a & b;
+	assign w3 = ~a & ~b;
+	assign w4 = a | b | c;
+	assign out = w1 | w2 | w3 | w4;
+	
+endmodule
+

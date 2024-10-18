@@ -1,0 +1,125 @@
+As a professional RTL designer, I would implement the TopModule using VHDL as follows:
+
+```vhdl
+library ieee;
+use ieee.std_logic_1164.all;
+
+entity TopModule is
+    port (
+        clk   : in  std_logic;
+        reset : in  std_logic;
+        s     : in  std_logic_vector(2 downto 0);
+        fr2   : out std_logic;
+        fr1   : out std_logic;
+        fr0   : out std_logic;
+        dfr   : out std_logic
+    );
+end entity;
+
+architecture Behavioral of TopModule is
+    type state_type is (state_low, state_below_s0, state_between_s0_s1, state_between_s1_s2, state_above_s2);
+    signal state       : state_type;
+    signal prev_level  : std_logic_vector(2 downto 0);
+
+begin
+
+    process (clk)
+    begin
+        if rising_edge(clk) then
+            if reset = '1' then
+                state <= state_low; -- Reset to the initial state
+                prev_level <= "000"; -- Reset the previous level indicator
+                fr2 <= '1'; -- All outputs are asserted during reset
+                fr1 <= '1';
+                fr0 <= '1';
+                dfr <= '1';
+            else
+                -- Next State Logic
+                case state is
+                    when state_low =>
+                        if s(2) = '1' then
+                            state <= state_above_s2;
+                        elsif s(1) = '1' then
+                            state <= state_between_s1_s2;
+                        elsif s(0) = '1' then
+                            state <= state_between_s0_s1;
+                        end if;
+
+                    when state_below_s0 =>
+                        if s(0) = '0' then
+                            state <= state_low;
+                        end if;
+
+                    when state_between_s0_s1 =>
+                        if s(1) = '1' then
+                            state <= state_between_s1_s2;
+                            prev_level <= s;
+                        elsif s(0) = '0' then
+                            state <= state_low;
+                        end if;
+
+                    when state_between_s1_s2 =>
+                        if s(2) = '1' then
+                            state <= state_above_s2;
+                        elsif s(0) = '0' then
+                            state <= state_low;
+                        end if;
+
+                    when state_above_s2 =>
+                        if s(2) = '0' then
+                            state <= state_between_s1_s2;
+                            prev_level <= s;
+                        end if;
+
+                    when others =>
+                        state <= state_low;
+                end case;
+
+                -- Output Logic
+                case state is
+                    when state_low =>
+                        fr2 <= '1';
+                        fr1 <= '1';
+                        fr0 <= '1';
+                        dfr <= '1';
+
+                    when state_below_s0 =>
+                        fr2 <= '1';
+                        fr1 <= '1';
+                        fr0 <= '1';
+                        dfr <= '0';
+
+                    when state_between_s0_s1 =>
+                        fr2 <= '1';
+                        fr1 <= '1';
+                        fr0 <= '0';
+                        dfr <= '0';
+
+                    when state_between_s1_s2 =>
+                        fr2 <= '1';
+                        fr1 <= '0';
+                        fr0 <= '0';
+                        dfr <= '0';
+
+                    when state_above_s2 =>
+                        fr2 <= '0';
+                        fr1 <= '0';
+                        fr0 <= '0';
+                        dfr <= '0';
+
+                    when others =>
+                        fr2 <= '1';
+                        fr1 <= '1';
+                        fr0 <= '1';
+                        dfr <= '1';
+                end case;
+            end if;
+        end if;
+    end process;
+
+end architecture;
+```
+
+In the above VHDL code, I have implemented a synchronous state machine using a process block. The state machine has five states corresponding to the water level conditions mentioned in the problem statement. The state transitions are determined based on the values of the input sensors `s`. The output ports `fr2`, `fr1`, `fr0`, and `dfr` are assigned values based on the current state.
+
+During reset, the state machine is set to the initial state, and the output ports are asserted to their initial values.

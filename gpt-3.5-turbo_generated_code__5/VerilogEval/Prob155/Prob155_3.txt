@@ -1,0 +1,123 @@
+Sure! Here is the implementation of the TopModule in VHDL:
+
+```vhdl
+library ieee;
+use ieee.std_logic_1164.all;
+
+entity TopModule is
+    port (
+        clk         : in    std_logic;
+        areset      : in    std_logic;
+        bump_left   : in    std_logic;
+        bump_right  : in    std_logic;
+        ground      : in    std_logic;
+        dig         : in    std_logic;
+        walk_left   : out   std_logic;
+        walk_right  : out   std_logic;
+        aaah        : out   std_logic;
+        digging     : out   std_logic
+    );
+end entity TopModule;
+
+architecture rtl of TopModule is
+    type State is (WALK_LEFT, WALK_RIGHT, FALL, DIG, SPLATTER);
+    
+    signal current_state : State;
+    signal next_state    : State;
+    signal countdown     : unsigned(5 downto 0) := (others => '0');
+    
+begin
+
+    process(clk, areset)
+    begin
+        if areset = '1' then        -- Asynchronous reset
+            current_state <= WALK_LEFT;
+            countdown     <= (others => '0');
+        elsif rising_edge(clk) then -- Synchronous logic
+
+            -- Next state logic
+            case current_state is
+                when WALK_LEFT =>
+                    if bump_right = '1' then
+                        next_state <= WALK_RIGHT;  -- Switch direction if bumped on right
+                    elsif ground = '0' then
+                        next_state <= FALL;        -- Fall if no ground
+                    elsif dig = '1' and ground = '1' then
+                        next_state <= DIG;         -- Start digging
+                    else
+                        next_state <= WALK_LEFT;   -- Continue walking left
+                    end if;
+                when WALK_RIGHT =>
+                    if bump_left = '1' then
+                        next_state <= WALK_LEFT;   -- Switch direction if bumped on left
+                    elsif ground = '0' then
+                        next_state <= FALL;        -- Fall if no ground
+                    elsif dig = '1' and ground = '1' then
+                        next_state <= DIG;         -- Start digging
+                    else
+                        next_state <= WALK_RIGHT;  -- Continue walking right
+                    end if;
+                when FALL =>
+                    if ground = '1' then
+                        next_state <= current_state;   -- Resume walking in the same direction
+                    elsif countdown = 20 then
+                        next_state <= SPLATTER;        -- Splatter if fallen for more than 20 cycles
+                    else
+                        next_state <= FALL;             -- Continue falling
+                    end if;
+                when DIG =>
+                    if ground = '0' then
+                        next_state <= FALL;             -- Fall when reaches other side
+                    else
+                        next_state <= current_state;    -- Continue digging
+                    end if;
+                when SPLATTER =>
+                    next_state <= SPLATTER;             -- Stay in splatter state
+            end case;
+
+            -- Output logic
+            case current_state is
+                when WALK_LEFT =>
+                    walk_left  <= '1';
+                    walk_right <= '0';
+                    aaah       <= '0';
+                    digging    <= '0';
+                when WALK_RIGHT =>
+                    walk_left  <= '0';
+                    walk_right <= '1';
+                    aaah       <= '0';
+                    digging    <= '0';
+                when FALL =>
+                    walk_left  <= '0';
+                    walk_right <= '0';
+                    aaah       <= '1';
+                    digging    <= '0';
+                when DIG =>
+                    walk_left  <= '0';
+                    walk_right <= '0';
+                    aaah       <= '0';
+                    digging    <= '1';
+                when SPLATTER =>
+                    walk_left  <= '0';
+                    walk_right <= '0';
+                    aaah       <= '0';
+                    digging    <= '0';
+            end case;
+
+            -- Update states
+            current_state <= next_state;
+
+            -- Update countdown for splatter state
+            if current_state = FALL and next_state = SPLATTER then
+                countdown <= (others => '0');
+            elsif next_state = SPLATTER then
+                countdown <= countdown + 1;
+            end if;
+
+        end if;
+    end process;
+
+end architecture rtl;
+```
+
+Please note that this is just a simple implementation of the behavior you described. In a real design, you may need to handle additional edge cases and add more complex logic to handle timing and edge conditions.

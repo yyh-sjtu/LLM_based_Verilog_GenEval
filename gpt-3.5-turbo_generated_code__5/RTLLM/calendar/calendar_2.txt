@@ -1,0 +1,57 @@
+Here is the complete code for the perpetual calendar module in Verilog:
+
+```verilog
+module calendar (
+  input CLK,
+  input RST,
+  output reg [5:0] Hours,
+  output reg [5:0] Mins,
+  output reg [5:0] Secs
+);
+
+  always @(posedge CLK or posedge RST) begin
+    if (RST) begin
+      Secs <= 6'b000000;
+    end
+    else begin
+      if (Secs == 6'b111111) begin
+        Secs <= 6'b000000;
+      end
+      else begin
+        Secs <= Secs + 1;
+      end
+    end
+  end
+
+  always @(posedge CLK or posedge RST) begin
+    if (RST) begin
+      Mins <= 6'b000000;
+    end
+    else begin
+      if (Mins == 6'b111111 || (Secs == 6'b111111 && Mins == 6'b111111)) begin
+        Mins <= 6'b000000;
+      end
+      else if (Secs == 6'b111111) begin
+        Mins <= Mins + 1;
+      end
+    end
+  end
+
+  always @(posedge CLK or posedge RST) begin
+    if (RST) begin
+      Hours <= 6'b000000;
+    end
+    else begin
+      if (Hours == 6'b111111 || (Mins == 6'b111111 && Secs == 6'b111111 && Hours == 6'b000111)) begin
+        Hours <= 6'b000000;
+      end
+      else if (Mins == 6'b111111 && Secs == 6'b111111) begin
+        Hours <= Hours + 1;
+      end
+    end
+  end
+
+endmodule
+```
+
+Please note that the above code assumes that the input clock (CLK) is a regular clock signal and that the input reset (RST) is an active high signal. The outputs (Hours, Mins, Secs) are defined as 6-bit wide registers.

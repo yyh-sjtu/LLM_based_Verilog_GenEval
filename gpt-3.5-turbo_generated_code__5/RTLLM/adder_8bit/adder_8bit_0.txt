@@ -1,0 +1,37 @@
+module adder_8bit (
+    input [7:0] a,
+    input [7:0] b,
+    input cin,
+    output reg [7:0] sum,
+    output reg cout
+);
+
+reg [7:0] temp_sum;
+
+// Adder for the least significant bit
+full_adder FA0(
+    .a(a[0]),
+    .b(b[0]),
+    .cin(cin),
+    .sum(temp_sum[0]),
+    .cout(temp_cout[0])
+);
+
+// Adders for remaining bits
+genvar i;
+generate
+    for (i = 1; i < 8; i = i + 1) begin : adder_gen
+        full_adder FA (
+            .a(a[i]),
+            .b(b[i]),
+            .cin(temp_cout[i-1]),
+            .sum(temp_sum[i]),
+            .cout(temp_cout[i])
+        );
+    end
+endgenerate
+
+assign sum = temp_sum;
+assign cout = temp_cout[7];
+
+endmodule

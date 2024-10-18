@@ -1,0 +1,2 @@
+assign q = a & (~b | c) | (b & ~c & ~d); // Implementing the logic based on the given waveform data
+endmodule

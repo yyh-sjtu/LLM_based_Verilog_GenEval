@@ -1,0 +1,88 @@
+module dff_module(
+    input clk,
+    input d,
+    input reset,
+    output reg q
+);
+
+always @(posedge clk or posedge reset) begin
+    if(reset) begin
+        q <= 0;
+    end else begin
+        q <= d;
+    end
+end
+
+endmodule
+
+module top_module(
+    input clk,
+    input [7:0] d,
+    input reset,
+    output reg [7:0] q
+);
+
+wire [7:0] dff_output;
+
+dff_module dff_instance0(
+    .clk(clk),
+    .d(d[0]),
+    .reset(reset),
+    .q(dff_output[0])
+);
+
+dff_module dff_instance1(
+    .clk(clk),
+    .d(d[1]),
+    .reset(reset),
+    .q(dff_output[1])
+);
+
+dff_module dff_instance2(
+    .clk(clk),
+    .d(d[2]),
+    .reset(reset),
+    .q(dff_output[2])
+);
+
+dff_module dff_instance3(
+    .clk(clk),
+    .d(d[3]),
+    .reset(reset),
+    .q(dff_output[3])
+);
+
+dff_module dff_instance4(
+    .clk(clk),
+    .d(d[4]),
+    .reset(reset),
+    .q(dff_output[4])
+);
+
+dff_module dff_instance5(
+    .clk(clk),
+    .d(d[5]),
+    .reset(reset),
+    .q(dff_output[5])
+);
+
+dff_module dff_instance6(
+    .clk(clk),
+    .d(d[6]),
+    .reset(reset),
+    .q(dff_output[6])
+);
+
+dff_module dff_instance7(
+    .clk(clk),
+    .d(d[7]),
+    .reset(reset),
+    .q(dff_output[7])
+);
+
+always @(*) begin
+    q = dff_output;
+end
+
+endmodule
+

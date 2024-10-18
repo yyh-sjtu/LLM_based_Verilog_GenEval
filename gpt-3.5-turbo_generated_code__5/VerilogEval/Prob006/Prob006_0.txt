@@ -1,0 +1,14 @@
+As a professional RTL designer, I would implement the TopModule module as described below:
+
+```verilog
+module TopModule (
+  input [7:0] in,
+  output [7:0] out
+);
+
+  assign out = {in[7], in[6], in[5], in[4], in[3], in[2], in[1], in[0]};
+
+endmodule
+```
+
+In this module, the input port `in` is an 8-bit wide signal, and the output port `out` is also an 8-bit wide signal. The `assign` statement is used to reverse the bit ordering by concatenating the bits in reverse order using the curly brackets `{}`. The input bits are accessed individually using the `[ ]` indexing operator and placed in the output bits in reverse order.

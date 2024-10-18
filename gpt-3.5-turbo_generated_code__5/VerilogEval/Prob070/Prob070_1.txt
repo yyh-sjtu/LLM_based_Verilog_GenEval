@@ -1,0 +1,24 @@
+As a professional RTL designer, I would implement the TopModule using Verilog HDL. Here's the code for the module:
+
+```verilog
+module TopModule(
+  input a,
+  input b,
+  input c,
+  input d,
+  output out_sop,
+  output out_pos
+);
+
+  // Output out_sop in minimum sum-of-products form
+  assign out_sop = (~a & ~b & ~c & d) | (a & ~b & c & d) | (~a & b & c & d);
+
+  // Output out_pos in minimum product-of-sums form
+  assign out_pos = (a | b | c | d) & (~a | b | ~c | d) & (~a | ~b | c | d);
+
+endmodule
+```
+
+In the above code, I have used bitwise operations to implement the logic for generating the desired output. The expression for `out_sop` is a sum-of-products form, where each term represents one of the required numbers (2, 7, or 15). Similarly, the expression for `out_pos` is a product-of-sums form, where each term represents the complement of one of the undesired numbers (0, 1, 4, 5, 6, 9, 10, 13, or 14).
+
+Please let me know if you have any further questions or if there's anything else I can assist you with.

@@ -1,0 +1,17 @@
+Sure, here is the Verilog code for the TopModule module that implements a 2-to-1 multiplexer:
+
+```verilog
+module TopModule (
+  input  wire a,
+  input  wire b,
+  input  wire sel,
+  output wire out
+);
+  
+  // implementation of 2-to-1 multiplexer
+  assign out = (sel == 1'b0) ? a : b;
+  
+endmodule
+```
+
+In this module, the output 'out' is assigned the value of input 'a' when 'sel' is 0, and the value of input 'b' when 'sel' is 1. This implementation adheres to the behavior you have specified for the 2-to-1 multiplexer.

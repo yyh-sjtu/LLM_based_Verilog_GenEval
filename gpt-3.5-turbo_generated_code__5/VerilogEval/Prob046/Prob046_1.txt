@@ -1,0 +1,27 @@
+Here is the RTL code for the TopModule implementing 8 D flip-flops with active high synchronous reset, triggered by the negative edge of clk and reset to 0x34:
+
+```verilog
+module TopModule (
+    input clk,
+    input reset,
+    input [7:0] d,
+    output reg [7:0] q
+);
+
+reg [7:0] q_reg; // Internal register to hold the output values
+
+always @(negedge clk or posedge reset)
+begin
+    if (reset) begin
+        q_reg <= 8'b00110100; // Reset to 0x34
+    end else begin
+        q_reg <= d;
+    end
+end
+
+assign q = q_reg;
+
+endmodule
+```
+
+This implementation ensures that the 8 D flip-flops are triggered by the negative edge of the clock signal and reset to the specified value of 0x34. The output q will reflect the input value d when not in reset state.

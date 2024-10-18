@@ -1,0 +1,48 @@
+As a professional RTL designer, I will now provide you with the Verilog code for implementing the TopModule.
+
+```verilog
+module TopModule (
+  input  wire clk,
+  input  wire areset,
+  input  wire x,
+  output wire z
+);
+
+  reg [1:0] state;
+  reg [1:0] next_state;
+  reg z_reg;
+
+  always @(posedge clk or posedge areset) begin
+    if (areset) begin
+      state <= 2'b00;
+      z_reg <= 1'b0;
+    end
+    else begin
+      state <= next_state;
+      z_reg <= (state == 2'b01) ? ~z_reg : z_reg;
+    end
+  end
+
+  always @(state, x) begin
+    case (state)
+      2'b00: next_state = x ? 2'b01 : 2'b00;
+      2'b01: next_state = 2'b00;
+    endcase
+  end
+
+  assign z = z_reg;
+
+endmodule
+```
+
+In the above code, I have implemented a Moore state machine with two states. The state 00 represents the initial state where the 2's complement conversion has not started yet. The state 01 represents the state where the conversion is happening.
+
+The `state` register keeps track of the current state, while the `next_state` register holds the value of the next state to transition to. The `z_reg` register holds the output value.
+
+In the `always` block with the positive edge of the clock and the asynchronous reset, the state and output registers are updated based on the current state and the input `x`. The 2's complement operation is performed when the state is 01.
+
+The `always` block with the `state` and `x` sensitivity list determines the next state based on the current state and input `x`.
+
+The `assign` statement connects the `z_reg` to the output port `z`.
+
+Please let me know if you have any further questions or need additional assistance.

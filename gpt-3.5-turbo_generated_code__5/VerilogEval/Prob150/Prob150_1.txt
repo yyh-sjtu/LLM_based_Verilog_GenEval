@@ -1,0 +1,51 @@
+Based on the given state diagram and the one-hot encoding, we can derive the next-state logic and output logic equations for each state.
+
+Next-state logic equations:
+- B3_next: B3_next = B2
+- S_next: S_next = d' & S + d & S1
+- S1_next: S1_next = d' & S1 + d & S11
+- Count_next: Count_next = counting & done_counting' + counting & done_counting
+- Wait_next: Wait_next = done & ack' + done & ack
+
+Output logic equations:
+- done: done = Wait_next
+- counting: counting = Count_next
+- shift_ena: shift_ena = (S_next & B3_next) | (B3_next & shift_ena)
+
+Here's the RTL implementation of the TopModule module:
+
+```verilog
+module TopModule (
+  input d,
+  input done_counting,
+  input ack,
+  input [9:0] state,
+  output reg B3_next,
+  output reg S_next,
+  output reg S1_next,
+  output reg Count_next,
+  output reg Wait_next,
+  output reg done,
+  output reg counting,
+  output reg shift_ena
+);
+  
+  // Combinational logic for state transition and output generation
+  always @* begin
+    // Next-state logic equations
+    B3_next = state[1];
+    S_next = (~d & state[0]) | (d & state[1]);
+    S1_next = (~d & state[1]) | (d & state[2]);
+    Count_next = counting & ~done_counting | counting & done_counting;
+    Wait_next = done & ~ack | done & ack;
+    
+    // Output logic equations
+    done = Wait_next;
+    counting = Count_next;
+    shift_ena = (S_next & B3_next) | (B3_next & shift_ena);
+  end
+
+endmodule
+```
+
+Please note that this implementation only includes the combinational logic portion of the state machine. The module does not include any sequential logic (flip-flops) or clock and reset signals. The provided code is suitable for simulation purposes or integration within a larger RTL design.

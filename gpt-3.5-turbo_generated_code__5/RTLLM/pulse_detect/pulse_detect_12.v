@@ -1,0 +1,53 @@
+
+module pulse_detect (
+    input clk,
+    input rst_n,
+    input data_in,
+    output reg data_out
+);
+
+// Define states for pulse detection process
+parameter IDLE = 2'b00;
+parameter PULSE_DETECTED = 2'b01;
+parameter PULSE_WAIT = 2'b10;
+
+// Declare state register to keep track of current state
+reg [1:0] state;
+
+always @(posedge clk or negedge rst_n) begin
+    if (~rst_n) begin
+        // Reset condition
+        state <= IDLE;  // Set state to initial state
+        data_out <= 0;  // Set output to 0
+    end else begin
+        // Continue pulse detection process for remaining states
+
+        case (state)
+            IDLE: begin
+                // Check if input transitions from 0 to 1
+                if (data_in == 1'b0 && data_in[1] == 1'b1) begin
+                    state <= PULSE_DETECTED;  // Transition to next state
+                    data_out <= 0;
+                end
+            end
+
+            PULSE_DETECTED: begin
+                // Check if input transitions from 1 to 0
+                if (data_in == 1'b1 && data_in[1] == 1'b0) begin
+                    state <= PULSE_WAIT;  // Transition to next state
+                    data_out <= 1;  // Indicate end of pulse
+                end
+            end
+
+            PULSE_WAIT: begin
+                // Check if input remains 0
+                if (data_in == 1'b0) begin
+                    state <= IDLE;  // Transition back to idle state
+                    data_out <= 0;
+                end
+            end
+        endcase
+    end
+end
+
+endmodule

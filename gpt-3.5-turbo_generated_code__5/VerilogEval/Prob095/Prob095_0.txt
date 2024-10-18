@@ -1,0 +1,31 @@
+As a professional RTL designer, I would implement the TopModule as follows in Verilog:
+
+```verilog
+module TopModule(
+  input clk,
+  input reset,
+  output shift_ena
+);
+
+  reg [3:0] counter;
+
+  always @(posedge clk or posedge reset) begin
+    if (reset) begin
+      counter <= 4'b1111;
+      shift_ena <= 1'b1;
+    end else begin
+      if (counter > 4'b0000) begin
+        counter <= counter - 1;
+        shift_ena <= 1'b1;
+      end else begin
+        shift_ena <= 1'b0;
+      end
+    end
+  end
+
+endmodule
+```
+
+In this implementation, I have used a 4-bit counter (`counter`) to count the number of clock cycles since the reset. When the reset signal is asserted (`reset = 1`), the counter is set to the maximum value `4'b1111` and the `shift_ena` signal is set to `1` to enable the shift register. On subsequent clock cycles, if the counter is greater than `4'b0000`, it is decremented by one and the `shift_ena` signal remains `1`. Once the counter reaches `4'b0000`, the `shift_ena` signal is set to `0` to disable the shift register until the next reset signal.
+
+Please note that this implementation assumes that the shift register itself is implemented in a separate module and is not included in the TopModule. The TopModule only handles the control of the shift register for 4 clock cycles upon the proper bit pattern detection.

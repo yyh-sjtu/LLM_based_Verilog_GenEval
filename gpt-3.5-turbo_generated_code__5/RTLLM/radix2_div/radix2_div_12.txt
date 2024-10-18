@@ -1,0 +1,82 @@
+Here is the complete code for the radix2_div module:
+
+```
+module radix2_div (
+    input wire clk,
+    input wire rst,
+    input wire sign,
+    input wire [7:0] dividend,
+    input wire [7:0] divisor,
+    input wire opn_valid,
+    output wire res_valid,
+    output wire [15:0] result
+);
+
+    reg [15:0] result_reg;
+    reg [15:0] shift_reg;
+    reg signed [15:0] NEG_DIVISOR;
+    reg [3:0] cnt;
+    reg [3:0] start_cnt;
+    reg [15:0] final_result;
+    reg res_valid_reg;
+    
+    always @(posedge clk) begin
+        if (rst) begin
+            cnt <= 0;
+            start_cnt <= 0;
+            shift_reg <= 0;
+            NEG_DIVISOR <= 0;
+            res_valid_reg <= 0;
+            result_reg <= 0;
+        end else if (opn_valid && ~res_valid_reg) begin
+            cnt <= 1;
+            start_cnt <= 1;
+            shift_reg <= {dividend, 1'b0};
+            NEG_DIVISOR <= -divisor;
+            res_valid_reg <= 0;
+            result_reg <= 0;
+        end else if (start_cnt) begin
+            if (cnt == 8) begin
+                start_cnt <= 0;
+                res_valid_reg <= 1;
+                final_result <= {shift_reg[16:9], shift_reg[8:1]};
+            end else begin
+                cnt <= cnt + 1;
+                shift_reg <= {shift_reg[14:0], shift_reg[15]};
+                if (sign) begin
+                    if (shift_reg[15] == 1'b0 && shift_reg[14:8] >= NEG_DIVISOR[14:8]) begin
+                        shift_reg[8:1] <= shift_reg[8:1] - NEG_DIVISOR[14:8];
+                        shift_reg[0] <= 1;
+                    end else if (shift_reg[15] == 1'b1 && (-{shift_reg[14:8]}) >= NEG_DIVISOR[14:8]) begin
+                        shift_reg[8:1] <= shift_reg[8:1] + {~NEG_DIVISOR[14:8]};
+                        shift_reg[0] <= 0;
+                    end else begin
+                        shift_reg[0] <= 0;
+                    end
+                end else begin
+                    if (shift_reg[15] == 1'b0 && shift_reg[14:8] >= divisor[7:1]) begin
+                        shift_reg[8:1] <= shift_reg[8:1] - divisor[7:1];
+                        shift_reg[0] <= 1;
+                    end else if (shift_reg[15] == 1'b1) begin
+                        shift_reg[8:1] <= shift_reg[8:1] + divisor[7:1];
+                        shift_reg[0] <= 0;
+                    end else begin
+                        shift_reg[0] <= 0;
+                    end
+                end
+            end
+        end else if (res_valid_reg && ~result_reg[15]) begin
+            result_reg <= {result_reg[14:0], 1'b1};
+        end else if (res_valid_reg && result_reg[15]) begin
+            res_valid_reg <= 0;
+            result_reg <= 0;
+        end
+    end
+    
+    assign res_valid = res_valid_reg;
+    assign result = result_reg;
+    
+endmodule
+```
+
+This code should cover all the required functionalities and meet the specifications provided.

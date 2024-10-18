@@ -1,0 +1,51 @@
+reg [1:0] state;
+reg f, g;
+
+always @(posedge clk or negedge resetn) begin
+	if (~resetn) begin
+		state <= 2'b00; // Initial state A
+		f <= 1'b0;
+		g <= 1'b0;
+	end
+	else begin
+		case (state)
+			2'b00: begin // State A
+				if (~resetn) begin
+					f <= 1'b0;
+					state <= 2'b01; // Transition to state B
+				end
+			end
+			2'b01: begin // State B
+				if (x == 1'b1) begin
+					state <= 2'b10; // Transition to state C
+				end
+				else begin
+					state <= 2'b01;
+				end
+			end
+			2'b10: begin // State C
+				if (x == 1'b0) begin
+					state <= 2'b01; // Transition back to state B
+				end
+				else begin
+					state <= 2'b10;
+				end
+			end
+		endcase
+		
+		if (state == 2'b10 && x == 1'b1 && $past(x) == 1'b0 && $past($past(x)) == 1'b1) begin
+			f <= 1'b1; // Set f to 1 for one clock cycle
+		end
+		
+		if (state == 2'b10) begin
+			if (y == 1'b1) begin
+				g <= 1'b1; // Set g to 1 if y becomes 1 within two clock cycles
+			end
+			else if ($past($past(y)) != 1'b1) begin
+				g <= 1'b0; // Set g to 0 if y does not become 1 within two clock cycles
+			end
+		end
+	end
+end
+
+endmodule

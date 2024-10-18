@@ -1,0 +1,44 @@
+As an RTL designer, I would implement the TopModule using Verilog code. Based on the given finite-state machine and the one-hot code state assignment, I can derive the implementation by inspecting the transition logic for each state.
+
+Here is the Verilog code implementation for the TopModule:
+
+```verilog
+module TopModule (
+  input  wire [5:0] y,
+  input  wire w,
+  output wire Y1,
+  output wire Y3
+);
+
+  // State flip-flop definitions
+  reg [5:0] next_state;
+  reg [5:0] current_state;
+  
+  always @ (posedge w) begin
+    current_state <= next_state;
+  end
+  
+  // State transition logic
+  always @ (*) begin
+    case (current_state)
+      6'b000001: next_state = w ? 6'b000010 : 6'b000001;
+      6'b000010: next_state = w ? 6'b000100 : 6'b001000;
+      6'b000100: next_state = w ? 6'b010000 : 6'b001000;
+      6'b001000: next_state = w ? 6'b100000 : 6'b000001;
+      6'b010000: next_state = w ? 6'b010000 : 6'b001000;
+      6'b100000: next_state = w ? 6'b000100 : 6'b001000;
+      default: next_state = 6'b000001;
+    endcase
+  end
+  
+  // Output signal assignments
+  assign {Y1, Y3} = {next_state[1], next_state[3]};
+  
+endmodule
+```
+
+In this implementation, `current_state` represents the current state, and `next_state` represents the next state. The `w` input is sampled on the positive edge of the clock (`posedge w`), and the `next_state` is updated based on the current state and the `w` input using a case statement.
+
+The output signals `Y1` and `Y3` are assigned with the second and fourth bits of the `next_state` respectively, representing the inputs of the state flip-flops `y[1]` and `y[3]`.
+
+This implementation should correctly implement the state output logic for the given finite-state machine using the specified one-hot encoding.

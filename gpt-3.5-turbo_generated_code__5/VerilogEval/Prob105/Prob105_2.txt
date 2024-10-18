@@ -1,0 +1,27 @@
+As a professional RTL designer, I would implement the TopModule in Verilog as follows:
+
+```verilog
+module TopModule (
+  input clk,
+  input load,
+  input [1:0] ena,
+  input [99:0] data,
+  output reg [99:0] q
+);
+
+  always @(posedge clk) begin
+    if (load) begin
+      q <= data;
+    end else if (ena == 2'b01) begin
+      q <= {q[0], q[99:1]};
+    end else if (ena == 2'b10) begin
+      q <= {q[98:0], q[99]};
+    end
+  end
+
+endmodule
+```
+
+In this implementation, I have used a synchronous always block to handle the input signals. When `load` is high, the shift register `q` is loaded with the input `data`. If `ena` is `2'b01`, the bits are rotated right by one bit, and if `ena` is `2'b10`, the bits are rotated left by one bit. If `ena` is `2'b00` or `2'b11`, the shift register remains unchanged. The contents of the rotator `q` are continuously assigned based on the selected operation. Note that I have used a `reg` data type for `q` as it needs to retain its value between clock cycles.
+
+This implementation should meet the requirements specified in the interface description. Let me know if you have any further questions or need any additional assistance.

@@ -1,0 +1,11 @@
+// Define the flip-flop
+reg q_reg;
+always @(posedge clk) begin
+	q_reg <= (a & ~b) | (q_reg & ~a);
+end
+
+// Define the output state based on q_reg
+assign state = q_reg;
+
+// Connect q to the output
+assign q = q_reg;

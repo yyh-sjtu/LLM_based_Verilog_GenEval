@@ -1,0 +1,28 @@
+Based on the provided simulation waveforms, the TopModule should implement the following combinational circuit:
+
+```verilog
+module TopModule (
+    input [3:0] a,
+    input [3:0] b,
+    input [3:0] c,
+    input [3:0] d,
+    input [3:0] e,
+    output reg [3:0] q
+);
+
+always @* begin
+    case (c)
+        4'b0000: q = b;
+        4'b0001: q = e;
+        4'b0010: q = a;
+        4'b0011: q = d;
+        default: q = 4'b1111; // For cases where c is greater than 3
+    endcase
+end
+
+endmodule
+```
+
+This Verilog code defines the TopModule with the specified input and output ports. Inside the `always` block, a `case` statement is used to determine the output value of `q` based on the value of input `c`. If `c` matches any of the defined cases, the corresponding value is assigned to `q`. If `c` is greater than 3, the default case assigns `f` to `q` (represented as '1111' in binary).
+
+Please ensure to simulate and verify the functionality of the implemented circuit in your design environment. Let me know if you need any further assistance or clarification.

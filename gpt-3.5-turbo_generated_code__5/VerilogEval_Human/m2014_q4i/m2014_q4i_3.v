@@ -1,0 +1,7 @@
+module top_module(
+	output out);
+	
+	assign out = 1'b0; // Assigning the output 'out' to always drive logic low (0)
+
+endmodule
+

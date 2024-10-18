@@ -1,0 +1,16 @@
+In Verilog, the implementation of the TopModule with the specified interface would look like this:
+
+```verilog
+module TopModule (
+    output reg one
+);
+
+// Always drive output 'one' to logic high
+always @(*) begin
+    one = 1'b1;
+end
+
+endmodule
+```
+
+This Verilog code defines the TopModule with a single output reg named 'one'. Inside the 'always' block, it assigns the value 1 to the 'one' output port, which means the module will always drive logic high on the 'one' output.

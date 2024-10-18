@@ -1,0 +1,46 @@
+Sure! Here is the Verilog code for the Mealy FSM detection circuit:
+
+```verilog
+module fsm (
+  input wire IN,
+  input wire CLK,
+  input wire RST,
+  output reg MATCH
+);
+
+  reg [4:0] state;
+  reg [4:0] next_state;
+
+  always @(posedge CLK or posedge RST) begin
+    if(RST) begin
+      state <= 5'b00000;
+      MATCH <= 1'b0;
+    end
+    else begin
+      state <= next_state;
+      MATCH <= (state == 5'b10011) ? 1'b1 : 1'b0;
+    end
+  end
+
+  always @(*) begin
+    case(state)
+      5'b00000: next_state = (IN == 1'b1) ? 5'b00001 : 5'b00000; // Initial state
+      5'b00001: next_state = (IN == 1'b0) ? 5'b00010 : 5'b00000;
+      5'b00010: next_state = (IN == 1'b0) ? 5'b00011 : 5'b00000;
+      5'b00011: next_state = (IN == 1'b1) ? 5'b00100 : 5'b00000;
+      5'b00100: next_state = (IN == 1'b1) ? 5'b00101 : 5'b00000;
+      /* Add more states as needed */
+      default: next_state = 5'b00000;
+    endcase
+  end
+
+endmodule
+```
+
+In this code, the FSM has 5 states represented by a 5-bit binary value. The `state` variable holds the current state, while the `next_state` variable determines the next state based on the input and current state.
+
+The `always @(posedge CLK or posedge RST)` block is triggered on the positive edge of the clock or the reset signal. If the reset signal (`RST`) is active, the FSM is reset to its initial state, and the `MATCH` output is set to 0. Otherwise, the current state is updated to the next state, and the `MATCH` output is determined based on whether the current state matches the desired sequence.
+
+The `always @(*)` block is a combinational block that updates the `next_state` value based on the input (`IN`) and current state. Each state is associated with a case statement that defines the next state based on the input value. You can extend this block to add more states if needed.
+
+I hope this helps! Let me know if you have any further questions.

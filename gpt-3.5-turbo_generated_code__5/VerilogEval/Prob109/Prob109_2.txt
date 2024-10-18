@@ -1,0 +1,44 @@
+As a professional RTL designer, I would implement the TopModule as follows:
+
+```verilog
+module TopModule (
+  input clk,
+  input areset,
+  input in,
+  output reg out
+);
+
+  // State declaration
+  reg [1:0] state;
+
+  // State definitions
+  parameter A = 2'b00;
+  parameter B = 2'b01;
+
+  // Output logic
+  always @(state)
+    case (state)
+      A: out = 1'b0;
+      B: out = 1'b1;
+    endcase
+
+   // State transitions
+   always @(posedge clk or posedge areset)
+    if (areset)
+      state <= B;
+    else
+      case (state)
+        A: state <= in ? A : B;
+        B: state <= in ? A : B;
+      endcase
+
+endmodule
+```
+
+In this implementation, I first declare the state variable `state` that represents the current state of the Moore machine. Then, I define the states A and B using 2-bit encoding. 
+
+The output `out` is determined based on the value of `state`, as specified in the Moore machine diagram. 
+
+For the state transitions, I use a clocked always block with an asynchronous reset condition. If the `areset` signal is high, the state is asynchronously reset to B. Otherwise, the state transitions are determined based on the current state and the input signal `in`, following the Moore machine diagram.
+
+Please note that this implementation assumes synchronous positive-edge clocking. Additionally, since the `out` signal is registered, it will be updated on each positive edge of `clk`.

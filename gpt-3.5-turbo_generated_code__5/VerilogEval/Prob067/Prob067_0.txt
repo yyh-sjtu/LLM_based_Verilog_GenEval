@@ -1,0 +1,35 @@
+As a professional RTL designer, I will now implement the TopModule module based on the given requirements. Please find the Verilog implementation below:
+
+```verilog
+module TopModule (
+  input clk,
+  input reset,
+  input slowena,
+  output reg [3:0] q
+);
+
+  reg [3:0] counter;
+
+  always @(posedge clk) begin
+    if (reset) begin
+      counter <= 4'h0;
+    end else if (slowena) begin
+      // Check if counter has reached 9
+      if (counter == 4'h9) begin
+        counter <= 4'h0;
+      end else begin
+        counter <= counter + 1;
+      end
+    end
+  end
+
+  assign q = counter;
+
+endmodule
+```
+
+In this implementation, I have declared a 4-bit register `counter` to store the current count value. The `counter` is reset to `4'h0` when the `reset` input is high. The `slowena` input is used to control the counter increment. On each positive edge of the clock, if `reset` is active high, the counter is reset to `4'h0`. If `slowena` is high and the counter is not at 9, it increments by 1; otherwise, it wraps back to 0.
+
+The output `q` is assigned with the value of the `counter` which represents the current count.
+
+Please let me know if you have any further questions or if there is anything else I can assist you with.

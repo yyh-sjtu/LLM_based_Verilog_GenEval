@@ -1,0 +1,20 @@
+Here is the Verilog code for implementing the TopModule as per the provided interface:
+
+```verilog
+module TopModule (
+    input [2:0] vec,
+    output [2:0] outv,
+    output o2,
+    output o1,
+    output o0
+);
+
+assign outv = vec;
+assign o2 = vec[2];
+assign o1 = vec[1];
+assign o0 = vec[0];
+
+endmodule
+```
+
+This code defines the TopModule with the specified interface. The input vec is a 3-bit vector, and the output outv is also a 3-bit vector which is the same as the input vec. Additionally, the input vector is split into three 1-bit outputs o2, o1, and o0, each connected to the corresponding bit position of the input vector vec.

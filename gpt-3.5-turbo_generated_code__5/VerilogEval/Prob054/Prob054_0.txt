@@ -1,0 +1,27 @@
+Sure, I can help you with implementing the TopModule RTL design. Here's the Verilog implementation:
+
+```verilog
+module TopModule (
+  input  wire clk,
+  input  wire [7:0] in,
+  output wire [7:0] pedge
+);
+  
+  reg [7:0] in_prev;
+
+  // Sequential logic to detect the rising edge
+  always @(posedge clk) begin
+    in_prev <= in;
+    pedge <= (in & ~in_prev); // Detect the rising edge
+  end
+
+endmodule
+```
+
+Explanation:
+- We declare the input clock `clk`, the 8-bit input signal `in`, and the 8-bit output signal `pedge`.
+- The `in_prev` register stores the previous value of `in`.
+- Inside the `always @(posedge clk)` block, we update `in_prev` with the current value of `in`.
+- Then we calculate `pedge` by performing a bitwise AND operation between `in` and the complement of `in_prev`. This will result in a high (1) output if the corresponding bit in `in` transitions from 0 to 1.
+
+I hope this helps! Let me know if you have any further questions.

@@ -1,0 +1,23 @@
+As a professional RTL designer, I will implement the TopModule as described. Here's the RTL code for the module:
+
+```verilog
+module TopModule (
+  input [7:0] in,
+  output [31:0] out
+);
+  
+  wire [7:0] sign_bit;
+  
+  assign sign_bit = {24{in[7]}};
+  assign out = {sign_bit, in};
+  
+endmodule
+```
+
+In this implementation, the input `in` is an 8-bit number, and the output `out` is a 32-bit sign-extended number. 
+
+To sign-extend the input number, we first create a wire `sign_bit` which is a concatenation of 24 copies of the sign bit (`in[7]`). This is done using the replication operator `{24{in[7]}}`. 
+
+Next, we concatenate `sign_bit` with the original 8-bit number `in` using the concatenation operator `{sign_bit, in}`. This creates a 32-bit number where the sign bit is replicated 24 times to the left, followed by the 8-bit number itself. The sign-extended result is assigned to the module output `out`.
+
+This implementation ensures that sign-extension is applied correctly to the input number, replicating the sign bit to the left 24 times.

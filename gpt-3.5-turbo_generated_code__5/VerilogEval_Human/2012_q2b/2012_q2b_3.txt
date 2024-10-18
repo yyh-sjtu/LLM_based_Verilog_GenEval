@@ -1,0 +1,71 @@
+module state_machine (
+    input clk,
+    input reset,
+    output reg [5:0] y,
+    
+);
+
+parameter A = 6'b000001;
+parameter B = 6'b000010;
+parameter C = 6'b000100;
+parameter D = 6'b001000;
+parameter E = 6'b010000;
+parameter F = 6'b100000;
+
+always @ (posedge clk or posedge reset) begin
+    if (reset) begin
+        y <= A;
+    end else begin
+        case (y)
+            A: begin
+                if (w) begin
+                    y <= B;
+                else
+                    y <= A;
+                end
+            end
+            B: begin
+                if (w) begin
+                    y <= C;
+                else
+                    y <= D;
+                end
+            end
+            C: begin
+                if (w) begin
+                    y <= E;
+                else
+                    y <= D;
+                end
+            end
+            D: begin
+                if (w) begin
+                    y <= F;
+                else
+                    y <= A;
+                end
+            end
+            E: begin
+                if (w) begin
+                    y <= E;
+                else
+                    y <= D;
+                end
+            end
+            F: begin
+                if (w) begin
+                    y <= C;
+                else
+                    y <= D;
+                end
+            end
+        endcase
+    end
+end
+
+assign Y1 = y[1];
+assign Y3 = y[3];
+
+endmodule
+
+// In this Verilog code, a simple state machine is implemented using a one-hot encoding scheme. The state transitions are based on the inputs w and the current state y. The Y1 and Y3 outputs are derived directly from the corresponding bits of the current state y. The state machine advances on the positive edge of the clock signal and is reset when the reset input is high.

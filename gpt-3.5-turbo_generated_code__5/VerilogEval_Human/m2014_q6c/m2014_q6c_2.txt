@@ -1,0 +1,4 @@
+// Verilog code for the next-state signals Y2 and Y4
+assign Y2 = (y[1] & ~y[2] & ~y[3] & ~y[4] & ~y[5] & ~y[6] & ~w) | (y[5] & ~y[6] & ~w);
+assign Y4 = (y[1] & ~y[2] & ~y[3] & ~y[4] & ~y[5] & ~y[6] & ~w) | (y[3] & ~y[6]) | (y[4] & ~y[5] & ~y[6] & ~w) | (y[4] & ~y[5] & y[6]);
+endmodule

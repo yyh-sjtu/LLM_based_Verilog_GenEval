@@ -1,0 +1,44 @@
+module div_16bit (
+  input [15:0] A,
+  input [7:0] B,
+  output reg [15:0] result,
+  output reg [15:0] odd
+);
+
+  reg [15:0] a_reg;
+  reg [7:0] b_reg;
+
+  always @ (A or B)
+    a_reg <= A;
+    b_reg <= B;
+
+  always @ (a_reg or b_reg)
+  begin
+    reg [15:0] dividend_temp;
+    reg [15:0] quotient_temp;
+    reg [7:0] divisor_temp;
+    reg [3:0] count;
+
+    dividend_temp = a_reg;
+    divisor_temp = b_reg;
+    count = 0;
+    quotient_temp = 0;
+  
+    repeat (16) begin
+      if (dividend_temp[15] == 1'b1) begin
+        if (dividend_temp >= divisor_temp) begin
+          quotient_temp[count] = 1;
+          dividend_temp = dividend_temp - divisor_temp;
+        end else begin
+          quotient_temp[count] = 0;
+        end
+      end
+      count = count + 1;
+      dividend_temp = dividend_temp << 1;
+      odd = dividend_temp;
+    end
+
+    result = quotient_temp;
+  end
+endmodule
+

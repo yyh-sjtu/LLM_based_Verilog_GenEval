@@ -1,0 +1,20 @@
+Sure, here is a Verilog implementation of the TopModule that reverses the bit ordering of the input and writes it to the output:
+
+```verilog
+module TopModule (
+    input [99:0] in,
+    output [99:0] out
+);
+
+    integer i;
+
+    always @(*) begin
+        for (i = 0; i < 100; i=i+1) begin
+            out[i] = in[99-i];
+        end
+    end
+
+endmodule
+```
+
+This implementation uses a for-loop to iterate through each bit of the input array in reverse order and assigns it to the corresponding index in the output array.

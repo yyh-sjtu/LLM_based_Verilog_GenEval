@@ -1,0 +1,44 @@
+Here is the complete code for the Triangle Wave signal generator module in Verilog:
+
+```verilog
+module signal_generator (
+    input clk,
+    input rst_n,
+    output reg [4:0] wave
+);
+
+    reg [1:0] state;
+
+    always @(posedge clk or negedge rst_n) begin
+        if (~rst_n) begin
+            state <= 2'b00;
+            wave <= 5'b00000;
+        end else begin
+            case(state)
+                2'b00: begin
+                    if (wave == 5'b11111)
+                        state <= 2'b01;
+                    else
+                        wave <= wave + 1;
+                end
+                
+                2'b01: begin
+                    if (wave == 5'b00000)
+                        state <= 2'b00;
+                    else
+                        wave <= wave - 1;
+                end
+                
+                default: state <= 2'b00;
+            endcase
+        end
+    end
+
+endmodule
+```
+
+This module has an input clock `clk`, an active-low reset signal `rst_n`, and an output waveform `wave` of width 5 bits. The `state` register controls the state of the waveform generation, and the `wave` register stores the generated waveform.
+
+The `always` block is triggered on the positive edge of the clock signal (`posedge clk`) or the negative edge of the reset signal (`negedge rst_n`). On reset (`~rst_n`), the `state` register is cleared to `2'b00`, and the `wave` register is cleared to `5'b00000`.
+
+Inside the `always` block, a case statement is used to control the waveform generation based on the current state. If the state is `2'b00`, the waveform (`wave`) is incremented by 1. If the waveform reaches 31 (`wave == 5'b11111`), the state is transitioned to `2'b01`. If the state is `2'b01`, the waveform is decremented by 1. If the waveform reaches 0 (`wave == 5'b00000`), the state is transitioned back to `2'b00`. The waveform generation continues to cycle between 0 and 31 based on the state transitions.

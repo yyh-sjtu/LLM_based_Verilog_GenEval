@@ -1,0 +1,24 @@
+Sure! Here's an implementation of the TopModule using Verilog:
+
+```verilog
+module TopModule (
+    input clk,
+    input reset,
+    output reg [3:0] q
+);
+
+    always @(posedge clk, posedge reset) begin
+        if (reset)
+            q <= 4'd0;
+        else if (q == 4'd9)
+            q <= 4'd0;
+        else
+            q <= q + 1;
+    end
+
+endmodule
+```
+
+In this implementation, I've used an `always` block that triggers on the positive edge of the clock (`posedge clk`) and the positive edge of the reset signal (`posedge reset`). Inside the `always` block, there's a conditional statement that checks if the reset signal is high, in which case the counter (`q`) is set to 0. Otherwise, it checks if the counter is at 9, and if so, it wraps around to 0. Finally, if none of these conditions are met, the counter increments by 1.
+
+Note that I've declared the output `q` as a 4-bit wide signal (`reg [3:0] q`) to allow it to represent numbers from 0 to 9.

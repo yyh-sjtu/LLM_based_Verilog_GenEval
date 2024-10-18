@@ -1,0 +1,23 @@
+Sure, here's an example implementation of the TopModule in RTL code:
+
+```verilog
+module TopModule (
+  input clk,
+  input reset,
+  output reg [3:0] q
+);
+
+always @(posedge clk) begin
+  if (reset) begin
+    q <= 4'b0000;
+  end else begin
+    q <= q + 1;
+  end
+end
+
+endmodule
+```
+
+In this implementation, we use an always block triggered by the positive edge of the clock (clk). Inside the always block, we have an if-else statement to handle reset. If reset is high, we set the counter (q) to 4'b0000 (0 in binary). Otherwise, we increment the counter by 1 (q <= q + 1).
+
+Note that the output q is declared as a reg type since it's being assigned within an always block. The [3:0] notation specifies a 4-bit wide bus, allowing the counter to count from 0 to 15.

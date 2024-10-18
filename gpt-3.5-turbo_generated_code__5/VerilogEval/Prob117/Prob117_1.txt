@@ -1,0 +1,36 @@
+As a professional RTL designer, I would implement the TopModule as follows:
+
+```verilog
+module TopModule (
+    input clk,
+    input a,
+    output reg [2:0] q
+);
+
+reg [2:0] q_next;
+
+always @(posedge clk) begin
+    if (a == 0)
+        q_next = 0;
+    else if (q == 4)
+        q_next = 5;
+    else if (q == 5)
+        q_next = 6;
+    else if (q == 6)
+        q_next = 0;
+    else
+        q_next = q;
+end
+
+always @(posedge clk) begin
+    q <= q_next;
+end
+
+endmodule
+```
+
+In this implementation, I have used a `reg` type variable `q_next` to store the next value of the output signal `q`. The `always @(posedge clk)` block is used to synchronize the computation of `q_next` with the clock signal. Depending on the values of `a` and `q`, I have defined the logic to update `q_next` as per the given waveform data.
+
+Finally, I assign the value of `q_next` to `q` in a separate `always @(posedge clk)` block to ensure the output is updated synchronously with the clock.
+
+Please let me know if you need any further assistance.

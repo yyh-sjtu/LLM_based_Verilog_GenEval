@@ -1,0 +1,27 @@
+Sure! Here's the implementation of the TopModule in RTL (Register Transfer Level) design:
+
+```verilog
+module TopModule (
+    input  clk,
+    input  j,
+    input  k,
+    output reg Q
+);
+
+always @(posedge clk) begin
+    if (j & ~k)
+        Q <= 1'b1;
+    else if (~j & k)
+        Q <= 1'b0;
+    else if (j & k)
+        Q <= ~Q;
+end
+
+endmodule
+```
+
+In this design, I have used an `always` block that triggers on the positive edge of the clock (`posedge clk`). Inside the `always` block, I have used an `if-else` ladder to implement the JK flip-flop's truth table.
+
+If `j` is 1 and `k` is 0, it sets `Q` to 1. If `j` is 0 and `k` is 1, it sets `Q` to 0. If both `j` and `k` are 1, it performs a toggle operation on `Q` by complementing it (~Q). If none of the above conditions are met, it retains the previous value of `Q` (Qold).
+
+Finally, I have declared `Q` as a `reg` type to hold the state of the flip-flop and connected it as the output.

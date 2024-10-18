@@ -1,0 +1,13 @@
+// Declare internal wires for connecting gates
+wire nand1_out;
+wire nand2_out;
+
+// Implement the two NAND gates
+assign nand1_out = ~(p1a & p1b & p1c & p1d);
+assign nand2_out = ~(p2a & p2b & p2c & p2d);
+
+// Assign outputs
+assign p1y = nand1_out;
+assign p2y = nand2_out;
+
+endmodule

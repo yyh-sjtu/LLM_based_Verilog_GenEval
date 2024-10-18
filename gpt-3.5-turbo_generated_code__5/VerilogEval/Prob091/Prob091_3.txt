@@ -1,0 +1,43 @@
+Here is the RTL implementation for the TopModule module:
+
+```verilog
+module TopModule(
+    input [5:0] y,
+    input w,
+    output reg Y1,
+    output reg Y3
+);
+    
+    always @(y) begin
+        case(y)
+            6'b000001: begin // State A
+                Y1 <= w;
+                Y3 <= 0;
+            end
+            6'b000010: begin // State B
+                Y1 <= w;
+                Y3 <= 0;
+            end
+            6'b000100: begin // State C
+                Y1 <= w;
+                Y3 <= 0;
+            end
+            6'b001000: begin // State D
+                Y1 <= w;
+                Y3 <= w;
+            end
+            6'b010000: begin // State E
+                Y1 <= 0;
+                Y3 <= w;
+            end
+            6'b100000: begin // State F
+                Y1 <= 0;
+                Y3 <= 0;
+            end
+        endcase
+    end
+
+endmodule
+```
+
+In this implementation, the state output logic for the finite-state machine is derived using a case statement based on the current state given by the input `y`. Based on the one-hot encoding, the appropriate outputs `Y1` and `Y3` are assigned for each state. The output `Y1` is assigned based on the value of `w`, while the output `Y3` is assigned based on the current state and `w`.

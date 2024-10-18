@@ -1,0 +1,27 @@
+Sure! Here is an example implementation of the TopModule in RTL (Register-Transfer Level) code using Verilog:
+
+```verilog
+module TopModule (
+  input  clk,
+  input  reset,
+  output reg [3:0] q
+);
+  
+  always @(posedge clk) begin
+    if (reset) begin
+      q <= 0;
+    end else begin
+      if (q == 9) begin
+        q <= 0;
+      end else begin
+        q <= q + 1;
+      end
+    end
+  end
+  
+endmodule
+```
+
+In this implementation, a synchronous always block is used to trigger the counter on the positive edge of the clock. When the reset signal is high (active high synchronous reset), the counter is set to 0. Otherwise, it increments by 1 until it reaches 9, at which point it resets back to 0.
+
+Note that the output port `q` is defined as a 4-bit vector `[3:0]` to represent the values from 0 to 9.

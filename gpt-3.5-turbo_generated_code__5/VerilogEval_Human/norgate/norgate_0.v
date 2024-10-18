@@ -1,0 +1,20 @@
+module nor_gate(
+    input a,
+    input b,
+    output out
+);
+
+    assign out = ~(a | b);
+
+endmodule
+
+module top_module(
+    input a,
+    input b,
+    output out
+);
+
+    nor_gate nor1 (.a(a), .b(b), .out(out));
+
+endmodule
+

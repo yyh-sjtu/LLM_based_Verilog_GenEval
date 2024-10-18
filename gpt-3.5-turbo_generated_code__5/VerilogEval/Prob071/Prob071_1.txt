@@ -1,0 +1,24 @@
+As a professional RTL designer, I will create the TopModule module with the specified interface and functionality for the priority encoder. Here is a Verilog implementation of the TopModule module:
+
+```verilog
+module TopModule (
+    input [7:0] in,
+    output reg [2:0] pos
+);
+
+always @* begin
+    pos = 3'b0; // Initialize output to zero
+    for (int i = 0; i < 8; i = i + 1) begin
+        if (in[i] == 1'b1) begin
+            pos = i;
+            break; // Exit loop once first high bit is found
+        end
+    end
+end
+
+endmodule
+```
+
+In this Verilog code, the TopModule module takes an 8-bit input vector 'in' and outputs a 3-bit priority-encoded value 'pos'. The module iterates through the input vector to find the first high bit (bit with value 1) and assigns its position to the 'pos' output. If no high bits are found, the output 'pos' remains zero. 
+
+This implementation of the priority encoder meets the requirements specified for the TopModule module. Let me know if you need any further assistance or modifications.

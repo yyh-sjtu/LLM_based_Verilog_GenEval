@@ -1,0 +1,41 @@
+Sure, here's the implementation of the TopModule in RTL:
+
+```verilog
+module TopModule(
+  input   clk,
+  input   reset,
+  output  reg [3:0] q
+);
+
+// Internal signal declaration
+reg [3:0] count;
+
+always @(posedge clk) begin
+  if (reset) begin
+    // Reset counter to 1
+    count <= 4'b0001;
+  end else begin
+    // Increment counter
+    if (count == 4'b1010) begin
+      count <= 4'b0001;
+    end else begin
+      count <= count + 1;
+    end
+  end
+end
+
+// Assign output
+assign q = count;
+
+endmodule
+```
+
+Explanation:
+- The `TopModule` is declared with the specified interface, including `clk`, `reset`, and `q` signals.
+- An internal signal `count` is declared to store the current count value.
+- Inside the `always @(posedge clk)` block, the logic is conditioned based on the `reset` input.
+  - If `reset` is high, the counter is reset to 1.
+  - If `reset` is low, the counter is incremented by 1, with special handling for counting from 10 back to 1.
+- Finally, the `q` output is assigned with the value of the `count` signal.
+
+Note: Make sure to use the proper synthesis and simulation tools to verify and implement the design on the desired hardware platform.

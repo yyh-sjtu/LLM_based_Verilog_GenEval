@@ -1,0 +1,10 @@
+// Verilog code for a circuit with no inputs and one output that drives 0
+
+module top_module(
+    output reg out);
+
+    always @* begin
+        out = 0;
+    end
+
+endmodule

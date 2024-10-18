@@ -1,0 +1,18 @@
+module pe (
+    input wire clk,
+    input wire rst,
+    input wire signed [31:0] a,
+    input wire signed [31:0] b,
+    output reg signed [31:0] c
+);
+
+always @(posedge clk or posedge rst)
+begin
+    if (rst)
+        c <= 0;
+    else
+        c <= c + (a * b);
+end
+
+endmodule
+

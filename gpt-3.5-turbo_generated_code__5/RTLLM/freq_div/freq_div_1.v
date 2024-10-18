@@ -1,0 +1,71 @@
+
+module freq_div (
+  input wire CLK_in,
+  input wire RST,
+  output wire CLK_50,
+  output wire CLK_10,
+  output wire CLK_1
+);
+
+  reg CLK_50;
+  reg CLK_10;
+  reg CLK_1;
+  reg [2:0] cnt_10;
+  reg [6:0] cnt_100;
+
+  // CLK_50 generation
+  always @(posedge CLK_in or posedge RST) begin
+    if (RST)
+      CLK_50 <= 0;
+    else
+      CLK_50 <= ~CLK_50;
+  end
+
+  // CLK_10 generation
+  always @(posedge CLK_in or posedge RST) begin
+    if (RST) begin
+      CLK_10 <= 0;
+      cnt_10 <= 0;
+    end
+    else if (cnt_10 == 4) begin
+      CLK_10 <= ~CLK_10;
+      cnt_10 <= 0;
+    end
+    else begin
+      cnt_10 <= cnt_10 + 1;
+    end
+  end
+
+  // CLK_1 generation
+  always @(posedge CLK_in or posedge RST) begin
+    if (RST) begin
+      CLK_1 <= 0;
+      cnt_100 <= 0;
+    end
+    else if (cnt_100 == 49) begin
+      CLK_1 <= ~CLK_1;
+      cnt_100 <= 0;
+    end
+    else begin
+      cnt_100 <= cnt_100 + 1;
+    end
+  end
+
+endmodule
+module top_module (
+  input wire CLOCK_100MHz,
+  input wire RESET,
+  output wire CLOCK_50MHz,
+  output wire CLOCK_10MHz,
+  output wire CLOCK_1MHz
+);
+
+  freq_div divider (
+    .CLK_in(CLOCK_100MHz),
+    .RST(RESET),
+    .CLK_50(CLOCK_50MHz),
+    .CLK_10(CLOCK_10MHz),
+    .CLK_1(CLOCK_1MHz)
+  );
+
+endmodule

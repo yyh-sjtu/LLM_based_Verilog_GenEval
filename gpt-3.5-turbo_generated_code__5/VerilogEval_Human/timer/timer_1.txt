@@ -1,0 +1,17 @@
+// Define the top module with inputs clk, load, data and output tc
+
+reg [9:0] counter; // Declare a 10-bit register for the internal counter
+
+always @(posedge clk) begin
+	if (load == 1) begin
+		counter <= data; // Load the internal counter with the data when load is 1
+	end else begin
+		if (counter > 0) begin
+			counter <= counter - 1; // Decrement the counter by 1 if load is 0
+		end
+	end
+end
+
+assign tc = (counter == 0) ? 1'b1 : 1'b0; // Output signal tc is asserted when the counter reaches 0
+
+endmodule

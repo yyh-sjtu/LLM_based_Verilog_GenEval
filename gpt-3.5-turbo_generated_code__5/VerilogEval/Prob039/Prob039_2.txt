@@ -1,0 +1,30 @@
+Sure, here's an example implementation of the TopModule using both assign statements and a procedural if statement:
+
+```verilog
+module TopModule(
+  input a,
+  input b,
+  input sel_b1,
+  input sel_b2,
+  output out_assign,
+  output out_always
+);
+
+  // Using assign statements
+  assign out_assign = (sel_b1 & sel_b2) ? b : a;
+
+  // Using a procedural if statement
+  always @*
+    if (sel_b1 & sel_b2)
+      out_always = b;
+    else
+      out_always = a;
+
+endmodule
+```
+
+In this implementation, the `out_assign` output is assigned using an assign statement. If both `sel_b1` and `sel_b2` are true (`sel_b1 & sel_b2`), then `b` is chosen. Otherwise, `a` is chosen.
+
+The `out_always` output is assigned using a procedural if statement inside an `always` block with `@*` sensitivity list. If both `sel_b1` and `sel_b2` are true, then `b` is assigned to `out_always`. Otherwise, `a` is assigned.
+
+Please note that this implementation assumes that the inputs `a`, `b`, `sel_b1`, and `sel_b2` are synchronous and updated on the rising edge of the clock.

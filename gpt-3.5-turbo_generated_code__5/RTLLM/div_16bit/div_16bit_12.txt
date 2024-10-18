@@ -1,0 +1,48 @@
+Here is the complete code for the div_16bit module:
+
+```verilog
+module div_16bit (
+  input [15:0] A,
+  input [7:0] B,
+  output reg [15:0] result,
+  output reg [15:0] odd
+);
+
+  reg [15:0] a_reg;
+  reg [7:0] b_reg;
+  reg [8:0] remainder_reg;
+  reg [3:0] quotient_reg;
+  
+  always @* begin
+    a_reg = A;
+    b_reg = B;
+  end
+  
+  always @* begin
+    remainder_reg = 16'd0;
+    quotient_reg = 4'd0;
+    
+    for (int i = 15; i >= 0; i = i-1) begin
+      remainder_reg = {remainder_reg[7:0], A[i]};
+      if (remainder_reg >= b_reg) begin
+        remainder_reg = remainder_reg - b_reg;
+        quotient_reg[i/4] = quotient_reg[i/4] | (1 << (i%4));
+      end
+    end
+    
+    result = quotient_reg;
+    odd = remainder_reg;
+  end
+  
+endmodule
+```
+
+In this code, there are two always blocks. The first always block is used to update the values of the registers a_reg and b_reg whenever there is a change in the input values A and B, respectively.
+
+The second always block is where the actual division operation takes place. It uses a for loop to iterate through each bit of the dividend, starting from the highest bit (bit 15) and going down to the lowest bit (bit 0). 
+
+Inside the for loop, the remainder_reg is updated by concatenating the next bit of the dividend with the lower 8 bits of the remainder_reg. 
+
+Then, it checks if the current remainder value is greater than or equal to the divisor value (b_reg). If it is, it subtracts the divisor from the remainder and sets the corresponding quotient bit to 1.
+
+Finally, the quotient and remainder values are assigned to the output ports result and odd, respectively.

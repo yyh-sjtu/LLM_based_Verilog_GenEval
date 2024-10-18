@@ -1,0 +1,82 @@
+Sure! Below is an RTL implementation of the TopModule:
+
+```verilog
+module TopModule(
+  input  wire clk,
+  input  wire areset,
+  input  wire in,
+  output wire out
+);
+
+  // States
+  localparam A = 2'b00;
+  localparam B = 2'b01;
+  localparam C = 2'b10;
+  localparam D = 2'b11;
+  
+  // Registers
+  reg [1:0] state;
+  reg       next_state;
+  
+  // Outputs
+  reg       output;
+  
+  always @(posedge clk or posedge areset) begin
+    if (areset) begin
+      // Asynchronous reset
+      state <= A;
+      output <= 0;
+    end else begin
+      // State transitions and outputs
+      case(state)
+        A: begin
+          if (in) begin
+            next_state <= B;
+          end else begin
+            next_state <= A;
+          end
+          output <= 0;
+        end
+        B: begin
+          if (in) begin
+            next_state <= C;
+          end else begin
+            next_state <= B;
+          end
+          output <= 0;
+        end
+        C: begin
+          if (in) begin
+            next_state <= D;
+          end else begin
+            next_state <= A;
+          end
+          output <= 0;
+        end
+        D: begin
+          if (in) begin
+            next_state <= B;
+          end else begin
+            next_state <= C;
+          end
+          output <= 1;
+        end
+      endcase
+    end
+  end
+  
+  // Output assignment
+  assign out = output;
+  
+endmodule
+```
+
+In this implementation, the state machine is driven by a clock (`clk`) and an asynchronous reset signal (`areset`). The current state is stored in the `state` register, and the next state is computed and stored in the `next_state` register. The output value is stored in the `output` register.
+
+The state transitions and outputs are determined based on the current state and the input value (`in`). The output value is assigned accordingly, and the next state is updated based on the input value and the current state.
+
+The `areset` signal is used to asynchronously reset the state machine to state A (`A`) and the output to 0 (`0`). When the asynchronous reset is not active, the state machine operates on the positive edge of the clock as specified.
+
+Finally, the output value is assigned to the `out` wire using the `assign` statement.
+
+Please note that this implementation assumes standard Verilog syntax.

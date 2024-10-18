@@ -1,0 +1,32 @@
+module DFF (
+  input clk,
+  input d,
+  input r,
+  output reg q
+);
+
+  always @(posedge clk or posedge r) begin
+    if (r)
+      q <= 0;
+    else
+      q <= d;
+  end
+
+endmodule
+
+module top_module (
+  input clk,
+  input d,
+  input r,
+  output logic q
+);
+
+  DFF dff (
+    .clk(clk),
+    .d(d),
+    .r(r),
+    .q(q)
+  );
+
+endmodule
+

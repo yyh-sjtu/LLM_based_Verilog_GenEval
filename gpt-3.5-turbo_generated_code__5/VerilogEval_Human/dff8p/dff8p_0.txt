@@ -1,0 +1,44 @@
+```verilog
+module dff_reset (
+	input clk,
+	input d,
+	input reset,
+	output reg q
+);
+
+always @(negedge clk or posedge reset) begin
+	if (reset) begin
+		q <= 8'b00110100; // 0x34
+	else begin
+		q <= d;
+	end
+end
+
+endmodule
+
+module top_module (
+	input clk,
+	input [7:0] d,
+	input reset,
+	output reg [7:0] q
+);
+
+reg [7:0] q_temp;
+
+// Instantiate 8 D flip-flops with active high synchronous reset
+// and reset to 0x34
+dff_reset dff0 (.clk(clk), .d(d[0]), .reset(reset), .q(q_temp[0]);
+dff_reset dff1 (.clk(clk), .d(d[1]), .reset(reset), .q(q_temp[1]);
+dff_reset dff2 (.clk(clk), .d(d[2]), .reset(reset), .q(q_temp[2]);
+dff_reset dff3 (.clk(clk), .d(d[3]), .reset(reset), .q(q_temp[3]);
+dff_reset dff4 (.clk(clk), .d(d[4]), .reset(reset), .q(q_temp[4]);
+dff_reset dff5 (.clk(clk), .d(d[5]), .reset(reset), .q(q_temp[5]);
+dff_reset dff6 (.clk(clk), .d(d[6]), .reset(reset), .q(q_temp[6]);
+dff_reset dff7 (.clk(clk), .d(d[7]), .reset(reset), .q(q_temp[7]);
+
+always @(posedge clk) begin
+	q <= q_temp;
+end
+
+endmodule
+```

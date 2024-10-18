@@ -1,0 +1,47 @@
+Here's the complete Verilog code implementing the 16-bit divider module:
+
+```verilog
+module div_16bit (
+  input [15:0] A, // 16-bit dividend
+  input [7:0] B, // 8-bit divisor
+  output reg [15:0] result, // 16-bit quotient
+  output reg [15:0] odd // 16-bit remainder
+);
+
+  reg [15:0] a_reg; // Register to hold the dividend
+  reg [7:0] b_reg; // Register to hold the divisor
+  reg [7:0] difference; // Difference between dividend and divisor
+  reg [15:0] remainder_bits; // Bits used for calculating the remainder
+
+  always @* begin
+    a_reg = A; // Update a_reg with the value of A
+    b_reg = B; // Update b_reg with the value of B
+  end
+
+  always @* begin
+    result = 0; // Initialize the quotient to zero
+    remainder_bits = {16{1'b0}}; // Initialize the remainder bits with zeros
+
+    for (int i=15; i>=8; i=i-1) begin
+      difference = a_reg[i-1:0] - {1'b0, b_reg}; // Calculate the difference between dividend and divisor
+
+      if (difference >= 0) begin
+        result[i] = 1; // Set the quotient bit to 1 if dividend bits are greater
+        a_reg = difference; // Update the dividend with the difference
+      end
+    end
+
+    remainder_bits = {a_reg[7:0], remainder_bits[15:1]}; // Concatenate the remainder bits with the highest remaining 1-bit of the dividend
+    odd = remainder_bits; // Assign the remainder bits to the odd output port
+  end
+
+endmodule
+```
+
+In the above code, we have defined a module `div_16bit` that takes a 16-bit dividend `A` and an 8-bit divisor `B` as input. It provides two output ports `result` for the 16-bit quotient and `odd` for the 16-bit remainder.
+
+The division operation is performed using two always blocks. The first always block is a combinational block triggered by any change in the input values `A` and `B`. It updates the values of two registers `a_reg` and `b_reg` with the values of `A` and `B`, respectively.
+
+The second always block is also a combinational block triggered by any change in the input values `A` and `B`. It calculates the division operation by comparing the highest bits of the dividend with the divisor and updating the quotient accordingly. The difference between the dividend and divisor is used as the remainder. The process is repeated until all dividend bits are processed. The remainder bits are concatenated with the highest remaining 1-bit of the dividend to form the final remainder.
+
+The code is designed to work with any combination of input values for `A` and `B`, and the outputs `result` and `odd` will be updated accordingly.

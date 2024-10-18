@@ -1,0 +1,52 @@
+Here's the Verilog code for the 16-bit full adder module using small bit-width adders:
+
+```verilog
+module adder_16bit(
+  input [15:0] a,
+  input [15:0] b,
+  input Cin,
+  output [15:0] y,
+  output Co
+);
+
+// Instantiate 8-bit adders for each bit in the input operands
+genvar i;
+for (i = 0; i < 16; i = i + 1) begin
+  // Create a unique instance name for each 8-bit adder
+  wire carry;
+  wire sum;
+  adder_8bit adder(
+    .a(a[i]),
+    .b(b[i]),
+    .Cin(Cin),
+    .y(y[i]),
+    .Co(carry)
+  );
+  assign Cin = carry;
+end
+
+// Logic to calculate the Carry-out
+assign Co = Cin;
+
+endmodule
+
+
+module adder_8bit(
+  input a,
+  input b,
+  input Cin,
+  output y,
+  output Co
+);
+
+// Calculate sum of inputs and generate Carry-out
+assign {Co, y} = a + b + Cin;
+
+endmodule
+```
+
+In this code, we first declare the `adder_16bit` module with its input and output ports. Inside the module, we iterate over each bit of the input operands `a` and `b` using a `genvar` loop. For each bit position, an 8-bit adder module called `adder_8bit` is instantiated and connected to the corresponding bits of `a` and `b`. The carry-out (`Co`) from each 8-bit adder is connected to the carry-in (`Cin`) of the next adder to propagate the carry.
+
+The `adder_8bit` module simply calculates the sum of the inputs (`a`, `b`, and `Cin`) and assigns it to the output `y`. The carry-out `Co` is also calculated and assigned.
+
+Note that these modules assume that the input operands `a` and `b` are 16-bit wide, and the output `y` and carry-out `Co` are 16-bit and 1-bit wide respectively. Make sure to provide suitable testbenches to verify the functionality of the `adder_16bit` module.

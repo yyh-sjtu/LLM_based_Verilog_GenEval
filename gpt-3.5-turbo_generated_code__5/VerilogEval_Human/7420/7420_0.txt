@@ -1,0 +1,15 @@
+// Declare internal wire signals
+wire nand1_out, nand2_out;
+
+// Implement the 7420 functionality using NAND gates
+nand nand1(nand1_out, p1a, p1b, p1c, p1d);
+nand nand2(nand2_out, p2a, p2b, p2c, p2d);
+
+// The outputs are the complement of the NAND gate outputs
+assign p1y = ~nand1_out;
+assign p2y = ~nand2_out;
+
+// Define the NAND gate module
+module nand(output nand_out, input nand_in1, input nand_in2, input nand_in3, input nand_in4);
+	nand n1(nand_out, nand_in1, nand_in2, nand_in3, nand_in4);
+endmodule

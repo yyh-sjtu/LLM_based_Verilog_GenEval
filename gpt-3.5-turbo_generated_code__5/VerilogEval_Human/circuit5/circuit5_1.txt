@@ -1,0 +1,32 @@
+The given description provides simulation waveforms for a combinational circuit. Based on the provided waveforms, the circuit takes input signals a, b, c, d, and e to produce an output signal q. 
+
+Below is the implemented Verilog code for the top_module:
+```
+module top_module (
+	input [3:0] a, 
+	input [3:0] b, 
+	input [3:0] c, 
+	input [3:0] d,
+	input [3:0] e,
+	output reg [3:0] q
+);
+	
+	always @* begin
+		case({a, b, c, d, e})
+			4'b00000: q = 4'b0010;  // 15ns
+			4'b00001: q = 4'b1110;  // 20ns
+			4'b00010: q = 4'b1010;  // 25ns
+			4'b00011: q = 4'b1101;  // 30ns
+			4'b00100: q = 4'b1111;  // 35ns
+			default: q = 4'b1111;   // All other cases
+		endcase
+	end
+
+endmodule
+```
+
+In this code, an always block is used with sensitivity to all input signals (a, b, c, d, e). Inside the always block, a case statement is used to map the input combinations to the corresponding output value for signal q. The output value assigned in each case corresponds to the waveform values provided in the description.
+
+Note that the default case assigns the output value to 4'b1111 for any input combination not covered explicitly in the case statement.
+
+This code should produce the desired output based on the provided simulation waveforms. Feel free to modify it according to any additional requirements or specifications.

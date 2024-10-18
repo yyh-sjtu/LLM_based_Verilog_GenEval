@@ -1,0 +1,20 @@
+Sure, here is a possible implementation for the TopModule module in RTL:
+
+```verilog
+module TopModule (
+    input [2:0] vec,
+    output [2:0] outv,
+    output o2,
+    output o1,
+    output o0
+);
+
+assign outv = vec;
+assign o2 = vec[2];
+assign o1 = vec[1];
+assign o0 = vec[0];
+
+endmodule
+```
+
+In this implementation, the input vector `vec` is directly connected to the output vector `outv`. The individual bits of the input vector are then connected to the respective output ports `o2`, `o1`, and `o0`.

@@ -1,0 +1,50 @@
+
+module TopModule (
+    input clk,
+    input areset,
+    input x,
+    output reg z
+);
+
+reg state;
+reg next_state;
+
+always @(posedge clk or posedge areset) begin
+    if (areset) begin
+        state <= 0;
+        z <= 0;
+    end else begin
+        state <= next_state;
+        case(state)
+            2'b00: begin // State 0 - waiting for input
+                if (x) begin
+                    next_state = 2'b01;
+                    z <= 1;
+                end else begin
+                    next_state = 2'b00;
+                    z <= 0;
+                end
+            end
+            2'b01: begin // State 1 - inverting input
+                if (x) begin
+                    next_state = 2'b01;
+                    z <= 0;
+                end else begin
+                    next_state = 2'b10;
+                    z <= 1;
+                end
+            end
+            2'b10: begin // State 2 - adding 1 to inverted input
+                if (x) begin
+                    next_state = 2'b10;
+                    z <= 1;
+                end else begin
+                    next_state = 2'b00;
+                    z <= 0;
+                end
+            end
+        endcase
+    end
+end
+
+endmodule

@@ -1,0 +1,61 @@
+As a professional RTL designer, I can help you implement the TopModule as per your requirements. Here's the RTL code for the module:
+
+```verilog
+module TopModule(
+  input  wire clk,
+  input  wire areset,
+  
+  input  wire predict_valid,
+  input  wire [6:0] predict_pc,
+  output wire predict_taken,
+  output wire [6:0] predict_history,
+  
+  input  wire train_valid,
+  input  wire train_taken,
+  input  wire train_mispredicted,
+  input  wire [6:0] train_history,
+  input  wire [6:0] train_pc
+);
+
+  reg [6:0] history_register;
+  reg [6:0] predict_index;
+  reg [127:0] pattern_history_table;
+  wire [1:0] predict_state;
+  reg [6:0] train_index;
+  reg [1:0] train_state;
+  
+  always @(posedge clk or posedge areset) begin
+    if (areset) begin
+      // Reset branch predictor state
+      history_register <= 7'b0;
+      pattern_history_table <= 128'b0;
+    end else if (predict_valid) begin
+      // Prediction request
+      predict_index <= predict_pc ^ history_register;
+      predict_state <= pattern_history_table[predict_index];
+      predict_taken <= (predict_state[1] == 2'b11) ? 1'b1 : 1'b0;
+      predict_history <= history_register;
+    end else if (train_valid) begin
+      // Training request
+      train_index <= train_pc ^ train_history;
+      train_state <= pattern_history_table[train_index];
+      
+      if (train_mispredicted) begin
+        // Training for misprediction
+        pattern_history_table[train_index] <= (train_state == 2'b00) ? 2'b01 : 2'b00;
+        history_register <= train_history;
+      end else begin
+        // Training for correct prediction
+        pattern_history_table[train_index] <= (train_state == 2'b11) ? 2'b11 : 2'b10;
+      end
+    end
+  end
+  
+endmodule
+```
+
+In this implementation, I have used a combinational logic block to calculate the prediction index by XORing the predict_pc with the history_register. This index is then used to access the pattern_history_table, which stores the 2-bit saturating counters. The predict_state determines the predicted branch direction based on the value in the pattern_history_table.
+
+For training, the train_index is calculated similarly. If there was a misprediction, the pattern_history_table is updated accordingly and the history_register is recovered to the state immediately after the mispredicted branch completes execution.
+
+Please note that this implementation assumes that the input signals are synchronous and that the reset signal is asynchronous and active-high.

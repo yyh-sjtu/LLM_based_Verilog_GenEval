@@ -1,0 +1,38 @@
+Here is the RTL code for the TopModule implementing the timer functionality as described:
+
+```verilog
+module TopModule (
+    input clk,
+    input load,
+    input [9:0] data,
+    output tc
+);
+
+reg [9:0] counter;
+reg tc_out;
+reg d_ff;
+
+always @(posedge clk) begin
+    if (load == 1) begin
+        counter <= data;
+    end
+    else begin
+        if (counter > 0) begin
+            counter <= counter - 1;
+        end
+        if (counter == 0) begin
+            tc_out <= 1;
+        end
+    end
+end
+
+always @(posedge clk) begin
+    d_ff <= tc_out;
+end
+
+assign tc = d_ff;
+
+endmodule
+```
+
+This code defines a module named TopModule with the given interface. It implements a timer using a down-counter that decrements based on the load signal and triggers the tc output when the count reaches 0. The module also includes a single D flip-flop to synchronize the tc signal with the clock. The sequential logic is triggered on the positive edge of the clock.

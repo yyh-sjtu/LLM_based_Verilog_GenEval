@@ -1,0 +1,58 @@
+
+module and_gate (
+    input a,
+    input b,
+    output y
+);
+    assign y = a & b;
+endmodule
+
+module or_gate (
+    input a,
+    input b,
+    output y
+);
+    assign y = a | b;
+endmodule
+
+module not_gate (
+    input a,
+    output y
+);
+    assign y = ~a;
+endmodule
+
+module top_module (
+    input a,
+    input b,
+    input c,
+    input d,
+    output out,
+    output out_n
+);
+    wire intermediate1;
+    wire intermediate2;
+
+    and_gate and1 (
+        .a(a),
+        .b(b),
+        .y(intermediate1)
+    );
+
+    and_gate and2 (
+        .a(c),
+        .b(d),
+        .y(intermediate2)
+    );
+
+    or_gate or1 (
+        .a(intermediate1),
+        .b(intermediate2),
+        .y(out)
+    );
+
+    not_gate not1 (
+        .a(out),
+        .y(out_n)
+    );
+endmodule

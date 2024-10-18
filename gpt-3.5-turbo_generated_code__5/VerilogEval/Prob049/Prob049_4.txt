@@ -1,0 +1,24 @@
+Sure! Here's a Verilog implementation of the TopModule with the required D flip flop:
+
+```verilog
+module TopModule (
+  input clk,
+  input ar,
+  input d,
+  output reg q
+);
+
+  always @(posedge clk or posedge ar)
+  begin
+    if (ar)
+      q <= 0; // Asynchronous reset
+    else
+      q <= d;
+  end
+
+endmodule
+```
+
+In this implementation, we have a synchronous always block that is triggered on the positive edge of the "clk" signal or the positive edge of the asynchronous reset "ar" signal. Inside the always block, we use an if-else statement to check if the "ar" signal is high. If it is, we asynchronously reset the output "q" to 0. Otherwise, we update the output "q" with the value of the input "d" on the positive edge of the clock signal.
+
+Please let me know if you need any further assistance or have any questions!

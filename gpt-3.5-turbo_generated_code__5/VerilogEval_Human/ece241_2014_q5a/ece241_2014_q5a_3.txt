@@ -1,0 +1,60 @@
+module serial_complementer (
+	input clk,
+	input areset,
+	input x,
+	output reg z
+);
+
+reg [3:0] state;
+parameter S0 = 4'b0000;
+parameter S1 = 4'b0001;
+parameter S2 = 4'b0010;
+parameter S3 = 4'b0011;
+
+always @(posedge clk or posedge areset) begin
+	if (areset) begin
+		state <= S0;
+		z <= 1'b0;
+	end else begin
+		case (state)
+			S0: begin
+				if (x == 1'b1) begin
+					z <= 1'b1;
+					state <= S1;
+				end else begin
+					z <= 1'b0;
+					state <= S0;
+				end
+			end
+			S1: begin
+				if (x == 1'b0) begin
+					z <= 1'b1;
+					state <= S2;
+				end else begin
+					z <= 1'b0;
+					state <= S1;
+				end
+			end
+			S2: begin
+				if (x == 1'b0) begin
+					z <= 1'b1;
+					state <= S2;
+				end else begin
+					z <= 1'b0;
+					state <= S3;
+				end
+			end
+			S3: begin
+				if (x == 1'b0) begin
+					z <= 1'b1;
+					state <= S3;
+				end else begin
+					z <= 1'b0;
+					state <= S3;
+				end
+			end
+		endcase
+	end
+end
+
+endmodule

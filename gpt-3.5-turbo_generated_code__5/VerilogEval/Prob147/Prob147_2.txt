@@ -1,0 +1,30 @@
+Here is the implementation of the TopModule based on the provided simulation waveforms:
+
+```verilog
+module TopModule (
+    input clk,
+    input a,
+    input b,
+    output reg q,
+    output reg state
+);
+
+reg next_state;
+
+always @(posedge clk) begin
+    state <= next_state;
+    q <= state;
+end
+
+always @* begin
+    if (state == 0 && a == 0 && b == 1) begin
+        next_state = 1;
+    end else if (state == 1 && (a == 1 || b == 0)) begin
+        next_state = 0;
+    end
+end
+
+endmodule
+```
+
+This Verilog code defines the TopModule with input ports `clk`, `a`, and `b`, and output ports `q` and `state`. The module uses a flip-flop to store its state and updates the next state based on the defined logic. The state transition matches the behavior described in the provided simulation waveforms.

@@ -1,0 +1,36 @@
+module two_input_xnor (
+	input a,
+	input b,
+	output xnor_out
+);
+	assign xnor_out = ~(a ^ b);
+endmodule
+
+module two_input_xor (
+	input a,
+	input b,
+	output xor_out
+);
+	assign xor_out = a ^ b;
+endmodule
+
+module top_module (
+	input in1,
+	input in2,
+	input in3,
+	output logic out
+);
+	wire xnor_out;
+	two_input_xnor xnor (
+		.a(in1),
+		.b(in2),
+		.xnor_out(xnor_out)
+	);
+
+	two_input_xor xor (
+		.a(xnor_out),
+		.b(in3),
+		.xor_out(out)
+	);
+endmodule
+

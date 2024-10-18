@@ -1,0 +1,27 @@
+Sure, here's an implementation of the TopModule module in RTL:
+
+```verilog
+module TopModule (
+  input clk,
+  input [7:0] in,
+  input [7:0] anyedge,
+  output reg [7:0] output
+);
+
+  reg [7:0] prev_in;
+
+  always @(posedge clk) begin
+    prev_in <= in;
+
+    for (integer i = 0; i < 8; i = i + 1) begin
+      if (anyedge[i] && (in[i] != prev_in[i]))
+        output[i] <= 1'b1;
+      else
+        output[i] <= 1'b0;
+    end
+  end
+
+endmodule
+```
+
+In this implementation, we use a sequential always block triggered on the positive edge of the clock. We store the previous input values in the "prev_in" register. Then, for each bit in the input vector, we check if the corresponding anyedge bit is set and if the input value has changed from the previous cycle. If both conditions are met, we set the output bit to 1; otherwise, we set it to 0.

@@ -1,0 +1,31 @@
+Sure, here's a possible implementation for the TopModule in VHDL:
+
+```vhdl
+library ieee;
+use ieee.std_logic_1164.all;
+
+entity TopModule is
+  port (
+    clk   : in  std_logic;
+    in_8  : in  std_logic_vector(7 downto 0);
+    pedge : out std_logic_vector(7 downto 0)
+  );
+end entity;
+
+architecture rtl of TopModule is
+  signal previous_in : std_logic_vector(7 downto 0);
+begin
+  process(clk)
+  begin
+    if rising_edge(clk) then
+      previous_in <= in_8;
+    end if;
+  end process;
+  
+  pedge <= in_8 and not previous_in;
+end architecture;
+```
+
+In this implementation, we store the previous value of the `in` signal in the `previous_in` signal using a flip-flop. On each rising edge of the `clk`, we update `previous_in` with the current value of `in_8`. Then, the `pedge` signal is set to 1 for each bit where the current value of `in_8` is 1 and the corresponding bit in `previous_in` is 0, indicating a transition from 0 to 1.
+
+Note that this implementation assumes that the `in` signal is synchronous to the clock.

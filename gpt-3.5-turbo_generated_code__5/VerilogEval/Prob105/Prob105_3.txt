@@ -1,0 +1,47 @@
+As a professional RTL designer, I can help you implement the TopModule module with the specified interface.
+
+```verilog
+module TopModule (
+  input clk,
+  input load,
+  input [1:0] ena,
+  input [99:0] data,
+  output reg [99:0] q
+);
+
+  reg [99:0] shift_reg;
+
+  always @(posedge clk) begin
+    if (load) begin
+      shift_reg <= data;
+    end else begin
+      case (ena)
+        2'b01: begin  // Right rotation by one bit
+          shift_reg <= {shift_reg[0], shift_reg[99:1]};
+        end
+
+        2'b10: begin  // Left rotation by one bit
+          shift_reg <= {shift_reg[98:0], shift_reg[99]};
+        end
+
+        default: begin  // No rotation
+          shift_reg <= shift_reg;
+        end
+      endcase
+    end
+  end
+
+  assign q = shift_reg;
+
+endmodule
+```
+
+In this implementation, we have a 100-bit shift register (`shift_reg`) which holds the contents of the rotator. On the rising edge of the `clk` signal, we check the value of `load`. If it is high, we load the shift register with the data from `data`, otherwise we check the value of `ena` to determine the rotation direction.
+
+If `ena` is `2'b01`, we perform a right rotation by one bit by shifting all bits to the right and inserting the most significant bit at the least significant bit position.
+
+If `ena` is `2'b10`, we perform a left rotation by one bit by shifting all bits to the left and inserting the least significant bit at the most significant bit position.
+
+If `ena` is `2'b00` or `2'b11`, no rotation is performed and the shift register remains unchanged.
+
+The contents of the shift register are assigned to the output `q`.

@@ -1,0 +1,41 @@
+Here is the complete code for the 8-bit Radix-4 Booth multiplier implementation in Verilog:
+
+```verilog
+module multi_booth_8bit (
+  input wire clk,       // Clock signal
+  input wire reset,     // Reset signal
+  input wire [7:0] a,   // 8-bit multiplicand
+  input wire [7:0] b,   // 8-bit multiplier
+  output wire [15:0] p, // 16-bit product
+  output wire rdy       // Ready signal
+);
+  
+  reg [7:0] multiplicand;   // Multiplicand register
+  reg [15:0] multiplier;    // Multiplier register
+  reg [4:0] ctr;            // Counter
+  
+  always @(posedge clk or posedge reset) begin
+    if (reset) begin         // Reset operation
+      multiplier <= {{8{1'b0}}, a};
+      multiplicand <= {{8{1'b0}}, b};
+      ctr <= 5'b0;
+      rdy <= 1'b0;
+    end
+    else begin              // Normal operation
+      if (ctr < 5'd15) begin
+        multiplicand <= multiplicand << 1;
+        if (multiplier[ctr] == 1'b1) begin
+          p <= p + multiplicand;
+        end
+        ctr <= ctr + 1;
+      end
+      else begin
+        rdy <= 1'b1;
+      end
+    end
+  end
+
+endmodule
+```
+
+Note that in this implementation, the product (`p`) is a 16-bit register, so it can hold the maximum possible value (256*256 = 65536). The Booth multiplier performs the multiplication process from the LSB of the multiplier (`b`) to the MSB. The initial values of the registers (`multiplier`, `multiplicand`, `ctr`, and `p`) are set during the reset operation. The Booth algorithm's shifting operation is simulated by left-shifting the `multiplicand` register by 1 each time `ctr` is less than 16. When `ctr` reaches 16, the multiplication process is complete, and `rdy` is set to 1.

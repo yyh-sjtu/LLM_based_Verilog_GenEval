@@ -1,0 +1,17 @@
+As a professional RTL designer, I will implement the TopModule module with the desired interface and functionality in Verilog. Here is the code for the module:
+
+```verilog
+module TopModule (
+    input x,
+    input y,
+    output z
+);
+
+assign z = (x ^ y) & x;
+
+endmodule
+```
+
+In this Verilog code, the module TopModule takes two input ports (x and y) and one output port (z). The output z is assigned the result of the boolean function z = (x^y) & x, where ^ represents the XOR operation and & represents the AND operation.
+
+This implementation fulfills the requirements of implementing the boolean function z = (x^y) & x in the TopModule module. If you have any further requirements or need additional assistance, please let me know.

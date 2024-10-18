@@ -1,0 +1,14 @@
+Here is the Verilog code for the TopModule implementing the even parity checking functionality:
+
+```verilog
+module TopModule (
+    input [7:0] in,
+    output parity
+);
+
+assign parity = in[0] ^ in[1] ^ in[2] ^ in[3] ^ in[4] ^ in[5] ^ in[6] ^ in[7];
+
+endmodule
+```
+
+This module takes an 8-bit input 'in' and calculates the parity bit using even parity by XORing all 8 data bits. The result is output through the 'parity' output port. This implementation should meet the requirements for computing the parity bit for an 8-bit byte. Let me know if you need any further assistance.

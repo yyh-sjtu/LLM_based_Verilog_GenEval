@@ -1,0 +1,12 @@
+// State transition logic equations
+assign B3_next = (state == 10'b0000001000) ? 1'b1 : 1'b0; // Next state logic for state B3
+assign S_next = (state == 10'b0000000001) ? 1'b1 : 1'b0;
+assign S1_next = (state == 10'b0000000010) ? 1'b1 : 1'b0;
+assign Count_next = (state == 10'b0000001110 && !done_counting) ? 1'b1 : 1'b0;
+assign Wait_next = (state == 10'b1000000000 && done) ? 1'b1 : 1'b0;
+
+// Output logic equations
+assign done = ((state == 10'b1000000000) || (state == 10'b1000000001)) ? 1'b1 : 1'b0;
+assign counting = (state == 10'b0000001110 || state == 10'b0000001111) ? 1'b1 : 1'b0;
+assign shift_ena = (state == 10'b0000001100 || state == 10'b0000001000) ? 1'b1 : 1'b0;
+endmodule

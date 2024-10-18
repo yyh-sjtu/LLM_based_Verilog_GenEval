@@ -1,0 +1,71 @@
+// Define intermediate signals
+reg [3:0] temp;
+
+always @* begin
+	if (c == 0) begin
+		temp = a;
+	end else if (c == 1) begin
+		temp = b;
+	end else if (c == 2) begin
+		temp = a | b;
+	end else if (c == 3) begin
+		temp = a & b;
+	end else if (c == 4) begin
+		temp = a ^ b;
+	end else if (c == 5) begin
+		temp = ~(a & b);
+	end else if (c == 6) begin
+		temp = a + b;
+	end else if (c == 7) begin
+		temp = a - b;
+	end else if (c == 8) begin
+		temp = a * b;
+	end else if (c == 9) begin
+		temp = a % b;
+	end else if (c == 0A) begin
+		temp = a << 1;
+	end else if (c == 0B) begin
+		temp = a >> 1;
+	end else if (c == 0C) begin
+		temp = a >>> 1;
+	end else if (c == 0D) begin
+		temp = a < b ? 1 : 0;
+	end else if (c == 0E) begin
+		temp = a <= b ? 1 : 0;
+	end else if (c == 0F) begin
+		temp = a > b ? 1 : 0;
+	end
+end
+
+always @* begin
+	if (d == 0) begin
+		q = temp;
+	end else if (d == 1) begin
+		q = temp + d;
+	end else if (d == 2) begin
+		q = temp - d;
+	end else if (d == 3) begin
+		q = temp * d;
+	end else if (d == 4) begin
+		q = temp % d;
+	end else if (d == 5) begin
+		q = temp << 1;
+	end else if (d == 6) begin
+		q = temp >> 1;
+	end else if (d == 7) begin
+		q = temp >>> 1;
+	end else if (d == 8) begin
+		q = temp | d;
+	end else if (d == 9) begin
+		q = temp & d;
+	end else if (d == 0A) begin
+		q = temp ^ d;
+	end else if (d == 0B) begin
+		q = ~(temp & d);
+	end else if (d == 0C) begin
+		q = temp < d ? 1 : 0;
+	end else if (d == 0D) begin
+		q = temp <= d ? 1 : 0;
+	end
+end
+endmodule

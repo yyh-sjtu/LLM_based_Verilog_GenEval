@@ -1,0 +1,31 @@
+Sure! Below is the Verilog code for the implementation of the TopModule:
+
+```
+module TopModule (
+   input clk,
+   input reset,
+   output reg [4:0] q
+);
+   reg [4:0] state;
+
+   always @(posedge clk or posedge reset)
+   begin
+      if (reset)
+         state <= 5'b1;
+      else
+         state <= {state[3] ^ state[2], state[4:1]};
+   end
+
+   assign q = state;
+
+endmodule
+```
+
+Explanation:
+- The `state` register represents the current state of the LFSR. It is a 5-bit register.
+- On the positive edge of the clock or a positive edge of the reset signal, the value of `state` is updated.
+- If the reset signal is active, the LFSR output (`state`) is set to 1.
+- If the reset signal is not active, the LFSR output is updated based on the XOR operation between bits 3 and 2 (`state[3] ^ state[2]`). The result is then concatenated with the right-shifted value of `state[4:1]` to form the updated value of `state`.
+- The `q` output is assigned the value of `state`.
+
+Please let me know if you need any further assistance.

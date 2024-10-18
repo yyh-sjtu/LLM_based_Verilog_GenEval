@@ -1,0 +1,31 @@
+As an RTL designer, I would implement a circuit that functionally behaves like a dual-edge triggered flip-flop by utilizing a combination of two flip-flops and some additional logic. Here's the implementation:
+
+```verilog
+module TopModule(
+  input  clk,
+  input  d,
+  output q
+);
+  reg q1, q2;
+
+  always @(posedge clk) begin
+    q1 <= d;
+    q2 <= q1;
+  end
+
+  always @(negedge clk) begin
+    q1 <= q2;
+  end
+
+  assign q = q2;
+
+endmodule
+```
+
+Explanation:
+1. Two flip-flop stages q1 and q2 are declared as registers to store the input value d over time.
+2. On every positive edge of the clock (posedge clk), q1 is assigned the value of d, and q2 is assigned the value of q1. This mimics the first stage of the dual-edge triggered flip-flop.
+3. On every negative edge of the clock (negedge clk), q1 is updated with the value of q2. This mimics the second stage of the dual-edge triggered flip-flop.
+4. The output q is assigned the value of q2, which represents the output of the dual-edge triggered flip-flop.
+
+This circuit ensures that the output q is updated on both the rising and falling edges of the clock, functioning similarly to a dual-edge triggered flip-flop.

@@ -1,0 +1,39 @@
+// Define states
+parameter IDLE = 0;
+parameter FIRST_BYTE_RECEIVED = 1;
+parameter SECOND_BYTE_RECEIVED = 2;
+parameter THIRD_BYTE_RECEIVED = 3;
+parameter DONE = 4;
+
+reg [2:0] state;
+reg done;
+
+always @(posedge clk) begin
+    if (reset) begin
+        state <= IDLE;
+        done <= 0;
+    end else begin
+        case (state)
+            IDLE:
+                if (in[3] == 1) begin
+                    state <= FIRST_BYTE_RECEIVED;
+                end else begin
+                    state <= IDLE;
+                end
+            FIRST_BYTE_RECEIVED:
+                state <= SECOND_BYTE_RECEIVED;
+            SECOND_BYTE_RECEIVED:
+                state <= THIRD_BYTE_RECEIVED;
+            THIRD_BYTE_RECEIVED:
+                begin
+                    state <= DONE;
+                    done <= 1;
+                end
+            DONE:
+                state <= IDLE;
+                done <= 0;
+        endcase
+    end
+end
+
+endmodule

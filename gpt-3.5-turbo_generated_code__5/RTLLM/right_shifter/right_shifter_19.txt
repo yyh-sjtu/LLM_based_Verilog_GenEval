@@ -1,0 +1,22 @@
+Here is the complete code for the right shifter module:
+
+```verilog
+module right_shifter(
+  input clk,
+  input d,
+  output reg [7:0] q
+);
+
+  always @(posedge clk) begin
+    q <= (q >> 1);
+    q[7] <= d;
+  end
+
+  initial begin
+    q <= 8'b00000000;
+  end
+
+endmodule
+```
+
+This code defines a module called "right_shifter" with three ports: clk (input), d (input), and q (output reg [7:0]). Inside the module, there is an "always" block that triggers on the positive edge of the clk signal. On each clock edge, the contents of the q register are right-shifted by 1 bit using the >> operator and the new input bit (d) is assigned to the most significant bit (q[7]). Additionally, the initial block initializes the q register to 0 (8'b00000000).

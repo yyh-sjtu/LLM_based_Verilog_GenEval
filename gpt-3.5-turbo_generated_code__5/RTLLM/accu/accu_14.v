@@ -1,0 +1,41 @@
+module accu (
+    input clk,
+    input rst_n,
+    input [7:0] data_in,
+    input valid_in,
+    output reg valid_out,
+    output reg [9:0] data_out
+);
+
+reg [7:0] data_acc [0:3]; // Array to store 4 input data
+reg [3:0] count; // Counter to keep track of the number of input data received
+
+always @(posedge clk or negedge rst_n) begin
+    if (~rst_n) begin
+        // Reset the module
+        count <= 0;
+        valid_out <= 0;
+        data_out <= 0;
+        data_acc <= 8'b0;
+    end else begin
+        // Accumulate 4 input data
+        if (valid_in) begin
+            data_acc[count] <= data_in;
+            count <= count + 1;
+            if (count == 3) begin
+                // Calculate the output data_out
+                data_out <= data_acc[0] + data_acc[1] + data_acc[2] + data_acc[3];
+                valid_out <= 1;
+            end
+        end
+        if (valid_out) begin
+            // Reset the module after valid_out is set
+            count <= 0;
+            data_acc <= 8'b0;
+            valid_out <= 0;
+        end
+    end
+end
+
+endmodule
+

@@ -1,0 +1,48 @@
+Sure! Here's an example of an RTL design in Verilog that implements a module named TopModule, which is a full adder:
+
+```verilog
+module FullAdder(
+  input a,
+  input b,
+  input cin,
+  output cout,
+  output sum
+);
+
+  assign {cout, sum} = a + b + cin;
+
+endmodule
+
+module TopModule(
+  input a,
+  input b,
+  input cin,
+  output cout,
+  output sum
+);
+
+  wire cout_intermediate;
+  wire sum_intermediate;
+
+  FullAdder full_adder(
+    .a(a),
+    .b(b),
+    .cin(cin),
+    .cout(cout_intermediate),
+    .sum(sum_intermediate)
+  );
+
+  // Output assignments
+  assign cout = cout_intermediate;
+  assign sum = sum_intermediate;
+
+endmodule
+```
+
+In this implementation, we have two modules - `FullAdder` which represents a full adder logic block, and `TopModule` which is the module that instantiates the full adder and connects its inputs and outputs.
+
+The `FullAdder` module takes three inputs: `a`, `b`, and `cin` (carry-in), and produces two outputs: `cout` (carry-out) and `sum`. The logic for the full adder is implemented in the `assign` statement, where the sum and carry-out are computed using the addition of the inputs and the carry-in.
+
+The `TopModule` module instantiates the `FullAdder` module and connects its inputs and outputs using wires. The `sum` and `cout` signals are used to store the intermediate values computed by the full adder module, and then assigned to the corresponding outputs of `TopModule`.
+
+This design can be further tested by writing a testbench that provides stimulus to the `TopModule` and verifies the correctness of the outputs.

@@ -1,0 +1,12 @@
+module top_module (
+    input [5:0] y,
+    input w,
+    output Y1,
+    output Y3
+);
+
+    assign Y1 = y[4] & w ; // Y1 is the input of state flip-flop y[1]
+    assign Y3 = y[2] & w ; // Y3 is the input of state flip-flop y[3]
+
+endmodule
+

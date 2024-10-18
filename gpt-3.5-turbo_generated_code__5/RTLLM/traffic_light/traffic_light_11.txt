@@ -1,0 +1,91 @@
+```verilog
+module traffic_light(
+    input rst_n,   // Reset signal (active low)
+    input clk,     // Clock signal
+    input pass_request,  // Request signal for allowing vehicles to pass
+    output [7:0] clock,  // 8-bit output representing the count value of the internal counter
+    output reg red,      // Output signal representing the state of the red traffic light
+    output reg yellow,   // Output signal representing the state of the yellow traffic light
+    output reg green     // Output signal representing the state of the green traffic light
+);
+
+// Enumeration representing different states of the traffic light controller
+parameter idle = 2'b00;
+parameter s1_red = 2'b01;
+parameter s2_yellow = 2'b10;
+parameter s3_green = 2'b11;
+
+// Registers for internal counter and state
+reg [7:0] cnt;
+reg [1:0] state, next_state;
+reg p_red, p_yellow, p_green;
+
+always @(posedge clk or negedge rst_n) begin
+    if (!rst_n) begin
+        cnt <= 10;  // Initialize counter to 10 on reset
+        state <= idle;  // Set initial state to idle on reset
+        p_red <= 0;  // Initialize previous red signal to 0 on reset
+        p_yellow <= 0;  // Initialize previous yellow signal to 0 on reset
+        p_green <= 0;  // Initialize previous green signal to 0 on reset
+    end
+    else begin
+        // State transition logic
+        case(state)
+            idle: next_state <= s1_red;  // Transition to s1_red state immediately
+            s1_red: next_state <= (cnt == 3) ? s3_green : s1_red;  // Transition to s3_green or remain in s1_red
+            s2_yellow: next_state <= (cnt == 3) ? s1_red : s2_yellow;  // Transition to s1_red or remain in s2_yellow
+            s3_green: next_state <= (cnt == 3) ? s2_yellow : s3_green;  // Transition to s2_yellow or remain in s3_green
+            default: next_state <= idle;  // Default transition to idle state
+        endcase
+        state <= next_state;  // Update state on positive edge of clock
+
+        // Counting logic for internal counter
+        if ((!rst_n) || (pass_request && p_green)) cnt <= 10;  // Set counter to 10 on reset or if pass_request is active and green signal is active
+        else if (!p_green && green) cnt <= 60;  // Set counter to 60 if green signal transitions from inactive to active
+        else if (!p_yellow && yellow) cnt <= 5;  // Set counter to 5 if yellow signal transitions from inactive to active
+        else if (!p_red && red) cnt <= 10;  // Set counter to 10 if red signal transitions from inactive to active
+        else cnt <= cnt - 1;  // Decrement counter normally
+    end
+end
+
+// Assign value of internal counter to output clock
+assign clock = cnt;
+
+// Output assignment for red, yellow, and green signals
+always @(posedge clk or negedge rst_n) begin
+    if (!rst_n) begin
+        red <= 0;  // Set red signal to 0 on reset
+        yellow <= 0;  // Set yellow signal to 0 on reset
+        green <= 0;  // Set green signal to 0 on reset
+    end
+    else begin
+        p_red <= red;  // Update previous red signal value
+        p_yellow <= yellow;  // Update previous yellow signal value
+        p_green <= green;  // Update previous green signal value
+        case(state)
+            s1_red: begin
+                red <= 1;  // Set red signal to 1 in s1_red state
+                yellow <= 0;  // Set yellow signal to 0 in s1_red state
+                green <= 0;  // Set green signal to 0 in s1_red state
+            end
+            s2_yellow: begin
+                red <= 0;  // Set red signal to 0 in s2_yellow state
+                yellow <= 1;  // Set yellow signal to 1 in s2_yellow state
+                green <= 0;  // Set green signal to 0 in s2_yellow state
+            end
+            s3_green: begin
+                red <= 0;  // Set red signal to 0 in s3_green state
+                yellow <= 0;  // Set yellow signal to 0 in s3_green state
+                green <= 1;  // Set green signal to 1 in s3_green state
+            end
+            default: begin
+                red <= 0;  // Set red signal to 0 in default state
+                yellow <= 0;  // Set yellow signal to 0 in default state
+                green <= 0;  // Set green signal to 0 in default state
+            end
+        endcase
+    end
+end
+
+endmodule
+```

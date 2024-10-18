@@ -1,0 +1,29 @@
+As a professional RTL designer, I can help you implement the TopModule with the required specifications. Here's the Verilog code for the module:
+
+```
+module TopModule(
+  input clk,
+  input reset,
+  output reg [31:0] q
+);
+
+  reg [31:0] state;
+
+  always @(posedge clk) begin
+    if (reset) begin
+      state <= 32'h1;  // Reset output q to 32'h1
+    end else begin
+      state <= {state[31]^state[21]^state[1]^state[0], state[31:1]};  // Galois LFSR logic
+    end
+  end
+
+  assign q = state;  // Output q is the current state of the LFSR
+
+endmodule
+```
+
+Here, I've used a `state` register to store the current state of the Galois LFSR. On the positive edge of the clock, if the `reset` input is high, the `state` and `q` are reset to 32'h1. Otherwise, the Galois LFSR logic is implemented using XOR gates (`^`) to calculate the next state, and the new state is stored in the `state` register.
+
+Finally, the `q` output is assigned to the current state of the LFSR.
+
+Please let me know if you need any further assistance or clarification.

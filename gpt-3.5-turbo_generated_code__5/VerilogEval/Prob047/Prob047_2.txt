@@ -1,0 +1,22 @@
+Sure! Below is an example implementation of the TopModule in Verilog, which includes 8 D flip-flops with an active high asynchronous reset. The output is reset to 0 and all the D flip-flops are triggered by the positive edge of the clock signal.
+
+```verilog
+module TopModule (
+  input clk,
+  input areset,
+  input [7:0] d,
+  output reg [7:0] q
+);
+
+  always @(posedge clk or posedge areset) begin
+    if (areset) begin
+      q <= 8'b0;
+    end else begin
+      q <= d;
+    end
+  end
+
+endmodule
+```
+
+In this implementation, the `always` block is triggered on the positive edge of the `clk` signal or the positive edge of the `areset` signal. When `areset` is asserted, the output `q` is reset to 0. Otherwise, the value of `d` is transferred to `q`. The `reg` keyword is used to declare `q` as a register type output.

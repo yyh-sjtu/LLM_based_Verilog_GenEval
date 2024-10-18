@@ -1,0 +1,32 @@
+Sure! Here is the RTL code for implementing the TopModule with a shift register:
+
+```verilog
+module TopModule (
+  input clk,
+  input resetn,
+  input in,
+  output reg out
+);
+  
+  reg [3:0] shift_register;
+  
+  always @(posedge clk or negedge resetn) begin
+    if (~resetn) begin
+      shift_register <= 4'b0;
+    end else begin
+      shift_register <= {in, shift_register[3:1]};
+    end
+  end
+  
+  assign out = shift_register[0];
+  
+endmodule
+```
+
+In this code, a 4-bit register called `shift_register` is declared to store the data in the shift register. The `always` block triggers on the positive edge of the clock (`@(posedge clk)`) and also on the negative edge of the active-low reset signal (`or negedge resetn`).
+
+Inside the `always` block, an `if-else` statement is used to handle the reset behavior. When the reset signal (`resetn`) is low (active-low), the shift register is cleared to 0 using the synchronous reset (`shift_register <= 4'b0;`). When the reset signal is high, the shift register is updated by shifting the existing data and inserting the input (`in`) value at the MSB position (`shift_register <= {in, shift_register[3:1]};`).
+
+Finally, the output (`out`) is assigned the LSB of the shift register (`assign out = shift_register[0];`), which represents the output bit of the shift register.
+
+This implementation fulfills the requirements of the TopModule as mentioned in the interface description.

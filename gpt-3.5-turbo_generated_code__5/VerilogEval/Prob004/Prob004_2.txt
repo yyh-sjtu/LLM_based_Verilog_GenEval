@@ -1,0 +1,27 @@
+Sure, here's an RTL design implementation for the TopModule module that reverses the byte order of a 32-bit vector:
+
+```verilog
+module TopModule(
+  input [31:0] in,
+  output [31:0] out
+);
+  reg [31:0] temp;
+  reg [7:0] byte0, byte1, byte2, byte3;
+  
+  always @(*) begin
+    byte0 = in[7:0];
+    byte1 = in[15:8];
+    byte2 = in[23:16];
+    byte3 = in[31:24];
+    
+    temp = {byte3, byte2, byte1, byte0};
+  end
+  
+  assign out = temp;
+  
+endmodule
+```
+
+In this implementation, we declare `temp` as a register to store the reversed vector. Then, we split the input vector `in` into four bytes `byte0`, `byte1`, `byte2`, and `byte3`, using slicing. Finally, we concatenate these bytes in reverse order to obtain the reversed vector `temp`. The resulting `temp` value is assigned to the `out` output port.
+
+Please let me know if you need further assistance.

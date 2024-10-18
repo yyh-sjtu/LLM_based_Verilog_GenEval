@@ -1,0 +1,26 @@
+
+module TopModule (
+  input x,
+  input [2:0] y,
+  output Y0,
+  output z
+);
+  reg [2:0] nextState;
+
+  // Combinational logic for determining next state
+  always @* begin
+    case (y)
+      3'b000: nextState = x ? 3'b001 : 3'b000;
+      3'b001: nextState = x ? 3'b100 : 3'b001;
+      3'b010: nextState = x ? 3'b001 : 3'b010;
+      3'b011: nextState = x ? 3'b010 : 3'b001;
+      3'b100: nextState = x ? 3'b100 : 3'b011;
+      default: nextState = 3'b000;
+    endcase
+  end
+
+  // Assigning outputs based on current state
+  assign z = (y == 3'b011) || (y == 3'b100);
+  assign Y0 = nextState[0];
+
+endmodule

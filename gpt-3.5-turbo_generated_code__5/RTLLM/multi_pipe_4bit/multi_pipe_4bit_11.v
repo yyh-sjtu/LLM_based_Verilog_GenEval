@@ -1,0 +1,39 @@
+module multi_pipe_4bit (
+    input clk,
+    input rst_n,
+    input [3:0] mul_a,
+    input [3:0] mul_b,
+    output reg [7:0] mul_out
+);
+
+parameter size = 4;
+
+reg [7:0] partial_products [0:size-1];
+reg [7:0] intermediate_sums [0:size-1];
+
+always @(posedge clk or negedge rst_n) begin
+    if (rst_n == 1'b0) begin
+        for (int i = 0; i < size; i = i + 1) begin
+            partial_products[i] <= 8'd0;
+            intermediate_sums[i] <= 8'd0;
+        end
+    end
+    else begin
+        for (int i = 0; i < size; i = i + 1) begin
+            if (mul_b[i] == 1'b1) begin
+                partial_products[i] <= {mul_a, i'b0};
+            end
+            else begin
+                partial_products[i] <= 8'd0;
+            end
+        end
+        intermediate_sums[0] <= partial_products[0];
+        for (int i = 1; i < size; i = i + 1) begin
+            intermediate_sums[i] <= intermediate_sums[i-1] + partial_products[i];
+        end
+        mul_out <= intermediate_sums[size-1];
+    end
+end
+
+endmodule
+

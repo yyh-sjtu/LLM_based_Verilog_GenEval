@@ -1,0 +1,62 @@
+As an AI language model, I can provide you with a code implementation for the TopModule with the specified requirements. Please find the Verilog code below:
+
+```verilog
+module TopModule (
+    input  clk,
+    input  aresetn,
+    input  x,
+    output z
+);
+
+    reg [2:0] state, next_state;
+    reg z_reg;
+
+    parameter S0 = 3'b000;
+    parameter S1 = 3'b001;
+    parameter S2 = 3'b010;
+
+    always @(posedge clk or negedge aresetn) begin
+        if (~aresetn)
+            state <= S0;
+        else
+            state <= next_state;
+    end
+
+    always @(state or x) begin
+        next_state = state;
+        z_reg = 1'b0;
+
+        case (state)
+            S0: begin
+                if (x)
+                    next_state = S1;
+                else
+                    next_state = S0;
+            end
+
+            S1: begin
+                if (x)
+                    next_state = S2;
+                else
+                    next_state = S0;
+            end
+
+            S2: begin
+                if (x)
+                    next_state = S1;
+                else begin
+                    next_state = S0;
+                    z_reg = 1'b1;
+                end
+            end
+        endcase
+    end
+
+    assign z = z_reg;
+
+endmodule
+```
+
+In this implementation, there are three states `S0`, `S1`, and `S2`, representing the different stages of the Mealy-type FSM. The input `x` is checked in each state, and the next state is determined accordingly. When the sequence "101" is detected (reaching state `S2`), the output `z` is asserted to `1'b1`. The negative edge-triggered asynchronous reset is implemented using the `aresetn` input.
+
+Please let me know if you need any further assistance!

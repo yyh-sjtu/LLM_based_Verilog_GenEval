@@ -1,0 +1,12 @@
+As a professional RTL designer, I can help you implement the requested module. Below is a Verilog code for the TopModule implementing a NOT gate:
+
+```verilog
+module TopModule (
+  input  in,
+  output out
+);
+  assign out = ~in;
+endmodule
+```
+
+In this code, the input `in` is inverted using the `~` operator and assigned to the output `out`. Thus, the module implements a NOT gate.

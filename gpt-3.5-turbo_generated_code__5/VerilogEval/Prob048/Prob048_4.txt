@@ -1,0 +1,26 @@
+Sure, here's an RTL design implementation of the TopModule:
+
+```verilog
+module TopModule (
+  input  wire  clk,
+  input  wire  d,
+  input  wire  r,
+  output wire  q
+);
+  reg q;
+
+  always @(posedge clk) begin
+    if (r)       // Synchronous Reset
+      q <= 0;
+    else
+      q <= d;    // Updating the output based on the input
+  end
+
+endmodule
+```
+
+In this design, the `TopModule` implements a D flip-flop with an active high synchronous reset. The input `d` represents the data input, while the `r` represents the reset control input. The output `q` represents the output of the D flip-flop.
+
+Inside the `always @(posedge clk)` block, the flip-flop updates its output based on the input `d`. If the reset signal `r` is high, the output `q` is set to 0, indicating a synchronous reset. Otherwise, the output `q` is updated with the input `d` on the positive edge of the clock signal.
+
+Note: Please ensure to properly connect the input `clk`, `d`, and `r`, and the output `q` in the testbench or higher-level design where the `TopModule` is instantiated.

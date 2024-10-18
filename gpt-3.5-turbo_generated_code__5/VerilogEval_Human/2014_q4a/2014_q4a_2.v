@@ -1,0 +1,33 @@
+module top_module (
+    input clk,
+    input w,
+    input R,
+    input E,
+    input L,
+    output reg Q
+);
+
+reg next_Q;
+
+// Multiplexer logic
+always @(*) begin
+    if (E) begin
+        if (L)
+            next_Q = R;
+        else
+            next_Q = Q;
+    end
+    else
+        next_Q = Q;
+end
+
+// Flip-flop logic
+always @(posedge clk) begin
+    if (E)
+        Q <= next_Q;
+    else
+        Q <= Q;
+end
+
+endmodule
+

@@ -1,0 +1,73 @@
+Sure, here's an example implementation of the TopModule in VHDL:
+
+```vhdl
+library ieee;
+use ieee.std_logic_1164.all;
+
+entity TopModule is
+    port (
+        clk      : in  std_logic;
+        resetn   : in  std_logic;
+        byteena  : in  std_logic_vector(1 downto 0);
+        d        : in  std_logic_vector(15 downto 0);
+        q        : out std_logic_vector(15 downto 0)
+    );
+end entity TopModule;
+
+architecture rtl of TopModule is
+    signal d_reg   : std_logic_vector(15 downto 0);
+    signal q_reg   : std_logic_vector(15 downto 0);
+    signal clear_q : std_logic;
+
+begin
+    -- Registers for storing the input data
+    process (clk, resetn)
+    begin
+        if resetn = '0' then
+            d_reg <= (others => '0');
+        elsif rising_edge(clk) then
+            if clear_q = '1' then
+                d_reg <= d;
+            else
+                d_reg <= d_reg;
+            end if;
+        end if;
+    end process;
+
+    -- Output register
+    process (clk, resetn)
+    begin
+        if resetn = '0' then
+            q_reg <= (others => '0');
+        elsif rising_edge(clk) then
+            if clear_q = '1' then
+                q_reg <= (others => '0');
+            else
+                q_reg <= d_reg;
+            end if;
+        end if;
+    end process;
+
+    -- Byte enable logic
+    process (clk, resetn)
+    begin
+        if resetn = '0' then
+            clear_q <= '1';
+        elsif rising_edge(clk) then
+            if clear_q = '1' then
+                clear_q <= '0';
+            else
+                clear_q <= '1';
+            end if;
+        end if;
+    end process;
+
+    -- Output assignment
+    q <= q_reg when clear_q = '0' else (others => '0');
+
+end architecture rtl;
+```
+
+This implementation of TopModule uses two separate processes to handle the clocked registers and the byte enable logic. The input data `d` is stored in a register `d_reg` which is updated on the positive edge of the clock when `resetn` is asserted. The output data `q` is stored in a register `q_reg` which is also updated on the positive edge of the clock when `resetn` is asserted. The byte enable signal `byteena` is used to clear the output register `q_reg` when asserted.
+
+Note: This implementation assumes that the positive edge clock is provided externally, and the reset signal `resetn` is asynchronously asserted low to reset the module's internal state. It also assumes that the `d` input and `q` output are defined elsewhere and connected to the module using appropriate signals.

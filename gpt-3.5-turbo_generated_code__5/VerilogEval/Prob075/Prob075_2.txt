@@ -1,0 +1,50 @@
+Here is the implementation of the TopModule in RTL:
+
+```verilog
+module TopModule(
+    input clk,
+    input areset,
+    input train_valid,
+    input train_taken,
+    output reg [1:0] state
+);
+
+// Define internal signals
+reg [1:0] next_state;
+
+always @(posedge clk or posedge areset) begin
+    if (areset) begin
+        // Asynchronous reset
+        state <= 2'b01;
+    end else begin
+        // Saturating counter logic
+        if (train_valid && train_taken && (state != 2'b11)) begin
+            // Increment counter
+            next_state <= state + 2'b01;
+        end else if (train_valid && !train_taken && (state != 2'b00)) begin
+            // Decrement counter
+            next_state <= state - 2'b01;
+        end else begin
+            // Keep counter value unchanged
+            next_state <= state;
+        end
+    end
+end
+
+always @(posedge clk) begin
+    // Assign next state value to current state
+    state <= next_state;
+end
+
+endmodule
+```
+
+In this implementation, the module `TopModule` takes in the clock `clk`, asynchronous reset `areset`, and the input signals `train_valid` and `train_taken`. The output `state` is a 2-bit reg that represents the two-bit counter value.
+
+The internal signal `next_state` is used to store the next state value, allowing for sequential updates on the positive edge of the clock.
+
+The always block triggered by the clock and asynchronous reset handles the counter logic. If the asynchronous reset is triggered, the counter is reset to weakly not-taken state 2'b01. Otherwise, the saturating counter logic is applied. When `train_valid` and `train_taken` are both high, the counter is incremented unless it is already at its maximum value (2'b11). When `train_valid` is high and `train_taken` is low, the counter is decremented unless it is already at its minimum value (2'b00). If neither condition is met, the counter value remains unchanged.
+
+Lastly, in a separate always block triggered by the clock, the `next_state` value is assigned to the `state` output, ensuring that the current state is updated synchronously on the positive edge of the clock.
+
+This implementation meets the specifications of implementing a two-bit saturating counter using the given input and output interface.

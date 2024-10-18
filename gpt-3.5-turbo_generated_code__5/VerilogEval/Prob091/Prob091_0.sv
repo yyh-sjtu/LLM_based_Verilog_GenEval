@@ -1,0 +1,107 @@
+
+module TopModule (
+  input [5:0] y,
+  input w,
+  output Y1,
+  output Y3
+);
+
+  // Declare the state signals
+  reg A, B, C, D, E, F;
+
+  // Assign initial state values based on the one-hot encoding
+  always @(*) begin
+    A = y[0];
+    B = y[1];
+    C = y[2];
+    D = y[3];
+    E = y[4];
+    F = y[5];
+  end
+
+  // Declare the output signals
+  wire Y1, Y3;
+
+  // State output logic
+  always @(*) begin
+    case ({F, D, C, B, A})
+      // A (0) --1--> B
+      6'b000001: begin
+        Y1 = 0;
+        Y3 = B;
+      end
+
+      // A (0) --0--> A
+      6'b000000: begin
+        Y1 = 0;
+        Y3 = A;
+      end
+
+      // B (0) --1--> C
+      6'b000010: begin
+        Y1 = 0;
+        Y3 = C;
+      end
+
+      // B (0) --0--> D
+      6'b000011: begin
+        Y1 = 0;
+        Y3 = D;
+      end
+
+      // C (0) --1--> E
+      6'b000100: begin
+        Y1 = 0;
+        Y3 = E;
+      end
+
+      // C (0) --0--> D
+      6'b000101: begin
+        Y1 = 0;
+        Y3 = D;
+      end
+
+      // D (0) --1--> F
+      6'b001000: begin
+        Y1 = 0;
+        Y3 = F;
+      end
+
+      // D (0) --0--> A
+      6'b001001: begin
+        Y1 = 0;
+        Y3 = A;
+      end
+
+      // E (1) --1--> E
+      6'b010000: begin
+        Y1 = E;
+        Y3 = E;
+      end
+
+      // E (1) --0--> D
+      6'b010001: begin
+        Y1 = E;
+        Y3 = D;
+      end
+
+      // F (1) --1--> C
+      6'b100000: begin
+        Y1 = F;
+        Y3 = C;
+      end
+
+      // F (1) --0--> D
+      6'b100001: begin
+        Y1 = F;
+        Y3 = D;
+      end
+
+      default: begin
+        Y1 = 0;
+        Y3 = 0;
+      end
+    endcase
+  end
+
+endmodule

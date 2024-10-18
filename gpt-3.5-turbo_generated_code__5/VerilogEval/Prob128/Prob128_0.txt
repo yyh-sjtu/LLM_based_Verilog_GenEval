@@ -1,0 +1,7 @@
+As a professional RTL designer, I would first create the state diagram for the finite state machine that will search for message boundaries in the input byte stream. The states would include an idle state, a state where we are looking for the start of a message, and states to receive and validate the three bytes of each message.
+
+Next, I would write the RTL code in Verilog or VHDL to implement the TopModule module. I would define the states, transitions, and logic to search for message boundaries as described in the algorithm provided. I would make sure that the module is synchronous and reset is properly handled.
+
+I would simulate the design using a testbench to ensure that the module behaves as expected under different input scenarios. I would verify that the done signal is asserted correctly when a complete message is received.
+
+Finally, I would synthesize the design and analyze the resulting RTL to ensure that it meets timing constraints and is optimized for the target technology. I would also perform post-synthesis and post-layout simulations to verify the functionality and performance of the design.

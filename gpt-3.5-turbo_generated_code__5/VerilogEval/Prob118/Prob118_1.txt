@@ -1,0 +1,37 @@
+Here is an implementation of the TopModule in RTL (Register-Transfer Level) design:
+
+```verilog
+module TopModule (
+    input  wire      clk,
+    input  wire      areset,
+    input  wire      predict_valid,
+    input  wire      predict_taken,
+    input  wire      train_mispredicted,
+    input  wire      train_taken,
+    input  wire [31:0] train_history,
+    output wire [31:0] predict_history
+);
+    reg [31:0] branch_history;
+
+    always @(posedge clk or posedge areset) begin
+        if (areset) begin
+            branch_history <= 0;
+        end else begin
+            if (train_mispredicted) begin
+                branch_history <= {train_history, train_taken};
+            end else if (predict_valid) begin
+                branch_history <= {branch_history[30:0], predict_taken};
+            end
+        end
+    end
+
+    assign predict_history = branch_history;
+
+endmodule
+```
+
+This implementation uses a synchronous always block to update the `branch_history` register. On a positive edge of the clock or the positive edge of the asynchronous reset signal `areset`, the block checks for misprediction or prediction signals. If a misprediction occurs, it loads the `branch_history` with `train_history` concatenated with `train_taken`. If a prediction occurs, it shifts in `predict_taken` from the least significant bit side of `branch_history`. The `predict_history` is assigned the value of `branch_history`.
+
+Note that this implementation assumes that all other sequential logic in the design is also triggered on the positive edge of the clock.
+
+Let me know if you have any questions or need further clarification!

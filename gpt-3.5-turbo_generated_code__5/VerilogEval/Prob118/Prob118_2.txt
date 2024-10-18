@@ -1,0 +1,38 @@
+Sure! Here's an implementation of the TopModule in RTL:
+
+```verilog
+module TopModule (
+  input  wire clk,
+  input  wire areset,
+  input  wire predict_valid,
+  input  wire predict_taken,
+  input  wire train_mispredicted,
+  input  wire train_taken,
+  input  wire [31:0] train_history,
+  output wire [31:0] predict_history
+);
+
+  reg [31:0] history_reg;
+
+  always @(posedge clk) begin
+    if (areset) begin
+      history_reg <= 0;
+    end else begin
+      if (predict_valid) begin
+        history_reg <= {history_reg[30:0], predict_taken};
+      end else if (train_mispredicted) begin
+        history_reg <= {train_history[30:0], train_taken};
+      end
+    end
+  end
+  
+  assign predict_history = history_reg;
+  
+endmodule
+```
+
+In this implementation, `history_reg` is a 32-bit register that holds the branch history. On a positive edge of the clock, the register is updated based on the inputs `predict_valid`, `predict_taken`, `train_mispredicted`, `train_taken`, and `train_history`. If a prediction is valid, the register is shifted to the left by one bit and the `predict_taken` input is shifted in from the least significant bit (LSB) side. If a misprediction occurs, the register is loaded with `train_history` shifted by one bit to the left and concatenated with `train_taken`. The output `predict_history` is the value of the branch history register.
+
+The asynchronous reset `areset` is used to initialize the history counter to zero.
+
+Please note that this implementation assumes that the inputs `predict_valid`, `predict_taken`, `train_mispredicted`, `train_taken`, and `train_history` are synchronous to the positive edge of the clock. You may need to modify the code if your requirements are different.

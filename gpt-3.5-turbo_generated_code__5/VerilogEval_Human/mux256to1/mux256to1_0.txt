@@ -1,0 +1,10 @@
+
+  wire [255:0] selected_input;
+  
+  // Generate the selected input
+  assign selected_input = in >> (8*sel);
+
+  // Create the 1-bit wide multiplexer
+  assign out = selected_input[0];
+
+endmodule

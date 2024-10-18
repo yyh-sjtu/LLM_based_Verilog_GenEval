@@ -1,0 +1,54 @@
+
+module freq_div (
+  input wire CLK_in,
+  input wire RST,
+  output wire CLK_50,
+  output wire CLK_10,
+  output wire CLK_1
+);
+
+  reg [2:0] cnt_10;
+  reg [5:0] cnt_100;
+  reg CLK_50_reg, CLK_10_reg, CLK_1_reg;
+
+  always @(posedge CLK_in or posedge RST) begin
+    if (RST) begin
+      CLK_50_reg <= 1'b0;
+    end else begin
+      CLK_50_reg <= ~CLK_50_reg;
+    end
+  end
+
+  always @(posedge CLK_in or posedge RST) begin
+    if (RST) begin
+      CLK_10_reg <= 1'b0;
+      cnt_10 <= 3'b000;
+    end else begin
+      if (cnt_10 == 4'b0100) begin
+        CLK_10_reg <= ~CLK_10_reg;
+        cnt_10 <= 3'b000;
+      end else begin
+        cnt_10 <= cnt_10 + 1'b1;
+      end
+    end
+  end
+
+  always @(posedge CLK_in or posedge RST) begin
+    if (RST) begin
+      CLK_1_reg <= 1'b0;
+      cnt_100 <= 6'b000000;
+    end else begin
+      if (cnt_100 == 6'b110001) begin
+        CLK_1_reg <= ~CLK_1_reg;
+        cnt_100 <= 6'b000000;
+      end else begin
+        cnt_100 <= cnt_100 + 1'b1;
+      end
+    end
+  end
+
+  assign CLK_50 = CLK_50_reg;
+  assign CLK_10 = CLK_10_reg;
+  assign CLK_1 = CLK_1_reg;
+
+endmodule

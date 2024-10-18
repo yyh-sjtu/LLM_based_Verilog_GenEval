@@ -1,0 +1,24 @@
+Certainly! Below is an example of a Verilog code for implementing a D latch using an always block:
+
+```verilog
+module TopModule (
+  input d,
+  input ena,
+  output q
+);
+
+  reg q;
+
+  always @(posedge ena) begin
+    if (ena)
+      q <= d;
+  end
+
+endmodule
+```
+
+In this code, we have a module named `TopModule` with input `d`, `ena`, and output `q`. Inside the module, we declare a register `q` to store the output value.
+
+The `always` block is triggered on the positive edge of `ena`. When the `ena` signal is high, the block executes and assigns the value of `d` to `q`. The assignment `q <= d;` represents storing the value of `d` in the register `q`.
+
+By using this code, you can implement a D latch with an always block in an RTL design.

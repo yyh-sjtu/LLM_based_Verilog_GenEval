@@ -1,0 +1,42 @@
+module accu (
+    input clk,
+    input rst_n,
+    input [7:0] data_in,
+    input valid_in,
+    output reg valid_out,
+    output reg [9:0] data_out
+);
+
+reg [7:0] accumulator [0:3]; // Four 8-bit accumulators
+reg [2:0] count; // Counter to keep track of number of inputs received
+reg [9:0] sum; // Accumulated sum of 4 inputs
+
+always @(posedge clk or negedge rst_n) begin
+    if (~rst_n) begin
+        // Reset all registers
+        count <= 0;
+        sum <= 0;
+        valid_out <= 0;
+        data_out <= 0;
+        for (int i = 0; i < 4; i = i + 1) begin
+            accumulator[i] <= 0;
+        end
+    end else begin
+        if (valid_in) begin
+            accumulator[count] <= data_in; // Store input data in accumulator
+            count <= count + 1; // Increment input count
+            if (count == 3) begin
+                // Calculate sum of 4 inputs
+                sum <= accumulator[0] + accumulator[1] + accumulator[2] + accumulator[3];
+                valid_out <= 1; // Set valid_out signal
+                data_out <= sum; // Output accumulated sum
+                count <= 0; // Reset input count
+            end
+        else begin
+            valid_out <= 0; // Reset valid_out signal
+            data_out <= 0; // Reset output
+        end
+    end
+end
+
+endmodule

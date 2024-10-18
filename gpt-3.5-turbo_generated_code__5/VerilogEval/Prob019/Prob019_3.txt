@@ -1,0 +1,21 @@
+Sure! Here's an implementation of the TopModule in Verilog:
+
+```verilog
+module TopModule (
+  input in1,
+  input in2,
+  output out
+);
+  wire in2_bubble;
+  wire and_gate_output;
+
+  assign in2_bubble = ~in2;
+  assign and_gate_output = in1 & in2_bubble;
+  assign out = and_gate_output;
+
+endmodule
+```
+
+In this implementation, the 'in2_bubble' wire is created by negating the 'in2' input using the '~' operator. This represents the bubble on the 'in2' input. The 'and_gate_output' wire is then computed by performing an AND operation between 'in1' and 'in2_bubble'. Finally, the 'out' output is assigned to the value of 'and_gate_output'.
+
+Please let me know if you need any further assistance or if you have any questions!

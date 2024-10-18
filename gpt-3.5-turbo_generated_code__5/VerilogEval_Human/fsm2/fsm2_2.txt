@@ -1,0 +1,40 @@
+
+	// Define states
+	typedef enum logic [1:0] {
+		OFF,
+		ON
+	} state_type;
+
+	// Define state register
+	reg [1:0] state_reg, next_state;
+
+	// Define output register
+	reg out_reg;
+
+	// Define state transition and output logic
+	always @(posedge clk or posedge areset) begin
+		if (areset) begin
+			state_reg <= OFF;
+			out_reg <= 0;
+		end else begin
+			state_reg <= next_state;
+			out_reg <= (state_reg == ON) ? 1 : 0;
+		end
+	end
+
+	// Define next state and output logic
+	always @* begin
+		case (state_reg)
+			OFF: begin
+				next_state = (j) ? ON : OFF;
+			end
+			ON: begin
+				next_state = (k) ? OFF : ON;
+			end
+		endcase
+	end
+
+	// Assign output
+	assign out = out_reg;
+
+endmodule

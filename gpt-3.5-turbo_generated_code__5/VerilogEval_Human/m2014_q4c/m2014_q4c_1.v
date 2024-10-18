@@ -1,0 +1,28 @@
+module d_flip_flop (
+	input clk,
+	input d,
+	input r,
+	output reg q
+);
+
+	always @(posedge clk or posedge r) begin
+		if (r) begin
+			q <= 0;
+		end else begin
+			q <= d;
+		end
+	end
+
+endmodule
+
+module top_module (
+	input clk,
+	input d,
+	input r,
+	output q
+);
+
+	d_flip_flop flipflop1 (.clk(clk), .d(d), .r(r), .q(q));
+
+endmodule
+

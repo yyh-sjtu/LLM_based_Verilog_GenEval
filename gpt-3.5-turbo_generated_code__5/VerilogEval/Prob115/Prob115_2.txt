@@ -1,0 +1,41 @@
+To implement the TopModule module described, we can define the RTL code as follows:
+
+```verilog
+module TopModule (
+    input clk,
+    input load,
+    input ena,
+    input [1:0] amount,
+    input [63:0] data,
+    output reg [63:0] q
+);
+
+reg [63:0] shift_reg;
+
+always @(posedge clk) begin
+    if (load) begin
+        shift_reg <= data;
+    end else if (ena) begin
+        case (amount)
+            2'b00: shift_reg <= {shift_reg[62:0], shift_reg[63]};
+            2'b01: shift_reg <= {shift_reg[55:0], data[63:56]};
+            2'b10: shift_reg <= {shift_reg[63], shift_reg[63:1]};
+            2'b11: shift_reg <= {data[7:0], shift_reg[63:8]};
+        endcase
+    end
+end
+
+assign q = shift_reg;
+
+endmodule
+```
+
+In this Verilog code, we have defined a module called TopModule with the specified input and output ports. Inside the module, we declare a 64-bit shift register `shift_reg` which will hold the shifted data.
+
+The `always @(posedge clk)` block captures the positive edge of the clock signal. If the `load` signal is active, the module loads the `data` input into the shift register. If the `ena` signal is active, the module performs the specified shift operation based on the `amount` input.
+
+The case statement in the `always` block selects the appropriate shift operation based on the `amount` input. For each case, the shift operation to the left or right by 1 or 8 bits is performed accordingly.
+
+Finally, the output `q` is assigned with the contents of the shift register `shift_reg`.
+
+This code implements the desired functionality of a 64-bit arithmetic shift register with synchronous loading and shifting capabilities based on the input signals provided.

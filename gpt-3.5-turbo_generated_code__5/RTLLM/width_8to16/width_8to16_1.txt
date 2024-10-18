@@ -1,0 +1,38 @@
+module width_8to16 (
+    input clk,
+    input rst_n,
+    input valid_in,
+    input [7:0] data_in,
+    output reg valid_out,
+    output reg [15:0] data_out
+);
+
+reg [7:0] data_reg;
+reg [1:0] state;
+
+always @(posedge clk or negedge rst_n) begin
+    if (!rst_n) begin
+        data_reg <= 8'b0;
+        valid_out <= 1'b0;
+        data_out <= 16'b0;
+        state <= 2'b00;
+    end else begin
+        case (state)
+            2'b00: begin // State 0: Waiting for first data
+                if (valid_in) begin
+                    data_reg <= data_in;
+                    state <= 2'b01;
+                end
+            end
+            2'b01: begin // State 1: Waiting for second data
+                if (valid_in) begin
+                    data_out <= {data_reg, data_in};
+                    valid_out <= 1'b1;
+                    state <= 2'b00;
+                end
+            end
+        endcase
+    end
+end
+
+endmodule

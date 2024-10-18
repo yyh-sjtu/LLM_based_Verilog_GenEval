@@ -1,0 +1,55 @@
+Sure, here's the RTL code for the TopModule with the desired behavior:
+
+```verilog
+module TopModule (
+  input clk,
+  input areset,
+  input in,
+  output out
+);
+
+  reg [1:0] state;
+  reg out_reg;
+
+  always @(posedge clk or posedge areset) begin
+    if (areset)
+      state <= 2'b1; // Reset to state B
+    else begin
+      case (state)
+        2'b00: begin // State A
+          if (in)
+            state <= 2'b00; // Transition to state A
+          else
+            state <= 2'b01; // Transition to state B
+        end
+        2'b01: begin // State B
+          if (in)
+            state <= 2'b00; // Transition to state A
+          else
+            state <= 2'b01; // Transition to state B
+        end
+      endcase
+    end
+  end
+
+  always @(state) begin
+    case (state)
+      2'b00: out_reg <= 1'b0; // Output 0 in state A
+      2'b01: out_reg <= 1'b1; // Output 1 in state B
+    endcase
+  end
+
+  assign out = out_reg;
+
+endmodule
+```
+
+In this code, I have defined a 2-bit state register `state` to represent the current state of the Moore machine. The output register `out_reg` holds the value of the output `out`. The module has two always blocks: one for state transition and one for output assignment.
+
+The state transition logic is within the `always @(posedge clk or posedge areset)` block. Whenever the clock edge occurs or an asynchronous reset is triggered, the module checks the current state and input value to determine the next state. If the asynchronous reset signal `areset` is high, the module resets to state B. If not, it transitions between states according to the diagram given in the problem description.
+
+The output assignment logic is within the `always @(state)` block. Based on the current state, the output register `out_reg` is set accordingly. In state A (`2'b00`), output `out` is set to 0, and in state B (`2'b01`), output `out` is set to 1.
+
+Finally, the output `out` is assigned to the value of `out_reg`.
+
+I hope this meets your requirements as a professional RTL designer! Let me know if you have any further questions.

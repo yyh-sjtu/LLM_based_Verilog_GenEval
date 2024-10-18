@@ -1,0 +1,13 @@
+module top_module (
+	input [7:0] in,
+	output parity
+);
+
+wire xor_output;
+
+assign xor_output = in[7] ^ in[6] ^ in[5] ^ in[4] ^ in[3] ^ in[2] ^ in[1] ^ in[0];
+
+assign parity = xor_output;
+
+endmodule
+

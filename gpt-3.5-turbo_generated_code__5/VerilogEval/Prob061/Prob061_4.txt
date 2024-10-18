@@ -1,0 +1,33 @@
+Sure! Here's the RTL design implementation for the TopModule:
+
+```verilog
+module TopModule (
+    input clk,   // Clock input
+    input w,     // Input from previous stage
+    input R,     // Value to load
+    input E,     // Enable shift
+    input L,     // Load enable
+    output Q     // Output
+);
+
+reg Q;          // Output register
+reg D;          // Data input register
+
+always @(posedge clk) begin
+    if (E) begin
+        if (L) begin
+            Q <= R;            // Load value
+        end else begin
+            Q <= w;            // Shift
+        end
+    end else begin
+        Q <= 1'b0;            // Reset Q
+    end
+end
+
+endmodule
+```
+
+In this design, the `Q` output is assigned to the `R` value when the `L` input is asserted and the shift operation is disabled. When the shift operation is enabled, the `Q` output is assigned to the input from the previous stage (`w`). If the enable shift is not active, the `Q` output is reset to 0. The sequential logic is triggered on the positive edge of the `clk` input.
+
+Please let me know if you need any further assistance!

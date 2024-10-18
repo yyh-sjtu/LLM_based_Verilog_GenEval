@@ -1,0 +1,16 @@
+To implement the TopModule with the specified interface and functionality of a population count circuit, you can use the following Verilog code:
+
+```verilog
+module TopModule(
+    input [2:0] in,
+    output [1:0] out
+);
+
+assign out = {in[2] + in[1], in[1] + in[0]};
+
+endmodule
+```
+
+In this code, the input vector is a 3-bit signal 'in' and the output vector is a 2-bit signal 'out'. The assign statement calculates the population count by adding adjacent bits in the input vector. The resulting count is stored in the output vector.
+
+You can further customize the implementation based on specific requirements or constraints. Let me know if you need any further assistance with RTL design.

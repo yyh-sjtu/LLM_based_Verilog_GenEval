@@ -1,0 +1,25 @@
+module top_module (
+	input [99:0] in,
+	output out_and,
+	output out_or,
+	output out_xor
+);
+	// Create a wire to connect the 100-input AND gate
+	wire [99:0] and_wire;
+	// Create a wire to connect the 100-input OR gate
+	wire [99:0] or_wire;
+	// Create a wire to connect the 100-input XOR gate
+	wire [99:0] xor_wire;
+	
+	// Instantiate the 100-input AND gate
+	assign and_wire = &in;
+	// Instantiate the 100-input OR gate
+	assign or_wire = |in;
+	// Instantiate the 100-input XOR gate
+	assign xor_wire = ^in;
+	
+	// Output the results of the AND, OR, and XOR gates
+	assign out_and = and_wire[0];
+	assign out_or = or_wire[0];
+	assign out_xor = xor_wire[0];
+endmodule

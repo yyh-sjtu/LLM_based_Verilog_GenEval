@@ -1,0 +1,38 @@
+As a professional RTL designer, I will provide you with a verilog implementation of the TopModule based on your requirements. Here's the code:
+
+```verilog
+module TopModule (
+  input clk,
+  input resetn,
+  input [1:0] byteena,
+  input [15:0] d,
+  output reg [15:0] q
+);
+
+reg [15:0] q_reg;
+
+always @(posedge clk or negedge resetn) begin
+  if (~resetn) begin
+    q_reg <= 16'b0;
+  end else begin
+    if (byteena[0])
+      q_reg[7:0] <= d[7:0];
+    if (byteena[1])
+      q_reg[15:8] <= d[15:8];
+  end
+end
+
+always @(posedge clk) begin
+  q <= q_reg;
+end
+
+endmodule
+```
+
+In this implementation, the `TopModule` contains a 16-bit register `q` which holds the output value. The register `q_reg` is used to store the intermediate values updated based on `byteena` inputs and `d` input. On the positive edge of the clock (`clk`), the value of `q_reg` is assigned to `q` to update the output.
+
+The `resetn` input is used as an active-low synchronous reset. When `resetn` is low, all the D flip-flops are reset, and `q` is set to all zeros.
+
+The `byteena` input with two bits controls which bytes of the 16 registers should be written on each cycle. `byteena[1]` controls the upper byte `d[15:8]`, and `byteena[0]` controls the lower byte `d[7:0]`. When `byteena[0]` is high, `d[7:0]` is written to `q_reg[7:0]`, and when `byteena[1]` is high, `d[15:8]` is written to `q_reg[15:8]`.
+
+Please let me know if you need any further information.

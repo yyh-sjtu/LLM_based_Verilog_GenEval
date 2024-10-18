@@ -1,0 +1,50 @@
+```verilog
+module radix2_div(
+    input clk,
+    input rst,
+    input sign,
+    input [7:0] dividend,
+    input [7:0] divisor,
+    input opn_valid,
+    output reg res_valid,
+    output reg [15:0] result
+);
+
+reg [8:0] SR; // Shift register
+reg [8:0] NEG_DIVISOR;
+reg [3:0] cnt;
+reg start_cnt;
+
+always @(posedge clk or posedge rst) begin
+    if (rst) begin
+        SR <= 0;
+        NEG_DIVISOR <= 0;
+        cnt <= 0;
+        start_cnt <= 0;
+        res_valid <= 0;
+        result <= 0;
+    end else if (opn_valid && !res_valid) begin
+        SR <= {1'b0, |dividend} << 1; // left shift of dividend
+        NEG_DIVISOR <= -divisor;
+        cnt <= 1;
+        start_cnt <= 1;
+    end else if (start_cnt) begin
+        if (cnt == 8) begin
+            SR <= {SR[7:1], (SR[0] ^ sign)}; // insert sign of the dividend
+            result <= {SR[7:0], SR[8:1]}; // upper 8 bits for remainder, lower 8 bits for quotient
+            cnt <= 0;
+            start_cnt <= 0;
+            res_valid <= 1;
+        end else begin
+            cnt <= cnt + 1;
+            if (SR[8:1] >= NEG_DIVISOR) begin
+                SR <= {SR[7:1], (SR[0] ^ sign)}; // insert sign of the dividend
+            end else begin
+                SR <= {SR[7:1], (SR[0] ^ sign), 1'b0}; // insert sign of the dividend and shift left
+            end
+        end
+    end
+end
+
+endmodule
+```

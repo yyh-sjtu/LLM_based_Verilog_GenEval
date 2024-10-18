@@ -1,0 +1,16 @@
+As an AI language model, I can provide you with the code implementation for the TopModule in RTL (Register-Transfer Level) design. Please find the RTL code below:
+
+```verilog
+module TopModule(
+  input [31:0] in,
+  output [31:0] out
+);
+  assign out = {in[7:0], in[15:8], in[23:16], in[31:24]};
+endmodule
+```
+
+In this implementation, the `TopModule` takes a 32-bit input vector `in` and outputs a 32-bit vector `out`. The `assign` statement reverses the byte order by concatenating the 8-bit portions of the `in` vector in reverse order.
+
+For example, if `in` is `[31:0] = 8'h12_34_56_78`, the `out` vector will be `[31:0] = 8'h78_56_34_12`.
+
+Please let me know if there is anything else I can help you with!

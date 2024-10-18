@@ -1,0 +1,12 @@
+wire [3:0] mux_out;
+wire a, b;
+
+assign a = ~c & ~d;
+assign b = ~c & d;
+
+assign mux_in[0] = a;
+assign mux_in[1] = ~a & ~b;
+assign mux_in[2] = ~a & b;
+assign mux_in[3] = ~a & ~b;
+
+endmodule

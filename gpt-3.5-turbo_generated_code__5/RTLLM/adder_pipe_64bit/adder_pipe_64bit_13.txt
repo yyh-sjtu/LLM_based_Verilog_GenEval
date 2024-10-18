@@ -1,0 +1,90 @@
+Here is the complete verilog code for the 64-bit ripple carry adder with pipeline stages:
+
+```verilog
+module adder_pipe_64bit (
+    input clk,
+    input rst_n,
+    input i_en,
+    input [63:0] adda,
+    input [63:0] addb,
+    output reg [64:0] result,
+    output reg o_en
+);
+
+reg [63:0] sum1, sum2, sum3, sum4;
+reg [64:0] carry;
+
+always @(posedge clk or negedge rst_n) begin
+    if (!rst_n) begin
+        sum1 <= 64'b0;
+        sum2 <= 64'b0;
+        sum3 <= 64'b0;
+        sum4 <= 64'b0;
+        carry <= 65'b0;
+        o_en <= 0;
+        result <= 65'b0;
+    end else begin
+        if (i_en) begin
+            sum1 <= adda + addb;
+        end
+    end
+end
+
+always @(posedge clk or negedge rst_n) begin
+    if (!rst_n) begin
+        carry <= 65'b0;
+        o_en <= 0;
+        result <= 65'b0;
+    end else begin
+        if (i_en) begin
+            sum2 <= sum1 + carry[0:63];
+            carry <= {1'b0, sum1[63]} + {sum1[63], sum1[62:0]};
+        end
+    end
+end
+
+always @(posedge clk or negedge rst_n) begin
+    if (!rst_n) begin
+        carry <= 65'b0;
+        o_en <= 0;
+        result <= 65'b0;
+    end else begin
+        if (i_en) begin
+            sum3 <= sum2 + carry[0:63];
+            carry <= {1'b0, sum2[63]} + {sum2[63], sum2[62:0]};
+        end
+    end
+end
+
+always @(posedge clk or negedge rst_n) begin
+    if (!rst_n) begin
+        carry <= 65'b0;
+        o_en <= 0;
+        result <= 65'b0;
+    end else begin
+        if (i_en) begin
+            sum4 <= sum3 + carry[0:63];
+            carry <= {1'b0, sum3[63]} + {sum3[63], sum3[62:0]};
+        end
+    end
+end
+
+always @(posedge clk or negedge rst_n) begin
+    if (!rst_n) begin
+        o_en <= 0;
+        result <= 65'b0;
+    end else begin
+        if (i_en) begin
+            o_en <= 1;
+            result <= {carry[63], sum4};
+        end else begin
+            o_en <= 0;
+            result <= 65'b0;
+        end
+    end
+end
+
+endmodule
+```
+
+This verilog module implements a 64-bit ripple carry adder with pipeline stages. The input operands are added in pipeline stages and the output result is available on the result port. The pipeline stages are synchronized with the clock and reset signals, and the output enable signal (o_en) indicates the availability of the result.

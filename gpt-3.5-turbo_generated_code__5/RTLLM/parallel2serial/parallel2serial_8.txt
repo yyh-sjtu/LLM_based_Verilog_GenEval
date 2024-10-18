@@ -1,0 +1,36 @@
+Sure, here is the complete Verilog code for the parallel-to-serial conversion module:
+
+```verilog
+module parallel2serial (
+    input clk,
+    input rst_n,
+    input [3:0] d,
+    output reg valid_out,
+    output reg dout
+);
+
+reg [3:0] data;
+reg [1:0] cnt;
+
+always @(posedge clk or negedge rst_n) begin
+    if (~rst_n) begin
+        cnt <= 2'b00;
+        data <= 4'b0;
+        valid_out <= 1'b0;
+    end else if (cnt == 2'b11) begin
+        cnt <= 2'b00;
+        data <= d;
+        valid_out <= 1'b1;
+    end else begin
+        cnt <= cnt + 1;
+        valid_out <= 1'b0;
+        data <= {data[2:0], data[3]};
+    end
+end
+
+assign dout = data[3];
+
+endmodule
+```
+
+This Verilog code implements the parallel-to-serial conversion module as per the given requirements, with the use of a counter to keep track of the bit position and a data register to store the parallel input. The output valid_out indicates the availability of valid serial output, and the dout represents the converted data. The module also includes a reset functionality to initialize the state of the module.

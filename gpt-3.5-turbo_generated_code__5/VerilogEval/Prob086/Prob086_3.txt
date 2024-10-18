@@ -1,0 +1,27 @@
+As a professional RTL designer, I will design the TopModule according to the given requirements. Below is the Verilog code for the implementation of the 5-bit maximal-length Galois LFSR with taps at bit positions 5 and 3:
+
+```verilog
+module TopModule (
+    input clk,
+    input reset,
+    output reg [4:0] q
+);
+
+reg [4:0] lfsr;
+
+always @(posedge clk) begin
+    if (reset) begin
+        lfsr <= 5'b1;
+    end else begin
+        lfsr <= {lfsr[3] ^ lfsr[0], lfsr[4:1]};
+    end
+end
+
+assign q = lfsr;
+
+endmodule
+```
+
+In this code, the 5-bit LFSR register 'lfsr' is updated on the positive edge of the clock based on the feedback logic specified with taps at bit positions 5 and 3. The synchronous reset signal resets the LFSR output to '1'. The output q is assigned the current value of the LFSR.
+
+This implementation meets the requirements for the TopModule with the specified interface and functionality of a 5-bit maximal-length Galois LFSR. It has been designed with synchronous reset and appropriate feedback logic for generating the next state of the LFSR.

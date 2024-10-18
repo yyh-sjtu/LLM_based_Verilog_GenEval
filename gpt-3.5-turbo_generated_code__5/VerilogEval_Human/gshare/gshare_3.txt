@@ -1,0 +1,91 @@
+// Define parameters
+parameter HISTORY_SIZE = 7;
+parameter TABLE_SIZE = 128;
+
+// Define states
+parameter IDLE = 2'b00;
+parameter PREDICTING = 2'b01;
+parameter TRAINING = 2'b10;
+
+// Define counter states
+parameter STRONGLY_NOT_TAKEN = 2'b00;
+parameter WEAKLY_NOT_TAKEN = 2'b01;
+parameter WEAKLY_TAKEN = 2'b10;
+parameter STRONGLY_TAKEN = 2'b11;
+
+// Define register sizes
+parameter PC_SIZE = 7;
+parameter HISTORY_REGISTER_SIZE = 7;
+parameter INDEX_SIZE = HISTORY_SIZE;
+parameter COUNTER_SIZE = 2;
+
+// Define register signals
+reg [PC_SIZE-1:0] pc_reg;
+reg [HISTORY_REGISTER_SIZE-1:0] history_reg;
+reg [INDEX_SIZE-1:0] index_reg;
+reg [COUNTER_SIZE-1:0] counter_reg[TABLE_SIZE-1:0];
+
+// Define internal signals
+wire [INDEX_SIZE-1:0] index;
+wire [COUNTER_SIZE-1:0] counter;
+wire [HISTORY_REGISTER_SIZE-1:0] history;
+
+// Define state registers
+reg [1:0] state_reg;
+reg [1:0] next_state_reg;
+
+// Define output signals
+wire predict_taken;
+wire [HISTORY_REGISTER_SIZE-1:0] predict_history;
+
+// Initialize state register with IDLE state
+initial begin
+	state_reg <= IDLE;
+end
+
+// Synchronous logic
+always @(posedge clk or posedge areset) begin
+	if (areset) begin
+		state_reg <= IDLE;
+	end else begin
+		state_reg <= next_state_reg;
+	end
+end
+
+// Combinational logic
+always @(*) begin
+	case (state_reg)
+		IDLE: begin
+			if (predict_valid) begin
+				next_state_reg = PREDICTING;
+			end else if (train_valid) begin
+				next_state_reg = TRAINING;
+			end else begin
+				next_state_reg = IDLE;
+			end
+			index_reg = {predict_pc[HISTORY_SIZE-1:0]} ^ history_reg;
+		end
+		PREDICTING: begin
+			predict_taken = counter_reg[index_reg] >= 2'b10;
+			predict_history = history_reg;
+			next_state_reg = IDLE;
+		end
+		TRAINING: begin
+			if (train_mispredicted) begin
+				history_reg = train_history;
+			end
+			counter_reg[index_reg] <= train_taken ? counter_reg[index_reg] + 1 : counter_reg[index_reg] - 1;
+			next_state_reg = IDLE;
+		end
+		default: begin
+			next_state_reg = IDLE;
+		end
+	endcase
+end
+
+// Assign internal signals
+assign index = index_reg;
+assign counter = counter_reg[index_reg];
+assign history = history_reg;
+
+endmodule

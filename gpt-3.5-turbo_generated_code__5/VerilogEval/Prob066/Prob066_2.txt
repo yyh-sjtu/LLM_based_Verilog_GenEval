@@ -1,0 +1,28 @@
+Sure, here is an example implementation of the TopModule in RTL:
+
+```verilog
+module TopModule (
+  input clk,
+  input reset,
+  input [31:0] in,
+  output reg [31:0] out
+);
+
+  reg [31:0] prev_in;
+
+  always @(posedge clk or posedge reset) begin
+    if (reset) begin
+      out <= 0;
+      prev_in <= 0;
+    end else begin
+      prev_in <= in;
+      out <= out | (prev_in & ~in);
+    end
+  end
+
+endmodule
+```
+
+In this implementation, we have a register `prev_in` which stores the previous value of the input vector `in`. On each positive edge of the clock, we check if the reset signal is active. If it is active, we reset the output `out` and `prev_in` to 0. Otherwise, we update `prev_in` with the current value of `in` and set each bit in the `out` signal to 1 if the corresponding bit in `prev_in` was 1 and the corresponding bit in `in` is 0.
+
+This implementation ensures that the output `out` remains 1 until the register is reset using a synchronous reset methodology.

@@ -1,0 +1,94 @@
+Sure, here's the complete code for the 64-bit ripple carry adder module with pipeline stages:
+
+```verilog
+module adder_pipe_64bit (
+  input wire clk,
+  input wire rst_n,
+  input wire i_en,
+  input wire [63:0] adda,
+  input wire [63:0] addb,
+  output wire [64:0] result,
+  output wire o_en
+);
+
+  reg [63:0] stage1_sum;
+  reg [63:0] stage2_sum;
+  reg [63:0] stage3_sum;
+  reg [63:0] stage4_sum;
+  reg [63:0] stage5_sum;
+  reg [63:0] stage6_sum;
+  reg [63:0] stage7_sum;
+
+  reg [63:0] stage1_carry;
+  reg [63:0] stage2_carry;
+  reg [63:0] stage3_carry;
+  reg [63:0] stage4_carry;
+  reg [63:0] stage5_carry;
+  reg [63:0] stage6_carry;
+
+  reg o_en_reg;
+
+  always @(posedge clk or negedge rst_n) begin
+    if (~rst_n) begin
+      stage1_sum <= 0;
+      stage2_sum <= 0;
+      stage3_sum <= 0;
+      stage4_sum <= 0;
+      stage5_sum <= 0;
+      stage6_sum <= 0;
+      stage7_sum <= 0;
+
+      stage1_carry <= 0;
+      stage2_carry <= 0;
+      stage3_carry <= 0;
+      stage4_carry <= 0;
+      stage5_carry <= 0;
+      stage6_carry <= 0;
+
+      o_en_reg <= 0;
+    end else begin
+      if (i_en) begin
+        stage1_sum <= adda + addb;
+        stage1_carry <= (adda[0] & addb[0]) | (adda[0] & stage1_sum[0]) | (addb[0] & stage1_sum[0]);
+      end
+
+      if (i_en) begin
+        stage2_sum <= stage1_sum;
+        stage2_carry <= (stage1_sum[0] & stage1_carry[63]) | (stage1_sum[0] & stage1_sum[63]) | (stage1_carry[63] & stage1_sum[63]);
+      end
+
+      if (i_en) begin
+        stage3_sum <= stage2_sum;
+        stage3_carry <= (stage2_sum[0] & stage2_carry[63]) | (stage2_sum[0] & stage2_sum[63]) | (stage2_carry[63] & stage2_sum[63]);
+      end
+
+      if (i_en) begin
+        stage4_sum <= stage3_sum;
+        stage4_carry <= (stage3_sum[0] & stage3_carry[63]) | (stage3_sum[0] & stage3_sum[63]) | (stage3_carry[63] & stage3_sum[63]);
+      end
+
+      if (i_en) begin
+        stage5_sum <= stage4_sum;
+        stage5_carry <= (stage4_sum[0] & stage4_carry[63]) | (stage4_sum[0] & stage4_sum[63]) | (stage4_carry[63] & stage4_sum[63]);
+      end
+
+      if (i_en) begin
+        stage6_sum <= stage5_sum;
+        stage6_carry <= (stage5_sum[0] & stage5_carry[63]) | (stage5_sum[0] & stage5_sum[63]) | (stage5_carry[63] & stage5_sum[63]);
+      end
+
+      if (i_en) begin
+        stage7_sum <= stage6_sum;
+      end
+
+      o_en_reg <= i_en;
+    end
+  end
+
+  assign result = {stage7_sum[63], stage7_sum};
+  assign o_en = o_en_reg;
+
+endmodule
+```
+
+This module implements a 64-bit ripple carry adder with pipeline stages. The input operands `adda` and `addb` are added together, and the result is available on the `result` output port. The `o_en` output signal indicates the availability of the result. The pipeline stages are controlled by the clock signal (`clk`) and reset signal (`rst_n`). The input enable signal `i_en` is synchronized and used to control the pipeline stages. The carry signals for each stage of the adder are also calculated and used in the subsequent stages.

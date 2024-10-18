@@ -1,0 +1,67 @@
+Sure! Here's the implementation of the TopModule in synthesizable RTL code:
+
+```verilog
+module TopModule (
+  input clk,
+  input in,
+  input reset,
+  output reg [7:0] out_byte,
+  output reg done
+);
+  reg [3:0] state;
+  reg [7:0] shift_reg;
+  reg [2:0] bit_count;
+
+  always @(posedge clk) begin
+    if (reset) begin
+      state <= 0;
+      shift_reg <= 0;
+      bit_count <= 0;
+      done <= 0;
+      out_byte <= 0;
+    end else begin
+      case (state)
+        0: begin // wait for start bit
+          if (in == 0) begin
+            state <= 1; // receive first data bit
+            bit_count <= 0;
+          end
+        end
+        1: begin // receive data bits
+          shift_reg[bit_count] <= in;
+          if (bit_count == 7) begin
+            state <= 2; // wait for stop bit
+          end else begin
+            bit_count <= bit_count + 1;
+          end
+        end
+        2: begin // wait for stop bit
+          if (in == 1) begin
+            state <= 0;
+            done <= 1;
+            out_byte <= shift_reg;
+          end
+        end
+        default: begin
+          state <= 0;
+          shift_reg <= 0;
+          bit_count <= 0;
+          done <= 0;
+          out_byte <= 0;
+        end
+      endcase
+    end
+  end
+endmodule
+```
+
+The TopModule is implemented as a finite state machine (FSM). It has four main states:
+
+- State 0: Waiting for the start bit. If the input `in` is low, it transitions to state 1 to receive the first data bit.
+- State 1: Receiving the data bits. Each received bit is stored in the `shift_reg` register at the corresponding position dictated by the `bit_count`. After receiving all 8 data bits, it transitions to state 2.
+- State 2: Waiting for the stop bit. If the input `in` is high, it transitions back to state 0, indicating that a complete byte has been received. It asserts the `done` signal and outputs the received data byte on the `out_byte` port.
+- Default: This is the reset state and also the state to handle any undefined states.
+
+The FSM is sensitive to the positive edge of the clock (`@(posedge clk)`) and includes an active-high synchronous reset (`reset`).
+
+Note that this implementation assumes that `in` represents the input bit stream and is synchronized to the clock domain. Additionally, it assumes that input data is valid only when `reset` is low.

@@ -1,0 +1,47 @@
+Here is the complete code for the Verilog module "edge_detect":
+
+```verilog
+module edge_detect (
+    input wire clk,
+    input wire rst_n,
+    input wire a,
+    output wire rise,
+    output wire down
+);
+
+    reg prev_a;
+    reg rise_sync, down_sync;
+
+    always @(posedge clk or negedge rst_n) begin
+        if (~rst_n) begin
+            prev_a <= 1'b0;
+            rise_sync <= 1'b0;
+            down_sync <= 1'b0;
+        end else begin
+            prev_a <= a;
+            if (a && ~prev_a) begin // Rising edge
+                rise_sync <= 1'b1;
+                down_sync <= 1'b0;
+            end else if (~a && prev_a) begin // Falling edge
+                rise_sync <= 1'b0;
+                down_sync <= 1'b1;
+            end else begin
+                rise_sync <= rise_sync;
+                down_sync <= down_sync;
+            end
+        end
+    end
+
+    assign rise = rise_sync;
+    assign down = down_sync;
+
+endmodule
+```
+
+In this implementation, we use a synchronous always block to detect rising and falling edges on the positive edge of the clock signal (`@(posedge clk)`). We also take into account the reset signal (`rst_n`) to initialize the internal state of the module.
+
+Inside the always block, we check for the rising and falling edges using an if-else statement. If a rising edge is detected (`a && ~prev_a`), we set the `rise_sync` flag to 1 and clear the `down_sync` flag. If a falling edge is detected (`~a && prev_a`), we set the `down_sync` flag to 1 and clear the `rise_sync` flag. Otherwise, we retain the previous values of `rise_sync` and `down_sync`.
+
+Finally, we assign the synchronized output signals `rise_sync` and `down_sync` to the output ports `rise` and `down`, respectively.
+
+Please note that this is a basic implementation of edge detection and may need modifications based on your specific requirements and design constraints.

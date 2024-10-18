@@ -1,0 +1,15 @@
+Here are the next-state logic equations and output logic equations for the given Moore state machine:
+
+B3_next = shift_ena
+S_next = S11
+S1_next = S11
+Count_next = (counting == 1) && !(done_counting)
+Wait_next = done
+
+done = (Wait && ack) || ((Count && done_counting) && !done)
+
+counting = Count
+
+shift_ena = B0 || B1 || B2 || B3
+
+Please implement this logic in your RTL design for the TopModule. If you need further assistance or clarification, feel free to ask.

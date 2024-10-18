@@ -1,0 +1,22 @@
+// Define internal wire to hold the inverted version of the input vector
+wire [99:0] in_inv;
+assign in_inv = ~in;
+
+// Define internal wire to hold the shifted version of the input vector (to the right)
+wire [98:0] in_shifted;
+assign in_shifted = in[99:1];
+
+// Define internal wire to hold the shifted version of the input vector (to the left)
+wire [99:1] in_shifted_left;
+assign in_shifted_left = {in[0], in[99:2]};
+
+// Define output vector out_both
+assign out_both = in & in_shifted;
+
+// Define output vector out_any
+assign out_any = in | in_shifted_left;
+
+// Define output vector out_different
+assign out_different = in ^ in_shifted_left;
+
+endmodule

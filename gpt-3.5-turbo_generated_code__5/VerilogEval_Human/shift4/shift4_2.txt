@@ -1,0 +1,27 @@
+module shift_register (
+  input clk,
+  input areset,
+  input load,
+  input ena,
+  input [3:0] data,
+  output reg [3:0] q
+);
+
+  always @(posedge clk or posedge areset) begin
+    if (areset) begin
+      q <= 4'b0000;
+    end else begin
+      if (load) begin
+        q <= data;
+      end else begin
+        if (ena) begin
+          q[3] <= 1'b0;
+          q[2:0] <= q[3:1];
+        end
+      end
+    end
+  end
+
+endmodule
+
+Note: In the shift_register module, a synchronous always block is used to perform the shifting operations. The areset input is used to asynchronously reset the shift register to zero. The load input is used to load the shift register with the data input instead of shifting. The ena input is used to shift the contents of the shift register to the right, with q[3] becoming zero and q[0] being shifted out and disappearing. The q output represents the contents of the shift register. If both the load and ena inputs are asserted, the load input takes higher priority.

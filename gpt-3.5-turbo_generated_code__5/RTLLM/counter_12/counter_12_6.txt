@@ -1,0 +1,30 @@
+Here is the complete Verilog code for the counter design:
+
+```verilog
+module counter_12 (
+    input rst_n,
+    input clk,
+    input valid_count,
+    output reg [3:0] out
+);
+
+always @(posedge clk or negedge rst_n) begin
+    if (~rst_n) begin
+        out <= 4'b0000; // Reset the counter to 0
+    end else if (valid_count && (out != 4'd11)) begin
+        out <= out + 1; // Increment the counter if valid_count is active and not at maximum value
+    end else begin
+        out <= out; // Remain unchanged if valid_count is inactive or at maximum value
+    end
+end
+
+endmodule
+```
+
+In this code, an `always` block is used to control the behavior of the counter. The counter is sensitive to the rising edge of the `clk` signal and the falling edge of the `rst_n` signal. Inside the `always` block, an if-else statement is used to implement the counter logic.
+
+When the reset signal, `rst_n`, is active low (i.e., ~rst_n), the counter is reset to 0 by assigning the value `4'b0000` to the output register, `out`.
+If the `valid_count` signal is active high (1 in Verilog), and the current counter value (`out`) is not equal to the maximum count value (`4'd11`), the counter increments by 1 by adding 1 to the output register.
+If the `valid_count` signal is inactive low (0 in Verilog), or the counter is already at the maximum value, the output register remains unchanged.
+
+Note that the counter output `out` is declared as a 4-bit wide register (`reg [3:0] out`) to hold the 4-bit count value. The `out` register is declared as a `reg` type to allow assignment inside the `always` block.

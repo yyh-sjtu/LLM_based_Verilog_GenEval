@@ -1,0 +1,26 @@
+As a professional RTL designer, I will implement the TopModule with the given interface in Verilog HDL. Here is the code for the module:
+
+```verilog
+module TopModule (
+  input [3:0] in,
+  output out_and,
+  output out_or,
+  output out_xor
+);
+
+  assign out_and = in[3] & in[2] & in[1] & in[0];
+  assign out_or = in[3] | in[2] | in[1] | in[0];
+  assign out_xor = in[3] ^ in[2] ^ in[1] ^ in[0];
+
+endmodule
+```
+
+In this code, I declared a module named "TopModule" which takes a 4-bit input called "in" and has three 1-bit outputs: "out_and", "out_or", and "out_xor". 
+
+The "out_and" output is assigned the result of a 4-input AND gate using the bitwise AND operator "&".
+
+The "out_or" output is assigned the result of a 4-input OR gate using the bitwise OR operator "|".
+
+The "out_xor" output is assigned the result of a 4-input XOR gate using the bitwise XOR operator "^".
+
+This implementation meets the requirements for the combinational circuit with four inputs and three outputs in the given interface.

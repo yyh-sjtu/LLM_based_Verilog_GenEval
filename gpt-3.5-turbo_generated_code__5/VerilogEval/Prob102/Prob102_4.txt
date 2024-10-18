@@ -1,0 +1,17 @@
+Based on the given simulation waveforms, the module TopModule implements a combinational circuit with the following behavior:
+
+```verilog
+module TopModule (
+  input  a,
+  input  b,
+  input  c,
+  input  d,
+  output q
+);
+
+  assign q = ~(a & b & c & d);
+
+endmodule
+```
+
+The output `q` is the logical negation of the AND operation between inputs `a`, `b`, `c`, and `d`.

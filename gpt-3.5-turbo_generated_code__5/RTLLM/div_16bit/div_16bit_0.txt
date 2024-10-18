@@ -1,0 +1,56 @@
+```verilog
+module div_16bit (
+  input [15:0] A,
+  input [7:0] B,
+  output [15:0] result,
+  output [15:0] odd
+);
+
+  reg [15:0] a_reg;
+  reg [7:0] b_reg;
+  reg [15:0] quotient;
+
+  always @* begin
+    a_reg = A;
+    b_reg = B;
+  end
+
+  always @* begin
+    reg [15:0] dividend;
+    reg [3:0] shift_amount;
+    reg [15:0] remaining_bits;
+    reg [15:0] new_dividend;
+    reg [7:0] divisor;
+
+    dividend = a_reg;
+    divisor = b_reg;
+    shift_amount = 0;
+    quotient = 0;
+
+    for (shift_amount = 15; shift_amount >= 0; shift_amount = shift_amount - 1) begin
+      if (dividend[shift_amount + 7:shift_amount] >= divisor) begin
+        quotient[shift_amount] = 1;
+        remaining_bits = dividend[shift_amount + 7:shift_amount] - divisor;
+        new_dividend = {remaining_bits, dividend[shift_amount + 6:0]};
+      end
+      else begin
+        quotient[shift_amount] = 0;
+        new_dividend = {dividend[shift_amount + 7:shift_amount], dividend[shift_amount + 6:0]};
+      end
+
+      dividend = new_dividend;
+    end
+
+    result = quotient;
+    odd = dividend;
+  end
+
+endmodule
+```
+This code defines a module called `div_16bit` that takes a 16-bit dividend `A` and an 8-bit divisor `B` as inputs, and produces a 16-bit quotient `result` and a 16-bit remainder `odd` as outputs.
+
+The module uses two always blocks. The first always block is a combinational block that updates the values of two registers `a_reg` and `b_reg` with the values of inputs `A` and `B`, respectively.
+
+The second always block is also a combinational block that performs the actual division operation using the values of `a_reg` and `b_reg`. It uses a `for` loop to iterate through each bit of the dividend starting from the most significant bit (`shift_amount = 15`). Inside the loop, it compares the bits of the dividend with the divisor. If the dividend bits are greater than or equal to the divisor, it sets the corresponding quotient bit to 1 and subtracts the divisor from the dividend bits to get the remaining bits. Otherwise, it sets the quotient bit to 0. The loop then updates the dividend with the remaining bits concatenated with the next bit from the dividend. Finally, it assigns the quotient and dividend values to the output ports `result` and `odd`, respectively.
+
+Note: This implementation assumes that the divisor `B` is non-zero. Additional checks can be added to handle the case of a zero divisor.

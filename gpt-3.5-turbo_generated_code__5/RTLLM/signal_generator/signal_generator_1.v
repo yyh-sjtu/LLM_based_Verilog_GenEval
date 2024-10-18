@@ -1,0 +1,35 @@
+
+module signal_generator (
+  input wire clk,      // Clock signal
+  input wire rst_n,    // Reset signal (active-low)
+  output reg [4:0] wave // 5-bit output waveform signal
+);
+
+  // State register for controlling waveform generation
+  reg [1:0] state;
+
+  // Waveform generation logic
+  always @(posedge clk or negedge rst_n) begin
+    if (~rst_n) begin
+      state <= 2'b00; // Reset state to 0
+      wave <= 5'b0;   // Reset waveform to 0
+    end
+    else begin
+      case (state)
+        2'b00: begin  // State = 0, increment waveform
+          if (wave == 5'b11111) // If wave reaches 31
+            state <= 2'b01;     // Transition to state 1
+          else
+            wave <= wave + 1;   // Increment waveform by 1
+        end
+        2'b01: begin  // State = 1, decrement waveform
+          if (wave == 5'b00000) // If wave reaches 0
+            state <= 2'b00;     // Transition to state 0
+          else
+            wave <= wave - 1;   // Decrement waveform by 1
+        end
+      endcase
+    end
+  end
+
+endmodule

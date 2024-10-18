@@ -1,0 +1,129 @@
+module top_module (
+  input clk,
+  input resetn,
+  input x,
+  input y,
+  output f,
+  output g
+);
+  
+  // Define the states
+  typedef enum logic [1:0] {
+    STATE_A,
+    STATE_B,
+    STATE_C,
+    STATE_D
+  } state_type;
+  
+  // Define the state register and next state register
+  logic [1:0] state_reg, state_next;
+  
+  // Define the output registers
+  logic f_reg, g_reg;
+  
+  // State register and output register assignments
+  always_ff @(posedge clk or negedge resetn)
+  begin
+    if (!resetn)
+    begin
+      state_reg <= STATE_A;
+      f_reg <= 0;
+      g_reg <= 0;
+    end
+    else
+    begin
+      state_reg <= state_next;
+      f_reg <= f_next;
+      g_reg <= g_next;
+    end
+  end
+  
+  // Next state logic
+  always_comb
+  begin
+    case(state_reg)
+      STATE_A:
+        begin
+          state_next = STATE_B;
+          f_next = 0;
+          g_next = 0;
+        end
+        
+      STATE_B:
+        begin
+          if (resetn)
+          begin
+            if (x)
+            begin
+              state_next = STATE_C;
+              f_next = 1;
+              g_next = 0;
+            end
+            else
+            begin
+              state_next = STATE_B;
+              f_next = 0;
+              g_next = 0;
+            end
+          end
+          else
+          begin
+            state_next = STATE_A;
+            f_next = 0;
+            g_next = 0;
+          end
+        end
+        
+      STATE_C:
+        begin
+          if (resetn)
+          begin
+            if (x)
+            begin
+              state_next = STATE_D;
+              f_next = 0;
+              g_next = 0;
+            end
+            else
+            begin
+              state_next = STATE_C;
+              f_next = 0;
+              g_next = 0;
+            end
+          end
+          else
+          begin
+            state_next = STATE_A;
+            f_next = 0;
+            g_next = 0;
+          end
+        end
+      
+      STATE_D:
+        begin
+          if (resetn)
+          begin
+            state_next = STATE_D;
+            f_next = 0;
+            
+            if (y)
+              g_next = 1;
+            else
+              g_next = 0;
+          end
+          else
+          begin
+            state_next = STATE_A;
+            f_next = 0;
+            g_next = 0;
+          end
+        end      
+    endcase
+  end
+  
+  // Assign the outputs
+  assign f = f_reg;
+  assign g = g_reg;
+  
+endmodule
+

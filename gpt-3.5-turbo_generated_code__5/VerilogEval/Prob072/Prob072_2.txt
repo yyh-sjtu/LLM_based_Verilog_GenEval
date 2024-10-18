@@ -1,0 +1,52 @@
+As a professional RTL designer, I will implement the TopModule according to the provided interface specifications. Below is the RTL code for the TopModule:
+
+```verilog
+module TopModule(
+    input mode,
+    input too_cold,
+    input too_hot,
+    input fan_on,
+    output reg heater,
+    output reg aircon,
+    output reg fan
+);
+
+always @* begin
+    // Heating mode
+    if(mode == 1) begin
+        if(too_cold)
+            heater = 1;
+        else
+            heater = 0;
+        
+        if(heater)
+            fan = 1;
+        else if(fan_on)
+            fan = 1;
+        else
+            fan = 0;
+        
+        aircon = 0;
+    end
+    // Cooling mode
+    else begin
+        if(too_hot)
+            aircon = 1;
+        else
+            aircon = 0;
+        
+        if(aircon)
+            fan = 1;
+        else if(fan_on)
+            fan = 1;
+        else
+            fan = 0;
+        
+        heater = 0;
+    end
+end
+
+endmodule
+```
+
+In this code, I have implemented the logic for the thermostat controller based on the specified modes and input conditions. The heater, aircon, and fan outputs are controlled accordingly to maintain the desired temperature and air circulation. Please let me know if you need any further modifications or have any additional requirements.

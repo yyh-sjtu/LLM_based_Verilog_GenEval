@@ -1,0 +1,99 @@
+module top_module(
+	input clk,
+	input reset,
+	input ena,
+	output reg pm,
+	output reg [7:0] hh,
+	output reg [7:0] mm,
+	output reg [7:0] ss);
+	
+	// Internal variables for counters
+	reg [3:0] hr10; // Hours tens digit
+	reg [3:0] hr1;  // Hours ones digit
+	reg [3:0] min10; // Minutes tens digit
+	reg [3:0] min1;  // Minutes ones digit
+	reg [3:0] sec10;  // Seconds tens digit
+	reg [3:0] sec1;   // Seconds ones digit
+	
+	// Counter for fast clk
+	reg [31:0] clk_counter;
+	
+	always @(posedge clk) begin
+		if (reset) begin
+			// Reset the clock to 12:00 AM
+			clk_counter <= 0;
+			hr10 <= 0;
+			hr1 <= 1;
+			min10 <= 0;
+			min1 <= 0;
+			sec10 <= 0;
+			sec1 <= 0;
+			pm <= 0;
+			hh <= 8'b00000001; // 12
+			mm <= 8'b00000000; // 00
+			ss <= 8'b00000000; // 00
+		end else begin
+			// Increment counters every second
+			clk_counter <= clk_counter + 1;
+			if (clk_counter >= clk_freq) begin
+				clk_counter <= 0;
+				
+				// Check if the clock should increment
+				if (ena) begin
+					// Increment seconds ones digit
+					sec1 <= sec1 + 1;
+					
+					// Check if seconds ones digit overflowed
+					if (sec1 >= 10) begin
+						sec1 <= 0;
+						// Increment seconds tens digit
+						sec10 <= sec10 + 1;
+						
+						// Check if seconds tens digit overflowed
+						if (sec10 >= 6) begin
+							sec10 <= 0;
+							
+							// Increment minutes ones digit
+							min1 <= min1 + 1;
+							
+							// Check if minutes ones digit overflowed
+							if (min1 >= 10) begin
+								min1 <= 0;
+								// Increment minutes tens digit
+								min10 <= min10 + 1;
+								
+								// Check if minutes tens digit overflowed
+								if (min10 >= 6) begin
+									min10 <= 0;
+									
+									// Increment hours ones digit
+									hr1 <= hr1 + 1;
+									
+									// Check if hours ones digit overflowed
+									if (hr1 >= 10) begin
+										hr1 <= 0;
+										// Increment hours tens digit
+										hr10 <= hr10 + 1;
+										
+										// Check if hours tens digit overflowed
+										if (hr10 >= 2) begin
+											hr10 <= 0;
+											
+											// Toggle am/pm indicator
+											if (pm) begin
+												pm <= 0; // AM
+											end else begin
+												pm <= 1; // PM
+											end
+										end
+									end
+								end
+							end
+						end
+					end
+				end
+			end
+		end
+	end
+endmodule
+

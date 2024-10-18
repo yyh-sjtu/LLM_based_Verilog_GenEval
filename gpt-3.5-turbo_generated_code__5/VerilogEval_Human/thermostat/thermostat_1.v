@@ -1,0 +1,27 @@
+module top_module(
+    input mode,
+    input too_cold, 
+    input too_hot,
+    input fan_on,
+    output heater,
+    output aircon,
+    output fan
+);
+
+// Declare internal signals
+wire fan_required;
+
+// Determine if fan is required
+assign fan_required = (fan_on || heater || aircon);
+
+// Control the heater
+assign heater = (mode && too_cold && !aircon) ? 1'b1 : 1'b0;
+
+// Control the air conditioner
+assign aircon = (!mode && too_hot && !heater) ? 1'b1 : 1'b0;
+
+// Control the fan
+assign fan = (fan_required) ? 1'b1 : 1'b0;
+
+endmodule
+

@@ -1,0 +1,49 @@
+Here is the complete code for the dual-port RAM implementation in Verilog:
+
+```verilog
+module RAM (
+  input clk,
+  input rst_n,
+  input write_en,
+  input [WIDTH-1:0] write_addr,
+  input [WIDTH-1:0] write_data,
+  input read_en,
+  input [WIDTH-1:0] read_addr,
+  output reg [WIDTH-1:0] read_data
+);
+
+  parameter WIDTH = 6;
+  parameter DEPTH = 8;
+
+  reg [WIDTH-1:0] RAM [2**WIDTH-1:0];
+
+  always @(posedge clk or negedge rst_n) begin
+    if (!rst_n) begin
+      for (int i = 0; i < 2**WIDTH; i = i + 1) begin
+        RAM[i] <= 'b000000;
+      end
+    end else if (write_en) begin
+      RAM[write_addr] <= write_data;
+    end
+  end
+
+  always @(posedge clk or negedge rst_n) begin
+    if (!rst_n) begin
+      read_data <= 'b000000;
+    end else if (read_en) begin
+      read_data <= RAM[read_addr];
+    end else begin
+      read_data <= 'b000000;
+    end
+  end
+
+endmodule
+```
+
+In this code, the dual-port RAM module is implemented with a clock signal, a reset signal, separate write and read enable signals, write and read address signals, and a data width of 6 bits. The RAM array is declared as `reg [DEPTH-1:0] RAM [2**WIDTH-1:0]` to provide storage for 2^6 memory locations, each with a width of 6 bits.
+
+The first always block is triggered on the positive edge of the clock signal or the negative edge of the reset signal. On reset, indicated by `!rst_n`, all memory locations in the RAM array are cleared to 0 (`'b000000`). If the write enable signal (`write_en`) is active, the data (`write_data`) is written to the RAM array at the specified address (`write_addr`).
+
+The second always block is also triggered on the positive edge of the clock signal or the negative edge of the reset signal. On reset, the `read_data` register is cleared to 0. If the read enable signal (`read_en`) is active, the data at the specified address (`read_addr`) in the RAM array is assigned to the `read_data` register. If the read enable signal is not active, the `read_data` register is cleared to 0.
+
+Please note that the code assumes that you have defined the `WIDTH` and `DEPTH` parameters before instantiating the `RAM` module.

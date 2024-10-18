@@ -1,0 +1,15 @@
+As an RTL designer, I can help you implement the requested module. Here's the implementation of the TopModule:
+
+```verilog
+module TopModule(
+  input a,
+  input b,
+  output out
+);
+  
+  assign out = a & b;
+  
+endmodule
+```
+
+In this implementation, the `&` operator is used to perform a logical AND operation between inputs `a` and `b`. The result is assigned to the output `out`.

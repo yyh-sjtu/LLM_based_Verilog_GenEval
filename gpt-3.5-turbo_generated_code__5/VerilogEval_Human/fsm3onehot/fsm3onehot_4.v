@@ -1,0 +1,51 @@
+module top_module (
+    input in,
+    input [3:0] state,
+    output reg [3:0] next_state,
+    output out
+);
+
+// Define state values
+parameter A = 4'b0001;
+parameter B = 4'b0010;
+parameter C = 4'b0100;
+parameter D = 4'b1000;
+
+always @* begin
+    case(state)
+        A: begin
+            if(in == 0)
+                next_state = A;
+            else
+                next_state = B;
+            out = 0;
+        end
+        
+        B: begin
+            if(in == 0)
+                next_state = C;
+            else
+                next_state = B;
+            out = 0;
+        end
+        
+        C: begin
+            if(in == 0)
+                next_state = A;
+            else
+                next_state = D;
+            out = 0;
+        end
+        
+        D: begin
+            if(in == 0)
+                next_state = C;
+            else
+                next_state = B;
+            out = 1;
+        end
+    endcase
+end
+
+endmodule
+

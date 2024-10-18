@@ -1,0 +1,49 @@
+Here's the implementation of the 8-bit Radix-4 Booth multiplier in Verilog:
+
+```verilog
+module multi_booth_8bit (
+  input wire clk,
+  input wire reset,
+  input wire [7:0] a,
+  input wire [7:0] b,
+  output wire [15:0] p,
+  output wire rdy
+);
+
+  reg [7:0] multiplier;
+  reg [7:0] multiplicand;
+  reg [4:0] ctr;
+
+  always @(posedge clk or posedge reset) begin
+    if (reset) begin
+      multiplier <= {{8{a[7]}}, a};
+      multiplicand <= {{8{b[7]}}, b};
+      ctr <= 0;
+      rdy <= 0;
+    end else begin
+      if (ctr < 16) begin
+        multiplicand <= multiplicand << 1;
+        if (multiplier[ctr]) begin
+          p <= p + multiplicand;
+        end
+        ctr <= ctr + 1;
+      end else begin
+        rdy <= 1;
+      end
+    end
+  end
+
+endmodule
+```
+
+In this implementation, we use registers to store the values of the multiplier (`multiplier`) and multiplicand (`multiplicand`). The counter (`ctr`) keeps track of the current bit position being processed. On the positive edge of the clock signal or the reset signal, the module performs the multiplication process.
+
+If the reset signal is high, indicating a reset condition, the registers are initialized to hold the values of the inputs `a` and `b`. The counter is set to 0 and the ready signal (`rdy`) is set to 0.
+
+If the reset signal is low, indicating normal operation, the module checks if the counter (`ctr`) is less than 16. If the counter is less than 16, the multiplicand register (`multiplicand`) is left-shifted by 1 to simulate the Booth algorithm's shifting operation.
+
+If the current bit of the multiplier register is 1, indicating a positive Booth encoding, the product register (`p`) accumulates the value of the multiplicand register. The counter is incremented by 1.
+
+Once the counter reaches 16, indicating the completion of the multiplication process, the ready signal (`rdy`) is set to 1 to indicate completion.
+
+Note that the width of the product output (`p`) is 16 bits since the multiplication of two 8-bit numbers can result in a 16-bit product.

@@ -1,0 +1,40 @@
+module top_module (
+	input [7:0] code,
+	output reg [3:0] out,
+	output reg valid
+);
+	
+	// Define the possible scancode values
+	localparam [7:0] SC_CODES [0:9] = {8'h45, 8'h16, 8'h1e, 8'h26, 8'h25, 8'h2e, 8'h36, 8'h3d, 8'h3e, 8'h46};
+	
+	// Find the index of the matching scancode
+	reg [3:0] match_index;
+	
+	// Check if the input code matches any of the scancodes
+	always @*
+	begin
+		match_index = 0;
+		
+		for (integer i = 0; i < 10; i = i + 1)
+		begin
+			if (code == SC_CODES[i])
+			begin
+				match_index = i;
+				break;
+			end
+		end
+	
+		// Set the output and valid signals based on the match result
+		if (match_index == 0)
+		begin
+			out = 4'b0000;
+			valid = 1'b0;
+		end
+		else
+		begin
+			out = match_index;
+			valid = 1'b1;
+		end
+	end
+endmodule
+

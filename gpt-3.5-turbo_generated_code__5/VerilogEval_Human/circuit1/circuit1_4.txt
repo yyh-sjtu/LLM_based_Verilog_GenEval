@@ -1,0 +1,10 @@
+module top_module (
+	input a, 
+	input b, 
+	output q
+);
+
+// Assign q based on the input values of a and b
+assign q = a & ~b;
+
+endmodule

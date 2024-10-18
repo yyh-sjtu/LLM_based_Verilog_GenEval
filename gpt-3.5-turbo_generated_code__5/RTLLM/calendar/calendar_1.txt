@@ -1,0 +1,50 @@
+Here is the complete code for the perpetual calendar module in Verilog:
+
+```verilog
+module calendar (
+    input wire CLK,
+    input wire RST,
+    output wire [5:0] Hours,
+    output wire [5:0] Mins,
+    output wire [5:0] Secs
+);
+
+reg [5:0] Hours;
+reg [5:0] Mins;
+reg [5:0] Secs;
+
+always @(posedge CLK or posedge RST) begin
+    if (RST)
+        Secs <= 0;
+    else if (Secs == 5'd59)
+        Secs <= 0;
+    else
+        Secs <= Secs + 1;
+end
+
+always @(posedge CLK or posedge RST) begin
+    if (RST)
+        Mins <= 0;
+    else if (Mins == 5'd59 && Secs == 5'd59)
+        Mins <= 0;
+    else if (Secs == 5'd59)
+        Mins <= Mins + 1;
+end
+
+always @(posedge CLK or posedge RST) begin
+    if (RST)
+        Hours <= 0;
+    else if (Hours == 5'd23 && Mins == 5'd59 && Secs == 5'd59)
+        Hours <= 0;
+    else if (Mins == 5'd59 && Secs == 5'd59)
+        Hours <= Hours + 1;
+end
+
+assign Hours = Hours;
+assign Mins = Mins;
+assign Secs = Secs;
+
+endmodule
+```
+
+Please note that the code provided assumes a 6-bit representation for the hours, minutes, and seconds outputs.

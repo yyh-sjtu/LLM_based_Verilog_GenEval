@@ -1,0 +1,17 @@
+As a professional RTL designer, I can help you implement the TopModule with the desired interface. Here is the Verilog code for the module:
+
+```verilog
+module TopModule (
+  input  wire a,
+  input  wire b,
+  output wire out
+);
+  
+  assign out = a & b;
+  
+endmodule
+```
+
+In this code, we defined a module called "TopModule" with the specified input and output ports. The "assign" statement implements the 2-input AND gate, where the output "out" is assigned the result of the logical AND operation between inputs "a" and "b".
+
+You can use this module in your design hierarchy to perform the desired AND gate functionality. Make sure to instantiate and connect this module properly in your top-level RTL design.

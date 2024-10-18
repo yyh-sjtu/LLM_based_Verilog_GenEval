@@ -1,0 +1,33 @@
+Here is the corrected version of the adder-subtractor module with a zero flag:
+
+```verilog
+module TopModule (
+    input do_sub,
+    input [7:0] a,
+    input [7:0] b,
+    output reg [7:0] out,
+    output reg result_is_zero
+);
+
+    always @(*) begin
+        if (do_sub == 0) begin
+            out = a + b;
+            if (out == 0) begin
+                result_is_zero = 1;
+            end else begin
+                result_is_zero = 0;
+            end
+        end else begin
+            out = a - b;
+            if (out == 0) begin
+                result_is_zero = 1;
+            end else begin
+                result_is_zero = 0;
+            end
+        end
+    end
+
+endmodule
+```
+
+In this corrected version, the zero flag is updated correctly based on the result of the addition or subtraction operation. The bug where the zero flag was being set based on the result of bitwise negation of the output has been fixed.
