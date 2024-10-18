@@ -1,7 +1,0 @@
-As a professional RTL designer, I will create the TopModule with the specified interface. I will first implement an 8-bit shift register using D-type flip-flops. The shift register will have inputs S and enable, and outputs Q[0]...Q[7]. The enable signal will control the shifting operation of the shift register on the positive edge of the clock.
-
-Next, I will extend the circuit to include 3 additional inputs A, B, C and an output Z. I will use multiplexers to select the output Z based on the values of A, B, and C. For example, when ABC is 000, Z will be equal to Q[0], when ABC is 001, Z will be Q[1], and so on.
-
-I will ensure that the circuit operates correctly as a memory with random access read and shift-in write functionalities. All sequential logic will be triggered on the positive edge of the clock signal.
-
-This implementation will provide an efficient and reliable solution for realizing a 3-input logic function using an 8x1 memory circuit.

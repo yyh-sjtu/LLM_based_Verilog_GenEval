@@ -1,3 +1,0 @@
-
-	assign z = (A == B) ? 1 : 0;
-endmodule

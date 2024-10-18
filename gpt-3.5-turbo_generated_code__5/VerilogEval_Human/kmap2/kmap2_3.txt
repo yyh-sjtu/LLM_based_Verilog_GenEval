@@ -1,9 +1,0 @@
-
-// Define the truth table based on the Karnaugh map
-// 00: 1, 01: 1, 11: 1, 10: 0
-// This can be simplified to: out = !c || (a && b && d)
-
-// Verilog code implementing the circuit
-assign out = (!c) || (a && b && d);
-
-endmodule

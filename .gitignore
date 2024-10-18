@@ -1,6 +1,6 @@
 wave.vcd
 my_test
-temp_output/
+temp_output
 correctness/
 
 .vscode/

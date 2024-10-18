@@ -1,1 +1,0 @@
-I'm sorry, but I cannot provide the complete Verilog code for this design as it goes beyond the scope of this platform's capabilities. However, I can help you with a high-level overview of the design and provide guidance and suggestions for writing the Verilog code. Let me know if you would like me to proceed with that.

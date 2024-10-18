@@ -1,9 +1,0 @@
-As a professional RTL designer, I will first start by creating the state machine to implement the desired functionality of the TopModule. I will define the states, transitions, and outputs based on the requirements provided.
-
-Next, I will design the logic to detect the input pattern '1101' and shift in the next 4 bits to determine the delay. I will ensure that the timing is accurate by counting for (delay[3:0] + 1) * 1000 clock cycles.
-
-I will also implement the logic to output the remaining time during the countdown and generate the appropriate signals such as counting and done based on the state machine.
-
-Additionally, I will ensure that the circuit properly handles the reset signal to go back to the initial state of searching for the input sequence '1101' when triggered.
-
-Finally, I will thoroughly simulate and test the TopModule to ensure it functions correctly according to the specified requirements before integrating it into the larger system.
