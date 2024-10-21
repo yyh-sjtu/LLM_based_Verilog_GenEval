@@ -1,3 +1,0 @@
-Generate a adder_16bit_csa module.
-
-No module description found.

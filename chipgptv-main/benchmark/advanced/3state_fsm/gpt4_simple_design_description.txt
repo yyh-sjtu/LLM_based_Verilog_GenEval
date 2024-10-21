@@ -1,7 +1,0 @@
-Generate a 3state_fsm module.
-
-module verified_fsm3 (
-    input IN, CLK, RST,
-    output reg MATCH
-);
-
