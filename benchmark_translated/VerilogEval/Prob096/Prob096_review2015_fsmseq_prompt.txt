@@ -8,7 +8,7 @@ Note that you should return the codes only without including additional informat
 
 ### Input:
 
-Description: The module `TopModule` implements a finite-state machine that searches for the sequence 1101 in an input bit stream. When the sequence is found, it sets the output `start_shifting` to 1, forever, until reset. Reset is active high synchronous.
+Description: The module `TopModule` implements a finite-state machine that searches for the sequence 1101 in an input bit stream and sets the start_shifting output to 1 when this sequence is found, maintaining this output until a high synchronous reset.
 Verilog code: 
 module TopModule (
 	input clk,

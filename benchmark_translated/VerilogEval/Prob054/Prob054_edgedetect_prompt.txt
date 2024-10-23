@@ -8,7 +8,7 @@ Note that you should return the codes only without including additional informat
 
 ### Input:
 
-Description: The module `TopModule` implements a module to examine each bit in an 8-bit vector and detect transitions from 0 to 1 (similar to positive edge detection).
+Description: The module `TopModule` implements an edge detection mechanism for each bit in an 8-bit input vector, detecting transitions from 0 to 1 from one clock cycle to the next, and produces an 8-bit output vector indicating these transitions.
 Verilog code: 
 module TopModule (
 	input clk,

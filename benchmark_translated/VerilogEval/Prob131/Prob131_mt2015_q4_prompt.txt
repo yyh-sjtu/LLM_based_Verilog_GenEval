@@ -8,9 +8,9 @@ Note that you should return the codes only without including additional informat
 
 ### Input:
 
-Description: The top-level module implements a complex boolean function by utilizing two `A` submodules and two `B` submodules. The module organizes these submodules in a specific logic structure involving OR, AND, and XOR gates to compute the output `z` based on inputs `x` and `y`.
+**Description:**
 Verilog code: 
-module top_level (
+module topLevel (
 	input x,
 	input y,
 	output z

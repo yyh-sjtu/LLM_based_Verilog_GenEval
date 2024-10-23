@@ -8,7 +8,7 @@ Note that you should return the codes only without including additional informat
 
 ### Input:
 
-Description: The module `TopModule` implements a combinational circuit based on the provided simulation waveforms which define how the output `q` behaves with respect to the inputs `a`, `b`, `c`, and `d`.
+"Description: The module `TopModule` implements a combinational circuit based on simulation waveform analysis.
 Verilog code: 
 module TopModule (
     input a,

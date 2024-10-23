@@ -1,8 +1,19 @@
-// This is a 3-bit priority encoder. It outputs the position of the first high bit.
-module priority_encoder( 
-input [2:0] in,
-output reg [1:0] pos ); 
-// If in==0, assign zero to pos
-// If in[0] is high, assign 0 to pos
-// If in[1] is high, assign 1 to pos
-// If in[2] is high, assign 2 to pos
+Below is an instruction that describes a task, paired with an input that provides further context. 
+Write a response that appropriately completes the request.
+
+
+### Instruction:
+Based on the functional description and defined module head, complete the Verilog code. 
+Note that you should return the codes only without including additional information. And you should include the module head in the generated codes for completeness.
+
+### Input:
+
+Description: The module `priority_encoder` implements a 3-bit priority encoder that outputs the position of the first high bit.
+Verilog code: 
+module priority_encoder (
+	input [2:0] in,
+	output reg [1:0] pos
+);
+
+
+### Response:

@@ -8,13 +8,13 @@ Note that you should return the codes only without including additional informat
 
 ### Input:
 
-Description: The module `TopModule` implements a state machine with states A, B, C, D, E, and F, as described in the provided state transition diagram. The implementation accounts for transitions based on input signals and updates the output accordingly.
+Description: The module `TopModule` implements a state machine with states A, B, C, D, E, and F based on state transitions provided in the description.
 Verilog code: 
 module TopModule (
-	input clk,
-	input reset,
-	input w,
-	output z
+    input clk,
+    input reset,
+    input w,
+    output z
 );
 
 

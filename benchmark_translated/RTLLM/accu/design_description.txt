@@ -8,15 +8,15 @@ Note that you should return the codes only without including additional informat
 
 ### Input:
 
-Description: The module `accu` implements a module to achieve serial input data accumulation. The input is 8-bit data, and it outputs the accumulation of every four input data along with a valid output signal.
+Description: The module `accu` implements a module to achieve serial input data accumulation, where input is 8-bit data. It accumulates four valid data inputs and outputs the accumulated result with a corresponding valid signal.
 Verilog code: 
 module accu (
-	input clk,
-	input rst_n,
-	input [7:0] data_in,
-	input valid_in,
-	output valid_out,
-	output [9:0] data_out
+    input clk,
+    input rst_n,
+    input [7:0] data_in,
+    input valid_in,
+    output valid_out,
+    output [9:0] data_out
 );
 
 

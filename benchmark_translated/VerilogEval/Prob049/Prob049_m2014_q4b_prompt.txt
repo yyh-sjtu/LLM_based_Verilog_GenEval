@@ -8,7 +8,7 @@ Note that you should return the codes only without including additional informat
 
 ### Input:
 
-Description: The module `TopModule` implements a D flip flop, positive edge triggered, with an asynchronous reset `ar`.
+"Description: The module `TopModule` implements a D flip flop, positive edge triggered, with an asynchronous reset.
 Verilog code: 
 module TopModule (
 	input clk,

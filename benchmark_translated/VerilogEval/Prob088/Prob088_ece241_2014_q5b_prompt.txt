@@ -8,7 +8,7 @@ Note that you should return the codes only without including additional informat
 
 ### Input:
 
-Description: The module `TopModule` implements a Mealy finite-state machine for a 2's complementer using one-hot encoding. This FSM features asynchronous, active-high reset and transitions between states based on input, providing output accordingly.
+Description: The module `TopModule` implements a Mealy finite-state machine for a 2's complementer using a one-hot encoding scheme, with asynchronous active-high reset. It resets into state A.
 Verilog code: 
 module TopModule (
     input clk,

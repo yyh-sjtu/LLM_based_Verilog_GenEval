@@ -10,7 +10,7 @@ Note that you should return the codes only without including additional informat
 
 Description: The module `adv_fsm` implements a finite state machine that recognizes the sequence 101 on the input signal x.
 Verilog code: 
-module adv_fsm(
+module adv_fsm (
     input clk,
     input reset,
     input x,

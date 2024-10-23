@@ -8,7 +8,7 @@ Note that you should return the codes only without including additional informat
 
 ### Input:
 
-Description: The module `TopModule` implements one stage in a larger n-bit shift register circuit. This module handles signal inputs for shifting, loading, and data transfer from the previous stage of the shift register.
+Description: The module `TopModule` implements a module that serves as one stage in a larger n-bit shift register circuit. Input `E` is for enabling shift, `R` for the value to load, `L` is asserted when it should load, and `w` is the input from the previous stage of the shift register. Assume all sequential logic is triggered on the positive edge of the clock.
 Verilog code: 
 module TopModule (
 	input clk,

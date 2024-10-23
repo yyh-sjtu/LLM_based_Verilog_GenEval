@@ -8,7 +8,7 @@ Note that you should return the codes only without including additional informat
 
 ### Input:
 
-Description: The module `TopModule` implements a Moore state machine with two states, two inputs, and one output according to a specific state transition diagram. The reset is an active-high asynchronous reset.
+Description: The module `TopModule` implements a Moore state machine with two states, two inputs, and one output. The module also includes an active-high asynchronous reset to state OFF.
 Verilog code: 
 module TopModule (
 	input clk,

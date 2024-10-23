@@ -8,15 +8,15 @@ Note that you should return the codes only without including additional informat
 
 ### Input:
 
-Description: The module `TopModule` implements a module that processes five 1-bit signals, computing all 25 pairwise one-bit comparisons, with each result forming a bit in a 25-bit output vector. Each bit in the output vector is 1 if the compared bits are equal.
+Description: The module `TopModule` implements a module that computes all 25 pairwise one-bit comparisons from five 1-bit input signals, outputting a 25-bit vector. Each element of the output vector is 1 if the two bits being compared are equal.
 Verilog code: 
 module TopModule (
-    input a,
-    input b,
-    input c,
-    input d,
-    input e,
-    output [24:0] out
+	input a,
+	input b,
+	input c,
+	input d,
+	input e,
+	output [24:0] out
 );
 
 

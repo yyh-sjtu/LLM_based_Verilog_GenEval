@@ -8,7 +8,7 @@ Note that you should return the codes only without including additional informat
 
 ### Input:
 
-Description: The module `TopModule` implements the state transition and output logic for a Moore state machine with one input, one output, and four states using one-hot encoding.
+Description: The module `TopModule` implements the state transition table for a Moore state machine with one input, one output, and four states using one-hot state encoding: A=4'b0001, B=4'b0010, C=4'b0100, D=4'b1000. This module manages state transitions and output logic based on the input.
 Verilog code: 
 module TopModule (
 	input in,

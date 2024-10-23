@@ -1,0 +1,22 @@
+Below is an instruction that describes a task, paired with an input that provides further context. 
+Write a response that appropriately completes the request.
+
+
+### Instruction:
+Based on the functional description and defined module head, complete the Verilog code. 
+Note that you should return the codes only without including additional information. And you should include the module head in the generated codes for completeness.
+
+### Input:
+
+Description: The module `top_module` implements a two-bit saturating counter. The counter increments when both `train_valid` and `train_taken` are set to 1, up to a maximum value of 3. It decrements when `train_valid` is set to 1 and `train_taken` is set to 0, down to a minimum value of 0. The counter's value remains unchanged when `train_valid` is 0. Additionally, an asynchronous reset `areset` resets the counter to a default value of 2'b01.
+Verilog code: 
+module top_module (
+    input clk,
+    input areset,
+    input train_valid,
+    input train_taken,
+    output logic [1:0] state
+);
+
+
+### Response:

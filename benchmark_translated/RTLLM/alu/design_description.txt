@@ -8,18 +8,18 @@ Note that you should return the codes only without including additional informat
 
 ### Input:
 
-Description: The module `alu` implements an ALU for a 32-bit MIPS-ISA CPU. It uses a control signal `aluc` to select operations such as ADD, SUB, AND, OR, XOR, NOR, SLT, SLTU, SLL, SRL, SRA, SLLV, SRLV, SRAV, and LUI. The result of operations is output on `r` with indication flags for zero, carry, negative, overflow, and a general flag for SLT and SLTU results.
+**Description**: The module `alu` implements an ALU for a 32-bit MIPS-ISA CPU, handling a variety of operations defined by the control signal `aluc`. These operations include arithmetic, logical, shift functions, and setting specific flags based on the operation results such as zero, carry, negative, overflow, and a general flag for operations like SLT and SLTU.
 Verilog code: 
 module alu (
     input [31:0] a,
     input [31:0] b,
     input [5:0] aluc,
-    output [31:0] r,
-    output zero,
-    output carry,
-    output negative,
-    output overflow,
-    output flag
+    output reg [31:0] r,
+    output reg zero,
+    output reg carry,
+    output reg negative,
+    output reg overflow,
+    output reg flag
 );
 
 

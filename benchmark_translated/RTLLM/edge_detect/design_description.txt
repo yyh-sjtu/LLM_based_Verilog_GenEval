@@ -8,14 +8,14 @@ Note that you should return the codes only without including additional informat
 
 ### Input:
 
-Description: The module `edge_detect` implements a module for edge detection where a rising edge on input signal `a` sets the `rise` output high and a falling edge sets the `down` output high. These outputs are synchronized with the clock and reset on the next clock cycle.
+Description: The module `edge_detect` implements a module for edge detection of a slowly changing 1-bit signal `a`. It generates two outputs `rise` and `down` indicating rising and falling edges respectively.
 Verilog code: 
 module edge_detect (
-    input clk,
-    input rst_n,
-    input a,
-    output rise,
-    output down
+	input clk,
+	input rst_n,
+	input a,
+	output rise,
+	output down
 );
 
 

@@ -8,14 +8,14 @@ Note that you should return the codes only without including additional informat
 
 ### Input:
 
-Description: The module `TopModule` implements a finite state machine for searching message boundaries in a given input byte stream. Based upon the identification of a specific bit pattern in input bytes (in[3] = 1), it constructs a 24-bit message from consecutive bytes and signals the completion of the message.
+Description: The module `TopModule` implements a finite state machine that will search for message boundaries when given an input byte stream. The algorithm used will discard bytes until a byte with the fourth bit set (in[3]=1) is detected, then it will collect a 3-byte message, signaling its completion with the `done` signal.
 Verilog code: 
 module TopModule (
-	input clk,
-	input reset,
-	input [7:0] in,
-	output [23:0] out_bytes,
-	output done
+    input clk,
+    input reset,
+    input [7:0] in,
+    output [23:0] out_bytes,
+    output done
 );
 
 

@@ -8,13 +8,13 @@ Note that you should return the codes only without including additional informat
 
 ### Input:
 
-Description: The module `pulse_detect` implements a pulse detection mechanism, identifying sequences of data_in making transitions from 0 to 1 and back to 0 across three clock cycles, and activating data_out only on the last cycle of such a pulse.
+Description: The module `pulse_detect` implements a pulse detection mechanism. It detects a specific sequence in a 1-bit input signal, defined by transitions from 0 to 1 and back to 0 over three clock cycles. The output signal `data_out` indicates the presence of a pulse at the end of the cycle.
 Verilog code: 
 module pulse_detect (
-    input clk,
-    input rst_n,
-    input data_in,
-    output data_out
+	input clk,
+	input rst_n,
+	input data_in,
+	output data_out
 );
 
 

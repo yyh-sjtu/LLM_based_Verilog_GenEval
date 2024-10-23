@@ -8,7 +8,7 @@ Note that you should return the codes only without including additional informat
 
 ### Input:
 
-Description: The module `TopModule` implements a 4-digit BCD (binary-coded decimal) counter using a synchronous active-high reset. Each decimal digit is encoded using 4 bits, and enables indicate when the upper three digits should be incremented.
+"Description: The module `TopModule` implements a 4-digit BCD (binary-coded decimal) counter.
 Verilog code: 
 module TopModule (
 	input clk,

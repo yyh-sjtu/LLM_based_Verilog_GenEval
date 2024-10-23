@@ -8,7 +8,7 @@ Note that you should return the codes only without including additional informat
 
 ### Input:
 
-Description: The module `multi_pipe_4bit` implements a 4-bit unsigned number pipeline multiplier using a two-level register architecture to store intermediate values and control the multiplication process.
+Description: The module `multi_pipe_4bit` implements a 4-bit unsigned number pipeline multiplier, which uses two levels of registers to store and control the multiplication process.
 Verilog code: 
 module multi_pipe_4bit (
     input clk,

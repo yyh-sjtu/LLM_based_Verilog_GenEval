@@ -8,7 +8,7 @@ Note that you should return the codes only without including additional informat
 
 ### Input:
 
-Description: The module `TopModule` implements a "population count" circuit that counts the number of '1's in the input vector.
+"Description: The module `TopModule` implements a population count circuit that counts the number of '1's in the input vector.
 Verilog code: 
 module TopModule (
 	input [2:0] in,

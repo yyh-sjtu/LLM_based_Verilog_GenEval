@@ -8,7 +8,7 @@ Note that you should return the codes only without including additional informat
 
 ### Input:
 
-Description: The module `multi_16bit` implements an unsigned 16-bit multiplier that utilizes shift and accumulate operations to generate the product output. It includes control signals such as clock, reset, and start, with a completion flag indicating the completion of the multiplication operation.
+**Description:** The module `multi_16bit` implements an unsigned 16-bit multiplier utilizing shift and accumulate operations. The module includes a clock signal `clk`, an active-low reset `rst_n`, and a start control signal `start` for initiating the multiplication process. The module outputs a product value `yout` with a completion flag `done` indicating the end of the multiplication operation.
 Verilog code: 
 module multi_16bit (
     input clk,

@@ -8,7 +8,7 @@ Note that you should return the codes only without including additional informat
 
 ### Input:
 
-Description: The module `TopModule` implements a comparator that finds the minimum of four 8-bit unsigned input values.
+Description: The module `TopModule` implements a module that finds the minimum of the four 8-bit input values using standard comparison operators.
 Verilog code: 
 module TopModule (
 	input [7:0] a,

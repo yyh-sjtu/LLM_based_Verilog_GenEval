@@ -8,12 +8,12 @@ Note that you should return the codes only without including additional informat
 
 ### Input:
 
-Description: The module `TopModule` implements an FSM as an arbiter circuit which controls access to a resource by three requesting devices, based on incoming requests on the r[i] inputs. It provides grants via the g[i] outputs depending on the priority of the requests.
+Description: The module `TopModule` implements a finite state machine (FSM) as an arbiter circuit, which controls access to a resource based on requests from three devices using 3-bit input `r`. State transitions and output `g` (3 bits) are determined based on the current state and input `r`.
 Verilog code: 
 module TopModule (
-    input  clk,
-    input  resetn,
-    input  [2:0] r,
+    input clk,
+    input resetn,
+    input [2:0] r,
     output [2:0] g
 );
 

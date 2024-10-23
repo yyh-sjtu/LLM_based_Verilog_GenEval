@@ -8,7 +8,7 @@ Note that you should return the codes only without including additional informat
 
 ### Input:
 
-"Description: The module `count_slow` implements a decade counter that counts from 0 through 9, inclusive, counting only when `slowena` is high.
+Description: The module `count_slow` implements a decade counter that counts from 0 through 9, inclusive. It counts only when `slowena` is high.
 Verilog code: 
 module count_slow (
 	input clk,

@@ -8,12 +8,12 @@ Note that you should return the codes only without including additional informat
 
 ### Input:
 
-Description: The module `TopModule` implements a 4-bit wide, 256-to-1 multiplexer based on selection from a 1024-bit input vector. 
+Description: The module `TopModule` implements a 4-bit wide, 256-to-1 multiplexer.
 Verilog code: 
 module TopModule (
-	input [1023:0] in,
-	input [7:0] sel,
-	output [3:0] out
+    input [1023:0] in,
+    input [7:0] sel,
+    output [3:0] out
 );
 
 

@@ -8,7 +8,7 @@ Note that you should return the codes only without including additional informat
 
 ### Input:
 
-Description: The module `TopModule` implements a simulation of a dual-edge triggered flip-flop.
+Description: The module `TopModule` implements a circuit that functionally behaves like a dual-edge triggered flip-flop.
 Verilog code: 
 module TopModule (
 	input clk,

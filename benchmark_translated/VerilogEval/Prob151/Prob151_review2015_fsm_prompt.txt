@@ -8,7 +8,7 @@ Note that you should return the codes only without including additional informat
 
 ### Input:
 
-Description: The module `TopModule` implements a finite-state machine that controls a timer. The timer is started upon detecting a specific pattern (1101), then it shifts in 4 more bits to determine the delay duration, waits for the counters to finish, and notifies the user, waiting for acknowledgment.
+Description: The module `TopModule` implements a finite-state machine for a timer which is actuated by detecting a specific pattern (1101), shifts in additional bits to set a duration, waits for a countdown, and performs user notification and acknowledgment handling.
 Verilog code: 
 module TopModule (
 	input clk,

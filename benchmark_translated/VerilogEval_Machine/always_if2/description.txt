@@ -1,0 +1,23 @@
+Below is an instruction that describes a task, paired with an input that provides further context. 
+Write a response that appropriately completes the request.
+
+
+### Instruction:
+Based on the functional description and defined module head, complete the Verilog code. 
+Note that you should return the codes only without including additional information. And you should include the module head in the generated codes for completeness.
+
+### Input:
+
+Description: The module `top_module` is used to control the behavior of a computer and a car. It handles various inputs like signals indicating if the computer is overheated, if the car has arrived at its destination, or if the car's gas tank is empty, and it controls relevant outputs based on these conditions.
+Verilog code: 
+module top_module (
+	input cpu_overheated,
+	input arrived,
+	input gas_tank_empty,
+	input shut_off_computer,
+	output reg keep_driving,
+	output reg shut_off_computer
+);
+
+
+### Response:

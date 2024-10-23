@@ -8,13 +8,13 @@ Note that you should return the codes only without including additional informat
 
 ### Input:
 
-Description: The module `TopModule` implements a circuit to control a cellphone's ringer and vibration motor. Based on the input signals, it selectively activates either the ringer or the vibration motor.
+Description: The module `TopModule` implements a circuit to control a cellphone's ringer and vibration motor based on incoming call and mode settings.
 Verilog code: 
 module TopModule (
-	input ring,
-	input vibrate_mode,
-	output ringer,
-	output motor
+    input ring,
+    input vibrate_mode,
+    output ringer,
+    output motor
 );
 
 

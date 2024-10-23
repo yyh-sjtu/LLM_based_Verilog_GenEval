@@ -8,7 +8,7 @@ Note that you should return the codes only without including additional informat
 
 ### Input:
 
-Description: The module `TopModule` implements a combinational circuit that uses a 3-bit input to generate a 16-bit output based on predefined results shown in simulation waveforms.
+Description: The module `TopModule` implements a combinational circuit that maps a 3-bit input to a specific 16-bit output determined by the timing simulation waveform.  
 Verilog code: 
 module TopModule (
     input [2:0] a,

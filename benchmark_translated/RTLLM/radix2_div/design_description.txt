@@ -8,17 +8,17 @@ Note that you should return the codes only without including additional informat
 
 ### Input:
 
-Description: The module `radix2_div` implements a simplified radix-2 divider on 8-bit signed or unsigned integers. The divider accepts a dividend and a divisor as inputs and provides a 16-bit result containing both the quotient and the remainder. The design supports both signed and unsigned division operations.
+Description: The module `radix2_div` implements a simplified radix-2 divider on 8-bit signed or unsigned integers, taking 8-bit values as dividend and divisor, and providing a 16-bit result containing both the quotient and the remainder. It supports both signed and unsigned division operations.
 Verilog code: 
 module radix2_div (
-	input clk,
-	input rst,
-	input sign,
-	input [7:0] dividend,
-	input [7:0] divisor,
-	input opn_valid,
-	output reg res_valid,
-	output reg [15:0] result
+    input clk,
+    input rst,
+    input sign,
+    input [7:0] dividend,
+    input [7:0] divisor,
+    input opn_valid,
+    output res_valid,
+    output [15:0] result
 );
 
 

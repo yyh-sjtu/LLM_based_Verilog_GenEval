@@ -8,14 +8,14 @@ Note that you should return the codes only without including additional informat
 
 ### Input:
 
-Description: The module `abro` implements an ABRO FSM that outputs 1 when 1 is received for signals a and b irrespective of their order, either simultaneously or non-simultaneously.
+Description: The module `abro` is an ABRO FSM that outputs 1 when 1 is received for signals a and b, irrespective of their order, either simultaneously or non-simultaneously.
 Verilog code: 
-module abro (
-	input clk,
-	input reset,
-	input a,
-	input b,
-	output z
+module abro(
+    input clk,
+    input reset,
+    input a,
+    input b,
+    output z
 );
 
 

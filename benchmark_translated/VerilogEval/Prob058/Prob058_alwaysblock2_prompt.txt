@@ -8,7 +8,7 @@ Note that you should return the codes only without including additional informat
 
 ### Input:
 
-Description: The module `TopModule` implements an XOR gate three ways (using assign statement, combinational always block, and clocked always block), demonstrating different implementation styles with varying outputs.
+Description: The module `TopModule` implements an XOR gate three ways: using an assign statement, a combinational always block, and a clocked always block, with each method outputting to `out_assign`, `out_always_comb`, and `out_always_ff` respectively. The clocked always block includes a flip-flop, causing output delay, and is triggered on the positive edge of the clock.
 Verilog code: 
 module TopModule (
 	input clk,

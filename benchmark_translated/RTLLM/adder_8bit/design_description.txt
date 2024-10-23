@@ -8,7 +8,7 @@ Note that you should return the codes only without including additional informat
 
 ### Input:
 
-Description: The module `adder_8bit` implements an 8-bit adder with multiple bit-level adders in combinational logic.
+Description: The module `adder_8bit` implements a module of an 8-bit adder with multiple bit-level adders in combinational logic.
 Verilog code: 
 module adder_8bit (
 	input [7:0] a,

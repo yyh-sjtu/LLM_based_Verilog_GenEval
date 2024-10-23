@@ -8,15 +8,15 @@ Note that you should return the codes only without including additional informat
 
 ### Input:
 
-Description: The module `TopModule` implements a 4-bit shift register with right shift capability, including support for asynchronous reset, load functionality, and enable control.
+Description: The module `TopModule` implements a 4-bit shift register with right shift capability. The unit has an asynchronous positive-edge triggered reset, and synchronous active high `load` and `ena` signals. The `areset` fully resets the shift register, the `load` signal loads the register with data instead of shifting, and, if both `load` and `ena` are high, `load` has the priority.
 Verilog code: 
 module TopModule (
-    input clk,
-    input areset,
-    input load,
-    input ena,
-    input [3:0] data,
-    output [3:0] q
+	input clk,
+	input areset,
+	input load,
+	input ena,
+	input [3:0] data,
+	output [3:0] q
 );
 
 

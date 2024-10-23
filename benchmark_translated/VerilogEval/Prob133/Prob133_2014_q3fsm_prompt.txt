@@ -8,14 +8,14 @@ Note that you should return the codes only without including additional informat
 
 ### Input:
 
-Description: The module `TopModule` implements a finite state machine with inputs s and w. The FSM begins in a reset state called A and moves through states based on input conditions outputting z accordingly.
+Description: The module `TopModule` implements a finite state machine (FSM) with inputs s and w. The FSM begins in a reset state called A and transitions between states based on the values of s and w, setting the output z accordingly.
 Verilog code: 
 module TopModule (
-    input clk,
-    input reset,
-    input s,
-    input w,
-    output z
+	input clk,
+	input reset,
+	input s,
+	input w,
+	output z
 );
 
 

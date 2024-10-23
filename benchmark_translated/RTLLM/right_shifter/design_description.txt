@@ -8,12 +8,12 @@ Note that you should return the codes only without including additional informat
 
 ### Input:
 
-Description: The module `right_shifter` implements a right shifter which performs an 8-bit right shift on a 1-bit input by initializing the q register to 0. On each rising edge of the clock, it shifts the contents of the q register to the right by one bit and inserts the new input bit d into the most significant position.
+Description: The module `right_shifter` implements a right shifter that performs an 8-bit right shift on a 1-bit input, initializing the `q` register to 0. On each rising edge of the clock, the module shifts the contents of the `q` register to the right by one bit and inserts the new input bit `d` into the most significant position.
 Verilog code: 
 module right_shifter (
-	input clk,
-	input d,
-	output reg [7:0] q
+    input clk,
+    input d,
+    output reg [7:0] q
 );
 
 

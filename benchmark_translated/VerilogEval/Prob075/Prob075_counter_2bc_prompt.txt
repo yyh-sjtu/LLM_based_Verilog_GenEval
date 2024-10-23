@@ -8,14 +8,14 @@ Note that you should return the codes only without including additional informat
 
 ### Input:
 
-Description: The module `TopModule` implements a two-bit saturating counter. It increments (up to a maximum of 3) when train_valid = 1 and train_taken = 1, and decrements (down to a minimum of 0) when train_valid = 1 and train_taken = 0. When not training (train_valid = 0), the counter retains its value. The `areset` signal triggers an asynchronous reset that resets the counter to 2'b01. The output `state` reflects the two-bit counter value.
+Description: The module `TopModule` implements a two-bit saturating counter. This counter increments or decrements based on the `train_valid` and `train_taken` inputs and retains its value when not training. It uses `areset` for asynchronous positive edge-triggered resetting.
 Verilog code: 
 module TopModule (
-    input clk,
-    input areset,
-    input train_valid,
-    input train_taken,
-    output [1:0] state
+	input clk,
+	input areset,
+	input train_valid,
+	input train_taken,
+	output [1:0] state
 );
 
 

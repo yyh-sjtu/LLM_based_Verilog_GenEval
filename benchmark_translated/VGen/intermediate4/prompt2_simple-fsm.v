@@ -8,7 +8,7 @@ Note that you should return the codes only without including additional informat
 
 ### Input:
 
-Description: The module `simple_fsm` implements a Moore state machine with two states 0 and 1, one input `in`, and one output `out`. Reset state is 0. Output is high in state 0. If `in` is low, state changes.
+"Description: The module `simple_fsm` is a Moore state machine with two states, 0 and 1, one input `in`, and one output `out`. Reset state is 0. The output is high in state 0, and the state changes if `in` is low.
 Verilog code: 
 module simple_fsm (
 	input clk,

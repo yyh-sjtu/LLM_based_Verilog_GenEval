@@ -8,13 +8,13 @@ Note that you should return the codes only without including additional informat
 
 ### Input:
 
-"Description: The module `TopModule` implements a design using 8 D flip-flops with active high synchronous reset and is triggered by the positive edge of clk.
+Description: The module `TopModule` implements a module that includes 8 D flip-flops with an active high synchronous reset, setting the output to zero, and is triggered by the positive edge of clk.
 Verilog code: 
 module TopModule (
-	input clk,
-	input reset,
-	input [7:0] d,
-	output [7:0] q
+    input clk,
+    input reset,
+    input [7:0] d,
+    output [7:0] q
 );
 
 

@@ -8,7 +8,7 @@ Note that you should return the codes only without including additional informat
 
 ### Input:
 
-Description: The module `TopModule` implements a design where it receives a 3-bit input vector and outputs the same vector. Additionally, it splits this input into three separate 1-bit outputs, each corresponding to a bit position from the input vector.
+Description: The module `TopModule` implements a simple interface that takes a 3-bit input vector and outputs the same vector as well as splits it into three separate 1-bit outputs. The outputs o0, o1, and o2 correspond to the positions 0, 1, and 2 of the input vector respectively.
 Verilog code: 
 module TopModule (
 	input [2:0] vec,

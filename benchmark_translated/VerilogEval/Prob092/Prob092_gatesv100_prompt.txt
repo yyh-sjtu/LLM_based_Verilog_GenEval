@@ -8,7 +8,7 @@ Note that you should return the codes only without including additional informat
 
 ### Input:
 
-Description: The module `TopModule` implements a module that takes a 100-bit input vector and produces three different 100-bit output vectors indicating specific relationships between each bit and its neighboring bits.
+Description: The module `TopModule` implements a module that processes a 100-bit input vector to produce three different 100-bit output vectors based on specified bitwise conditions.
 Verilog code: 
 module TopModule (
 	input [99:0] in,

@@ -8,13 +8,13 @@ Note that you should return the codes only without including additional informat
 
 ### Input:
 
-Description: The module `TopModule` implements a state machine with transitions based on input conditions. The design involves standard one-bit interfaces for inputs and outputs, with synchronous operation controlled via the clock, and reset functionality.
+Description: The module `TopModule` implements a state machine with a specific state diagram. Reset into state A is synchronous and active-high, with all sequential logic triggered on the positive edge of the clock.
 Verilog code: 
 module TopModule (
-    input clk,
-    input reset,
-    input w,
-    output z
+	input clk,
+	input reset,
+	input w,
+	output z
 );
 
 

@@ -8,7 +8,7 @@ Note that you should return the codes only without including additional informat
 
 ### Input:
 
-Description: The module `TopModule` implements a circuit with a D flip-flop that takes its input from a two-input XOR gate. The XOR gate inputs are 'in' and the output 'out' of the flip-flop.
+Description: The module `TopModule` implements a circuit with a D flip-flop that is fed by a two-input XOR. The XOR inputs are 'in' and the D flip-flop's output 'out'. The flip-flop is positive edge triggered by 'clk' without a reset.
 Verilog code: 
 module TopModule (
 	input clk,

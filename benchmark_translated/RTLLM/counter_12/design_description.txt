@@ -8,7 +8,7 @@ Note that you should return the codes only without including additional informat
 
 ### Input:
 
-Description: The module `counter_12` implements a counter design that counts from 4'b0000 to 4'd11, controlled by the input signal `valid_count`. The count increments on each clock cycle when `valid_count` is active and resets on an active low reset signal (`rst_n`).
+Description: The module `counter_12` implements a counter that counts from 4'b0000 to 4'd11. The count increments every clock cycle when the `valid_count` signal is active, and resets to 0 when the `rst_n` signal is active.
 Verilog code: 
 module counter_12 (
     input rst_n,

@@ -8,7 +8,7 @@ Note that you should return the codes only without including additional informat
 
 ### Input:
 
-Description: The module `TopModule` implements a finite state machine that systematically finds message boundaries in a byte stream based on the PS/2 mouse protocol, signaling when a complete three-byte message is received.
+Description: The module `TopModule` implements a finite state machine that searches for message boundaries in a PS/2 mouse protocol byte stream. It identifies the start of a three-byte message based on a marker in the input byte and outputs a signal once three bytes have been successfully received.
 Verilog code: 
 module TopModule (
     input clk,

@@ -8,16 +8,16 @@ Note that you should return the codes only without including additional informat
 
 ### Input:
 
-Description: The module `TopModule` implements a set of counters suitable for use as a 12-hour clock with an AM/PM indicator. The counters handle hours, minutes, and seconds and are clocked by a fast clock signal `clk`, incrementing on the pulse of `ena`.
+Description: The module `TopModule` implements a set of counters suitable for use as a 12-hour clock with AM/PM indicator. These counters are clocked by a fast-running `clk`, with updates triggered by a pulse on `ena`. The clock displays hours (`hh`), minutes (`mm`), and seconds (`ss`) in BCD format. The `pm` signal indicates PM when asserted, and AM otherwise. The `reset` is an active high synchronous signal that resets the clock to "12:00 AM."
 Verilog code: 
 module TopModule (
-	input clk,
-	input reset,
-	input ena,
-	output pm,
-	output [7:0] hh,
-	output [7:0] mm,
-	output [7:0] ss
+    input clk,
+    input reset,
+    input ena,
+    output pm,
+    output [7:0] hh,
+    output [7:0] mm,
+    output [7:0] ss
 );
 
 

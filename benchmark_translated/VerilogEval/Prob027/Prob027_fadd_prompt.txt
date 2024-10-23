@@ -8,7 +8,7 @@ Note that you should return the codes only without including additional informat
 
 ### Input:
 
-Description: The module `TopModule` implements a full adder which adds three bits including carry-in and produces a sum and carry-out.
+Description: The module `TopModule` implements a full adder, which adds three one-bit inputs (including carry-in) and produces a sum and carry-out.
 Verilog code: 
 module TopModule (
 	input a,

@@ -8,7 +8,7 @@ Note that you should return the codes only without including additional informat
 
 ### Input:
 
-Description: The module `TopModule` implements a simple game called Lemmings using a finite state machine, controlling Lemmings' movement based on obstacles encountered.
+Description: The module `TopModule` implements a finite state machine for a simple game called Lemmings, where critters switch walking directions upon bumping into obstacles.
 Verilog code: 
 module TopModule (
 	input clk,

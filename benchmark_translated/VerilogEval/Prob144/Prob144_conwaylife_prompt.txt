@@ -8,13 +8,13 @@ Note that you should return the codes only without including additional informat
 
 ### Input:
 
-Description: The module `TopModule` implements a module that simulates a 16x16 toroidal grid version of a cellular automaton game, often described as a variation of Conway's Game of Life, where each cell updates its state based on the number of live neighbors it has every clock cycle. The game uses specific rules for cell state transitions and handles edge cases by wrapping around edges to form a toroid. The grid state is represented by a 256-bit vector, which is loaded and updated synchronously with the clock.
+Description: The module `TopModule` implements a "game" played on a two-dimensional 16x16 toroidal grid, where each cell changes state based on the number of its neighbors. This mimics a cell automaton similar to Conway's Game of Life. The cells can either be alive (1) or dead (0), and they update their states every clock cycle based on specific neighbor count rules.
 Verilog code: 
 module TopModule (
-    input clk,
-    input load,
-    input [255:0] data,
-    output [255:0] q
+	input clk,
+	input load,
+	input [255:0] data,
+	output [255:0] q
 );
 
 

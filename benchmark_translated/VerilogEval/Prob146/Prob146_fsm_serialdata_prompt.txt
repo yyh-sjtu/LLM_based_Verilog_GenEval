@@ -8,14 +8,14 @@ Note that you should return the codes only without including additional informat
 
 ### Input:
 
-Description: The module `TopModule` implements a finite state machine designed to identify correctly received bytes in a serial communication based on a format of one start bit, eight data bits, and one stop bit. The line remains at logic 1 when idle, indicating no transmission. The finite state machine will detect the start bit, process the subsequent eight data bits, verify the correct stop bit, and output the received data byte. The output `out_byte` is valid when `done` is asserted. If the stop bit is incorrect, the FSM will wait until a proper stop bit is found before processing a new byte. It includes an active-high synchronous reset.
+Description: The module `TopModule` implements a finite state machine to decode a serial communication protocol that handles data byte, start bit, and stop bit as described.
 Verilog code: 
 module TopModule (
-    input clk,
-    input in,
-    input reset,
-    output [7:0] out_byte,
-    output done
+	input clk,
+	input in,
+	input reset,
+	output [7:0] out_byte,
+	output done
 );
 
 

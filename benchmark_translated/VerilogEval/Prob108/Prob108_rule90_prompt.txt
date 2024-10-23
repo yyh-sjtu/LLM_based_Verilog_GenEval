@@ -8,13 +8,13 @@ Note that you should return the codes only without including additional informat
 
 ### Input:
 
-Description: The module `TopModule` implements a one-dimensional cellular automaton known as Rule 90. It processes a 512-cell system, advancing by one time step each clock cycle based on XOR logic of cell's neighbors and loads initial state when indicated.
+Description: The module `TopModule` implements Rule 90, a one-dimensional cellular automaton, where each cell's next state is the XOR of its two neighboring cells' current states.
 Verilog code: 
 module TopModule (
-    input clk,
-    input load,
-    input [511:0] data,
-    output [511:0] q
+	input clk,
+	input load,
+	input [511:0] data,
+	output [511:0] q
 );
 
 

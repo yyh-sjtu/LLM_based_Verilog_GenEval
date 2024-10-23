@@ -8,14 +8,14 @@ Note that you should return the codes only without including additional informat
 
 ### Input:
 
-Description: The module `TopModule` implements an adder-subtractor that computes either the sum or the difference of two 8-bit numbers based on the input control `do_sub`. It outputs the 8-bit result and a zero flag which indicates if the result is zero.
+Description: The module `TopModule` implements an 8-bit adder-subtractor with a zero flag and fixes a previously existing bug in the logic handling.
 Verilog code: 
 module TopModule (
-    input do_sub,
-    input [7:0] a,
-    input [7:0] b,
-    output reg [7:0] out,
-    output reg result_is_zero
+	input do_sub,
+	input [7:0] a,
+	input [7:0] b,
+	output reg [7:0] out,
+	output reg result_is_zero
 );
 
 

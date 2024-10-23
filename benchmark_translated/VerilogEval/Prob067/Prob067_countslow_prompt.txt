@@ -8,7 +8,7 @@ Note that you should return the codes only without including additional informat
 
 ### Input:
 
-Description: The module `TopModule` implements a decade counter that counts from 0 through 9, inclusive, with a period of 10. The counter can be paused or resumed based on the input, increments on the positive edge of the clock, and resets synchronously when the reset input is high.
+Description: The module `TopModule` implements a decade counter that counts from 0 through 9, with a cycle of 10. It includes a synchronous reset and a pause functionality using the `slowena` signal.
 Verilog code: 
 module TopModule (
 	input clk,

@@ -8,7 +8,7 @@ Note that you should return the codes only without including additional informat
 
 ### Input:
 
-Description: The module `TopModule` implements a Moore state machine with one input, one output, and four states. The FSM has a synchronous active high reset that resets it to state A, with sequential logic triggered on the positive edge of the clock.
+Description: The module `TopModule` implements a Moore state machine with a synchronous active high reset and four states, with transitions and outputs defined per a given state transition table.
 Verilog code: 
 module TopModule (
 	input clk,

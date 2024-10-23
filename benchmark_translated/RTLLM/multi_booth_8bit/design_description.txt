@@ -8,15 +8,15 @@ Note that you should return the codes only without including additional informat
 
 ### Input:
 
-Description: The module `multi_booth_8bit` implements an 8-bit Radix-4 booth multiplier which performs the multiplication of two 8-bit inputs (a and b) using the Booth algorithm. It uses a clock (clk), and a reset signal (reset) to manage the synchronous operation and provides a 16-bit product output (p) with a ready signal (rdy) indicating the completion of the multiplication process.
+Description: The module `multi_booth_8bit` implements an 8-bit Radix-4 booth multiplier that performs the multiplication of two 8-bit inputs (a and b) using the Booth algorithm. It utilizes a clock signal (clk), and a reset signal (reset), and provides the product output (p) and a ready signal (rdy). The ready signal (rdy) is set to 1 to indicate the completion of the multiplication process.
 Verilog code: 
 module multi_booth_8bit (
-	input clk,
-	input reset,
-	input [7:0] a,
-	input [7:0] b,
-	output [15:0] p,
-	output rdy
+    input clk,
+    input reset,
+    input [7:0] a,
+    input [7:0] b,
+    output [15:0] p,
+    output rdy
 );
 
 

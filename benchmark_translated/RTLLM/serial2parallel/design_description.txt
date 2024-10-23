@@ -8,7 +8,7 @@ Note that you should return the codes only without including additional informat
 
 ### Input:
 
-Description: The module `serial2parallel` implements a series-parallel conversion circuit that receives a serial input signal along with a control signal indicating the validity of the input data, converting it to an 8-bit parallel output when 8 valid inputs are received.
+Description: The module `serial2parallel` implements a series-parallel conversion circuit that converts a serial input to an 8-bit parallel output. This conversion occurs on the rising edge of the clock signal where data is taken in serially and output in parallel after 8 clock cycles, with the validity of data indicated by the control signals.
 Verilog code: 
 module serial2parallel (
     input clk,

@@ -8,7 +8,7 @@ Note that you should return the codes only without including additional informat
 
 ### Input:
 
-"Description: The module `TopModule` implements a 2-1 multiplexer for 100-bit inputs based on the selection input.
+Description: The module `TopModule` implements a 2-1 multiplexer with 100-bit inputs to select either input `a` or `b` based on the control signal `sel`.
 Verilog code: 
 module TopModule (
 	input [99:0] a,

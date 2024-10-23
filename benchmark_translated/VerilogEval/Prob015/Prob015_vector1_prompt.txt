@@ -8,7 +8,7 @@ Note that you should return the codes only without including additional informat
 
 ### Input:
 
-Description: The module `TopModule` implements a combinational circuit that splits a 16-bit input half-word into lower and upper bytes.
+Description: The module `TopModule` implements a combinational circuit that splits an input half-word into lower and upper bytes.
 Verilog code: 
 module TopModule (
 	input [15:0] in,

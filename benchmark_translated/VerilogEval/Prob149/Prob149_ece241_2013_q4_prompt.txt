@@ -8,7 +8,7 @@ Note that you should return the codes only without including additional informat
 
 ### Input:
 
-Description: The module `TopModule` implements the control of a water flow system using a three-level sensor mechanism to determine the flow rate based on water levels. The module responds to water level signals and adjusts flow rate outputs accordingly.
+Description: The module `TopModule` implements the control logic for managing the flow rate of a water reservoir by sensing water levels with three vertically placed sensors and adjusting the flow rate accordingly.
 Verilog code: 
 module TopModule (
 	input clk,

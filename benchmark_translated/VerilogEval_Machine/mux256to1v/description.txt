@@ -1,0 +1,20 @@
+Below is an instruction that describes a task, paired with an input that provides further context. 
+Write a response that appropriately completes the request.
+
+
+### Instruction:
+Based on the functional description and defined module head, complete the Verilog code. 
+Note that you should return the codes only without including additional information. And you should include the module head in the generated codes for completeness.
+
+### Input:
+
+Description: The module `top_module` implements a 4-bit selector module which selects a 4-bit block from a 1024-bit input vector based on an 8-bit selection vector.
+Verilog code: 
+module top_module (
+	input [1023:0] in,
+	input [7:0] sel,
+	output [3:0] out
+);
+
+
+### Response:

@@ -8,7 +8,7 @@ Note that you should return the codes only without including additional informat
 
 ### Input:
 
-Description: The module `TopModule` implements a state machine as specified with the next-state logic for y[1] and the output Y1 is y[1].
+Description: The module `TopModule` implements a state machine using three flip-flops to encode six states from A to F, controlled by bit inputs. It primarily handles the next-state logic for y[1] and outputs it as Y1.
 Verilog code: 
 module TopModule (
     input [2:0] y,
