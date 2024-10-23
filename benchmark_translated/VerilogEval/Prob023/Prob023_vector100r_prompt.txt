@@ -8,7 +8,7 @@ Note that you should return the codes only without including additional informat
 
 ### Input:
 
-"Description: The module `TopModule` implements a module that reverses the bit ordering of the input and writes to the output.
+"Description: The module `TopModule` implements a process to reverse the bit ordering of a 100-bit input and outputs the reversed bits.
 Verilog code: 
 module TopModule (
 	input [99:0] in,

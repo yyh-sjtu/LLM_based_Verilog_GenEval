@@ -8,17 +8,17 @@ Note that you should return the codes only without including additional informat
 
 ### Input:
 
-Description: The module `TopModule` implements a finite state machine simulating the behavior of Lemmings in their 2D world, handling direction changes upon obstacles, and reacting to falling when there is no ground.
+**Description**: The module `TopModule` implements a finite state machine modeling the behavior of a Lemming from the game "Lemmings". Lemmings can be in one of two states: walking left or walking right, and they switch directions upon encountering obstacles. Additionally, a Lemming will fall and indicate this by activating an "aaah!" output if there's no ground, and resume its previous walking direction once the ground reappears. The machine undergoes an asynchronous reset that sets the walk direction to left.
 Verilog code: 
 module TopModule (
-	input clk,
-	input areset,
-	input bump_left,
-	input bump_right,
-	input ground,
-	output walk_left,
-	output walk_right,
-	output aaah
+    input clk,
+    input areset,
+    input bump_left,
+    input bump_right,
+    input ground,
+    output walk_left,
+    output walk_right,
+    output aaah
 );
 
 

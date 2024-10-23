@@ -1,0 +1,21 @@
+Below is an instruction that describes a task, paired with an input that provides further context. 
+Write a response that appropriately completes the request.
+
+
+### Instruction:
+Based on the functional description and defined module head, complete the Verilog code. 
+Note that you should return the codes only without including additional information. And you should include the module head in the generated codes for completeness.
+
+### Input:
+
+Description: The module `top_module` implements the state transition logic and output logic for a Moore state machine with one input, one output, and four states based on the given state transition table.
+Verilog code: 
+module top_module (
+	input in,
+	input [1:0] state,
+	output reg [1:0] next_state,
+	output out
+);
+
+
+### Response:

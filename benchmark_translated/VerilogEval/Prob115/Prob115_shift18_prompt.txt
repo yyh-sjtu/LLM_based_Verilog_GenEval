@@ -8,7 +8,7 @@ Note that you should return the codes only without including additional informat
 
 ### Input:
 
-Description: The module `TopModule` implements a 64-bit arithmetic shift register with a synchronous load. The shifter can shift both left and right by 1 or 8 bit positions, selected by the "amount" input.
+Description: The module `TopModule` implements a 64-bit arithmetic shift register with synchronous load. The shifter can shift both left and right by either 1 or 8 bit positions, controlled by a 2-bit input `amount`. When `load` is high, the register loads data directly; otherwise, it shifts as per `amount` and `ena`.
 Verilog code: 
 module TopModule (
 	input clk,

@@ -1,0 +1,23 @@
+Below is an instruction that describes a task, paired with an input that provides further context. 
+Write a response that appropriately completes the request.
+
+
+### Instruction:
+Based on the functional description and defined module head, complete the Verilog code. 
+Note that you should return the codes only without including additional information. And you should include the module head in the generated codes for completeness.
+
+### Input:
+
+Description: The module `top_module` implements a combinational logic circuit that takes in four inputs (a, b, c, d) and produces two outputs (out_sop, out_pos). The out_sop output represents a Sum-of-Products expression and the out_pos output represents a Product-of-Sums expression of the inputs.
+Verilog code: 
+module top_module (
+	input a,
+	input b,
+	input c,
+	input d,
+	output out_sop,
+	output out_pos
+);
+
+
+### Response:

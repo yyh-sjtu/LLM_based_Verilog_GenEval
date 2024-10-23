@@ -8,15 +8,15 @@ Note that you should return the codes only without including additional informat
 
 ### Input:
 
-Description: The module `TopModule` implements a finite state machine that is used to control some type of motor using inputs from the motor and producing outputs to control it. It works with synchronous reset logic to handle motor control states and transitions based on inputs from the motor.
+Description: The module `TopModule` implements a finite state machine (FSM) used to control a type of motor with inputs from the motor and outputs that control the motor. It operates under a defined sequence involving input monitoring and state transitions based on the values of inputs x and y, with synchronization provided by a clock signal clk and controlled start through a synchronous active low reset signal resetn.
 Verilog code: 
 module TopModule (
-	input clk,
-	input resetn,
-	input x,
-	input y,
-	output f,
-	output g
+    input clk,
+    input resetn,
+    input x,
+    input y,
+    output f,
+    output g
 );
 
 

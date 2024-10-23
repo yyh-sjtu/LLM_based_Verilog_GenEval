@@ -8,7 +8,7 @@ Note that you should return the codes only without including additional informat
 
 ### Input:
 
-"Description: The module `TopModule` implements a logic circuit with AND, OR, and NOT gates to process inputs and generate outputs based on specified logic functions.
+Description: The module `TopModule` implements a combinational circuit with two layers of logic gates. The first layer consists of two AND gates and the second has an OR gate and a NOT gate for outputs `out` and `out_n` respectively.
 Verilog code: 
 module TopModule (
 	input a,

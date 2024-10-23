@@ -8,7 +8,7 @@ Note that you should return the codes only without including additional informat
 
 ### Input:
 
-**Description:** The module `asyn_fifo` implements an asynchronous FIFO with configurable depth and width. It utilizes a dual-port RAM with separate read and write operations, managed through a system of pointers and synchronization that employ Gray code for stability and correctness in asynchronous environments.
+Description: The module `asyn_fifo` implements an asynchronous FIFO using a dual-port RAM module and additional logic for managing read and write pointers. This module can be configured with parameterized width and depth for flexibility.
 Verilog code: 
 module asyn_fifo #(
     parameter WIDTH = 8,

@@ -8,12 +8,12 @@ Note that you should return the codes only without including additional informat
 
 ### Input:
 
-Description: The module `TopModule` implements a custom logic as described by the simulation waveform for input ports x and y which affects the output port z.
+"Description: The module `TopModule` implements a basic logic function with inputs `x` and `y`, and output `z` based on the provided simulation waveform.
 Verilog code: 
 module TopModule (
-	input x,
-	input y,
-	output z
+    input x,
+    input y,
+    output z
 );
 
 

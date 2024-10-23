@@ -8,14 +8,14 @@ Note that you should return the codes only without including additional informat
 
 ### Input:
 
-Description: The module `pe` implements a Multiplying Accumulator for 32bit integer using parallel multiplication and accumulation operation.
+Description: The module `pe` implements a Multiplying Accumulator for 32bit integer. It uses registers and an always block to perform multiplication of input operands and accumulating the result.
 Verilog code: 
 module pe (
 	input clk,
 	input rst,
 	input [31:0] a,
 	input [31:0] b,
-	output [31:0] c
+	output reg [31:0] c
 );
 
 

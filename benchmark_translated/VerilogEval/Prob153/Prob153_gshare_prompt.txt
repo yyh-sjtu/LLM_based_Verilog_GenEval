@@ -8,17 +8,15 @@ Note that you should return the codes only without including additional informat
 
 ### Input:
 
-Description: The module `TopModule` implements a gshare branch predictor with seperate interfaces for prediction and training processes. This predictor utilizes a 7-bit pc and 7-bit global history, XORed to derive a 7-bit index for accessing a 128-entry table of two-bit saturating counters. The module includes asynchronous active-high reset and handles simultaneous prediction and training operations with specific priority rules.
+Description: The module `TopModule` implements a gshare branch predictor with a 7-bit pc and 7-bit global history, using XOR to hash into a 7-bit index that accesses a 128-entry table of two-bit saturating counters. This branch predictor has interfaces for predictions and training, handling updates on the positive clock edge, with priority given to training in conflicting updates.
 Verilog code: 
 module TopModule (
     input clk,
     input areset,
-
     input predict_valid,
     input [6:0] predict_pc,
     output predict_taken,
     output [6:0] predict_history,
-
     input train_valid,
     input train_taken,
     input train_mispredicted,

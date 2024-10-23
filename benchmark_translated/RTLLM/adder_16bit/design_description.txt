@@ -8,14 +8,14 @@ Note that you should return the codes only without including additional informat
 
 ### Input:
 
-Description: The module `adder_16bit` implements a 16-bit full adder using combinational logic and instances of a smaller width adder.
+Description: The module `adder_16bit` implements a 16-bit full adder in combinational logic.
 Verilog code: 
 module adder_16bit (
-    input [15:0] a,
-    input [15:0] b,
-    input Cin,
-    output [15:0] y,
-    output Co
+	input [15:0] a,
+	input [15:0] b,
+	input Cin,
+	output [15:0] y,
+	output Co
 );
 
 

@@ -8,7 +8,7 @@ Note that you should return the codes only without including additional informat
 
 ### Input:
 
-Description: The module `div_16bit` implements a 16-bit divider module where the dividend is 16-bit and the divisor is 8-bit, working in combinational logic. It processes division by comparing higher bits of the dividend with the divisor and generates the quotient and remainder accordingly.
+"Description: The `div_16bit` module implements a 16-bit divider where the dividend is 16-bit and the divisor is 8-bit using combinational logic. The division process extracts and matches higher bits of the dividend to the width of the divisor, computes the quotient by comparing those bits, and the difference forms the remainder. This process repeats until all bits of the dividend are processed.  
 Verilog code: 
 module div_16bit (
     input [15:0] A,

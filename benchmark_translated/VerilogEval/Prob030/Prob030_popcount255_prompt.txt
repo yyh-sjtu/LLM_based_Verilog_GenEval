@@ -8,11 +8,11 @@ Note that you should return the codes only without including additional informat
 
 ### Input:
 
-Description: The module `TopModule` implements a population count circuit for a 255-bit input vector which counts the number of '1's in the input vector.  
+Description: The module `TopModule` implements a population count circuit for a 255-bit input vector, counting the number of '1's.
 Verilog code: 
 module TopModule (
-    input [254:0] in,
-    output [7:0] out
+	input [254:0] in,
+	output [7:0] out
 );
 
 

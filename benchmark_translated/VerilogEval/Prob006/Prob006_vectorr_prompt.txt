@@ -8,7 +8,7 @@ Note that you should return the codes only without including additional informat
 
 ### Input:
 
-"Description: The module `TopModule` implements a module that reverses the bit ordering of an 8-bit input port and outputs the result to an 8-bit output port.
+Description: The module `TopModule` implements a design that reverses the bit ordering of an 8-bit input and outputs the result in the same bit order.
 Verilog code: 
 module TopModule (
 	input [7:0] in,

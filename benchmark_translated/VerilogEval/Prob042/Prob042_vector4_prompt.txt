@@ -8,11 +8,11 @@ Note that you should return the codes only without including additional informat
 
 ### Input:
 
-Description: The module `TopModule` implements a design that sign-extends an 8-bit number to a 32-bit number by replicating the sign bit (most significant bit of the smaller number) 24 times and then concatenating it with the original 8-bit number.
+Description: The module `TopModule` sign-extends an 8-bit number to a 32-bit number by replicating the sign bit.
 Verilog code: 
 module TopModule (
-    input [7:0] in,
-    output [31:0] out
+	input [7:0] in,
+	output [31:0] out
 );
 
 

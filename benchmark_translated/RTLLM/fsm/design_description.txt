@@ -8,7 +8,7 @@ Note that you should return the codes only without including additional informat
 
 ### Input:
 
-Description: The module `fsm` implements a Mealy FSM detection circuit that detects a single-bit input IN. When the input is 10011, output MATCH is 1, and MATCH is 0 in other cases, supporting continuous input and loop detection.
+"Description: The module `fsm` implements a Mealy FSM detection circuit that detects a single-bit input IN. When the input sequence is 10011, the output MATCH is set to 1, otherwise it is set to 0. The FSM supports continuous input and loop detection.
 Verilog code: 
 module fsm (
     input IN,

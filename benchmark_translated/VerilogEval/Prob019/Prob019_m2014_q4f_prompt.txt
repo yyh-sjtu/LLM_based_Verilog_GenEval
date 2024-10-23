@@ -8,12 +8,12 @@ Note that you should return the codes only without including additional informat
 
 ### Input:
 
-Description: The module `TopModule` implements a gate-level circuit where two inputs (in1 and in2) are input to an AND gate, and specifically in2 is inverted before feeding into the AND gate. The result is then output through 'out'.
+Description: The module `TopModule` implements a simple digital logic circuit with an AND gate that incorporates negation on one input, specifically the `in2` input. This inversion creates a NOT-AND (NAND) functionality between `in1` and `in2` components, with the result transmitted to the `out` port.
 Verilog code: 
 module TopModule (
-	input in1,
-	input in2,
-	output out
+    input in1,
+    input in2,
+    output out
 );
 
 

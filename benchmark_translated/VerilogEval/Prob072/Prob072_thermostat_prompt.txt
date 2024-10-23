@@ -8,7 +8,7 @@ Note that you should return the codes only without including additional informat
 
 ### Input:
 
-Description: The module `TopModule` implements a heating/cooling thermostat controller which controls a heater and an air conditioner based on external temperature indicators and mode settings. It handles the operation of a heater during winter (heating mode) and an air conditioner during summer (cooling mode). Additionally, it controls a fan which operates when the heater or air conditioner is active, or when manually switched on.
+Description: The module `TopModule` implements a heating/cooling thermostat controller that controls a heater, an air conditioner, and a blower fan based on the current mode, temperature conditions, and user input.
 Verilog code: 
 module TopModule (
 	input mode,

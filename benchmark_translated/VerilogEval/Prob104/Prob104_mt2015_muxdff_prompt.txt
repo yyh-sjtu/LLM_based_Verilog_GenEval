@@ -8,7 +8,7 @@ Note that you should return the codes only without including additional informat
 
 ### Input:
 
-Description: The module `TopModule` implements a hierarchical Verilog design, using a flip-flop and a 2-1 multiplexer at its core, invoked three times by `full_module`.
+Description: The module `TopModule` implements a hierarchical Verilog design consisting of a flipflop and a 2-1 multiplexer, instantiated three times within the full-module code.
 Verilog code: 
 module TopModule (
 	input clk,

@@ -8,11 +8,11 @@ Note that you should return the codes only without including additional informat
 
 ### Input:
 
-Description: The module `TopModule` implements a simple method for computing an even parity bit from an 8-bit input.
+Description: The module `TopModule` implements a parity checker which computes an "even" parity bit for an 8-bit byte using XOR operations.
 Verilog code: 
 module TopModule (
-	input [7:0] in,
-	output parity
+    input [7:0] in,
+    output parity
 );
 
 

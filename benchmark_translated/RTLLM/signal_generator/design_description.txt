@@ -11,9 +11,9 @@ Note that you should return the codes only without including additional informat
 Description: The module `signal_generator` implements a Triangle Wave signal generator module that generates a waveform by incrementing and decrementing a 5-bit signal named "wave". The waveform cycles between 0 and 31, which is incremented or decremented by 1.
 Verilog code: 
 module signal_generator (
-	input clk,
-	input rst_n,
-	output [4:0] wave
+    input clk,
+    input rst_n,
+    output [4:0] wave
 );
 
 

@@ -8,13 +8,13 @@ Note that you should return the codes only without including additional informat
 
 ### Input:
 
-Description: The module `TopModule` implements a one-bit wide, 2-to-1 multiplexer. When `sel`=0, it chooses `a`. When `sel`=1, it chooses `b`.
+Description: The module `TopModule` implements a one-bit wide, 2-to-1 multiplexer based on the selection input `sel`. When `sel=0`, output `a`, and when `sel=1`, output `b`.
 Verilog code: 
 module TopModule (
-	input a,
-	input b,
-	input sel,
-	output out
+    input a,
+    input b,
+    input sel,
+    output out
 );
 
 

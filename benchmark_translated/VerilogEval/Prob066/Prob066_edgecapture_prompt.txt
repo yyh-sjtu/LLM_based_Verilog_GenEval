@@ -8,7 +8,7 @@ Note that you should return the codes only without including additional informat
 
 ### Input:
 
-Description: The module `TopModule` examines each bit in a 32-bit input vector and captures transitions from 1 to 0 from one clock cycle to the next. The output remains high until the module is reset by an active high synchronous reset. All sequential logic is triggered on the positive edge of the clock.
+Description: The module `TopModule` examines each bit in the 32-bit input vector and captures signal changes from 1 to 0 from one clock cycle to the next. The captured state remains until the module is reset.
 Verilog code: 
 module TopModule (
 	input clk,

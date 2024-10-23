@@ -8,13 +8,13 @@ Note that you should return the codes only without including additional informat
 
 ### Input:
 
-Description: The module `TopModule` implements a Mealy-type finite state machine that recognizes the sequence "101" on the input signal named x. The output signal z is asserted to logic-1 when the sequence "101" is detected. This FSM also features a negative edge triggered asynchronous reset, and recognizes overlapping sequences.
+"Description: The module `TopModule` implements a Mealy-type finite state machine that recognizes the sequence "101" on input signal x. The FSM asserts output signal z to logic-1 when the "101" sequence is detected, featuring a negative edge triggered asynchronous reset. The FSM operates with only 3 states and is capable of recognizing overlapping sequences, triggered on the positive edge of the clock.
 Verilog code: 
 module TopModule (
-	input clk,
-	input aresetn,
-	input x,
-	output z
+    input clk,
+    input aresetn,
+    input x,
+    output z
 );
 
 

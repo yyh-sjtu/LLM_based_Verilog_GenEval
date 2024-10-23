@@ -8,7 +8,7 @@ Note that you should return the codes only without including additional informat
 
 ### Input:
 
-Description: The module `TopModule` implements a module that detects any edge for each bit in an 8-bit input vector, setting the output bit the cycle after a 0 to 1 transition occurs.
+Description: The module `TopModule` implements a design to detect edges for each bit in an 8-bit input vector, setting the output bit the cycle after a 0 to 1 transition.
 Verilog code: 
 module TopModule (
 	input clk,

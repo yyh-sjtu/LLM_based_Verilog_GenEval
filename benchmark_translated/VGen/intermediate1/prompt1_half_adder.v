@@ -1,4 +1,21 @@
-// This is a half adder.
-module half_adder( 
-input a, b,
-output cout, sum );
+Below is an instruction that describes a task, paired with an input that provides further context. 
+Write a response that appropriately completes the request.
+
+
+### Instruction:
+Based on the functional description and defined module head, complete the Verilog code. 
+Note that you should return the codes only without including additional information. And you should include the module head in the generated codes for completeness.
+
+### Input:
+
+"Description: The module `half_adder` implements a basic half adder which performs a simple addition of two single bits.
+Verilog code: 
+module half_adder (
+	input a,
+	input b,
+	output cout,
+	output sum
+);
+
+
+### Response:

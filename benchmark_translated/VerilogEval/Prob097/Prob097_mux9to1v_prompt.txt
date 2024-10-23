@@ -8,7 +8,7 @@ Note that you should return the codes only without including additional informat
 
 ### Input:
 
-Description: The module `TopModule` implements a 16-bit wide, 9-to-1 multiplexer. Based on the select input `sel`, it chooses one of the inputs `a` through `i` where `sel=0` chooses `a`, `sel=1` chooses `b`, and so on. For select inputs from `9` to `15`, the output is set to all '1's.
+Description: The module `TopModule` implements a 16-bit wide, 9-to-1 multiplexer where the output is selected based on the 4-bit input `sel`. For `sel` values from 0 to 8, it chooses from one of the 9 inputs (a to i) respectively. For `sel` values from 9 to 15, the output is set to all '1's.
 Verilog code: 
 module TopModule (
     input [15:0] a,

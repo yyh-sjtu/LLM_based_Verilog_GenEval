@@ -8,12 +8,12 @@ Note that you should return the codes only without including additional informat
 
 ### Input:
 
-Description: The module `TopModule` implements a circuit that has two 2-bit inputs A[1:0] and B[1:0], and produces an output z. The value of z should be 1 if A = B, otherwise z should be 0.
+Description: The module `TopModule` implements a circuit that compares two 2-bit inputs A and B, and produces a single output z which is 1 if A equals B, otherwise it is 0.
 Verilog code: 
 module TopModule (
-    input [1:0] A,
-    input [1:0] B,
-    output z
+	input [1:0] A,
+	input [1:0] B,
+	output z
 );
 
 

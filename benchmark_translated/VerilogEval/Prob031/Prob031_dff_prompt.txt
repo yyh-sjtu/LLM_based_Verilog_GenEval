@@ -8,12 +8,12 @@ Note that you should return the codes only without including additional informat
 
 ### Input:
 
-"Description: The module `TopModule` implements a single D flip-flop with all sequential logic triggered on the positive edge of the clock.
+"Description: The module `TopModule` implements a single D flip-flop.
 Verilog code: 
 module TopModule (
-    input clk,
-    input d,
-    input q
+	input clk,
+	input d,
+	output q
 );
 
 

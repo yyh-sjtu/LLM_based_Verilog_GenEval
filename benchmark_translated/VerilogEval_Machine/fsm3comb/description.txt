@@ -1,0 +1,21 @@
+Below is an instruction that describes a task, paired with an input that provides further context. 
+Write a response that appropriately completes the request.
+
+
+### Instruction:
+Based on the functional description and defined module head, complete the Verilog code. 
+Note that you should return the codes only without including additional information. And you should include the module head in the generated codes for completeness.
+
+### Input:
+
+Description: The module `top_module` implements a state machine that has four states, A, B, C, and D. It uses a single bit input `in` for state transitions. The `state` input represents the current state, `next_state` represents the next state, and `out` indicates when the state is D via a single bit signal. State transitions are managed using a combinational logic block with a case statement to handle transitions based on the current state and input signal.
+Verilog code: 
+module top_module (
+    input in,
+    input [1:0] state,
+    output reg [1:0] next_state,
+    output out
+);
+
+
+### Response:

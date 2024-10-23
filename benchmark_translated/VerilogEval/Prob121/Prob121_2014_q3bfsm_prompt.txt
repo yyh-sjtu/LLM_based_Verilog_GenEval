@@ -8,7 +8,7 @@ Note that you should return the codes only without including additional informat
 
 ### Input:
 
-Description: The module `TopModule` implements a finite-state machine with a synchronous active high reset, transitioning based on an input `x` and the present state `y[2:0]`.
+"Description: The module `TopModule` implements a finite-state machine with a synchronous active high reset, triggered on the positive edge of the clock, utilizing a state-assigned table approach.
 Verilog code: 
 module TopModule (
 	input clk,

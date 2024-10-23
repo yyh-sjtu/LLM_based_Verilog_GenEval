@@ -8,7 +8,7 @@ Note that you should return the codes only without including additional informat
 
 ### Input:
 
-Description: The module `TopModule` simulates a finite state machine for the game Lemmings, modeling the behavior of Lemmings as they walk, fall, dig and change directions based on various inputs.
+"Description: The module `TopModule` implements a finite state machine that models the behavior of Lemmings in a game, based on their interactions with the environment and possible actions like walking, falling, and digging.
 Verilog code: 
 module TopModule (
 	input clk,

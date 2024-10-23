@@ -8,14 +8,14 @@ Note that you should return the codes only without including additional informat
 
 ### Input:
 
-Description: The module `TopModule` implements a finite state machine based on one-hot encoding, with state transitions and output logic specified for handling various input conditions. 
+Description: The module `TopModule` implements the state transition logic and output logic portions of a state machine using one-hot encoding, with state transitions based on the given mapping for input conditions. The module possesses logic to provide next state outputs and action based on the current state and input.
 Verilog code: 
 module TopModule (
-	input in,
-	input [9:0] state,
-	output [9:0] next_state,
-	output out1,
-	output out2
+    input in,
+    input [9:0] state,
+    output [9:0] next_state,
+    output out1,
+    output out2
 );
 
 

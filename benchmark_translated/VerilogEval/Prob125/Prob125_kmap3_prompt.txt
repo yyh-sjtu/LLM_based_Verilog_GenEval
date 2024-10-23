@@ -8,7 +8,7 @@ Note that you should return the codes only without including additional informat
 
 ### Input:
 
-"Description: The module `TopModule` implements the logic defined by the Karnaugh map provided where the input `d` is don't-care.
+Description: The module `TopModule` implements a function based on the provided Karnaugh map, where the 'd' entries denote don't-care conditions.
 Verilog code: 
 module TopModule (
 	input a,

@@ -8,7 +8,7 @@ Note that you should return the codes only without including additional informat
 
 ### Input:
 
-Description: The module `TopModule` implements a simple wiring that connects input signals directly to outputs designated in the specification.
+Description: The module `TopModule` implements simple wire connections for interfacing single-bit inputs to outputs.
 Verilog code: 
 module TopModule (
 	input a,

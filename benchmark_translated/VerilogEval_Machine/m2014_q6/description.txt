@@ -1,0 +1,21 @@
+Below is an instruction that describes a task, paired with an input that provides further context. 
+Write a response that appropriately completes the request.
+
+
+### Instruction:
+Based on the functional description and defined module head, complete the Verilog code. 
+Note that you should return the codes only without including additional information. And you should include the module head in the generated codes for completeness.
+
+### Input:
+
+Description: The module `top_module` implements a state machine that outputs a one-bit signal z. The state machine has six states (A to F) and transitions between these states based on input `w`. The output `z` is high when in states E or F, and low otherwise.
+Verilog code: 
+module top_module (
+    input clk,
+    input reset,
+    input w,
+    output z
+);
+
+
+### Response:

@@ -8,7 +8,7 @@ Note that you should return the codes only without including additional informat
 
 ### Input:
 
-Description: The module `TopModule` implements a combinational circuit with 100 inputs in[99:0], and it outputs the result of 100-input AND, OR, and XOR gate operations.
+Description: The module `TopModule` implements a combinational circuit with 100 inputs and 3 outputs based on logical gates AND, OR, and XOR.
 Verilog code: 
 module TopModule (
 	input [99:0] in,

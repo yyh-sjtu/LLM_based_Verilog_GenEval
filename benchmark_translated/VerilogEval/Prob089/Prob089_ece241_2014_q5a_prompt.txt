@@ -8,7 +8,7 @@ Note that you should return the codes only without including additional informat
 
 ### Input:
 
-Description: The module `TopModule` implements a one-input one-output serial 2's complementer Moore state machine. The input (x) is a series of bits beginning with the least-significant bit, and the output (z) is the 2's complement of the input. The machine functions on a positive edge triggered asynchronous reset and accepts input numbers of arbitrary length.
+Description: The module `TopModule` implements a one-input one-output serial 2's complementer Moore state machine. The module accepts input numbers of arbitrary length, converts the input to the 2's complement, and operates with a positive edge triggered asynchronous reset.
 Verilog code: 
 module TopModule (
 	input clk,

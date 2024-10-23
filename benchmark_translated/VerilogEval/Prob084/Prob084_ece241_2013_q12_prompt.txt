@@ -8,16 +8,16 @@ Note that you should return the codes only without including additional informat
 
 ### Input:
 
-"Description: The module `TopModule` implements a circuit for an 8x1 memory, managed through a shift register and controlled by input bits to realize a 3-input logic function based on specific input combinations using multiplexers.
+Description: The module `TopModule` implements a circuit for an 8x1 memory using a shift register and a logic function circuit. This is realized with an 8-bit shift register and multiplexers, supporting random access for reading and bit shifting for writing. It includes logic to output from a specified register based on additional inputs A, B, and C.
 Verilog code: 
 module TopModule (
-	input clk,
-	input enable,
-	input S,
-	input A,
-	input B,
-	input C,
-	output Z
+    input clk,
+    input enable,
+    input S,
+    input A,
+    input B,
+    input C,
+    output Z
 );
 
 
