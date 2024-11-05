@@ -9,7 +9,7 @@ import argparse
 from LLM_caller import llm_call
 from extractor import verilog_extractor
 from glob import glob
-from verilog_syntax_function_eval import evaluate
+from verilog_syntax_function_eval import *
 from datetime import datetime
 import numpy as np
 import json
@@ -244,7 +244,8 @@ def test_on_benchmark(args):
                 design_name = os.path.basename(generated_design_dir)
                 generated_design_file_list = glob(os.path.join(generated_design_dir, "*.v" if not benchmark == "VerilogEval" else f"*.sv"))
                 
-                correct_count = 0
+                correct_count_function = 0
+                correct_count_syntax = 0
                 total_tests = 0
                 for generated_design_file in generated_design_file_list:
                     
@@ -254,8 +255,12 @@ def test_on_benchmark(args):
                         print(f"Skipping {generated_design_file}, because testbench pattern match failed.")
                         continue
                         
-                    if evaluate(benchmark, generated_design_file, testbench, args.temp_outputfile):
-                        correct_count += 1
+                    if evaluate_function(benchmark, generated_design_file, testbench, args.temp_outputfile):
+                        correct_count_function += 1
+                        
+                    if evaluate_syntax(benchmark, generated_design_file, testbench, args.temp_outputfile):
+                        correct_count_syntax += 1                
+                    
                     total_tests += 1
                 
                 # if total_tests > 0:
@@ -264,16 +269,23 @@ def test_on_benchmark(args):
                     
                 pass_at_k = estimate_pass_at_k
                 n = total_tests
-                c = correct_count
-                append_file(f"{design_name}(correct_num/total_num): {correct_count}/{total_tests}, pass@1: {pass_at_k(n, c, 1)*100:.2f}, pass@5: {pass_at_k(n, c, 5)*100:.2f}, pass@10: {pass_at_k(n, c, 10)*100:.2f}\n", args.correctness_file)
+                c_function = correct_count_function
+                c_syntax = correct_count_syntax
+                function_correctness = f"#Function correct_num/total_num: {correct_count_function}/{total_tests}, pass@1: {pass_at_k(n, c_function, 1)*100:.2f}, pass@5: {pass_at_k(n, c_function, 5)*100:.2f}, pass@10: {pass_at_k(n, c_function, 10)*100:.2f}"
+                syntax_correctness = f"#Syntax correct_num/total_num: {correct_count_syntax}/{total_tests}, pass@1: {pass_at_k(n, c_syntax, 1)*100:.2f}, pass@5: {pass_at_k(n, c_syntax, 5)*100:.2f}, pass@10: {pass_at_k(n, c_syntax, 10)*100:.2f}"
+                append_file(f"{design_name} | {syntax_correctness} | {function_correctness}\n", args.correctness_file)
                 
                 result_dict_jsonl = {
                     "design_name": design_name,
-                    "correct_num": correct_count,
                     "total_tests": total_tests,
-                    "pass@1": round(pass_at_k(n, c, 1)*100, 2),
-                    "pass@5": round(pass_at_k(n, c, 5)*100, 2),
-                    "pass@10": round(pass_at_k(n, c, 10)*100, 2)
+                    "function":{"correct_num": correct_count_function,
+                                     "pass@1": round(pass_at_k(n, c_function, 1)*100, 2),
+                                     "pass@5": round(pass_at_k(n, c_function, 5)*100, 2),
+                                    "pass@10": round(pass_at_k(n, c_function, 10)*100, 2)},
+                    "syntax":{"correct_num": correct_count_syntax,
+                                   "pass@1": round(pass_at_k(n, c_syntax, 1)*100, 2),
+                                   "pass@5": round(pass_at_k(n, c_syntax, 5)*100, 2),
+                                  "pass@10": round(pass_at_k(n, c_syntax, 10)*100, 2)}
                 }
                 append_jsonl(json.dumps(result_dict_jsonl), result_path_jsonl)
                 

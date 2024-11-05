@@ -10,7 +10,8 @@
 </div>
 
 #### Update:
-Configuration of benchmarks are moved to [src/config.py](src/config.py), you can add new benchmark by editting it.
+**Configuration of benchmarks are moved to [src/config.py](src/config.py), you can add new benchmark by editting it.**
+**Output of syntax and function correctness in .jsonl format are saved in args.result_path**
 
 ## 1. Introduction
 This framework integrates three mainstream benchmarks, including [RTLLM](https://github.com/hkust-zhiyao/RTLLM), [VGen](https://github.com/shailja-thakur/VGen), [VerilogEval](https://github.com/NVlabs/verilog-eval) for LLM based verilog generation.
@@ -46,7 +47,11 @@ Run the following command to evaluate on a specific benchmark:
 python src/verilog_gen_eval.py --benchmark RTLLM
 ```
 
-## 3. About Pass@k
+## 3. Output
+Output of syntax and function correctness in .txt format are saved in args.correctness_file
+Output of syntax and function correctness in .jsonl format are saved in args.result_path
+
+## 4. About Pass@k
 Problem with pass@k has been fixed, the current function used to estimate pass@k is copied from VerilogEval Version 1.0.
 ```python
 def estimate_pass_at_k(n: int, c: int, k: int) -> float:
@@ -59,7 +64,7 @@ def estimate_pass_at_k(n: int, c: int, k: int) -> float:
 ```
 The default value of n is 20, and you can set it a larger value to get more accurate estimation of pass@k, by using this argument: `--n4pass_at_k`.
 
-## 4. Set OpenAI API
+## 5. Set OpenAI API
 You can set your own OpenAI API key in two ways:
 ### 1) Set by argument:
 ```bash
@@ -71,7 +76,7 @@ export OPENAI_API_KEY='sk-xxxxx'
 export OPENAI_BASE_URL='https://xxxxx'
 ```
 
-## 5. Configuration of arguments
+## 6. Configuration of arguments
 ```python
 parser.add_argument("--model_name", type=str, default="gpt-3.5-turbo")
 parser.add_argument("--model_path", type=str, default="")
@@ -98,5 +103,5 @@ parser.add_argument("--num_seqs_per_iter", type=int, default=1)
 parser.add_argument("--num_beams", type=int, default=8)
 ```
 
-## 6. Configuration of Benchmarks
+## 7. Configuration of Benchmarks
 Settings about the benchmark can be found in [src/config.py](src/config.py).
