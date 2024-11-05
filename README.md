@@ -10,7 +10,7 @@
 </div>
 
 #### Update:
-Configuration about benchmarks are moved to [src/config.py](src/config.py), you can add new benchmark by edit it.
+Configuration of benchmarks are moved to [src/config.py](src/config.py), you can add new benchmark by editting it.
 
 ## 1. Introduction
 This framework integrates three mainstream benchmarks, including [RTLLM](https://github.com/hkust-zhiyao/RTLLM), [VGen](https://github.com/shailja-thakur/VGen), [VerilogEval](https://github.com/NVlabs/verilog-eval) for LLM based verilog generation.
