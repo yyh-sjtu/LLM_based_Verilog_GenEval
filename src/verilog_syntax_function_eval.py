@@ -12,7 +12,7 @@ def evaluate_function(benchmark, design_file, testbench, temp_outputfile):
     
     def is_correct(benchmark, result):
         result = result.lower()
-        if benchmark == "RTLLM":
+        if "RTLLM" in benchmark:
             return True if 'pass' in result else False
         elif benchmark == "VGen":
             return True if 'pass' in result else False
