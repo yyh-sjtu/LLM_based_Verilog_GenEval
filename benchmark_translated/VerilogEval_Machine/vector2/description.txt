@@ -1,0 +1,19 @@
+Below is an instruction that describes a task, paired with an input that provides further context. 
+Write a response that appropriately completes the request.
+
+
+### Instruction:
+Based on the functional description and defined module head, complete the Verilog code. 
+Note that you should return the codes only without including additional information. And you should include the module head in the generated codes for completeness.
+
+### Input:
+
+Description: The module `top_module` implements a simple Verilog module that takes an input of 32 bits and outputs the same 32 bits in a different order, useful for rearranging the order of bits in a data stream.
+Verilog code: 
+module top_module (
+    input [31:0] in,
+    output [31:0] out
+);
+
+
+### Response:

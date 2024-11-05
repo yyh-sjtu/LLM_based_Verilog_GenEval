@@ -1,0 +1,21 @@
+Below is an instruction that describes a task, paired with an input that provides further context. 
+Write a response that appropriately completes the request.
+
+
+### Instruction:
+Based on the functional description and defined module head, complete the Verilog code. 
+Note that you should return the codes only without including additional information. And you should include the module head in the generated codes for completeness.
+
+### Input:
+
+Description: The module `top_module` implements a FSM that has 4 states (A, B, C, D) with the initial state being A. It transitions through states based on the input `in` and resets to state A when `reset` is high. The output `out` is high only when the FSM is in state D.
+Verilog code: 
+module top_module (
+	input clk,
+	input in,
+	input reset,
+	output out
+);
+
+
+### Response:

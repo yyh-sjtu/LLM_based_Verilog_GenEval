@@ -8,7 +8,7 @@ Note that you should return the codes only without including additional informat
 
 ### Input:
 
-Description: The module `TopModule` implements a 32-bit global history shift register, with functionalities to handle updates on branch predictions and to roll back the state in response to pipeline flush due to branch mispredictions.
+Description: The module `TopModule` implements a 32-bit global history shift register, including support for rolling back state in response to a pipeline flush caused by a branch misprediction. The interface supports branch prediction and training updates based on input signals that indicate prediction validity, the direction of the predicted and actual branch, and a history of past branch outcomes.
 Verilog code: 
 module TopModule (
     input clk,

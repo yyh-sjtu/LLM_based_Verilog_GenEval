@@ -8,7 +8,7 @@ Note that you should return the codes only without including additional informat
 
 ### Input:
 
-Description: The module `TopModule` should implement the output logic and next state logic for an FSM based on the specified state transition table and output logic.
+"Description: The module `TopModule` implements the output logic and next state logic for an FSM according to a given state table.
 Verilog code: 
 module TopModule (
 	input x,

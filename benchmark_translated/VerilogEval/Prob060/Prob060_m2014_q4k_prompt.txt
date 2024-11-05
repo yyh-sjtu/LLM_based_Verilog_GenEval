@@ -8,7 +8,7 @@ Note that you should return the codes only without including additional informat
 
 ### Input:
 
-Description: The module `TopModule` implements a shift register with four D flip-flops, using positive edge-triggered sequential logic with active-low synchronous reset.
+Description: The module `TopModule` implements a shift register with four D flip-flops. All sequential logic is triggered on the positive edge of the clock. Reset is active-low synchronous resettable.
 Verilog code: 
 module TopModule (
 	input clk,

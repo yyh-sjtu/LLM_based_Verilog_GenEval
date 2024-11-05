@@ -8,14 +8,14 @@ Note that you should return the codes only without including additional informat
 
 ### Input:
 
-Description: The module `parallel2serial` implements a module for parallel-to-serial conversion, where every four input bits are converted to a serial one bit output from MSB to LSB. The output signal `valid_out` is set to 1 to indicate the availability of valid serial output.
+Description: The module `parallel2serial` implements a module for parallel-to-serial conversion, where every four input bits are converted to a serial one-bit output (from MSB to LSB). The output signal `valid_out` is set to 1 to indicate the availability of valid serial output.
 Verilog code: 
 module parallel2serial (
-    input clk,
-    input rst_n,
-    input [3:0] d,
-    output valid_out,
-    output dout
+	input clk,
+	input rst_n,
+	input [3:0] d,
+	output valid_out,
+	output dout
 );
 
 

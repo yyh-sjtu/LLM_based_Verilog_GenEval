@@ -8,7 +8,7 @@ Note that you should return the codes only without including additional informat
 
 ### Input:
 
-Description: The module `TopModule` implements a priority encoder for an 8-bit input, encoding the position of the least significant bit that is 1.
+Description: The module `TopModule` implements a priority encoder for an 8-bit input, which identifies the position of the first least significant high bit and outputs this position as a 3-bit number.
 Verilog code: 
 module TopModule (
     input [7:0] in,

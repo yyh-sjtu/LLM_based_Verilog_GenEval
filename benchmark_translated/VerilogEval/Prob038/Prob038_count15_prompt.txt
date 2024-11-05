@@ -8,12 +8,12 @@ Note that you should return the codes only without including additional informat
 
 ### Input:
 
-Description: The module `TopModule` implements a 4-bit binary counter that counts from 0 through 15, inclusive, with a period of 16. 
+Description: The module `TopModule` implements a 4-bit binary counter that counts from 0 through 15, inclusive, with a period of 16. All sequential logic is triggered on the positive edge of the clock. The reset input is active high synchronous, resetting the counter to 0.
 Verilog code: 
 module TopModule (
-	input clk,
-	input reset,
-	output [3:0] q
+    input clk,
+    input reset,
+    output [3:0] q
 );
 
 

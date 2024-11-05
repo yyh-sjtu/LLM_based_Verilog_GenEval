@@ -8,18 +8,18 @@ Note that you should return the codes only without including additional informat
 
 ### Input:
 
-Description: The module `TopModule` implements a combinational circuit with two inputs, a and b, and seven outputs driven by various logic gates.
+Description: The module `TopModule` implements a combinational circuit with two inputs, a and b, and seven outputs driven by specific logic gates.
 Verilog code: 
 module TopModule (
-	input a,
-	input b,
-	output out_and,
-	output out_or,
-	output out_xor,
-	output out_nand,
-	output out_nor,
-	output out_xnor,
-	output out_anotb
+    input a,
+    input b,
+    output out_and,
+    output out_or,
+    output out_xor,
+    output out_nand,
+    output out_nor,
+    output out_xnor,
+    output out_anotb
 );
 
 

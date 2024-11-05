@@ -8,7 +8,7 @@ Note that you should return the codes only without including additional informat
 
 ### Input:
 
-"Description: The module `TopModule` implements a four-bit shift register that also acts as a down counter.
+Description: The module `TopModule` implements a four-bit shift register that also acts as a down counter. Data is shifted in most-significant-bit first when `shift_ena` is 1. The number currently in the shift register is decremented when `count_ena` is 1.
 Verilog code: 
 module TopModule (
 	input clk,

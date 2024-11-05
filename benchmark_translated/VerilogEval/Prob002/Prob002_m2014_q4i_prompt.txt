@@ -8,7 +8,7 @@ Note that you should return the codes only without including additional informat
 
 ### Input:
 
-"Description: The module `TopModule` implements a simple output mechanism that consistently outputs a logic low.
+Description: The module `TopModule` implements a design that always drives output to logic low.
 Verilog code: 
 module TopModule (
 	output out

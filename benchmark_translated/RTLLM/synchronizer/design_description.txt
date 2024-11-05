@@ -8,16 +8,16 @@ Note that you should return the codes only without including additional informat
 
 ### Input:
 
-Description: The module `synchronizer` implements a multi-bit MUX-based synchronizer where `data_in` remains constant when `data_en` is high, synchronized with reference to clocks `clk_a` and `clk_b`.
+Description: The module `synchronizer` implements a multi-bit MUX-based synchronizer where `data_in` remains constant during the period when `data_en` is high. The module uses two clocks `clk_a` and `clk_b` to manage the synchronization and output of data.
 Verilog code: 
 module synchronizer (
-    input clk_a,
-    input clk_b,
-    input arstn,
-    input brstn,
-    input [3:0] data_in,
-    input data_en,
-    output [3:0] dataout
+	input clk_a,
+	input clk_b,
+	input arstn,
+	input brstn,
+	input [3:0] data_in,
+	input data_en,
+	output [3:0] dataout
 );
 
 

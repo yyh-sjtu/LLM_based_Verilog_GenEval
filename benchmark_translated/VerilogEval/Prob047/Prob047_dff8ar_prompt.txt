@@ -8,7 +8,7 @@ Note that you should return the codes only without including additional informat
 
 ### Input:
 
-Description: The module `TopModule` implements a module with 8 D flip-flops featuring active high asynchronous reset.
+Description: The module `TopModule` implements a set of 8 D flip-flops with active high asynchronous reset, where the output is reset to 0 and all flip-flops are triggered by the positive edge of the clock.
 Verilog code: 
 module TopModule (
 	input clk,

@@ -8,7 +8,7 @@ Note that you should return the codes only without including additional informat
 
 ### Input:
 
-**Description:** The module `TopModule` implements a sequential circuit for specified behavior based on simulation waveforms.
+Description: The module `TopModule` implements a sequential circuit, which is analyzed by observing its behavior through simulation waveforms.
 Verilog code: 
 module TopModule (
     input clk,

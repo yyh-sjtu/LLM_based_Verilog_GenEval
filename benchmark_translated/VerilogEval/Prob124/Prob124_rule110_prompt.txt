@@ -8,13 +8,13 @@ Note that you should return the codes only without including additional informat
 
 ### Input:
 
-Description: The module `TopModule` implements Rule 110, a one-dimensional cellular automaton where each cell’s next state depends on itself and its two neighbors. This module simulates a 512-cell system where each cell updates its state in each clock cycle based on the specified cellular automaton rules.
+Description: The module `TopModule` implements Rule 110, a one-dimensional cellular automaton with interesting properties such as being Turing-complete. It advances by one time step each clock cycle, simulating a 512-cell system where the next state of each cell depends only on itself and its two neighbours.
 Verilog code: 
 module TopModule (
-	input clk,
-	input load,
-	input [511:0] data,
-	output [511:0] q
+    input clk,
+    input load,
+    input [511:0] data,
+    output [511:0] q
 );
 
 

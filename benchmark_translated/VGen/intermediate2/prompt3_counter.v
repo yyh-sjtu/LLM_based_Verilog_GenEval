@@ -1,20 +1,10 @@
-Below is an instruction that describes a task, paired with an input that provides further context. 
-Write a response that appropriately completes the request.
-
-
-### Instruction:
-Based on the functional description and defined module head, complete the Verilog code. 
-Note that you should return the codes only without including additional information. And you should include the module head in the generated codes for completeness.
-
-### Input:
-
-Description: The module `counter` implements a counter that counts from 1 to 12.
-Verilog code: 
-module counter (
-	input clk,
-	input reset,
-	output reg [3:0] q
-);
-
-
-### Response:
+// This is a counter that counts from 1 to 12
+module counter( 
+input clk,
+input reset,
+output reg [3:0] q
+); 
+// update q on the positive edge of the clock according to the following cases:
+// on reset, assign q to 1
+// else if q is 12, assign q to 1
+// else, increment q by 1 

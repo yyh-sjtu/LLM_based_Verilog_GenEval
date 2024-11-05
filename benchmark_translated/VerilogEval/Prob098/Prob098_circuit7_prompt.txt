@@ -8,12 +8,12 @@ Note that you should return the codes only without including additional informat
 
 ### Input:
 
-Description: The module `TopModule` implements a sequential circuit based on simulation waveforms that determine the behavior of output q based on input a and clock clk.
+Description: The module `TopModule` implements a sequential circuit based on the provided simulation waveforms, suitable for understanding the behavior in relation to input `a` and the clock signal.
 Verilog code: 
 module TopModule (
-	input clk,
-	input a,
-	output q
+    input clk,
+    input a,
+    output q
 );
 
 

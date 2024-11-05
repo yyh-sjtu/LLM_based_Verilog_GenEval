@@ -8,7 +8,7 @@ Note that you should return the codes only without including additional informat
 
 ### Input:
 
-Description: The module `TopModule` implements a Moore state machine that models the behavior of Lemmings in a game environment, with the ability to walk, dig, and respond to bumps and falling based on given inputs.
+Description: The module `TopModule` implements a finite state machine modeling the behavior of Lemmings in a 2D world based on the classic game. The FSM handles direction changes on collisions, detects ground absence causing a fall (outputting "aaah!"), and enables the action of digging when applicable. It uses areset for asynchronously resetting the state to walk left.
 Verilog code: 
 module TopModule (
 	input clk,

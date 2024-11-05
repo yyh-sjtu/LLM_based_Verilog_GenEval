@@ -8,7 +8,7 @@ Note that you should return the codes only without including additional informat
 
 ### Input:
 
-Description: The module `TopModule` implements the circuit described by the given Karnaugh map.
+"Description: The module `TopModule` implements the circuit described by the provided Karnaugh map.
 Verilog code: 
 module TopModule (
 	input a,

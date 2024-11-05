@@ -8,7 +8,7 @@ Note that you should return the codes only without including additional informat
 
 ### Input:
 
-Description: The module `TopModule` implements a 6-to-1 multiplexer. When `sel` is between 0 and 5, it selects the corresponding data input. Otherwise, the output is 0. The data inputs and outputs are all 4 bits wide.
+Description: The module `TopModule` implements a 6-to-1 multiplexer where the selection input chooses from six 4-bit wide data inputs. If the selection is outside the range of 0 to 5, the output is zero.
 Verilog code: 
 module TopModule (
 	input [2:0] sel,

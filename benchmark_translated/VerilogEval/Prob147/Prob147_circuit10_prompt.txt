@@ -8,7 +8,7 @@ Note that you should return the codes only without including additional informat
 
 ### Input:
 
-Description: The module `TopModule` implements a sequential circuit consisting of combinational logic and a memory element (flip-flop). The state of the flip-flop is visible through the output state, and all sequential logic triggers on the positive edge of the clock, according to a specified behavior derived from simulation waveforms.
+Description: The module `TopModule` implements a sequential circuit with combinational logic and a memory element, triggered on the positive edge of the clock. The module captures specific logic states based on inputs `a` and `b`, storing this information in a flip-flop that outputs on `state`. This state influences the output `q` according to specific timing and input conditions as modeled in the simulation waveforms.
 Verilog code: 
 module TopModule (
     input clk,

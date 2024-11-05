@@ -8,19 +8,19 @@ Note that you should return the codes only without including additional informat
 
 ### Input:
 
-Description: The module `TopModule` implements the same functionality as the 7458 chip which includes four AND gates and two OR gates, having 10 inputs and 2 outputs. The output `p1y` is determined by the ORing of two 3-input AND gates combining `p1a`, `p1b`, `p1c` and `p1d`, `p1e`, `p1f` respectively. Similarly, the output `p2y` is the result of the ORing of two 2-input AND gates combining `p2a`, `p2b` and `p2c`, `p2d`.
+Description: The module `TopModule` implements a module with similar functionality to the 7458 chip, which features four AND gates and two OR gates in its logic structure. It has 10 inputs and 2 outputs, specifically designed for boolean logic operations.
 Verilog code: 
 module TopModule (
-    input p1a,
-    input p1b,
-    input p1c,
-    input p1d,
-    input p1e,
-    input p1f,
-    input p2a,
-    input p2b,
-    input p2c,
-    input p2d,
+    input  p1a,
+    input  p1b,
+    input  p1c,
+    input  p1d,
+    input  p1e,
+    input  p1f,
+    input  p2a,
+    input  p2b,
+    input  p2c,
+    input  p2d,
     output p1y,
     output p2y
 );

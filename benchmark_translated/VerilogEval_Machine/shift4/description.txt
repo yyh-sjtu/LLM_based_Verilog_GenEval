@@ -1,0 +1,23 @@
+Below is an instruction that describes a task, paired with an input that provides further context. 
+Write a response that appropriately completes the request.
+
+
+### Instruction:
+Based on the functional description and defined module head, complete the Verilog code. 
+Note that you should return the codes only without including additional information. And you should include the module head in the generated codes for completeness.
+
+### Input:
+
+Description: The module `top_module` is a 4-bit register that is sensitive to a rising edge of the clock and an asynchronous reset. Inputs include a clock (clk), an asynchronous reset (areset), a load signal (load), an enable signal (ena), and a 4-bit data input (data). The output is a 4-bit register (q). The register is cleared on an active asynchronous reset, loaded with the data signal when the load signal is active, shifted left by 1 bit when the enable signal is active, and remains unchanged otherwise.
+Verilog code: 
+module top_module (
+    input clk,
+    input areset,
+    input load,
+    input ena,
+    input [3:0] data,
+    output reg [3:0] q
+);
+
+
+### Response:

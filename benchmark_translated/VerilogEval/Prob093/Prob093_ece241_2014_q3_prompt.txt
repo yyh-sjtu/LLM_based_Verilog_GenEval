@@ -8,7 +8,7 @@ Note that you should return the codes only without including additional informat
 
 ### Input:
 
-Description: The module `TopModule` implements a design using a 4-to-1 multiplexer and additional 2-to-1 multiplexers, based on the provided Karnaugh map and specifically generates the outputs `mux_in[3:0]` according to the configurations of inputs `c` and `d` with selectors `a` and `b`.
+Description: The module `TopModule` implements a Karnaugh map-wise output mapping using one 4-to-1 multiplexer and two 2-to-1 multiplexers as required, with inputs `c` and `d`, and outputs corresponding to multiplexer inputs driven by `a` and `b` to implement the Karnaugh map logic.
 Verilog code: 
 module TopModule (
 	input c,

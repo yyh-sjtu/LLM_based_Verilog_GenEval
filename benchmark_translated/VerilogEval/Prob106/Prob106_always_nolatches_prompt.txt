@@ -8,14 +8,14 @@ Note that you should return the codes only without including additional informat
 
 ### Input:
 
-Description: The module `TopModule` processes scancodes from a PS/2 keyboard for a game, indicating specific arrow keys being pressed based on the last two bytes of scancodes.
+Description: The module `TopModule` implements a processor for scancodes from a PS/2 keyboard for a game. It indicates whether one of the arrow keys on the keyboard has been pressed based on a mapping of the last two bytes of scancodes received.
 Verilog code: 
 module TopModule (
-    input [15:0] scancode,
-    output left,
-    output down,
-    output right,
-    output up
+	input [15:0] scancode,
+	output left,
+	output down,
+	output right,
+	output up
 );
 
 

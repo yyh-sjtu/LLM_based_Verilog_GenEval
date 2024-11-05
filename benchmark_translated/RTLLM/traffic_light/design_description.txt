@@ -8,7 +8,7 @@ Note that you should return the codes only without including additional informat
 
 ### Input:
 
-**Description:** The module `traffic_light` implements a traffic light controller with signals for red, yellow, and green states, along with a pedestrian button influence on the green light timing. The controller handles timing and state transitions based on the clock cycles described.
+Description: The module `traffic_light` implements a traffic light controller for motor vehicles and pedestrians, featuring three signal states (red, yellow, green) based on clock cycles and pedestrian request inputs.
 Verilog code: 
 module traffic_light (
     input rst_n,

@@ -8,7 +8,7 @@ Note that you should return the codes only without including additional informat
 
 ### Input:
 
-"Description: The module `TopModule` implements a timer with a down-counter to indicate when a set duration has elapsed by asserting an output signal once the count reaches 0.
+"Description: The module `TopModule` implements a timer that counts down for a given number of clock cycles, and asserts a signal to indicate that the given duration has elapsed. This is done using a down-counter that asserts an output signal when the count reaches 0.
 Verilog code: 
 module TopModule (
 	input clk,

@@ -8,7 +8,7 @@ Note that you should return the codes only without including additional informat
 
 ### Input:
 
-Description: The module `TopModule` implements a module that is a part of the FSM for controlling a shift register. The functionality is to enable the shift register for exactly 4 clock cycles when a certain bit pattern is detected, and to assert `shift_ena` for 4 cycles when reset, then deactivate it until the next reset.
+Description: The module `TopModule` implements a part of the FSM for controlling a shift register, designed to enable the shift register for exactly 4 clock cycles when a specific bit pattern is detected and whenever the FSM is reset.
 Verilog code: 
 module TopModule (
 	input clk,

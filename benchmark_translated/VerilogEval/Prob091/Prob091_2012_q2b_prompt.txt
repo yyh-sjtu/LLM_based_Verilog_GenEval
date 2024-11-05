@@ -8,7 +8,7 @@ Note that you should return the codes only without including additional informat
 
 ### Input:
 
-Description: The module `TopModule` implements a finite-state machine based on one-hot encoding for state representation, implementing state transitions and output logic.
+Description: The module `TopModule` implements a finite-state machine with specified state transitions and outputs based on one-hot state encoding.
 Verilog code: 
 module TopModule (
 	input [5:0] y,

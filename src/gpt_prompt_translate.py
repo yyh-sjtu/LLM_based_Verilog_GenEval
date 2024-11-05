@@ -87,7 +87,11 @@ file_patterns = {
     "VGen": {"prompt_pattern": "prompt*", 
                 "testbench_pattern": "tb_*"},
     "VerilogEval": {"prompt_pattern": "*prompt.txt", 
-                    "testbench_pattern": "*test.sv"}
+                    "testbench_pattern": "*test.sv"},
+    "VerilogEval_Human": {"prompt_pattern": "description.txt", 
+                            "testbench_pattern": "testbench.sv"},
+    "VerilogEval_Machine": {"prompt_pattern": "description.txt", 
+                            "testbench_pattern": "testbench.sv"}
 }
 import re
 def verilog_code(text):
@@ -105,8 +109,8 @@ def description(text):
 
 def query_gpt(prompt, model="gpt-4-turbo"):
     client = OpenAI(
-        api_key="sk-89576ilSZoBXCFmGlJPxBEzpYGDRe17MBudXmnQmhMxmaC3x",
-        base_url="https://a.fe8.cn/v1"
+        api_key="sk-*******************",
+        base_url="*******************"
     )
     response = client.chat.completions.create(
         model=model,

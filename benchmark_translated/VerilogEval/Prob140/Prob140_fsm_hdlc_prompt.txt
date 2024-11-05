@@ -8,7 +8,7 @@ Note that you should return the codes only without including additional informat
 
 ### Input:
 
-Description: The module `TopModule` implements a synchronous HDLC framing decoder using a Moore-type finite state machine, focusing on recognizing specific bit patterns for framing purposes.
+Description: The module `TopModule` implements a Moore-type finite state machine (FSM) for synchronous HDLC framing that detects and processes specific bit sequences in data streams to manage framing errors, flag frames, and discard unnecessary bits.
 Verilog code: 
 module TopModule (
 	input clk,

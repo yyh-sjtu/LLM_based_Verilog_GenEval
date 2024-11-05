@@ -6,8 +6,9 @@ Author: Yunhao Zhou
 
 # from openai import OpenAI
 import openai
-# import local_model
+import local_model
 
+local_model_instance=None
 local_model_list = ["codet5_200m","local_model"]
 
 def llm_call(prompt, args):
@@ -54,11 +55,7 @@ def llm_call(prompt, args):
         answer = response.choices[0].message.content
     elif model_name in local_model_list:
         global local_model_instance
-        try:
-            local_model_instance
-            # print("model has been instantiated")
-        except:
-            # print("model is not instantiated, start instantiating")
+        if local_model_instance is None:
             local_model_instance = local_model.codet5(model=model_path, 
                                                       temperature=args.temperature,
                                                       N=args.N,

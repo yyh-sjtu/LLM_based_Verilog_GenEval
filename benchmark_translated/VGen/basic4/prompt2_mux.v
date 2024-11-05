@@ -1,6 +1,21 @@
-// This is a 2-to-1 multiplexer.
-module mux( 
-input [4:0] a, b,
-input sel,
-output [4:0] out );
-// select a when sel is low, otherwise select b
+Below is an instruction that describes a task, paired with an input that provides further context. 
+Write a response that appropriately completes the request.
+
+
+### Instruction:
+Based on the functional description and defined module head, complete the Verilog code. 
+Note that you should return the codes only without including additional information. And you should include the module head in the generated codes for completeness.
+
+### Input:
+
+Description: The module `mux` implements a 2-to-1 multiplexer.
+Verilog code: 
+module mux (
+    input [4:0] a,
+    input [4:0] b,
+    input sel,
+    output [4:0] out
+);
+
+
+### Response:

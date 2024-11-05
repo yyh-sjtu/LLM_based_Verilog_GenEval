@@ -8,7 +8,7 @@ Note that you should return the codes only without including additional informat
 
 ### Input:
 
-Description: The module `truthtable` implements a logic circuit synthesized from a given truth table.
+Description: The module `truthtable` synthesizes a logic circuit based on a specified truth table which maps combinations of inputs \(x3, x2, x1\) to output \(f\).
 Verilog code: 
 module truthtable (
 	input x3,

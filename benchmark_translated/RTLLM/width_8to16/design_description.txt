@@ -8,7 +8,7 @@ Note that you should return the codes only without including additional informat
 
 ### Input:
 
-Description: The module `width_8to16` implements a data width conversion circuit that converts 8-bit data input to 16-bit data output. The design concatenates two 8-bit inputs into a single 16-bit output in the indicated order upon receiving valid inputs, producing output flags on subsequent clock cycles as per requirements.
+Description: The module `width_8to16` implements a data width conversion circuit that converts 8-bit data input to 16-bit data output, placing the first arriving 8-bit data in the higher 8 bits of the 16-bit data output. The output valid_out and data_out are generated in the next clock cycle after the arrival of two valid data inputs.
 Verilog code: 
 module width_8to16 (
     input clk,

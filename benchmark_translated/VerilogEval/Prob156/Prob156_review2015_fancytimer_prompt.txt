@@ -8,16 +8,16 @@ Note that you should return the codes only without including additional informat
 
 ### Input:
 
-Description: The module `TopModule` implements a timer with one input that is triggered by the sequence 1101, shifts in 4 bits to set the timer, counts based on the input, and signals completion and readiness for a reset acknowledgment.
+Description: The module `TopModule` implements a timer with one input that starts upon detection of the pattern `1101`, shifts 4 additional bits to determine delay duration, counts the time accordingly, and notifies the user at completion while waiting for acknowledgment.
 Verilog code: 
 module TopModule (
-	input clk,
-	input reset,
-	input data,
-	output [3:0] count,
-	output counting,
-	output done,
-	input ack
+    input clk,
+    input reset,
+    input data,
+    output [3:0] count,
+    output counting,
+    output done,
+    input ack
 );
 
 

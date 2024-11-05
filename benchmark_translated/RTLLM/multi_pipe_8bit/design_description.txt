@@ -11,13 +11,13 @@ Note that you should return the codes only without including additional informat
 Description: The module `multi_pipe_8bit` implements an unsigned 8bit multiplier based on pipelining processing.
 Verilog code: 
 module multi_pipe_8bit (
-	input clk,
-	input rst_n,
-	input mul_en_in,
-	input [7:0] mul_a,
-	input [7:0] mul_b,
-	output mul_en_out,
-	output [15:0] mul_out
+    input clk,
+    input rst_n,
+    input mul_en_in,
+    input [7:0] mul_a,
+    input [7:0] mul_b,
+    output mul_en_out,
+    output [15:0] mul_out
 );
 
 

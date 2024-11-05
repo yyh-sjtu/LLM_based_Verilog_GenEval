@@ -8,13 +8,13 @@ Note that you should return the codes only without including additional informat
 
 ### Input:
 
-Description: The module `TopModule` implements a state machine based on a one-hot encoded state transition diagram with a specific interface including one 7-bit input and two single bit outputs.
+Description: The module `TopModule` implements a state machine with various transitions between states A through F, using one-hot encoding. It outputs signals to next-state indicators Y2 and Y4 based on current state and input signals.
 Verilog code: 
 module TopModule (
-	input [6:0] y,
-	input w,
-	output Y1,
-	output Y3
+    input [6:0] y,
+    input w,
+    output Y1,
+    output Y3
 );
 
 

@@ -1,0 +1,20 @@
+Below is an instruction that describes a task, paired with an input that provides further context. 
+Write a response that appropriately completes the request.
+
+
+### Instruction:
+Based on the functional description and defined module head, complete the Verilog code. 
+Note that you should return the codes only without including additional information. And you should include the module head in the generated codes for completeness.
+
+### Input:
+
+Description: The module `top_module` takes in two inputs, a clock signal (clk) and a data signal (d), and outputs a register signal (q). This module is used to synchronize the data signal d with the clock signal clk, so that the data signal is sampled at the rising edge of the clock signal.
+Verilog code: 
+module top_module (
+	input clk,
+	input d,
+	output reg q
+);
+
+
+### Response:

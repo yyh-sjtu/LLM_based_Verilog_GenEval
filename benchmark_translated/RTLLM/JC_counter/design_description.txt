@@ -8,7 +8,7 @@ Note that you should return the codes only without including additional informat
 
 ### Input:
 
-Description: The module `JC_counter` implements a 64-bit Johnson counter, also known as torsional ring counter, which operates much like the given 4-bit Johnson counter example with the states: 0000, 1000, 1100, 1110, 1111, 0111, 0011, 0001, and 0000.
+Description: The module `JC_counter` implements a 64-bit Johnson counter, also known as a torsional ring counter. The counter cycles through specific states, similar to the progression of a 4-bit Johnson counter with states like 0000, 1000, 1100, 1110, 1111, 0111, 0011, 0001, and back to 0000.
 Verilog code: 
 module JC_counter (
     input clk,

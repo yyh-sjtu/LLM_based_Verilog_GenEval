@@ -8,7 +8,7 @@ Note that you should return the codes only without including additional informat
 
 ### Input:
 
-Description: The module `TopModule` implements a 5-bit maximal-length Galois LFSR with taps at bit positions 5 and 3. A linear feedback shift register (LFSR) uses XOR gates and specified tap positions to generate sequences of bits. The active-high synchronous reset sets the LFSR output to 1, and sequential logic is triggered on the positive edge of the clock.
+Description: The module `TopModule` implements a 5-bit maximal-length Galois LFSR with taps at bit positions 5 and 3. The module uses an active-high synchronous reset.
 Verilog code: 
 module TopModule (
 	input clk,
