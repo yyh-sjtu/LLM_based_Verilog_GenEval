@@ -7,6 +7,19 @@ Author: Yunhao Zhou
 import os
 import subprocess
 from glob import glob
+import psutil
+
+def kill_process_tree(pid):
+    try:
+        parent = psutil.Process(pid)
+        children = parent.children(recursive=True)
+        for child in children:
+            child.kill()
+        psutil.wait_procs(children, timeout=5)
+        parent.kill()
+        parent.wait(5)
+    except psutil.NoSuchProcess:
+        pass
 
 def evaluate_function(benchmark, design_file, testbench, temp_outputfile):
     
@@ -34,13 +47,34 @@ def evaluate_function(benchmark, design_file, testbench, temp_outputfile):
         else:
             cmd = f"iverilog -o {temp_outputfile} {testbench} {design_file} && vvp {temp_outputfile}"
             
-        result = subprocess.run(cmd, shell=True, capture_output=True, text=True, timeout=2,  start_new_session=True)
-        if is_correct(benchmark, result.stdout):
-            return True 
+        process = subprocess.Popen(cmd, shell=True, stdout=subprocess.PIPE, stderr=subprocess.PIPE, text=True, preexec_fn=os.setsid)
+        
+        stdout, stderr = process.communicate(timeout=2)
+
+        if is_correct(benchmark, stdout):
+            return True
         else:
+            print(f"Error running test: {stderr}")
             return False
+
+    except subprocess.TimeoutExpired:
+        print("Process timed out")
+        return False
+
     except Exception as e:
         print(f"Error running test: {e}")
+        return False
+
+    finally:
+        if process:
+            kill_process_tree(process.pid)
+        
+        if os.path.exists(temp_outputfile):
+            try:
+                os.remove(temp_outputfile)
+            except Exception as e:
+                print(f"Error removing temporary file: {e}")
+
     return False
 
 def evaluate_syntax(benchmark, design_file, testbench, temp_outputfile):
@@ -62,14 +96,34 @@ def evaluate_syntax(benchmark, design_file, testbench, temp_outputfile):
         else:
             cmd = f"iverilog -o {temp_outputfile} {testbench} {design_file}"
             
-        result = subprocess.run(cmd, shell=True, capture_output=True, text=True, timeout=2,  start_new_session=True)
+        process = subprocess.Popen(cmd, shell=True, stdout=subprocess.PIPE, stderr=subprocess.PIPE, text=True, preexec_fn=os.setsid)
+        
+        stdout, stderr = process.communicate(timeout=2)
 
-        if is_correct(result.stderr):
-            return True 
+        if is_correct(benchmark, stdout):
+            return True
         else:
+            print(f"Error running test: {stderr}")
             return False
+
+    except subprocess.TimeoutExpired:
+        print("Process timed out")
+        return False
+
     except Exception as e:
         print(f"Error running test: {e}")
+        return False
+
+    finally:
+        if process:
+            kill_process_tree(process.pid)
+        
+        if os.path.exists(temp_outputfile):
+            try:
+                os.remove(temp_outputfile)
+            except Exception as e:
+                print(f"Error removing temporary file: {e}")
+
     return False
 
 if __name__ == "__main__":
