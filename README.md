@@ -1,13 +1,15 @@
 <div style="text-align: center;">
     <h1>LLM_based_Verilog_GenEval: A comprehensive generation and evaluation framework for LLM based Verilog code generation</h1>
 </div>
-[![Powered by OrcaRouter](https://img.shields.io/badge/Powered_by-OrcaRouter-2563eb)](https://www.orcarouter.ai/ref/ref_d71db6256b6cd33faffd)
+
 <div style="text-align: right;">
     <div style="display: inline-block; text-align: left;">
         <span>Author: Yunhao Zhou</span></br>
         <span>Date: 2024-10-21</span>
     </div>
 </div>
+
+[![Powered by OrcaRouter](https://img.shields.io/badge/Powered_by-OrcaRouter-2563eb)](https://www.orcarouter.ai/ref/ref_d71db6256b6cd33faffd)
 
 #### Update:
 **Configuration of benchmarks are moved to [src/config.py](src/config.py), you can add new benchmark by editting it.**
