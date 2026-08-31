@@ -74,8 +74,8 @@ You can set your own OpenAI API key in two ways:
 ```
 ### 2) Set by environment variable:
 ```bash
-export OPENAI_API_KEY='sk-xxxxx'
-export OPENAI_BASE_URL='https://xxxxx'
+export OPENAI_API_KEY='sk-orca-YOUR_KEY'
+export OPENAI_BASE_URL='[https://xxxxx](https://api.orcarouter.ai/v1)'
 ```
 
 ## 6. Configuration of arguments
